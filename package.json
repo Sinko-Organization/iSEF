@@ -7,7 +7,7 @@
     "dev": "next dev",
     "postinstall": "prisma generate",
     "lint": "next lint",
-    "start": "next start", 
+    "start": "next start",
     "test": "vitest"
   },
   "dependencies": {
@@ -39,6 +39,8 @@
     "jsdom": "^20.0.1",
     "postcss": "^8.4.16",
     "prisma": "^4.4.0",
+    "stylelint": "^14.13.0",
+    "stylelint-config-standard": "^28.0.0",
     "tailwindcss": "^3.1.8",
     "typescript": "4.7.4",
     "vite": "^3.1.7",
