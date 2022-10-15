@@ -33,6 +33,7 @@ specifiers:
   next: 12.3.1
   next-auth: ^4.10.3
   postcss: ^8.4.16
+  prettier: ^2.7.1
   prisma: ^4.4.0
   react: 18.2.0
   react-dom: 18.2.0
@@ -86,6 +87,7 @@ devDependencies:
   eslint-config-next: 12.3.1_4rv7y5c6xz3vfxwhbrcxxi73bq
   jsdom: 20.0.1
   postcss: 8.4.16
+  prettier: 2.7.1
   prisma: 4.4.0
   stylelint: 14.13.0
   stylelint-config-standard: 28.0.0_stylelint@14.13.0
@@ -11114,6 +11116,12 @@ packages:
 
   /prettier/2.3.0:
     resolution: {integrity: sha512-kXtO4s0Lz/DW/IJ9QdWhAf7/NmPWQXkFr/r/WkR3vyI+0v8amTDxiaQSLzs8NBlytfLWX/7uQUMIW677yLKl4w==}
+    engines: {node: '>=10.13.0'}
+    hasBin: true
+    dev: true
+
+  /prettier/2.7.1:
+    resolution: {integrity: sha512-ujppO+MkdPqoVINuDFDRLClm7D78qbDt0/NR+wp5FqEZOoTNAjPHWj17QRhu7geIHJfcNhRk1XVQmF8Bp3ye+g==}
     engines: {node: '>=10.13.0'}
     hasBin: true
     dev: true
