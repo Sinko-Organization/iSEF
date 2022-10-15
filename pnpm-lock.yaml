@@ -26,6 +26,7 @@ specifiers:
   autoprefixer: ^10.4.12
   babel-loader: ^8.2.5
   commitizen: ^4.2.5
+  commitizen-emoji: ^1.0.5
   commitlint: ^17.1.2
   commitlint-config-gitmoji: ^2.2.6
   cz-emoji: 1.3.2-canary.2
@@ -85,6 +86,7 @@ devDependencies:
   autoprefixer: 10.4.12_postcss@8.4.16
   babel-loader: 8.2.5_wfdvla2jorjoj23kkavho2upde
   commitizen: 4.2.5
+  commitizen-emoji: 1.0.5
   commitlint: 17.1.2
   commitlint-config-gitmoji: 2.2.6_commitlint@17.1.2
   cz-emoji: 1.3.2-canary.2
@@ -5867,6 +5869,24 @@ packages:
     engines: {node: '>= 12'}
     dev: true
 
+  /commitizen-emoji/1.0.5:
+    resolution: {integrity: sha512-kdnHltyW922+9vMChuKDsPnsfqRu4VUfQ2NNnYQLC3D+zpm9q9jhboyvSXDg4KbLi2pJrfR3Z+5j9fsJ8em51w==}
+    engines: {node: '>=10'}
+    dependencies:
+      cli-truncate: 1.1.0
+      find-up: 5.0.0
+      fuse.js: 3.6.1
+      inquirer-autocomplete-prompt: 0.12.2
+      inquirer-maxlength-input-prompt: 1.0.2
+      node-fetch: 2.6.7
+      pad: 2.3.0
+      read-pkg-up: 7.0.1
+      wrap-ansi: 3.0.1
+      yup: 0.32.11
+    transitivePeerDependencies:
+      - encoding
+    dev: true
+
   /commitizen/4.2.5:
     resolution: {integrity: sha512-9sXju8Qrz1B4Tw7kC5KhnvwYQN88qs2zbiB8oyMsnXZyJ24PPGiNM3nHr73d32dnE3i8VJEXddBFIbOgYSEXtQ==}
     engines: {node: '>= 12'}
@@ -9729,6 +9749,10 @@ packages:
       p-locate: 5.0.0
     dev: true
 
+  /lodash-es/4.17.21:
+    resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
+    dev: true
+
   /lodash.debounce/4.0.8:
     resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==}
     dev: true
@@ -10303,6 +10327,10 @@ packages:
     dependencies:
       big-integer: 1.6.51
     dev: false
+
+  /nanoclone/0.2.1:
+    resolution: {integrity: sha512-wynEP02LmIbLpcYw8uBKpcfF6dmg2vcpKqxeH5UcoKEYdExslsdUA4ugFauuaeYdTB76ez6gJW8XAZ6CgkXYxA==}
+    dev: true
 
   /nanoid/3.3.4:
     resolution: {integrity: sha512-MqBkQh/OHTS2egovRtLk45wEyNXwF+cokD+1YPf9u5VfJiRdAiRwB2froX5Co9Rh20xs4siNPm8naNotSD6RBw==}
@@ -11506,6 +11534,10 @@ packages:
       loose-envify: 1.4.0
       object-assign: 4.1.1
       react-is: 16.13.1
+    dev: true
+
+  /property-expr/2.0.5:
+    resolution: {integrity: sha512-IJUkICM5dP5znhCckHSv30Q4b5/JA5enCtkRHYaOVOAocnH/1BQEYTC5NMfT3AVl/iXKdr3aqQbQn9DxyWknwA==}
     dev: true
 
   /property-information/5.6.0:
@@ -13300,6 +13332,10 @@ packages:
     engines: {node: '>=0.6'}
     dev: true
 
+  /toposort/2.0.2:
+    resolution: {integrity: sha512-0a5EOkAUp8D4moMi2W8ZF8jcga7BgZd91O/yabJCFY8az+XSzeGyTKs0Aoo897iV1Nj6guFq8orWDS96z91oGg==}
+    dev: true
+
   /tough-cookie/4.1.2:
     resolution: {integrity: sha512-G9fqXWoYFZgTc2z8Q5zaHy/vJMjm+WV0AkAeHxVCQiEB1b+dGvWzFW6QV07cY5jQ5gRkeid2qIkzkxUnmoQZUQ==}
     engines: {node: '>=6'}
@@ -14208,6 +14244,14 @@ packages:
       microevent.ts: 0.1.1
     dev: true
 
+  /wrap-ansi/3.0.1:
+    resolution: {integrity: sha512-iXR3tDXpbnTpzjKSylUJRkLuOrEC7hwEB221cgn6wtF8wpmz28puFXAEfPT5zrjM3wahygB//VuWEr1vTkDcNQ==}
+    engines: {node: '>=4'}
+    dependencies:
+      string-width: 2.1.1
+      strip-ansi: 4.0.0
+    dev: true
+
   /wrap-ansi/7.0.0:
     resolution: {integrity: sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==}
     engines: {node: '>=10'}
@@ -14336,6 +14380,19 @@ packages:
   /yocto-queue/0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
+    dev: true
+
+  /yup/0.32.11:
+    resolution: {integrity: sha512-Z2Fe1bn+eLstG8DRR6FTavGD+MeAwyfmouhHsIUgaADz8jvFKbO/fXc2trJKZg+5EBjh4gGm3iU/t3onKlXHIg==}
+    engines: {node: '>=10'}
+    dependencies:
+      '@babel/runtime': 7.19.0
+      '@types/lodash': 4.14.186
+      lodash: 4.17.21
+      lodash-es: 4.17.21
+      nanoclone: 0.2.1
+      property-expr: 2.0.5
+      toposort: 2.0.2
     dev: true
 
   /zod/3.19.1:
