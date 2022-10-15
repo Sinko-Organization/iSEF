@@ -16,6 +16,9 @@
     "prepare": "husky install"
   },
   "config": {
+    "commitizenEmoji": {
+      "conventionalFormat": true
+    },
     "commitizen": {
       "path": "./node_modules/commitizen-emoji"
     }
