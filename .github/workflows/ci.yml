@@ -5,7 +5,7 @@ name: CI
 
 on:
   pull_request:
-    branches: [ "*" ]
+    branches: ["*"]
 
 jobs:
   lint:
@@ -39,7 +39,7 @@ jobs:
         run: pnpm install
 
       - run: pnpm run lint
-      
+
   prettier:
     runs-on: ubuntu-latest
     name: Run Prettier
@@ -71,7 +71,7 @@ jobs:
         run: pnpm install
 
       - run: pnpm format:check
-      
+
   tsc:
     runs-on: ubuntu-latest
     name: Run Typechecker
@@ -103,7 +103,7 @@ jobs:
         run: pnpm install
 
       - run: pnpm typecheck
-      
+
   build:
     runs-on: ubuntu-latest
     name: Run build
