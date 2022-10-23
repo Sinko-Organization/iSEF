@@ -13,13 +13,16 @@
     "start": "next start",
     "test": "vitest run",
     "test:watch": "vitest",
-    "commit": "cz",
+    "commit": "git add . && cz",
     "prepare": "husky install",
     "cypress:open": "cypress open"
   },
   "config": {
     "commitizen": {
       "path": "./node_modules/commitizen-emoji"
+    },
+    "commitizenEmoji": {
+      "conventionalFormat": true
     }
   },
   "dependencies": {
