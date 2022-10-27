@@ -118,6 +118,7 @@ jobs:
     name: Run build
     env:
       DATABASE_URL: file:./db.sqlite
+      NEXTAUTH_URL: http://localhost:3000
     steps:
       - uses: actions/checkout@v3
         with:
