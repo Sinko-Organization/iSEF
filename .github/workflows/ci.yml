@@ -116,6 +116,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     name: Run build
+    env:
+      DATABASE_URL: file:./db.sqlite
     steps:
       - uses: actions/checkout@v3
         with:
