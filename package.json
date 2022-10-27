@@ -2,6 +2,7 @@
   "name": "isef",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@7.13.4",
   "scripts": {
     "typecheck": "tsc",
     "build": "next build",
