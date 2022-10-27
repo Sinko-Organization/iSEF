@@ -117,8 +117,8 @@ jobs:
     runs-on: ubuntu-latest
     name: Run build
     env:
-      DATABASE_URL: file:./db.sqlite
-      NEXTAUTH_URL: http://localhost:3000
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
     steps:
       - uses: actions/checkout@v3
         with:
