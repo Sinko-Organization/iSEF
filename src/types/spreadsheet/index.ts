@@ -1,5 +1,8 @@
 import { z } from "zod";
 
+/**
+ * Expected fields for the spreadsheet data
+ */
 export const fields = [
   {
     label: "First Name",
@@ -35,19 +38,29 @@ export const fields = [
   },
 ];
 
-const validStudentSchema = z.object({
-  name: z.string(),
+/**
+ * Types for the spreadsheet data
+ */
+const indexSchema = z.object({
   __index: z.string(),
+});
+
+const validStudentSchema = z.object({
+  firstName: z.string(),
+  lastName: z.string(),
 });
 
 const invalidStudentSchema = validStudentSchema.partial();
 
-const allStudentSchema = z.union([validStudentSchema, invalidStudentSchema]);
+const allStudentSchema = z.union([
+  z.intersection(validStudentSchema, indexSchema),
+  z.intersection(invalidStudentSchema, indexSchema),
+]);
 
 export const dataOutputSchema = z.object({
-  all: allStudentSchema,
-  invalidData: invalidStudentSchema,
-  validData: validStudentSchema,
+  all: z.array(allStudentSchema),
+  invalidData: z.array(invalidStudentSchema),
+  validData: z.array(validStudentSchema),
 });
 
 export type DataOutput = z.infer<typeof dataOutputSchema>;

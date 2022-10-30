@@ -1,11 +1,10 @@
 import type { NextPage } from "next";
-import type { DataOutput } from "../types/spreadsheet";
 
 import { useState } from "react";
 import { ReactSpreadsheetImport } from "react-spreadsheet-import";
-import Button from "@mui/material/Button";
 
 import { fields, dataOutputSchema } from "../types/spreadsheet";
+import { Result } from "react-spreadsheet-import/types/types";
 
 const Import: NextPage = () => {
   const [open, setOpen] = useState<boolean>(false);
@@ -14,15 +13,14 @@ const Import: NextPage = () => {
     setOpen(state);
   };
 
-  const onSubmit = (data: any) => {
-    console.log(data);
+  const onSubmit = (data: Result<string>) => {
+    const res = dataOutputSchema.parse(data);
+    console.log(res);
   };
 
   return (
     <>
-      <Button onClick={toggleButton(true)} variant="contained">
-        Import File
-      </Button>
+      <button onClick={toggleButton(true)}>Import File</button>
       <ReactSpreadsheetImport
         isOpen={open}
         onClose={toggleButton(false)}
