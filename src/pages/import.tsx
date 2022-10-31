@@ -2,20 +2,26 @@ import type { NextPage } from "next";
 
 import { useState } from "react";
 import { ReactSpreadsheetImport } from "react-spreadsheet-import";
-
-import { fields, dataOutputSchema } from "../types/spreadsheet";
 import { Result } from "react-spreadsheet-import/types/types";
 
+import { fields, dataOutputSchema } from "../types/spreadsheet";
+import { trpc } from "../utils/trpc";
+
 const Import: NextPage = () => {
+  const { mutate: uploadData } = trpc.useMutation(["studentData.upload"]);
   const [open, setOpen] = useState<boolean>(false);
 
   const toggleButton = (state: boolean) => () => {
     setOpen(state);
   };
 
-  const onSubmit = (data: Result<string>) => {
-    const res = dataOutputSchema.parse(data);
-    console.log(res);
+  const onSubmit = async (data: Result<string>) => {
+    const result = dataOutputSchema.safeParse(data);
+    if (!result.success) {
+      console.log(result.error.message);
+    } else {
+      uploadData(result.data.validData);
+    }
   };
 
   return (
