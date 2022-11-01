@@ -8,7 +8,7 @@ import { fields, dataOutputSchema } from "../types/spreadsheet";
 import { trpc } from "../utils/trpc";
 
 const Import: NextPage = () => {
-  const { mutate: uploadData } = trpc.useMutation(["studentData.upload"]);
+  const { mutate: uploadData } = trpc.useMutation(["studentData.upload2"]);
   const [open, setOpen] = useState<boolean>(false);
 
   const toggleButton = (state: boolean) => () => {
@@ -20,7 +20,8 @@ const Import: NextPage = () => {
     if (!result.success) {
       console.log(result.error.message);
     } else {
-      uploadData(result.data.validData);
+      console.log(result.data);
+      // uploadData(result.data.validData);
     }
   };
 
