@@ -1,5 +1,3 @@
-import type { Prisma } from "@prisma/client";
-
 import { createRouter } from "./context";
 import { z } from "zod";
 import { validStudentSchema } from "../../types/spreadsheet";
@@ -8,13 +6,7 @@ export const studentDataRouter = createRouter()
   .mutation("upload", {
     input: z.array(validStudentSchema),
     resolve({ ctx, input }) {
-      // const data: Prisma.Enumerable<Prisma.StudentRecordCreateManyInput> = input.map(
-      //   (student) => ({
-      //   })
-      // );
-      // return ctx.prisma.studentRecord.createMany({
-      //   data: input.map((record) => ({
-      // });
+      return "None";
     },
   })
   .mutation("upload2", {
