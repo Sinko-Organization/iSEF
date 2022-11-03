@@ -34,7 +34,7 @@ describe("example router", () => {
   /**
    * Test the `getAll` query
    */
-  test("getAll endpoint", async () => {
+  test("get all endpoint", async () => {
     const ctx = await createContextInner({
       session: null,
     });

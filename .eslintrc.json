@@ -3,6 +3,15 @@
   "parserOptions": {
     "project": "./tsconfig.json"
   },
-  "plugins": ["@typescript-eslint"],
-  "extends": ["next/core-web-vitals", "plugin:@typescript-eslint/recommended"]
+  "plugins": ["@typescript-eslint", "vitest"],
+  "extends": ["next/core-web-vitals", "plugin:@typescript-eslint/recommended"],
+  "rules": {
+    /**
+     * Vitest rules
+     */
+    "vitest/no-skipped-tests": 2,
+    "vitest/lower-case-title": 2,
+    "vitest/no-identical-title": 2,
+    "vitest/no-conditional-in-tests": 2
+  }
 }
