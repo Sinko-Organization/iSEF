@@ -8,6 +8,7 @@ specifiers:
   '@emotion/react': ^11.10.4
   '@emotion/styled': ^11.10.4
   '@next-auth/prisma-adapter': ^1.0.4
+  '@next/eslint-plugin-next': ^13.0.1
   '@prisma/client': ^4.4.0
   '@testing-library/react': ^13.4.0
   '@trpc/client': ^9.27.2
@@ -30,6 +31,7 @@ specifiers:
   cypress: ^10.10.0
   eslint: 8.22.0
   eslint-config-next: 12.3.1
+  eslint-plugin-vitest: ^0.0.11
   husky: ^8.0.0
   immer: ^9.0.16
   jsdom: ^20.0.1
@@ -79,6 +81,7 @@ devDependencies:
   '@babel/core': 7.19.3
   '@commitlint/cli': 17.1.2
   '@commitlint/config-conventional': 17.1.0
+  '@next/eslint-plugin-next': 13.0.1
   '@testing-library/react': 13.4.0_biqbaboplfbrettd7655fr4n2y
   '@types/lodash': 4.14.186
   '@types/node': 18.0.0
@@ -96,6 +99,7 @@ devDependencies:
   cypress: 10.10.0
   eslint: 8.22.0
   eslint-config-next: 12.3.1_4rv7y5c6xz3vfxwhbrcxxi73bq
+  eslint-plugin-vitest: 0.0.11_4rv7y5c6xz3vfxwhbrcxxi73bq
   husky: 8.0.1
   jsdom: 20.0.1
   postcss: 8.4.16
@@ -2121,6 +2125,12 @@ packages:
 
   /@next/eslint-plugin-next/12.3.1:
     resolution: {integrity: sha512-sw+lTf6r6P0j+g/n9y4qdWWI2syPqZx+uc0+B/fRENqfR3KpSid6MIKqc9gNwGhJASazEQ5b3w8h4cAET213jw==}
+    dependencies:
+      glob: 7.1.7
+    dev: true
+
+  /@next/eslint-plugin-next/13.0.1:
+    resolution: {integrity: sha512-t3bggJhKE/oB4pvMM7hMNnmIpIqsMGJ+OLklk8llOkSeXtfCV+MBQbhImWxf5QODkxNAmMK3IJGAAecQhBTc/Q==}
     dependencies:
       glob: 7.1.7
     dev: true
@@ -4580,6 +4590,19 @@ packages:
       resolve: 2.0.0-next.4
       semver: 6.3.0
       string.prototype.matchall: 4.0.7
+    dev: true
+
+  /eslint-plugin-vitest/0.0.11_4rv7y5c6xz3vfxwhbrcxxi73bq:
+    resolution: {integrity: sha512-L3wnfKxsUFmd8aUqmrWD6CZ6YFBFqADVvs67uQR+pC095XPrvPgFjFMlsMBGDhmEZNjnAy/Fds2PcJKC0aZDCA==}
+    engines: {node: 14.x || >= 16}
+    peerDependencies:
+      eslint: '>=8.0.0'
+    dependencies:
+      '@typescript-eslint/utils': 5.38.1_4rv7y5c6xz3vfxwhbrcxxi73bq
+      eslint: 8.22.0
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
     dev: true
 
   /eslint-scope/5.1.1:
