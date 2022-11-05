@@ -1,11 +1,11 @@
 import { SemesterType } from "@prisma/client";
 
-import { createRouter } from "./context";
+import { createProtectedRouter } from "./context";
 import { z } from "zod";
 import { validStudentSchema } from "../../types/spreadsheet";
 import _ from "lodash";
 
-export const studentDataRouter = createRouter()
+export const studentDataRouter = createProtectedRouter()
   .mutation("upload", {
     input: z.array(validStudentSchema),
     resolve({ ctx, input }) {

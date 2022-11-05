@@ -1,7 +1,7 @@
 import NextAuth, { type NextAuthOptions } from "next-auth";
-import DiscordProvider from "next-auth/providers/discord";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
+import * as trpc from "@trpc/server";
 
 // Prisma adapter for NextAuth, optional and can be removed
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
@@ -17,14 +17,32 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
+    async signIn({ user }) {
+      // check if user's role is admin
+      const role = await prisma.user
+        .findUnique({
+          where: {
+            id: user.id,
+          },
+          select: {
+            role: true,
+          },
+        })
+        .then((res) => res?.role);
+
+      // if user's role is not admin, return an error
+      if (role !== "admin") {
+        throw new trpc.TRPCError({
+          code: "FORBIDDEN",
+        });
+      }
+
+      return true;
+    },
   },
   // Configure one or more authentication providers
   adapter: PrismaAdapter(prisma),
   providers: [
-    DiscordProvider({
-      clientId: env.DISCORD_CLIENT_ID,
-      clientSecret: env.DISCORD_CLIENT_SECRET,
-    }),
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
