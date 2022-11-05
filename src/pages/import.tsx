@@ -3,11 +3,13 @@ import type { NextPage } from "next";
 import { useState } from "react";
 import { ReactSpreadsheetImport } from "react-spreadsheet-import";
 import { Result } from "react-spreadsheet-import/types/types";
+import { useSession } from "next-auth/react";
 
 import { fields, dataOutputSchema } from "../types/spreadsheet";
 import { trpc } from "../utils/trpc";
 
 const Import: NextPage = () => {
+  const { data: session } = useSession();
   const { mutate: uploadData } = trpc.useMutation(["studentData.upload"]);
   const [open, setOpen] = useState<boolean>(false);
 
@@ -23,6 +25,10 @@ const Import: NextPage = () => {
       uploadData(result.data.validData);
     }
   };
+
+  if (!session) {
+    return <div>Not signed in</div>;
+  }
 
   return (
     <>

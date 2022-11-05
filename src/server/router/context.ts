@@ -37,7 +37,7 @@ export const createContext = async (
   });
 };
 
-type Context = trpc.inferAsyncReturnType<typeof createContext>;
+export type Context = trpc.inferAsyncReturnType<typeof createContext>;
 
 export const createRouter = () => trpc.router<Context>();
 
@@ -56,5 +56,30 @@ export function createProtectedRouter() {
         session: { ...ctx.session, user: ctx.session.user },
       },
     });
+  });
+}
+
+/**
+ * Creates a trpc router that is protected and also asserts that the user is an admin
+ */
+
+export function createAdminRouter() {
+  return createProtectedRouter().middleware(async ({ ctx, next }) => {
+    const role = await ctx.prisma.user
+      .findUnique({
+        where: {
+          id: ctx.session?.user?.id,
+        },
+        select: {
+          role: true,
+        },
+      })
+      .then((res) => res?.role);
+
+    if (role !== "admin") {
+      throw new trpc.TRPCError({ code: "FORBIDDEN" });
+    }
+
+    return next();
   });
 }
