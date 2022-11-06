@@ -1,11 +1,11 @@
 /**
  * Integration test example for the `example` router
  */
-import { test, expect, describe } from "vitest";
+import { describe, expect, test } from "vitest";
 
+import { inferQueryInput } from "../../utils/trpc";
 import { createContextInner } from "./context";
 import { appRouter } from "./index";
-import { inferQueryInput } from "../../utils/trpc";
 
 /**
  * Create a test context for the `example` router

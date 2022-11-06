@@ -1,7 +1,7 @@
 // src/server/router/index.ts
-import { createRouter } from "./context";
 import superjson from "superjson";
 
+import { createRouter } from "./context";
 import { exampleRouter } from "./example";
 import { protectedExampleRouter } from "./protected-example-router";
 import { studentDataRouter } from "./student-data";

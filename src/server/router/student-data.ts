@@ -1,9 +1,9 @@
 import { SemesterType } from "@prisma/client";
-
-import { createAdminRouter } from "./context";
-import { z } from "zod";
-import { validStudentSchema } from "../../types/spreadsheet";
 import _ from "lodash";
+import { z } from "zod";
+
+import { validStudentSchema } from "../../types/spreadsheet";
+import { createAdminRouter } from "./context";
 
 export const studentDataRouter = createAdminRouter()
   .mutation("upload", {
