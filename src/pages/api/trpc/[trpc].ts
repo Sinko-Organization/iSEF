@@ -1,9 +1,11 @@
 // src/pages/api/trpc/[trpc].ts
-import { PageConfig } from "next";
 import { createNextApiHandler } from "@trpc/server/adapters/next";
-import { env } from "../../../env/server.mjs";
+import { PageConfig } from "next";
+
 import { appRouter } from "../../../server/router";
 import { createContext } from "../../../server/router/context";
+
+import { env } from "../../../env/server.mjs";
 
 export const config: PageConfig = {
   api: {

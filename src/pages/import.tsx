@@ -1,11 +1,10 @@
 import type { NextPage } from "next";
-
+import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { ReactSpreadsheetImport } from "react-spreadsheet-import";
 import { Result } from "react-spreadsheet-import/types/types";
-import { useSession } from "next-auth/react";
 
-import { fields, dataOutputSchema } from "../types/spreadsheet";
+import { dataOutputSchema, fields } from "../types/spreadsheet";
 import { trpc } from "../utils/trpc";
 
 const Import: NextPage = () => {
