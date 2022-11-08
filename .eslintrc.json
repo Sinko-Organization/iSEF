@@ -3,13 +3,14 @@
   "parserOptions": {
     "project": "./tsconfig.json"
   },
-  "plugins": ["@typescript-eslint", "vitest"],
+  "plugins": ["@typescript-eslint", "vitest", "chakra-ui"],
   "extends": [
     "next/core-web-vitals",
     "next",
     "prettier",
     "plugin:@typescript-eslint/recommended",
-    "plugin:import/recommended"
+    "plugin:import/recommended",
+    "plugin:unicorn/recommended"
   ],
   "rules": {
     /**
@@ -18,6 +19,11 @@
     "vitest/no-skipped-tests": 2,
     "vitest/lower-case-title": 2,
     "vitest/no-identical-title": 2,
-    "vitest/no-conditional-in-tests": 2
+    "vitest/no-conditional-in-tests": 2,
+    /**
+     * Typescript rules
+     */
+    "unicorn/prevent-abbreviations": 0,
+    "unicorn/no-null": 0
   }
 }
