@@ -6,7 +6,7 @@ module.exports = {
   semi: true,
   trailingComma: "all",
   tabWidth: 2,
-  importOrder: ["^[./]"],
+  importOrder: ["^((../)+|./).*(?<!server.mjs)$", "server.mjs$"],
   importOrderSeparation: true,
   importOrderSortSpecifiers: true,
   plugins: [require("@trivago/prettier-plugin-sort-imports")],
