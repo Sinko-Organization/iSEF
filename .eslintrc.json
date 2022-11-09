@@ -24,6 +24,15 @@
      * Typescript rules
      */
     "unicorn/prevent-abbreviations": 0,
-    "unicorn/no-null": 0
+    "unicorn/no-null": 0,
+    "unicorn/filename-case": [
+      "error",
+      {
+        "cases": {
+          "kebabCase": true,
+          "pascalCase": true
+        }
+      }
+    ]
   }
 }
