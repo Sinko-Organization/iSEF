@@ -113,7 +113,7 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    name: Run build
+    name: Run Build
     env:
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
