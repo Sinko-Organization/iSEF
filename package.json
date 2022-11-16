@@ -17,6 +17,7 @@
     "start": "next start",
     "test": "vitest run",
     "test:unit": "vitest run unit",
+    "test:helper": "vitest run helpers",
     "test:integration": "vitest run int",
     "test:watch": "vitest",
     "commit": "git add . && cz",
