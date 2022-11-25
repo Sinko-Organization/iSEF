@@ -88,14 +88,25 @@ export function createAdminRouter() {
 /**
  * Create a function that returns the user session
  */
-export const createUserSession = () =>
-  createContextInner({
+export const createUserSession = async () => {
+  const ctx = await createContextInner({
+    session: null,
+  });
+
+  // create a user with the following properties
+  const user = await ctx.prisma.user.create({
+    data: {
+      id: "1",
+      email: "user@website.com",
+      name: "User",
+      role: "admin",
+    },
+  });
+
+  return createContextInner({
     session: {
-      user: {
-        id: "1",
-        email: "user@website.com",
-        name: "User",
-      },
+      user,
       expires: "100",
     },
   });
+};

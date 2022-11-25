@@ -3,7 +3,7 @@
  */
 import { afterEach, describe, expect, test } from "vitest";
 
-import { createUserSession } from "../context";
+import { createContextInner, createUserSession } from "../context";
 import { appRouter } from "../index";
 
 /**
@@ -14,9 +14,12 @@ describe("course router", () => {
    * Clean up the database after each test
    */
   afterEach(async () => {
-    const ctx = await createUserSession();
+    const ctx = await createContextInner({
+      session: null,
+    });
 
     ctx.prisma.course.deleteMany();
+    ctx.prisma.user.deleteMany();
   });
 
   /**
