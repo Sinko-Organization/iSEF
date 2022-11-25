@@ -84,3 +84,18 @@ export function createAdminRouter() {
     return next();
   });
 }
+
+/**
+ * Create a function that returns the user session
+ */
+export const createUserSession = () =>
+  createContextInner({
+    session: {
+      user: {
+        id: "1",
+        email: "user@website.com",
+        name: "User",
+      },
+      expires: "100",
+    },
+  });

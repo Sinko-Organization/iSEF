@@ -3,7 +3,7 @@
  */
 import { afterEach, describe, expect, test } from "vitest";
 
-import { createContextInner } from "../context";
+import { createUserSession } from "../context";
 import { appRouter } from "../index";
 
 /**
@@ -13,11 +13,8 @@ describe("course router", () => {
   /**
    * Clean up the database after each test
    */
-
   afterEach(async () => {
-    const ctx = await createContextInner({
-      session: null,
-    });
+    const ctx = await createUserSession();
 
     ctx.prisma.course.deleteMany();
   });
@@ -26,9 +23,7 @@ describe("course router", () => {
    * Query all 3 courses
    */
   test("getting 3 courses", async () => {
-    const ctx = await createContextInner({
-      session: null,
-    });
+    const ctx = await createUserSession();
 
     ctx.prisma.course.createMany({
       data: [
@@ -74,9 +69,7 @@ describe("course router", () => {
    * Query no courses
    */
   test("getting no courses", async () => {
-    const ctx = await createContextInner({
-      session: null,
-    });
+    const ctx = await createUserSession();
 
     const caller = appRouter.createCaller(ctx);
 
