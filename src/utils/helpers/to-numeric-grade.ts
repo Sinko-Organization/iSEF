@@ -1,5 +1,3 @@
-import _ from "lodash";
-
 export const toNumericGrade = (input: string): number => {
   const grade = Number.parseFloat(input);
 
