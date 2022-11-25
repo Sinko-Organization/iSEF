@@ -18,8 +18,8 @@ describe("course router", () => {
       session: null,
     });
 
-    ctx.prisma.course.deleteMany();
-    ctx.prisma.user.deleteMany();
+    await ctx.prisma.course.deleteMany();
+    await ctx.prisma.user.deleteMany();
   });
 
   /**
@@ -28,17 +28,20 @@ describe("course router", () => {
   test("getting 3 courses", async () => {
     const ctx = await createUserSession();
 
-    ctx.prisma.course.createMany({
+    await ctx.prisma.course.createMany({
       data: [
         {
+          id: "1",
           name: "Course 1",
           code: "C1",
         },
         {
+          id: "2",
           name: "Course 2",
           code: "C2",
         },
         {
+          id: "3",
           name: "Course 3",
           code: "C3",
         },
@@ -51,17 +54,17 @@ describe("course router", () => {
 
     expect(result).toEqual([
       {
-        id: 1,
+        id: "1",
         name: "Course 1",
         code: "C1",
       },
       {
-        id: 2,
+        id: "2",
         name: "Course 2",
         code: "C2",
       },
       {
-        id: 3,
+        id: "3",
         name: "Course 3",
         code: "C3",
       },

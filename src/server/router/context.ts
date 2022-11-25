@@ -96,7 +96,6 @@ export const createUserSession = async () => {
   // create a user with the following properties
   const user = await ctx.prisma.user.create({
     data: {
-      id: "1",
       email: "user@website.com",
       name: "User",
       role: "admin",
