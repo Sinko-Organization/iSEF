@@ -3,19 +3,27 @@ import _ from "lodash";
 import { z } from "zod";
 
 import { createAdminRouter } from "../context";
+import { toNumericGrade } from "@/helpers";
 import { validStudentSchema } from "@/types/spreadsheet";
-import { toNumericGrade } from "@/utils/helpers";
 
 export const studentDataRouter = createAdminRouter().mutation("upload", {
-  input: z.array(validStudentSchema),
-  resolve({ ctx, input }) {
-    return ctx.prisma.$transaction(
-      input.map((record) => {
+  input: z.object({
+    studentRecords: z.array(validStudentSchema),
+    schoolYear: z.object({
+      startYear: z.number().int().min(1990).max(2100),
+      endYear: z.number().int().min(1991).max(2101),
+    }),
+    semester: z.enum(["FIRST", "SECOND", "SUMMER"]),
+  }),
+  async resolve({ ctx, input }) {
+    const { studentRecords, schoolYear, semester } = input;
+
+    return ctx.prisma.$transaction([
+      ...studentRecords.map((record) => {
         return ctx.prisma.studentRecord.create({
           data: {
             grade: toNumericGrade(record.grade),
-            semesterType: SemesterType.FIRST,
-            schoolYear: 2021,
+            semesterType: semester as SemesterType,
             yearLevel: _.toInteger(record.yearLevel),
             course: {
               connectOrCreate: {
@@ -55,6 +63,16 @@ export const studentDataRouter = createAdminRouter().mutation("upload", {
           },
         });
       }),
-    );
+      ctx.prisma.schoolYear.upsert({
+        where: {
+          startYear: schoolYear.startYear,
+        },
+        create: {
+          startYear: schoolYear.startYear,
+          endYear: schoolYear.endYear,
+        },
+        update: {},
+      }),
+    ]);
   },
 });
