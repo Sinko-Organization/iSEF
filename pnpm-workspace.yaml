@@ -1,0 +1,3 @@
+packages:
+  - "packages/generator"
+  - "packages/config"

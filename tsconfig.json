@@ -21,6 +21,13 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.cjs", "**/*.mjs"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.cjs",
+    "**/*.mjs",
+    "packages/generator/index.js"
+  ],
   "exclude": ["node_modules"]
 }

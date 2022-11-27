@@ -43,8 +43,8 @@ export const studentDataRouter = createAdminRouter().mutation("upload", {
                 },
                 create: {
                   studentIdNumber: record.id,
-                  firstName: record.name,
-                  lastName: record.name,
+                  firstName: record.firstName,
+                  lastName: record.lastName,
                 },
               },
             },
