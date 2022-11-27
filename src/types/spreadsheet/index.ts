@@ -36,23 +36,33 @@ export const fields: Field<string>[] = [
     ],
   },
   {
-    label: "Name",
-    key: "name",
-    alternateMatches: [
-      "name",
-      "Student Name",
-      "student name",
-      "Full Name",
-      "full name",
-    ],
+    label: "First Name",
+    key: "firstName",
+    alternateMatches: ["first Name", "first name"],
     fieldType: {
       type: "input",
     },
-    example: "Stephanie Margaret",
+    example: "John",
     validations: [
       {
         rule: "required",
-        errorMessage: "Name is required",
+        errorMessage: "First Name is required",
+        level: "error",
+      },
+    ],
+  },
+  {
+    label: "Last Name",
+    key: "lastName",
+    alternateMatches: ["last Name", "last name"],
+    fieldType: {
+      type: "input",
+    },
+    example: "Doe",
+    validations: [
+      {
+        rule: "required",
+        errorMessage: "Last Name is required",
         level: "error",
       },
     ],
@@ -180,7 +190,8 @@ const indexSchema = z.object({
 
 export const validStudentSchema = z.object({
   id: z.string(),
-  name: z.string(),
+  firstName: z.string(),
+  lastName: z.string(),
   course: z.string(),
   yearLevel: z.string(),
   stubCode: z.string(),

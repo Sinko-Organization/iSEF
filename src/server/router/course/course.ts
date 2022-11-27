@@ -1,8 +1,13 @@
+import { TRPCError } from "@trpc/server";
 import _ from "lodash";
+import { z } from "zod";
 
 import { createAdminRouter } from "../context";
 
 export const courseRouter = createAdminRouter()
+  /**
+   * Queries
+   */
   .query("getAll", {
     resolve({ ctx }) {
       return ctx.prisma.course.findMany({
@@ -15,7 +20,7 @@ export const courseRouter = createAdminRouter()
     },
   })
   .query("population", {
-    resolve({ ctx }) {
+    async resolve({ ctx }) {
       // get all the student records for each course and selected the student ids
       return ctx.prisma.course
         .findMany({
@@ -48,5 +53,46 @@ export const courseRouter = createAdminRouter()
             };
           });
         });
+    },
+  })
+  .query("getStudents", {
+    input: z.object({
+      courseId: z.string(),
+    }),
+    async resolve({ ctx, input }) {
+      const course = await ctx.prisma.course.findUnique({
+        where: {
+          id: input.courseId,
+        },
+        include: {
+          studentRecords: {
+            select: {
+              student: {
+                select: {
+                  id: true,
+                  studentIdNumber: true,
+                  firstName: true,
+                  lastName: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      if (!course) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Course not found",
+        });
+      }
+
+      // remove repeating students with the same studentIdNumber
+      const records = _.uniqBy(
+        course.studentRecords,
+        (record) => record.student.studentIdNumber,
+      );
+
+      return records.map((record) => record.student);
     },
   });

@@ -5,9 +5,10 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import Link from "next/link";
 import type { FC } from "react";
 
-interface BasicTableProps {
+interface DashboardTableProps {
   rows: {
     id: string;
     name: string;
@@ -15,7 +16,7 @@ interface BasicTableProps {
   }[];
 }
 
-const BasicTable: FC<BasicTableProps> = ({ rows }) => {
+const DashboardTable: FC<DashboardTableProps> = ({ rows }) => {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -27,15 +28,16 @@ const BasicTable: FC<BasicTableProps> = ({ rows }) => {
         </TableHead>
         <TableBody>
           {rows.map((row) => (
-            <TableRow
-              key={row.id}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell align="right">{row.population}</TableCell>
-            </TableRow>
+            <Link href={`/course?id=${row.id}`} key={row.id}>
+              <TableRow
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {row.name}
+                </TableCell>
+                <TableCell align="right">{row.population}</TableCell>
+              </TableRow>
+            </Link>
           ))}
         </TableBody>
       </Table>
@@ -43,4 +45,4 @@ const BasicTable: FC<BasicTableProps> = ({ rows }) => {
   );
 };
 
-export default BasicTable;
+export default DashboardTable;

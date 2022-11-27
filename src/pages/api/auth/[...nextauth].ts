@@ -1,6 +1,5 @@
 // Prisma adapter for NextAuth, optional and can be removed
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import * as trpc from "@trpc/server";
 import NextAuth, { type NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
@@ -16,28 +15,6 @@ export const authOptions: NextAuthOptions = {
         session.user.id = user.id;
       }
       return session;
-    },
-    async signIn({ user }) {
-      // check if user's role is admin
-      const role = await prisma.user
-        .findUnique({
-          where: {
-            id: user.id,
-          },
-          select: {
-            role: true,
-          },
-        })
-        .then((res) => res?.role);
-
-      // if user's role is not admin, return an error
-      if (role !== "admin") {
-        throw new trpc.TRPCError({
-          code: "FORBIDDEN",
-        });
-      }
-
-      return true;
     },
   },
   // Configure one or more authentication providers
