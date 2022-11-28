@@ -94,7 +94,7 @@ model StudentRecord {
     subjectId    String       @map("subject_id")
     courseId     String       @map("course_id")
     yearLevel    Int          @map("year_level")
-    schoolYearId String?
+    schoolYearId String
     semesterType SemesterType
     grade        Float
     createdAt    DateTime     @default(now()) @map("created_at")
@@ -102,7 +102,7 @@ model StudentRecord {
     student      Student      @relation(fields: [studentId], references: [id], onDelete: Cascade)
     subject      Subject      @relation(fields: [subjectId], references: [id], onDelete: Cascade)
     course       Course       @relation(fields: [courseId], references: [id], onDelete: Cascade)
-    schoolYear   SchoolYear?  @relation(fields: [schoolYearId], references: [id])
+    schoolYear   SchoolYear   @relation(fields: [schoolYearId], references: [id], onDelete: Cascade)
 }
 
 model Course {

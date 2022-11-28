@@ -3,7 +3,7 @@ import type { FC } from "react";
 import { DashboardTable } from "@/components/tables";
 import { trpc } from "@/utils/trpc";
 
-const index: FC = ({}) => {
+const DashboardPage: FC = ({}) => {
   const coursePopulations = trpc.useQuery(["course.population"]);
 
   const { data, status } = coursePopulations;
@@ -26,4 +26,4 @@ const index: FC = ({}) => {
   );
 };
 
-export default index;
+export default DashboardPage;

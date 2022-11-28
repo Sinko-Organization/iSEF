@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { CourseTable } from "@/components/tables";
 import { trpc } from "@/utils/trpc";
 
-const Course: NextPage = () => {
+const CoursePage: NextPage = () => {
   const router = useRouter();
   const { id } = router.query;
 
@@ -38,4 +38,4 @@ const Course: NextPage = () => {
   );
 };
 
-export default Course;
+export default CoursePage;
