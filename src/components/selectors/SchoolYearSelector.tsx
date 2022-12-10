@@ -7,17 +7,19 @@ import type { SelectChangeEvent } from "@mui/material/Select";
 import type { FC } from "react";
 
 // integers from 1990 to 2100
-const schoolYears: number[] = Array.from(
+const schoolYearsData: number[] = Array.from(
   { length: 2100 - 1990 + 1 },
   (_, i) => 1990 + i,
 );
 
 interface SchoolYearSelectorProps {
+  schoolYears: number[];
   schoolYear: string;
   setSchoolYear: (schoolYear: string) => void;
 }
 
 const SchoolYearSelector: FC<SchoolYearSelectorProps> = ({
+  schoolYears = schoolYearsData,
   schoolYear,
   setSchoolYear,
 }) => {
