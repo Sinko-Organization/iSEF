@@ -2,9 +2,11 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 
 import { CourseTable } from "@/components/tables";
+import { useCurriculumStore } from "@/stores";
 import { trpc } from "@/utils/trpc";
 
 const CoursePage: NextPage = () => {
+  const { schoolYear, semesterType } = useCurriculumStore();
   const router = useRouter();
   const { id } = router.query;
 
@@ -16,6 +18,8 @@ const CoursePage: NextPage = () => {
     "course.getStudents",
     {
       courseId: id,
+      schoolYear,
+      semesterType,
     },
   ]);
 
