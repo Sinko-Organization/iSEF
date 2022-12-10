@@ -1,9 +1,12 @@
+import _ from "lodash";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 
+import { useCurriculumStore } from "@/stores";
 import { trpc } from "@/utils/trpc";
 
 const StudentPage: NextPage = () => {
+  const { schoolYear, semesterType } = useCurriculumStore();
   const router = useRouter();
   const { id } = router.query;
 
@@ -15,6 +18,8 @@ const StudentPage: NextPage = () => {
     "studentData.details",
     {
       studentId: id,
+      schoolYear,
+      semesterType,
     },
   ]);
 
@@ -54,6 +59,17 @@ const StudentPage: NextPage = () => {
               <div>Units: {record.subject.units}</div>
             </div>
           ))}
+          {/* 
+            GWA is the summation of all grades multiplied by the units 
+            of the subject divided by the summation of all units 
+          */}
+          <div>
+            GWA:
+            {_.sumBy(
+              data.studentRecords,
+              (record) => record.grade * record.subject.units,
+            ) / _.sumBy(data.studentRecords, (record) => record.subject.units)}
+          </div>
         </div>
       )}
     </>
