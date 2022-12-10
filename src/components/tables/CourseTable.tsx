@@ -5,6 +5,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import Link from "next/link";
 import type { FC } from "react";
 
 interface CourseTableProps {
@@ -29,16 +30,17 @@ const CourseTable: FC<CourseTableProps> = ({ students }) => {
         </TableHead>
         <TableBody>
           {students.map((student) => (
-            <TableRow
-              key={student.id}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {student.studentIdNumber}
-              </TableCell>
-              <TableCell align="right">{student.firstName}</TableCell>
-              <TableCell align="right">{student.lastName}</TableCell>
-            </TableRow>
+            <Link href={`/student?id=${student.id}`} key={student.id}>
+              <TableRow
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {student.studentIdNumber}
+                </TableCell>
+                <TableCell align="right">{student.firstName}</TableCell>
+                <TableCell align="right">{student.lastName}</TableCell>
+              </TableRow>
+            </Link>
           ))}
         </TableBody>
       </Table>

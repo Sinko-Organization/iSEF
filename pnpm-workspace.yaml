@@ -1,3 +1,5 @@
 packages:
   - "packages/generator"
   - "packages/config"
+
+ignore-workspace-root-check: true
