@@ -1,5 +1,4 @@
 import Button from "@mui/material/Button";
-import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
@@ -29,46 +28,38 @@ const CurriculumSelector: FC<CurriculumSelectorProps> = ({
   submitHandler,
   curriculum,
 }) => {
-  const { register, handleSubmit } = useForm<CurriculumType>();
+  const { register, handleSubmit } = useForm<CurriculumType>({
+    defaultValues: {
+      schoolYear: curriculum.schoolYear,
+      semesterType: curriculum.semesterType,
+    },
+  });
   return (
     <Stack sx={{ maxWidth: 200, marginY: 2 }} spacing={2}>
       {/* School Year */}
-      <FormControl>
-        <InputLabel id="demo-simple-select-label">School Year</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          {...register("schoolYear")}
-          label="Age"
-          defaultValue={curriculum.schoolYear}
-        >
-          {schoolYearsData.map((year) => (
-            <MenuItem key={year.id} value={year.startYear}>
-              S.Y. {year.startYear} - {year.endYear}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      <InputLabel id="demo-simple-select-label">School Year</InputLabel>
+      <Select defaultValue={curriculum.schoolYear} {...register("schoolYear")}>
+        {schoolYearsData.map((year) => (
+          <MenuItem key={year.id} value={year.startYear}>
+            S.Y. {year.startYear} - {year.endYear}
+          </MenuItem>
+        ))}
+      </Select>
 
       {/*  Semester Type */}
-      <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Semester Type</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          {...register("semesterType")}
-          label="Age"
-          defaultValue={curriculum.semesterType}
-        >
-          {Object.values(SemesterType).map((semesterType) => (
-            <MenuItem key={semesterType} value={semesterType}>
-              <option value={semesterType}>
-                {_.capitalize(semesterType.toLowerCase())}
-              </option>
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      <InputLabel id="demo-simple-select-label">Semester Type</InputLabel>
+      <Select
+        defaultValue={curriculum.semesterType}
+        {...register("semesterType")}
+      >
+        {Object.values(SemesterType).map((semesterType) => (
+          <MenuItem key={semesterType} value={semesterType}>
+            <option value={semesterType}>
+              {_.capitalize(semesterType.toLowerCase())}
+            </option>
+          </MenuItem>
+        ))}
+      </Select>
 
       {/* Submit */}
       <Button

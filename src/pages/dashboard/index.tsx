@@ -1,4 +1,5 @@
 import type { NextPage } from "next";
+import { useEffect } from "react";
 
 import { DashboardTable } from "@/components/tables";
 import { CurriculumSelector } from "@/containers/curriculum-selector";
@@ -10,8 +11,6 @@ const DashboardPage: NextPage = () => {
   const { schoolYear, setSchoolYear, semesterType, setSemesterType } =
     useCurriculumStore();
 
-  console.log(schoolYear, semesterType);
-
   const { data: courseData, status: courseStatus } = trpc.useQuery([
     "course.population",
     {
@@ -22,6 +21,15 @@ const DashboardPage: NextPage = () => {
   const { data: schoolYearsData, status: schoolYearStatus } = trpc.useQuery([
     "schoolYear.getAll",
   ]);
+
+  useEffect(() => {
+    if (schoolYearsData) {
+      const startYear = schoolYearsData[0]?.startYear;
+      if (startYear) {
+        setSchoolYear(startYear);
+      }
+    }
+  }, [schoolYearsData, setSchoolYear]);
 
   // function that filters based on school year and semester type
   const getCourseData = (data: CurriculumType) => {
