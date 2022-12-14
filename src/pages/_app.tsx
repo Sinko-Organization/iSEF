@@ -5,18 +5,29 @@ import { withTRPC } from "@trpc/next";
 import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import type { AppType } from "next/app";
+import { useRouter } from "next/router";
 import superjson from "superjson";
 
 import type { AppRouter } from "../server/router";
 import "../styles/globals.css";
+import { AdminRoute } from "@/containers/protected-route";
+
+const NON_PROTECTED_ROUTES = new Set(["/", "/auth/signin"]);
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
+  const router = useRouter();
   return (
     <SessionProvider session={session}>
-      <Component {...pageProps} />
+      {NON_PROTECTED_ROUTES.has(router.pathname) ? (
+        <Component {...pageProps} />
+      ) : (
+        <AdminRoute>
+          <Component {...pageProps} />
+        </AdminRoute>
+      )}
     </SessionProvider>
   );
 };
