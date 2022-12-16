@@ -1,6 +1,7 @@
 /**
  * Integration test example for the `example` router
  */
+import { SemesterType } from "@prisma/client";
 import { afterEach, describe, expect, test } from "vitest";
 
 import { createContextInner, createUserSession } from "../context";
@@ -91,30 +92,54 @@ describe("course router", () => {
   test("returns the correct population", async () => {
     const ctx = await createUserSession();
 
-    await ctx.prisma.course.createMany({
+    await ctx.prisma.course.create({
+      data: {
+        id: "1",
+        name: "Course 1",
+        code: "C1",
+      },
+    });
+
+    await ctx.prisma.studentRecord.createMany({
       data: [
         {
           id: "1",
-          name: "Course 1",
-          code: "C1",
+          studentId: "0001",
+          subjectId: "0001",
+          yearLevel: 3,
+          schoolYearId: "0001",
+          semesterType: SemesterType.FIRST,
+          grade: 1.5,
+          courseId: "1",
         },
         {
           id: "2",
-          name: "Course 2",
-          code: "C2",
+          studentId: "0002",
+          subjectId: "0001",
+          yearLevel: 3,
+          schoolYearId: "0001",
+          semesterType: SemesterType.FIRST,
+          grade: 2,
+          courseId: "1",
         },
         {
           id: "3",
-          name: "Course 3",
-          code: "C3",
+          studentId: "0003",
+          subjectId: "0001",
+          yearLevel: 3,
+          schoolYearId: "0001",
+          semesterType: SemesterType.FIRST,
+          grade: 1.75,
+          courseId: "1",
         },
       ],
     });
 
     const caller = appRouter.createCaller(ctx);
     const result = await caller.query("course.population");
+    const course1 = result[0];
 
-    expect(result).toEqual(3);
+    expect(course1?.population).toEqual(3);
   });
 
   /**
@@ -126,6 +151,6 @@ describe("course router", () => {
     const caller = appRouter.createCaller(ctx);
     const result = await caller.query("course.population");
 
-    expect(result).toEqual(0);
+    expect(result[0])?.toEqual(0);
   });
 });
