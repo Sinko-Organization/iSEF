@@ -69,6 +69,7 @@ importers:
       vite: ^3.1.7
       vitest: ^0.24.1
       zod: ^3.18.0
+      zustand: ^4.1.5
     dependencies:
       '@chakra-ui/react': 2.3.6_wcbo5zsdvkvvteeo7mhmlp7qhm
       '@emotion/react': 11.10.4_ihakah5cf6y53suoc2giy6uyfe
@@ -95,6 +96,7 @@ importers:
       superjson: 1.10.0
       ts-pattern: 4.0.6
       zod: 3.19.1
+      zustand: 4.1.5_immer@9.0.16+react@18.2.0
     devDependencies:
       '@babel/core': 7.19.3
       '@commitlint/cli': 17.1.2
@@ -9775,4 +9777,21 @@ packages:
 
   /zod/3.19.1:
     resolution: {integrity: sha512-LYjZsEDhCdYET9ikFu6dVPGp2YH9DegXjdJToSzD9rO6fy4qiRYFoyEYwps88OseJlPyl2NOe2iJuhEhL7IpEA==}
+    dev: false
+
+  /zustand/4.1.5_immer@9.0.16+react@18.2.0:
+    resolution: {integrity: sha512-PsdRT8Bvq22Yyh1tvpgdHNE7OAeFKqJXUxtJvj1Ixw2B9O2YZ1M34ImQ+xyZah4wZrR4lENMoDUutKPpyXCQ/Q==}
+    engines: {node: '>=12.7.0'}
+    peerDependencies:
+      immer: '>=9.0'
+      react: '>=16.8'
+    peerDependenciesMeta:
+      immer:
+        optional: true
+      react:
+        optional: true
+    dependencies:
+      immer: 9.0.16
+      react: 18.2.0
+      use-sync-external-store: 1.2.0_react@18.2.0
     dev: false

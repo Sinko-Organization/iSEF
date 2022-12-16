@@ -1,22 +1,19 @@
-import { SemesterType } from "@prisma/client";
 import type { NextPage } from "next";
-import { useState } from "react";
 
 import { DashboardTable } from "@/components/tables";
 import { CurriculumSelector } from "@/containers/curriculum-selector";
 import type { CurriculumType } from "@/containers/curriculum-selector";
+import { useCurriculumStore } from "@/stores";
 import { trpc } from "@/utils/trpc";
 
 const DashboardPage: NextPage = () => {
-  const [schoolYear, setSchoolYear] = useState<number>(
-    new Date().getFullYear(),
-  );
-  const [semesterType, setSemesterType] = useState<SemesterType>(
-    SemesterType.FIRST,
-  );
+  const { schoolYear, setSchoolYear, semesterType, setSemesterType } =
+    useCurriculumStore();
+
+  console.log(schoolYear, semesterType);
 
   const { data: courseData, status: courseStatus } = trpc.useQuery([
-    "course.populationByCourse",
+    "course.population",
     {
       schoolYear,
       semesterType,
@@ -50,6 +47,7 @@ const DashboardPage: NextPage = () => {
         <CurriculumSelector
           schoolYearsData={schoolYearsData}
           submitHandler={getCourseData}
+          curriculum={{ schoolYear, semesterType }}
         />
       )}
       {courseData && <DashboardTable rows={courseData} />}

@@ -16,6 +16,7 @@ interface CurriculumSelectorProps {
     endYear: number;
   }[];
   submitHandler: (data: CurriculumType) => void;
+  curriculum: CurriculumType;
 }
 
 export type CurriculumType = {
@@ -26,6 +27,7 @@ export type CurriculumType = {
 const CurriculumSelector: FC<CurriculumSelectorProps> = ({
   schoolYearsData,
   submitHandler,
+  curriculum,
 }) => {
   const { register, handleSubmit } = useForm<CurriculumType>();
   return (
@@ -38,6 +40,7 @@ const CurriculumSelector: FC<CurriculumSelectorProps> = ({
           id="demo-simple-select"
           {...register("schoolYear")}
           label="Age"
+          defaultValue={curriculum.schoolYear}
         >
           {schoolYearsData.map((year) => (
             <MenuItem key={year.id} value={year.startYear}>
@@ -55,6 +58,7 @@ const CurriculumSelector: FC<CurriculumSelectorProps> = ({
           id="demo-simple-select"
           {...register("semesterType")}
           label="Age"
+          defaultValue={curriculum.semesterType}
         >
           {Object.values(SemesterType).map((semesterType) => (
             <MenuItem key={semesterType} value={semesterType}>

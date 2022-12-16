@@ -13,6 +13,8 @@ export const studentDataRouter = createAdminRouter()
   .query("details", {
     input: z.object({
       studentId: z.string(),
+      schoolYear: z.number(),
+      semesterType: z.enum(["FIRST", "SECOND", "SUMMER"]),
     }),
     async resolve({ ctx, input }) {
       return ctx.prisma.student.findFirstOrThrow({
@@ -28,6 +30,22 @@ export const studentDataRouter = createAdminRouter()
           address: true,
           phoneNumber: true,
           studentRecords: {
+            where: {
+              AND: [
+                {
+                  schoolYear: {
+                    startYear: {
+                      equals: input.schoolYear,
+                    },
+                  },
+                },
+                {
+                  semesterType: {
+                    equals: input.semesterType,
+                  },
+                },
+              ],
+            },
             select: {
               id: true,
               grade: true,

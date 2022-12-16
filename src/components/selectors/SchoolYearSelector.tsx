@@ -13,7 +13,7 @@ const schoolYearsData: number[] = Array.from(
 );
 
 interface SchoolYearSelectorProps {
-  schoolYears: number[];
+  schoolYears?: number[];
   schoolYear: string;
   setSchoolYear: (schoolYear: string) => void;
 }
