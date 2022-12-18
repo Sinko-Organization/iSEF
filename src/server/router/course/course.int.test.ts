@@ -161,6 +161,14 @@ describe("course router", () => {
         SemesterType.FIRST || SemesterType.SECOND || SemesterType.SUMMER,
     };
 
+    await ctx.prisma.course.create({
+      data: {
+        id: "1",
+        name: "Course 1",
+        code: "C1",
+      },
+    });
+
     const caller = appRouter.createCaller(ctx);
 
     const result = await caller.query("course.population", input);
