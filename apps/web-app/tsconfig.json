@@ -16,7 +16,10 @@
     "jsx": "preserve",
     "incremental": true,
     "noUncheckedIndexedAccess": true,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "paths": {
+      "@web-app/*": ["src/*"]
+    }
   },
   "include": [
     "next-env.d.ts",

@@ -1,8 +1,8 @@
 // src/pages/_app.tsx
-import { AdminRoute } from "@isef-web-app/containers/protected-route";
 import { httpBatchLink } from "@trpc/client/links/httpBatchLink";
 import { loggerLink } from "@trpc/client/links/loggerLink";
 import { withTRPC } from "@trpc/next";
+import { AdminRoute } from "@web-app/containers/protected-route";
 import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import type { AppType } from "next/app";

@@ -1,5 +1,5 @@
-import { useCurriculumStore } from "@isef-web-app/stores";
-import { trpc } from "@isef-web-app/utils/trpc";
+import { useCurriculumStore } from "@web-app/stores";
+import { trpc } from "@web-app/utils/trpc";
 import _ from "lodash";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";

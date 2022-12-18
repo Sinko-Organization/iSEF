@@ -1,6 +1,6 @@
-import { CourseTable } from "@isef-web-app/components/tables";
-import { useCurriculumStore } from "@isef-web-app/stores";
-import { trpc } from "@isef-web-app/utils/trpc";
+import { CourseTable } from "@web-app/components/tables";
+import { useCurriculumStore } from "@web-app/stores";
+import { trpc } from "@web-app/utils/trpc";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 

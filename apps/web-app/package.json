@@ -1,5 +1,5 @@
 {
-  "name": "isef-web-app",
+  "name": "@isef/web-app",
   "version": "0.1.0",
   "private": true,
   "packageManager": "pnpm@7.13.4",

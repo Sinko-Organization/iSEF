@@ -1,4 +1,4 @@
-import { trpc } from "@isef-web-app/utils/trpc";
+import { trpc } from "@web-app/utils/trpc";
 import { useRouter } from "next/router";
 import type { FC } from "react";
 

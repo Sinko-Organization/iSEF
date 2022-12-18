@@ -1,8 +1,8 @@
-import { DashboardTable } from "@isef-web-app/components/tables";
-import { CurriculumSelector } from "@isef-web-app/containers/curriculum-selector";
-import type { CurriculumType } from "@isef-web-app/containers/curriculum-selector";
-import { useCurriculumStore } from "@isef-web-app/stores";
-import { trpc } from "@isef-web-app/utils/trpc";
+import { DashboardTable } from "@web-app/components/tables";
+import { CurriculumSelector } from "@web-app/containers/curriculum-selector";
+import type { CurriculumType } from "@web-app/containers/curriculum-selector";
+import { useCurriculumStore } from "@web-app/stores";
+import { trpc } from "@web-app/utils/trpc";
 import type { NextPage } from "next";
 import { useEffect } from "react";
 

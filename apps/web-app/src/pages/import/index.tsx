@@ -1,10 +1,10 @@
 import {
   SchoolYearSelector,
   SemesterSelector,
-} from "@isef-web-app/components/selectors";
-import type { Semester } from "@isef-web-app/types/semester";
-import { dataOutputSchema, fields } from "@isef-web-app/types/spreadsheet";
-import { trpc } from "@isef-web-app/utils/trpc";
+} from "@web-app/components/selectors";
+import type { Semester } from "@web-app/types/semester";
+import { dataOutputSchema, fields } from "@web-app/types/spreadsheet";
+import { trpc } from "@web-app/utils/trpc";
 import _ from "lodash";
 import type { NextPage } from "next";
 import { useSession } from "next-auth/react";

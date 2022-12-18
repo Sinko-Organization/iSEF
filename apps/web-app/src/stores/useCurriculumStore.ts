@@ -1,4 +1,4 @@
-import type { Semester } from "@isef-web-app/types/semester";
+import type { Semester } from "@web-app/types/semester";
 import create from "zustand";
 
 interface CurriculumState {

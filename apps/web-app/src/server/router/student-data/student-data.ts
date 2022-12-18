@@ -1,6 +1,6 @@
-import { toNumericGrade } from "@isef-web-app/helpers";
-import { validStudentSchema } from "@isef-web-app/types/spreadsheet";
 import { SemesterType } from "@prisma/client";
+import { toNumericGrade } from "@web-app/helpers";
+import { validStudentSchema } from "@web-app/types/spreadsheet";
 import _ from "lodash";
 import { z } from "zod";
 
