@@ -1,3 +1,4 @@
+import type { Semester } from "@isef-web-app/types/semester";
 import Box from "@mui/material/Box";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
@@ -6,8 +7,6 @@ import Select from "@mui/material/Select";
 import type { SelectChangeEvent } from "@mui/material/Select";
 import _ from "lodash";
 import type { FC } from "react";
-
-import type { Semester } from "@/types/semester";
 
 const semesters: Semester[] = ["FIRST", "SECOND", "SUMMER"];
 

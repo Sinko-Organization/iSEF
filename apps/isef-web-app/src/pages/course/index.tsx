@@ -1,9 +1,8 @@
+import { CourseTable } from "@isef-web-app/components/tables";
+import { useCurriculumStore } from "@isef-web-app/stores";
+import { trpc } from "@isef-web-app/utils/trpc";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-
-import { CourseTable } from "@/components/tables";
-import { useCurriculumStore } from "@/stores";
-import { trpc } from "@/utils/trpc";
 
 const CoursePage: NextPage = () => {
   const { schoolYear, semesterType } = useCurriculumStore();

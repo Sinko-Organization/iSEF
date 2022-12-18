@@ -1,10 +1,10 @@
+import { toNumericGrade } from "@isef-web-app/helpers";
+import { validStudentSchema } from "@isef-web-app/types/spreadsheet";
 import { SemesterType } from "@prisma/client";
 import _ from "lodash";
 import { z } from "zod";
 
 import { createAdminRouter } from "../context";
-import { toNumericGrade } from "@/helpers";
-import { validStudentSchema } from "@/types/spreadsheet";
 
 export const studentDataRouter = createAdminRouter()
   /**

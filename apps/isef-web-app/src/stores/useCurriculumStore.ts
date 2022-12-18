@@ -1,6 +1,5 @@
+import type { Semester } from "@isef-web-app/types/semester";
 import create from "zustand";
-
-import type { Semester } from "@/types/semester";
 
 interface CurriculumState {
   schoolYear: number;

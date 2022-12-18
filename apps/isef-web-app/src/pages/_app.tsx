@@ -1,4 +1,5 @@
 // src/pages/_app.tsx
+import { AdminRoute } from "@isef-web-app/containers/protected-route";
 import { httpBatchLink } from "@trpc/client/links/httpBatchLink";
 import { loggerLink } from "@trpc/client/links/loggerLink";
 import { withTRPC } from "@trpc/next";
@@ -10,7 +11,6 @@ import superjson from "superjson";
 
 import type { AppRouter } from "../server/router";
 import "../styles/globals.css";
-import { AdminRoute } from "@/containers/protected-route";
 
 const NON_PROTECTED_ROUTES = new Set(["/", "/auth/signin"]);
 

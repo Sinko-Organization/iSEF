@@ -1,11 +1,10 @@
+import { DashboardTable } from "@isef-web-app/components/tables";
+import { CurriculumSelector } from "@isef-web-app/containers/curriculum-selector";
+import type { CurriculumType } from "@isef-web-app/containers/curriculum-selector";
+import { useCurriculumStore } from "@isef-web-app/stores";
+import { trpc } from "@isef-web-app/utils/trpc";
 import type { NextPage } from "next";
 import { useEffect } from "react";
-
-import { DashboardTable } from "@/components/tables";
-import { CurriculumSelector } from "@/containers/curriculum-selector";
-import type { CurriculumType } from "@/containers/curriculum-selector";
-import { useCurriculumStore } from "@/stores";
-import { trpc } from "@/utils/trpc";
 
 const DashboardPage: NextPage = () => {
   const { schoolYear, setSchoolYear, semesterType, setSemesterType } =
