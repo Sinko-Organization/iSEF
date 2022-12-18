@@ -92,6 +92,12 @@ describe("course router", () => {
   test("returns the correct population", async () => {
     const ctx = await createUserSession();
 
+    const input = {
+      schoolYear: 2022,
+      semesterType:
+        SemesterType.FIRST || SemesterType.SECOND || SemesterType.SUMMER,
+    };
+
     await ctx.prisma.course.create({
       data: {
         id: "1",
@@ -136,7 +142,7 @@ describe("course router", () => {
     });
 
     const caller = appRouter.createCaller(ctx);
-    const result = await caller.query("course.population");
+    const result = await caller.query("course.population", input);
     const course1 = result[0];
 
     expect(course1?.population).toEqual(3);
@@ -148,8 +154,16 @@ describe("course router", () => {
 
   test("course that must have no population", async () => {
     const ctx = await createUserSession();
+
+    const input = {
+      schoolYear: 2022,
+      semesterType:
+        SemesterType.FIRST || SemesterType.SECOND || SemesterType.SUMMER,
+    };
+
     const caller = appRouter.createCaller(ctx);
-    const result = await caller.query("course.population");
+
+    const result = await caller.query("course.population", input);
 
     expect(result[0])?.toEqual(0);
   });
