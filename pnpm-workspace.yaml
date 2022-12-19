@@ -1,5 +1,4 @@
 packages:
   - "packages/generator"
   - "packages/config"
-
-ignore-workspace-root-check: true
+  - "apps/web-app"

@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/** @type {import('prettier').Options} */
 module.exports = {
   arrowParens: "always",
   printWidth: 80,
