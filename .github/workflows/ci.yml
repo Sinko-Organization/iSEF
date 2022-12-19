@@ -148,6 +148,6 @@ jobs:
         with:
           compose_file: docker-compose.yml
       - name: Push schema
-        run: pnpx prisma db push
+        run: pnpm db:push
 
       - run: pnpm build

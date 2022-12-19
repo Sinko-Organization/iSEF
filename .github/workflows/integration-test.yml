@@ -15,7 +15,7 @@ env:
   GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
 
 jobs:
-  lint:
+  test:
     runs-on: ubuntu-latest
     name: Run Backend Integration Tests
     steps:
@@ -48,7 +48,7 @@ jobs:
       - name: Docker Compose
         uses: isbang/compose-action@v1.4.0
         with:
-          compose_file: docker-compose.yml
+          compose_file: ./apps/web-app/docker-compose.yml
 
       - name: Push Database Schema
         run: pnpm db:push
