@@ -2,7 +2,6 @@
   "name": "@isef/web-app",
   "version": "0.1.0",
   "private": true,
-  "packageManager": "pnpm@7.13.4",
   "scripts": {
     "type-check": "tsc --noEmit",
     "build": "next build",
@@ -84,8 +83,5 @@
   },
   "ct3aMetadata": {
     "initVersion": "5.13.1"
-  },
-  "peerDependencies": {
-    "commitlint": "^11.0.0"
   }
 }
