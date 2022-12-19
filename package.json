@@ -1,7 +1,8 @@
 {
   "name": "isef",
   "version": "1.0.0",
-  "description": "",
+  "description": "Intelligent Students E-Folder",
+  "packageManager": "pnpm@7.13.4",
   "scripts": {
     "build": "turbo build",
     "clean": "rm -rf node_modules",
