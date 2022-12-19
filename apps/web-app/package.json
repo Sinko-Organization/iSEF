@@ -4,21 +4,20 @@
   "private": true,
   "packageManager": "pnpm@7.13.4",
   "scripts": {
-    "typecheck": "tsc",
+    "type-check": "tsc --noEmit",
     "build": "next build",
+    "clean": "rm -rf .next .turbo node_modules",
     "dev": "next dev",
     "postinstall": "prisma generate",
     "studio": "prisma studio",
     "eslint": "eslint --ext .js,.jsx,.ts,.tsx",
     "eslint:fix": "eslint --ext .js,.jsx,.ts,.tsx . --fix",
     "lint": "next lint",
-    "lint-staged": "lint-staged",
     "start": "next start",
     "test": "vitest run",
     "test:unit": "vitest run unit",
     "test:integration": "vitest run int",
     "test:watch": "vitest",
-    "commit": "git add . && cz",
     "cypress:open": "cypress open"
   },
   "dependencies": {

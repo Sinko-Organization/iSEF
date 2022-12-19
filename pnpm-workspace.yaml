@@ -1,4 +1,4 @@
 packages:
   - "packages/generator"
   - "packages/config"
-  - "apps/isef-web-app"
+  - "apps/web-app"

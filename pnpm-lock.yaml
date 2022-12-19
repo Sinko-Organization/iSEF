@@ -32,7 +32,7 @@ importers:
       turbo: 1.6.3
       typescript: 4.7.4
 
-  apps/isef-web-app:
+  apps/web-app:
     specifiers:
       '@babel/core': ^7.19.3
       '@chakra-ui/react': ^2.3.6
@@ -45,7 +45,6 @@ importers:
       '@next/eslint-plugin-next': ^13.0.1
       '@prisma/client': ^4.4.0
       '@testing-library/react': ^13.4.0
-      '@trivago/prettier-plugin-sort-imports': ^3.4.0
       '@trpc/client': ^9.27.2
       '@trpc/next': ^9.27.2
       '@trpc/react': ^9.27.2
@@ -124,7 +123,6 @@ importers:
       '@babel/core': 7.20.5
       '@next/eslint-plugin-next': 13.0.7
       '@testing-library/react': 13.4.0_biqbaboplfbrettd7655fr4n2y
-      '@trivago/prettier-plugin-sort-imports': 3.4.0_prettier@2.8.1
       '@types/lodash': 4.14.191
       '@types/node': 18.0.0
       '@types/react': 18.0.14
