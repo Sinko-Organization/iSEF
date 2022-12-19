@@ -51,7 +51,10 @@ jobs:
           compose_file: docker-compose.yml
 
       - name: Push Database Schema
-        run: pnpm prisma db push
+        run: pnpm db:push
+
+      - name: Run Unit Tests
+        run: pnpm test:unit
 
       - name: Run Integration Tests
-        run: pnpm run test:integration
+        run: pnpm test:integration

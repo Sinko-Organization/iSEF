@@ -18,7 +18,9 @@
     "test:unit": "vitest run unit",
     "test:integration": "vitest run int",
     "test:watch": "vitest",
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "db:push": "prisma db push",
+    "db:generate": "prisma generate"
   },
   "dependencies": {
     "@chakra-ui/react": "^2.3.6",

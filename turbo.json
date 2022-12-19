@@ -29,6 +29,14 @@
     "type-check": {
       "dependsOn": ["^db:generate"],
       "cache": false
+    },
+    "test:unit": {
+      "dependsOn": ["^db:generate"],
+      "cache": false
+    },
+    "test:integration": {
+      "dependsOn": ["^db:generate"],
+      "cache": false
     }
   }
 }
