@@ -1,3 +1,4 @@
+import { A, pipe } from "@mobily/ts-belt";
 import _ from "lodash";
 import { z } from "zod";
 
@@ -11,8 +12,13 @@ export const honorsRouter = createAdminRouter()
     input: z.object({
       schoolYear: z.number(),
       semesterType: z.enum(["FIRST", "SECOND", "SUMMER"]),
+      yearLevel: z.number().int().min(1).max(5).optional(),
       skip: z.number().default(0),
       take: z.number().default(10),
+      sortBy: z.object({
+        field: z.enum(["lastName", "gwa"]).default("lastName"),
+        order: z.enum(["asc", "desc"]).default("asc"),
+      }),
     }),
     async resolve({ ctx, input }) {
       // get all students with honors, invidual grades must be > 2.6 ang the GWA must be > 1.5
@@ -38,6 +44,9 @@ export const honorsRouter = createAdminRouter()
                     semesterType: {
                       equals: input.semesterType,
                     },
+                  },
+                  {
+                    yearLevel: input.yearLevel,
                   },
                 ],
               },
@@ -80,43 +89,37 @@ export const honorsRouter = createAdminRouter()
                     units: true,
                   },
                 },
+                yearLevel: true,
               },
             },
           },
         })
         .then((records) => {
-          // filter out students with GWA < 1.5
-          return records.filter((record) => {
-            const gwa =
-              _.sumBy(record.studentRecords, (record) => {
-                return record.grade * record.subject.units;
-              }) /
-              _.sumBy(record.studentRecords, (record) => {
-                return record.subject.units;
-              });
-            return gwa <= 1.5;
-          });
-        })
-        .then((records) => {
-          // return with the gwa
+          return pipe(
+            records,
+            // return with the gwa
+            A.map((record) => {
+              const gwa =
+                _.sumBy(record.studentRecords, (record) => {
+                  return record.grade * record.subject.units;
+                }) /
+                _.sumBy(record.studentRecords, (record) => {
+                  return record.subject.units;
+                });
 
-          return records.map((record) => {
-            const gwa =
-              _.sumBy(record.studentRecords, (record) => {
-                return record.grade * record.subject.units;
-              }) /
-              _.sumBy(record.studentRecords, (record) => {
-                return record.subject.units;
-              });
-
-            return {
-              ...record,
-              gwa,
-            };
-          });
-        })
-        .then((records) => {
-          return _.slice(records, input.skip, input.skip + input.take);
+              return {
+                ...record,
+                gwa,
+              };
+            }),
+            // filter out students with GWA < 1.5
+            A.filter((record) => record.gwa <= 1.5),
+            // get only the records that are within the skip and take
+            A.slice(input.skip, input.skip + input.take),
+            // sort the records
+            (records) =>
+              _.orderBy(records, [input.sortBy.field], [input.sortBy.order]),
+          );
         });
     },
   });
