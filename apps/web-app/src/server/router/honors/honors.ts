@@ -112,7 +112,7 @@ export const honorsRouter = createAdminRouter()
                 gwa,
               };
             }),
-            // filter out students with GWA < 1.5
+            // filter out students with GWA <= 1.5
             A.filter((record) => record.gwa <= 1.5),
             // get only the records that are within the skip and take
             A.slice(input.skip, input.skip + input.take),
