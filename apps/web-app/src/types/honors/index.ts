@@ -1,0 +1,5 @@
+export type HonorsType =
+  | "CUM LAUDE"
+  | "MAGNA CUM LAUDE"
+  | "SUMMA CUM LAUDE"
+  | "SUMMA CUM LAUDE WITH DISTINCTION";

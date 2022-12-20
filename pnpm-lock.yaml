@@ -38,6 +38,7 @@ importers:
       '@chakra-ui/react': ^2.3.6
       '@emotion/react': ^11.10.4
       '@emotion/styled': ^11.10.4
+      '@mobily/ts-belt': ^3.13.1
       '@mui/icons-material': ^5.10.16
       '@mui/material': ^5.10.15
       '@mui/styled-engine-sc': ^5.10.14
@@ -94,6 +95,7 @@ importers:
       '@chakra-ui/react': 2.4.4_ulcxn4lj42erdjzuvgv6z66e6i
       '@emotion/react': 11.10.5_osskuxkoxia2jgqs53ucuy3g5e
       '@emotion/styled': 11.10.5_hf2sshr7yk4lcfqullsz6ppcmm
+      '@mobily/ts-belt': 3.13.1
       '@mui/icons-material': 5.11.0_sm465bmxeu4ngqdqmcpqkblrw4
       '@mui/material': 5.11.0_z4txrogaoo2zkpnamooqyd3nbm
       '@mui/styled-engine-sc': 5.11.0_styled-components@5.3.6
@@ -2230,6 +2232,11 @@ packages:
       '@jridgewell/resolve-uri': 3.1.0
       '@jridgewell/sourcemap-codec': 1.4.14
     dev: true
+
+  /@mobily/ts-belt/3.13.1:
+    resolution: {integrity: sha512-K5KqIhPI/EoCTbA6CGbrenM9s41OouyK8A03fGJJcla/zKucsgLbz8HNbeseoLarRPgyWJsUyCYqFhI7t3Ra9Q==}
+    engines: {node: '>= 10.*'}
+    dev: false
 
   /@motionone/animation/10.15.1:
     resolution: {integrity: sha512-mZcJxLjHor+bhcPuIFErMDNyrdb2vJur8lSfMCsuCB4UyV8ILZLvK+t+pg56erv8ud9xQGK/1OGPt10agPrCyQ==}
@@ -6635,7 +6642,7 @@ packages:
     resolution: {integrity: sha512-7vuh85V5cdDofPyxn58nrPjBktZo0u9x1g8WtjQol+jZDaE+fhN+cIvTj11GndBnMnyfrUOG1sZQxCdjKh+DKg==}
     engines: {node: '>= 10.13.0'}
     dependencies:
-      '@types/node': 18.0.0
+      '@types/node': 18.11.17
       merge-stream: 2.0.0
       supports-color: 8.1.1
     dev: true
