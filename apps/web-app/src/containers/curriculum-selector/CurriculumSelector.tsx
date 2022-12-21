@@ -1,12 +1,9 @@
-import Button from "@mui/material/Button";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import { SemesterType } from "@prisma/client";
-import _ from "lodash";
 import type { FC } from "react";
-import { useForm } from "react-hook-form";
 
 interface CurriculumSelectorProps {
   schoolYearsData: {
@@ -14,8 +11,9 @@ interface CurriculumSelectorProps {
     startYear: number;
     endYear: number;
   }[];
-  submitHandler: (data: CurriculumType) => void;
   curriculum: CurriculumType;
+  setSchoolYear: (schoolYear: number) => void;
+  setSemesterType: (semesterType: SemesterType) => void;
 }
 
 export type CurriculumType = {
@@ -25,20 +23,18 @@ export type CurriculumType = {
 
 const CurriculumSelector: FC<CurriculumSelectorProps> = ({
   schoolYearsData,
-  submitHandler,
   curriculum,
+  setSchoolYear,
+  setSemesterType,
 }) => {
-  const { register, handleSubmit } = useForm<CurriculumType>({
-    defaultValues: {
-      schoolYear: curriculum.schoolYear,
-      semesterType: curriculum.semesterType,
-    },
-  });
   return (
     <Stack sx={{ maxWidth: 200, marginY: 2 }} spacing={2}>
       {/* School Year */}
-      <InputLabel id="demo-simple-select-label">School Year</InputLabel>
-      <Select defaultValue={curriculum.schoolYear} {...register("schoolYear")}>
+      <InputLabel>School Year</InputLabel>
+      <Select
+        defaultValue={curriculum.schoolYear}
+        onChange={(e) => setSchoolYear(Number(e.target.value))}
+      >
         {schoolYearsData.map((year) => (
           <MenuItem key={year.id} value={year.startYear}>
             S.Y. {year.startYear} - {year.endYear}
@@ -47,30 +43,19 @@ const CurriculumSelector: FC<CurriculumSelectorProps> = ({
       </Select>
 
       {/*  Semester Type */}
-      <InputLabel id="demo-simple-select-label">Semester Type</InputLabel>
+      <InputLabel>Semester Type</InputLabel>
       <Select
         defaultValue={curriculum.semesterType}
-        {...register("semesterType")}
+        onChange={(e) => setSemesterType(e.target.value as SemesterType)}
       >
         {Object.values(SemesterType).map((semesterType) => (
           <MenuItem key={semesterType} value={semesterType}>
-            <option value={semesterType}>
-              {_.capitalize(semesterType.toLowerCase())}
+            <option value={semesterType} className="capitalize">
+              {semesterType.toLowerCase()}
             </option>
           </MenuItem>
         ))}
       </Select>
-
-      {/* Submit */}
-      <Button
-        variant="contained"
-        type="submit"
-        onClick={handleSubmit((data) => {
-          submitHandler(data);
-        })}
-      >
-        Submit
-      </Button>
     </Stack>
   );
 };
