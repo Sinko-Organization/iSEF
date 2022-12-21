@@ -29,6 +29,7 @@
     "@mui/icons-material": "^5.10.16",
     "@mui/material": "^5.10.15",
     "@mui/styled-engine-sc": "^5.10.14",
+    "@mui/x-data-grid": "^5.17.16",
     "@next-auth/prisma-adapter": "^1.0.4",
     "@prisma/client": "^4.4.0",
     "@trpc/client": "^9.27.2",
