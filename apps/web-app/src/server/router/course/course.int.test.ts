@@ -11,6 +11,22 @@ import { appRouter } from "../index";
  */
 describe("course router", () => {
   /**
+   * Clean up the database before each test
+   */
+  beforeEach(async () => {
+    const ctx = await createContextInner({
+      session: null,
+    });
+
+    await ctx.prisma.course.deleteMany();
+    await ctx.prisma.user.deleteMany();
+    await ctx.prisma.student.deleteMany();
+    await ctx.prisma.studentRecord.deleteMany();
+    await ctx.prisma.schoolYear.deleteMany();
+    await ctx.prisma.subject.deleteMany();
+  });
+
+  /**
    * Clean up the database after each test
    */
   afterEach(async () => {

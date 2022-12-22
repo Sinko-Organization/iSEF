@@ -15,7 +15,7 @@
     "start": "next start",
     "test": "vitest run",
     "test:unit": "vitest run unit",
-    "test:integration": "vitest run int",
+    "test:integration": "vitest run int --threads false",
     "test:watch": "vitest",
     "cypress:open": "cypress open",
     "db:push": "prisma db push",
