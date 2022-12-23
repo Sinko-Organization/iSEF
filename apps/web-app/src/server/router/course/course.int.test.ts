@@ -257,7 +257,7 @@ describe("course router", () => {
       semesterType: "FIRST",
     });
 
-    expect(result).toEqual([
+    expect(result).toStrictEqual([
       {
         id: "1",
         studentIdNumber: "1",

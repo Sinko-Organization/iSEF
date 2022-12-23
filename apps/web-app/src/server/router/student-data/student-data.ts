@@ -1,4 +1,5 @@
 import { SemesterType } from "@prisma/client";
+import { TRPCError } from "@trpc/server";
 import { toNumericGrade } from "@web-app/helpers";
 import { validStudentSchema } from "@web-app/types/spreadsheet";
 import _ from "lodash";
@@ -91,7 +92,55 @@ export const studentDataRouter = createAdminRouter()
     async resolve({ ctx, input }) {
       const { studentRecords, schoolYear, semester } = input;
 
+      // end year must be start year + 1
+      if (schoolYear.endYear !== schoolYear.startYear + 1) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "End year must be one year after start year",
+        });
+      }
+
+      for (const record of studentRecords) {
+        const studentRecord = await ctx.prisma.studentRecord.findFirst({
+          where: {
+            AND: [
+              {
+                student: {
+                  studentIdNumber: record.id,
+                },
+              },
+              {
+                course: {
+                  code: record.course,
+                },
+              },
+              {
+                subject: {
+                  stubCode: record.subject,
+                },
+              },
+              {
+                schoolYear: {
+                  startYear: schoolYear.startYear,
+                },
+              },
+              {
+                semesterType: semester as SemesterType,
+              },
+            ],
+          },
+        });
+
+        if (studentRecord) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Student record already exists",
+          });
+        }
+      }
+
       return ctx.prisma.$transaction([
+        // upload student records
         ...studentRecords.map((record) => {
           return ctx.prisma.studentRecord.create({
             data: {
