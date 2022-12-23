@@ -100,50 +100,66 @@ export const studentDataRouter = createAdminRouter()
         });
       }
 
-      for (const record of studentRecords) {
-        const studentRecord = await ctx.prisma.studentRecord.findFirst({
-          where: {
-            AND: [
-              {
-                student: {
-                  studentIdNumber: record.id,
-                },
-              },
-              {
-                course: {
-                  code: record.course,
-                },
-              },
-              {
-                subject: {
-                  stubCode: record.subject,
-                },
-              },
-              {
-                schoolYear: {
-                  startYear: schoolYear.startYear,
-                },
-              },
-              {
-                semesterType: semester as SemesterType,
-              },
-            ],
-          },
-        });
-
-        if (studentRecord) {
-          throw new TRPCError({
-            code: "BAD_REQUEST",
-            message: "Student record already exists",
-          });
-        }
-      }
-
       return ctx.prisma.$transaction([
-        // upload student records
         ...studentRecords.map((record) => {
-          return ctx.prisma.studentRecord.create({
-            data: {
+          const complexId = `${record.id}-${record.course}-${record.subject}-${schoolYear.startYear}-${semester}`;
+          return ctx.prisma.studentRecord.upsert({
+            create: {
+              id: complexId,
+              grade: toNumericGrade(record.grade),
+              semesterType: semester as SemesterType,
+              yearLevel: _.toInteger(record.yearLevel),
+              schoolYear: {
+                connectOrCreate: {
+                  where: {
+                    startYear: schoolYear.startYear,
+                  },
+                  create: {
+                    startYear: schoolYear.startYear,
+                    endYear: schoolYear.endYear,
+                  },
+                },
+              },
+              course: {
+                connectOrCreate: {
+                  where: {
+                    code: record.course,
+                  },
+                  create: {
+                    code: record.course,
+                    name: record.course,
+                  },
+                },
+              },
+              student: {
+                connectOrCreate: {
+                  where: {
+                    studentIdNumber: record.id,
+                  },
+                  create: {
+                    studentIdNumber: record.id,
+                    firstName: record.firstName,
+                    lastName: record.lastName,
+                  },
+                },
+              },
+              subject: {
+                connectOrCreate: {
+                  where: {
+                    stubCode: record.stubCode,
+                  },
+                  create: {
+                    stubCode: record.stubCode,
+                    name: record.subject,
+                    units: _.toNumber(record.units),
+                  },
+                },
+              },
+            },
+            where: {
+              id: complexId,
+            },
+            update: {
               grade: toNumericGrade(record.grade),
               semesterType: semester as SemesterType,
               yearLevel: _.toInteger(record.yearLevel),
