@@ -14,6 +14,10 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+generator erd {
+    provider = "prisma-erd-generator"
+}
+
 model Example {
     id String @id @default(cuid())
 }
