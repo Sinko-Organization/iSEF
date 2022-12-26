@@ -66,7 +66,7 @@ importers:
       eslint-plugin-chakra-ui: ^0.7.5
       eslint-plugin-import: ^2.26.0
       eslint-plugin-unicorn: ^44.0.2
-      eslint-plugin-vitest: ^0.0.11
+      eslint-plugin-vitest: ^0.0.21
       immer: ^9.0.16
       jsdom: ^20.0.1
       lodash: ^4.17.21
@@ -139,7 +139,7 @@ importers:
       eslint-plugin-chakra-ui: 0.7.6_4rv7y5c6xz3vfxwhbrcxxi73bq
       eslint-plugin-import: 2.26.0_a4siyfpydtcaksmdq2mtzwlb2y
       eslint-plugin-unicorn: 44.0.2_eslint@8.22.0
-      eslint-plugin-vitest: 0.0.11_4rv7y5c6xz3vfxwhbrcxxi73bq
+      eslint-plugin-vitest: 0.0.21_4rv7y5c6xz3vfxwhbrcxxi73bq
       jsdom: 20.0.3
       postcss: 8.4.20
       prettier: 2.8.1
@@ -5345,8 +5345,8 @@ packages:
       strip-indent: 3.0.0
     dev: true
 
-  /eslint-plugin-vitest/0.0.11_4rv7y5c6xz3vfxwhbrcxxi73bq:
-    resolution: {integrity: sha512-L3wnfKxsUFmd8aUqmrWD6CZ6YFBFqADVvs67uQR+pC095XPrvPgFjFMlsMBGDhmEZNjnAy/Fds2PcJKC0aZDCA==}
+  /eslint-plugin-vitest/0.0.21_4rv7y5c6xz3vfxwhbrcxxi73bq:
+    resolution: {integrity: sha512-eer/eS0T9MW8X9CKHg6M9URKgSEOJ8I24CKQlz1WhD68Hz2Uuwepb61OHZ+33Fcuzp4YXl/qqd7XSSq+p8BJAw==}
     engines: {node: 14.x || >= 16}
     peerDependencies:
       eslint: '>=8.0.0'
