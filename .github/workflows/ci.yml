@@ -144,7 +144,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       - name: Docker Compose
-        uses: isbang/compose-action@v1.4.0
+        uses: isbang/compose-action@v1.4.1
         with:
           compose_file: docker-compose.yml
       - name: Push schema
