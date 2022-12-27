@@ -1,25 +1,17 @@
 import { DashboardTable } from "@web-app/components/tables";
 import { CurriculumSelector } from "@web-app/containers/curriculum-selector";
-import type { CurriculumType } from "@web-app/containers/curriculum-selector";
 import { useCurriculumStore } from "@web-app/stores";
 import { trpc } from "@web-app/utils/trpc";
 import type { NextPage } from "next";
 import { useEffect } from "react";
 
 const DashboardPage: NextPage = () => {
-  const { schoolYear, setSchoolYear, semesterType, setSemesterType } =
-    useCurriculumStore();
-
-  const { data: courseData, status: courseStatus } = trpc.useQuery([
-    "course.population",
-    {
-      schoolYear,
-      semesterType,
-    },
-  ]);
   const { data: schoolYearsData, status: schoolYearStatus } = trpc.useQuery([
     "schoolYear.getAll",
   ]);
+
+  const { schoolYear, setSchoolYear, semesterType, setSemesterType } =
+    useCurriculumStore();
 
   useEffect(() => {
     if (schoolYearsData) {
@@ -30,13 +22,13 @@ const DashboardPage: NextPage = () => {
     }
   }, [schoolYearsData, setSchoolYear]);
 
-  // function that filters based on school year and semester type
-  const getCourseData = (data: CurriculumType) => {
-    const { schoolYear, semesterType } = data;
-    setSchoolYear(schoolYear);
-    setSemesterType(semesterType);
-    return courseData;
-  };
+  const { data: courseData, status: courseStatus } = trpc.useQuery([
+    "course.population",
+    {
+      schoolYear,
+      semesterType,
+    },
+  ]);
 
   // loading
   if (courseStatus === "loading" || schoolYearStatus === "loading") {
@@ -53,8 +45,9 @@ const DashboardPage: NextPage = () => {
       {schoolYearsData && (
         <CurriculumSelector
           schoolYearsData={schoolYearsData}
-          submitHandler={getCourseData}
           curriculum={{ schoolYear, semesterType }}
+          setSchoolYear={setSchoolYear}
+          setSemesterType={setSemesterType}
         />
       )}
       {courseData && <DashboardTable rows={courseData} />}

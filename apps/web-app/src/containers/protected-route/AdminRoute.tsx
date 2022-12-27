@@ -8,7 +8,11 @@ interface Props {
 
 const AdminRoute: FC<Props> = ({ children }) => {
   const router = useRouter();
-  const { data: user } = trpc.useQuery(["user.role"]);
+  const { data: user, error } = trpc.useQuery(["user.role"]);
+
+  if (error) {
+    return <div>Error</div>;
+  }
 
   if (!user) {
     return <div>Loading...</div>;

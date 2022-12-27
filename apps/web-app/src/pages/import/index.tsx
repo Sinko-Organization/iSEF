@@ -14,7 +14,9 @@ import { Result } from "react-spreadsheet-import/types/types";
 
 const Import: NextPage = () => {
   const { data: session } = useSession();
-  const { mutate: uploadData } = trpc.useMutation(["studentData.upload"]);
+  const { mutate: uploadData, isLoading } = trpc.useMutation([
+    "studentData.upload",
+  ]);
   const [open, setOpen] = useState<boolean>(false);
   const [schoolYear, setSchoolYear] = useState<string>("1990");
   const [semester, setSemester] = useState<Semester>("FIRST");
@@ -45,6 +47,8 @@ const Import: NextPage = () => {
 
   return (
     <div className="mx-20 mt-10">
+      {/* loading component */}
+      {isLoading && <div>Uploading...</div>}
       <div className="my-10">
         <SchoolYearSelector
           schoolYear={schoolYear}
@@ -54,7 +58,9 @@ const Import: NextPage = () => {
       <div className="my-10">
         <SemesterSelector semester={semester} setSemester={setSemester} />
       </div>
-      <button onClick={toggleButton(true)}>Import File</button>
+      <button onClick={toggleButton(true)} disabled={isLoading}>
+        Import File
+      </button>
       <ReactSpreadsheetImport
         isOpen={open}
         onClose={toggleButton(false)}

@@ -188,17 +188,19 @@ const indexSchema = z.object({
   __index: z.string(),
 });
 
+const trimmedStringSchema = z.string().transform((str) => str.trim());
+
 export const validStudentSchema = z.object({
-  id: z.string(),
-  firstName: z.string(),
-  lastName: z.string(),
-  course: z.string(),
-  yearLevel: z.string(),
-  stubCode: z.string(),
-  subject: z.string(),
-  units: z.string(),
-  grade: z.string(),
-  remarks: z.string(),
+  id: trimmedStringSchema,
+  firstName: trimmedStringSchema,
+  lastName: trimmedStringSchema,
+  course: trimmedStringSchema,
+  yearLevel: trimmedStringSchema,
+  stubCode: trimmedStringSchema,
+  subject: trimmedStringSchema,
+  units: trimmedStringSchema,
+  grade: trimmedStringSchema,
+  remarks: trimmedStringSchema,
 });
 
 const invalidStudentSchema = validStudentSchema.partial();

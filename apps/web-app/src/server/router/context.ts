@@ -93,7 +93,6 @@ export const createUserSession = async () => {
     session: null,
   });
 
-  // create a user with the following properties
   const user = await ctx.prisma.user.create({
     data: {
       email: "user@website.com",
@@ -108,4 +107,52 @@ export const createUserSession = async () => {
       expires: "100",
     },
   });
+};
+
+/**
+ * Delete all data within the database
+ */
+
+export const deleteAllData = async () => {
+  const ctx = await createContextInner({
+    session: null,
+  });
+
+  const tablenames = await ctx.prisma.$queryRaw<
+    Array<{ tablename: string }>
+  >`SELECT tablename FROM pg_tables WHERE schemaname='public'`;
+
+  const tables = tablenames
+    .map(({ tablename }) => tablename)
+    .filter((name) => name !== "_prisma_migrations")
+    .map((name) => `"public"."${name}"`)
+    .join(", ");
+
+  try {
+    await ctx.prisma.$executeRawUnsafe(`TRUNCATE TABLE ${tables} CASCADE;`);
+  } catch (error) {
+    console.log({ error });
+  }
+};
+
+export const deleteRecords = async () => {
+  const ctx = await createContextInner({
+    session: null,
+  });
+
+  try {
+    await ctx.prisma.course.deleteMany();
+    await ctx.prisma.user.deleteMany();
+    await ctx.prisma.student.deleteMany();
+    await ctx.prisma.studentRecord.deleteMany();
+    await ctx.prisma.schoolYear.deleteMany();
+    await ctx.prisma.subject.deleteMany();
+    await ctx.prisma.teacher.deleteMany();
+    await ctx.prisma.example.deleteMany();
+    await ctx.prisma.account.deleteMany();
+    await ctx.prisma.verificationToken.deleteMany();
+    await ctx.prisma.session.deleteMany();
+  } catch (error) {
+    console.log({ error });
+  }
 };
