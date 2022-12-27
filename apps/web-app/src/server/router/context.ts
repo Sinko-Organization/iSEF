@@ -93,12 +93,8 @@ export const createUserSession = async () => {
     session: null,
   });
 
-  const user = await ctx.prisma.user.upsert({
-    where: {
-      email: "user@website.com",
-    },
-    update: {},
-    create: {
+  const user = await ctx.prisma.user.create({
+    data: {
       email: "user@website.com",
       name: "User",
       role: "admin",

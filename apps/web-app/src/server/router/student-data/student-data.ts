@@ -102,7 +102,7 @@ export const studentDataRouter = createAdminRouter()
 
       return ctx.prisma.$transaction([
         ...studentRecords.map((record) => {
-          const complexId = `${record.id}-${record.course}-${record.subject}-${schoolYear.startYear}-${semester}`;
+          const complexId = `${record.id}-${record.course}-${record.stubCode}-${schoolYear.startYear}-${semester}`;
           return ctx.prisma.studentRecord.upsert({
             create: {
               id: complexId,

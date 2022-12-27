@@ -509,8 +509,8 @@ describe("the upload route", () => {
       semester: "FIRST",
     });
 
-    expect(uploadMutation).rejects.toThrowError(
-      "School year start and end year must differ by one",
+    await expect(uploadMutation).rejects.toThrowError(
+      "End year must be one year after start year",
     );
   });
 });
