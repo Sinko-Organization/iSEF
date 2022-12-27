@@ -215,31 +215,16 @@ describe("course router", () => {
         })),
       );
 
-    expect(result).toEqual([
-      {
-        studentIdNumber: "1",
-        firstName: "John",
-        lastName: "Doe",
-      },
-      {
-        studentIdNumber: "2",
-        firstName: "Jane",
-        lastName: "Doe",
-      },
-    ]);
+    expect(result).toContainEqual({
+      studentIdNumber: "1",
+      firstName: "John",
+      lastName: "Doe",
+    });
 
-    // TODO: Remove or use if tests fail in CI
-
-    // expect(result).toContainEqual({
-    //   studentIdNumber: "1",
-    //   firstName: "John",
-    //   lastName: "Doe",
-    // });
-
-    // expect(result).toContainEqual({
-    //   studentIdNumber: "2",
-    //   firstName: "Jane",
-    //   lastName: "Doe",
-    // });
+    expect(result).toContainEqual({
+      studentIdNumber: "2",
+      firstName: "Jane",
+      lastName: "Doe",
+    });
   });
 });
