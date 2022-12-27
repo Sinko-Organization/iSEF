@@ -133,4 +133,21 @@ export const courseRouter = createAdminRouter()
 
       return records.map((record) => record.student);
     },
+  })
+  /**
+   * Mutations
+   */
+  .mutation("create", {
+    input: z.object({
+      name: z.string(),
+      code: z.string(),
+    }),
+    async resolve({ ctx, input }) {
+      return ctx.prisma.course.create({
+        data: {
+          name: input.name,
+          code: input.code,
+        },
+      });
+    },
   });

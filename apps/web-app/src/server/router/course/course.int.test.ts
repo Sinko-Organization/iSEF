@@ -153,119 +153,75 @@ describe("course router", () => {
   test("getting all student records with the same course id", async () => {
     const ctx = await createUserSession();
 
-    const course1 = await ctx.prisma.course.create({
-      data: {
-        id: "1",
-        name: "Course 1",
-        code: "C1",
-      },
-    });
-
-    const student1 = await ctx.prisma.student.create({
-      data: {
-        id: "1",
-        studentIdNumber: "1",
-        firstName: "John",
-        lastName: "Doe",
-      },
-    });
-
-    const student2 = await ctx.prisma.student.create({
-      data: {
-        id: "2",
-        studentIdNumber: "2",
-        firstName: "Jane",
-        lastName: "Doe",
-      },
-    });
-
-    const schoolYear = await ctx.prisma.schoolYear.create({
-      data: {
-        id: "1",
-        endYear: 2021,
-        startYear: 2020,
-      },
-    });
-
-    await ctx.prisma.studentRecord.create({
-      data: {
-        schoolYear: {
-          connect: {
-            id: schoolYear.id,
-          },
-        },
-        student: {
-          connect: {
-            id: student1.id,
-          },
-        },
-        course: {
-          connect: {
-            id: course1.id,
-          },
-        },
-        semesterType: "FIRST",
-        grade: 1,
-        yearLevel: 1,
-        subject: {
-          create: {
-            id: "1",
-            name: "Math",
-            stubCode: "MATH",
-            units: 3,
-          },
-        },
-      },
-    });
-
-    await ctx.prisma.studentRecord.create({
-      data: {
-        schoolYear: {
-          connect: {
-            id: schoolYear.id,
-          },
-        },
-        student: {
-          connect: {
-            id: student2.id,
-          },
-        },
-        course: {
-          connect: {
-            id: course1.id,
-          },
-        },
-        semesterType: "FIRST",
-        grade: 1,
-        yearLevel: 1,
-        subject: {
-          create: {
-            id: "2",
-            name: "English",
-            stubCode: "ENG",
-            units: 3,
-          },
-        },
-      },
-    });
-
     const caller = appRouter.createCaller(ctx);
 
-    const result = await caller.query("course.getStudents", {
-      courseId: course1.id,
-      schoolYear: 2020,
-      semesterType: "FIRST",
+    await caller.mutation("studentData.upload", {
+      schoolYear: {
+        startYear: 2020,
+        endYear: 2021,
+      },
+      semester: "FIRST",
+      studentRecords: [
+        {
+          id: "1",
+          firstName: "John",
+          lastName: "Doe",
+          course: "BSSE",
+          yearLevel: "1",
+          grade: "1",
+          remarks: "Good",
+          subject: "Math",
+          stubCode: "1",
+          units: "3",
+        },
+        {
+          id: "2",
+          firstName: "Jane",
+          lastName: "Doe",
+          course: "BSSE",
+          yearLevel: "1",
+          grade: "1",
+          remarks: "Good",
+          subject: "Math",
+          stubCode: "2",
+          units: "3",
+        },
+      ],
     });
+
+    const course = await ctx.prisma.course.findFirst({
+      where: {
+        code: "BSSE",
+      },
+    });
+
+    if (course === null) {
+      throw new Error("Course is null");
+    }
+
+    expect(course).not.toBeNull();
+
+    const result = await caller
+      .query("course.getStudents", {
+        courseId: course.id,
+        schoolYear: 2020,
+        semesterType: "FIRST",
+      })
+      .then((result) =>
+        result.map((studentRecord) => ({
+          studentIdNumber: studentRecord.studentIdNumber,
+          firstName: studentRecord.firstName,
+          lastName: studentRecord.lastName,
+        })),
+      );
 
     expect(result).toStrictEqual([
       {
-        id: "1",
         studentIdNumber: "1",
         firstName: "John",
         lastName: "Doe",
       },
       {
-        id: "2",
         studentIdNumber: "2",
         firstName: "Jane",
         lastName: "Doe",
