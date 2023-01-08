@@ -12,13 +12,16 @@ import { useState } from "react";
 import { ReactSpreadsheetImport } from "react-spreadsheet-import";
 import { Result } from "react-spreadsheet-import/types/types";
 
+// TODO: Improve UI for this page
 const Import: NextPage = () => {
   const { data: session } = useSession();
   const { mutate: uploadData, isLoading } = trpc.useMutation([
     "studentData.upload",
   ]);
   const [open, setOpen] = useState<boolean>(false);
-  const [schoolYear, setSchoolYear] = useState<string>("1990");
+  const [schoolYear, setSchoolYear] = useState<string>(
+    new Date().getFullYear().toString(),
+  );
   const [semester, setSemester] = useState<Semester>("FIRST");
 
   const toggleButton = (state: boolean) => () => {
