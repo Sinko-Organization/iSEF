@@ -11,7 +11,7 @@ const AdminRoute: FC<Props> = ({ children }) => {
   const { data: user, error } = trpc.useQuery(["user.role"]);
 
   if (error) {
-    return <div>Error</div>;
+    router.push("/");
   }
 
   if (!user) {
