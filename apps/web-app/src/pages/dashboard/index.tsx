@@ -5,6 +5,7 @@ import { trpc } from "@web-app/utils/trpc";
 import type { NextPage } from "next";
 import { useEffect } from "react";
 
+// TODO: Improve UI for this page
 const DashboardPage: NextPage = () => {
   const { data: schoolYearsData, status: schoolYearStatus } = trpc.useQuery([
     "schoolYear.getAll",
