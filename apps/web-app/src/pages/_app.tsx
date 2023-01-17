@@ -2,6 +2,7 @@
 import { httpBatchLink } from "@trpc/client/links/httpBatchLink";
 import { loggerLink } from "@trpc/client/links/loggerLink";
 import { withTRPC } from "@trpc/next";
+import { SideDrawer } from "@web-app/containers/drawers";
 import { AdminRoute } from "@web-app/containers/protected-route";
 import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
@@ -25,7 +26,9 @@ const MyApp: AppType<{ session: Session | null }> = ({
         <Component {...pageProps} />
       ) : (
         <AdminRoute>
-          <Component {...pageProps} />
+          <SideDrawer>
+            <Component {...pageProps} />
+          </SideDrawer>
         </AdminRoute>
       )}
     </SessionProvider>
