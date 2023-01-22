@@ -1,3 +1,4 @@
+import { StudentProfileCard } from "@web-app/components/cards";
 import { useCurriculumStore } from "@web-app/stores";
 import { trpc } from "@web-app/utils/trpc";
 import _ from "lodash";
@@ -37,13 +38,14 @@ const StudentPage: NextPage = () => {
     <>
       {data && (
         <div>
-          <div>ID: {data.studentIdNumber}</div>
-          <div>
-            Name: {data.firstName} {data.lastName}
-          </div>
-          <div>Email: {data.email ?? "No email"}</div>
-          <div>Phone: {data.phoneNumber ?? "No phone"}</div>
-          <div>Address: {data.address ?? "No address"}</div>
+          <StudentProfileCard
+            id={data.studentIdNumber}
+            firstName={data.firstName}
+            lastName={data.lastName}
+            email={data.email}
+            phone={data.phoneNumber}
+            address={data.address}
+          />
           {/* Student Records */}
           <div>Student Records</div>
           {data.studentRecords.map((record) => (
