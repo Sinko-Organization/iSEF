@@ -39,6 +39,7 @@ const StudentPage: NextPage = () => {
       {data && (
         <div>
           <StudentProfileCard
+            id={data.id}
             studentIdNumber={data.studentIdNumber}
             firstName={data.firstName}
             lastName={data.lastName}

@@ -28,18 +28,39 @@ export const studentRouter = createAdminRouter()
    */
   .mutation("update", {
     input: z.object({
-      studentIdNumber: z.string().nullable(),
-      firstName: z.string().nullable(),
-      middleName: z.string().nullable(),
-      lastName: z.string().nullable(),
-      email: z.string().nullable(),
-      address: z.string().nullable(),
-      phoneNumber: z.string().nullable(),
+      id: z.string(),
+      studentIdNumber: z.string().nullable().optional(),
+      firstName: z.string().nullable().optional(),
+      middleName: z.string().nullable().optional(),
+      lastName: z.string().nullable().optional(),
+      email: z.string().nullable().optional(),
+      address: z.string().nullable().optional(),
+      phoneNumber: z.string().nullable().optional(),
     }),
     async resolve({ ctx, input }) {
       if (!input.studentIdNumber) {
         throw new TRPCError({
           message: "Student ID number is required",
+          code: "PRECONDITION_FAILED",
+        });
+      }
+
+      // throw error if student id exists
+      const studentRecordId = await ctx.prisma.student.findMany({
+        where: {
+          studentIdNumber: input.studentIdNumber,
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      // make sure that the array must have either a length of 0 or
+      // the array must have a length of 1 and the id must be the same as the input id
+      const { length } = studentRecordId;
+      if (length > 1 || (length === 1 && studentRecordId[0]?.id !== input.id)) {
+        throw new TRPCError({
+          message: "Student ID number already exists",
           code: "PRECONDITION_FAILED",
         });
       }
