@@ -7,7 +7,11 @@ import type { IconButtonProps } from "@mui/material/IconButton";
 import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
 import { styled } from "@mui/material/styles";
+import { trpc } from "@web-app/utils/trpc";
+import type { inferMutationInput } from "@web-app/utils/trpc";
 import { useFormik } from "formik";
+
+type UpdateStudentInput = inferMutationInput<"student.update">;
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -25,11 +29,11 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 }));
 
 type StudentProfileCardProps = {
-  id: string;
+  studentIdNumber: string;
   firstName: string;
   lastName: string;
   email: string;
-  phone: string;
+  phoneNumber: string;
   address: string;
 };
 
@@ -38,24 +42,31 @@ type Props = {
 };
 
 export default function RecipeReviewCard({
-  id,
+  studentIdNumber,
   firstName,
   lastName,
   email,
-  phone,
+  phoneNumber,
   address,
 }: Props) {
+  const { mutate: updateStudent, isLoading } = trpc.useMutation([
+    "student.update",
+  ]);
   const formik = useFormik<Props>({
     initialValues: {
-      id,
+      studentIdNumber,
       firstName,
       lastName,
       email,
-      phone,
+      phoneNumber,
       address,
     },
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      const newValues: UpdateStudentInput = {
+        ...values,
+        middleName: null,
+      };
+      updateStudent(newValues);
     },
   });
   return (
@@ -66,11 +77,11 @@ export default function RecipeReviewCard({
           <Grid container direction="row" spacing={3}>
             <Grid item xs={6}>
               <TextField
-                name="id"
+                name="studentIdNumber"
                 label="Student ID"
                 fullWidth
                 variant="standard"
-                value={formik.values.id}
+                value={formik.values.studentIdNumber}
                 onChange={formik.handleChange}
               />
             </Grid>
@@ -108,13 +119,13 @@ export default function RecipeReviewCard({
             </Grid>
             <Grid item xs={6}>
               <TextField
-                name="phone"
-                type="number"
+                name="phoneNumber"
+                type="tel"
                 id="outlined-required"
                 label="Phone"
                 fullWidth
                 variant="standard"
-                value={formik.values.phone}
+                value={formik.values.phoneNumber}
                 onChange={formik.handleChange}
               />
             </Grid>

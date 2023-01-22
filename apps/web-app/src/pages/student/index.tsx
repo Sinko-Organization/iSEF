@@ -39,11 +39,11 @@ const StudentPage: NextPage = () => {
       {data && (
         <div>
           <StudentProfileCard
-            id={data.studentIdNumber}
+            studentIdNumber={data.studentIdNumber}
             firstName={data.firstName}
             lastName={data.lastName}
             email={data.email}
-            phone={data.phoneNumber}
+            phoneNumber={data.phoneNumber}
             address={data.address}
           />
           {/* Student Records */}
