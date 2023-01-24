@@ -3,10 +3,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Grid from "@mui/material/Grid";
-import type { IconButtonProps } from "@mui/material/IconButton";
-import IconButton from "@mui/material/IconButton";
 import TextField from "@mui/material/TextField";
-import { styled } from "@mui/material/styles";
 import { ErrorAlert, SuccessAlert } from "@web-app/components/alerts";
 import { trpc } from "@web-app/utils/trpc";
 import type { inferMutationInput } from "@web-app/utils/trpc";
@@ -14,21 +11,6 @@ import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 
 type UpdateStudentInput = inferMutationInput<"student.update">;
-
-interface ExpandMoreProps extends IconButtonProps {
-  expand: boolean;
-}
-
-const ExpandMore = styled((props: ExpandMoreProps) => {
-  const { ...other } = props;
-  return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-  transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
-  marginLeft: "auto",
-  transition: theme.transitions.create("transform", {
-    duration: theme.transitions.duration.shortest,
-  }),
-}));
 
 type StudentProfileCardProps = {
   id: string;
@@ -70,7 +52,6 @@ export default function RecipeReviewCard({
   });
   const {
     mutate: updateStudent,
-    isLoading,
     isError,
     error,
   } = trpc.useMutation(["student.update"]);
@@ -107,7 +88,7 @@ export default function RecipeReviewCard({
         message: error?.message || "Something went wrong",
       });
     }
-  }, [isError]);
+  }, [isError, error]);
 
   return (
     <>
