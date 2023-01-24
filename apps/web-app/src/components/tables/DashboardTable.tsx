@@ -3,6 +3,7 @@ import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
+import TableFooter from "@mui/material/TableFooter";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Link from "next/link";
@@ -40,6 +41,9 @@ const DashboardTable: FC<DashboardTableProps> = ({ rows }) => {
             </Link>
           ))}
         </TableBody>
+        <TableFooter>
+          <TableRow>Footer</TableRow>
+        </TableFooter>
       </Table>
     </TableContainer>
   );
