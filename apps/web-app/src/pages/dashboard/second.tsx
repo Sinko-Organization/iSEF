@@ -6,7 +6,7 @@ const Second: NextPage = () => {
     <>
       {/* add some margin  */}
       <div className="mx-32 mt-10">
-        <DashboardTable2 />
+        <DashboardTable2 courseData={[]} />
       </div>
     </>
   );
