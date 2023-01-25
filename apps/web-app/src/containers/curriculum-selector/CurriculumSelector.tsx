@@ -3,6 +3,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Stack from "@mui/material/Stack";
 import { SemesterType } from "@prisma/client";
+import { capitalize } from "lodash";
 import type { FC } from "react";
 
 interface CurriculumSelectorProps {
@@ -28,35 +29,47 @@ const CurriculumSelector: FC<CurriculumSelectorProps> = ({
   setSemesterType,
 }) => {
   return (
-    <Stack sx={{ maxWidth: 200, marginY: 2 }} spacing={2}>
-      {/* School Year */}
-      <InputLabel>School Year</InputLabel>
-      <Select
-        defaultValue={curriculum.schoolYear}
-        onChange={(e) => setSchoolYear(Number(e.target.value))}
-      >
-        {schoolYearsData.map((year) => (
-          <MenuItem key={year.id} value={year.startYear}>
-            S.Y. {year.startYear} - {year.endYear}
-          </MenuItem>
-        ))}
-      </Select>
+    <div className="flex flex-row gap-5">
+      <div className="flex flex-row gap-5">
+        <InputLabel className="mt-auto">School Year:</InputLabel>
+        <Select
+          sx={{
+            maxWidth: 200,
+          }}
+          variant="standard"
+          defaultValue={curriculum.schoolYear}
+          onChange={(e) => setSchoolYear(Number(e.target.value))}
+        >
+          {schoolYearsData.map((year) => (
+            <MenuItem key={year.id} value={year.startYear}>
+              S.Y. {year.startYear} - {year.endYear}
+            </MenuItem>
+          ))}
+        </Select>
+      </div>
 
-      {/*  Semester Type */}
-      <InputLabel>Semester Type</InputLabel>
-      <Select
-        defaultValue={curriculum.semesterType}
-        onChange={(e) => setSemesterType(e.target.value as SemesterType)}
-      >
-        {Object.values(SemesterType).map((semesterType) => (
-          <MenuItem key={semesterType} value={semesterType}>
-            <option value={semesterType} className="capitalize">
-              {semesterType.toLowerCase()}
-            </option>
-          </MenuItem>
-        ))}
-      </Select>
-    </Stack>
+      <div className="flex flex-row gap-5">
+        <InputLabel className="mt-auto">Semester Type:</InputLabel>
+        <Select
+          sx={{
+            maxWidth: 100,
+          }}
+          variant="standard"
+          defaultValue={curriculum.semesterType}
+          onChange={(e) => setSemesterType(e.target.value as SemesterType)}
+        >
+          {Object.values(SemesterType).map((semesterType) => (
+            <MenuItem
+              key={semesterType}
+              value={semesterType}
+              className="capitalize"
+            >
+              {capitalize(semesterType)}
+            </MenuItem>
+          ))}
+        </Select>
+      </div>
+    </div>
   );
 };
 export default CurriculumSelector;

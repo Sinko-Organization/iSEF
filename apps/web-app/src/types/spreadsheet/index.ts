@@ -28,10 +28,10 @@ export const fields: Field<string>[] = [
          * Second part must be 4 digits
          * Third part must be 2 digits
          */
-        value: "/^(d{2})-(d{4})-(d{2})$/",
+        value: "^\\d{2}-\\d{4}-\\d{2}$",
         errorMessage: "ID must be in the format ##-####-##",
         flags: "g",
-        level: "warning",
+        level: "error",
       },
     ],
   },

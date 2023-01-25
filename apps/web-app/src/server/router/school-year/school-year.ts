@@ -1,6 +1,3 @@
-import { TRPCError } from "@trpc/server";
-import { z } from "zod";
-
 import { createAdminRouter } from "../context";
 
 export const schoolYearRouter = createAdminRouter()

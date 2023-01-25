@@ -4,22 +4,7 @@ import { trpc } from "@web-app/utils/trpc";
 import type { NextPage } from "next";
 
 const Index: NextPage = () => {
-  const {
-    schoolYear,
-    setSchoolYear,
-    semesterType,
-    setSemesterType,
-    yearLevel,
-    setYearLevel,
-    field,
-    order,
-    setField,
-    setOrder,
-    setSkip,
-    setTake,
-    skip,
-    take,
-  } = useHonorsFilterStore();
+  const { semesterType, yearLevel } = useHonorsFilterStore();
   const { data } = trpc.useQuery(
     [
       "honors.getAll",

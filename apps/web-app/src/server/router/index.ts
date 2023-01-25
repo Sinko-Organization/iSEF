@@ -7,6 +7,7 @@ import { exampleRouter } from "./example";
 import { honorsRouter } from "./honors";
 import { protectedExampleRouter } from "./protected-example-router";
 import { schoolYearRouter } from "./school-year";
+import { studentRouter } from "./student";
 import { studentDataRouter } from "./student-data";
 import { userRouter } from "./user";
 
@@ -18,7 +19,8 @@ export const appRouter = createRouter()
   .merge("course.", courseRouter)
   .merge("schoolYear.", schoolYearRouter)
   .merge("user.", userRouter)
-  .merge("honors.", honorsRouter);
+  .merge("honors.", honorsRouter)
+  .merge("student.", studentRouter);
 
 // export type definition of API
 export type AppRouter = typeof appRouter;
