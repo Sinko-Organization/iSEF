@@ -33,7 +33,7 @@ type AlertState = {
   message: string;
 };
 
-export default function RecipeReviewCard({
+export default function StudentProfileCard({
   id,
   studentIdNumber,
   firstName,
@@ -93,7 +93,12 @@ export default function RecipeReviewCard({
   return (
     <>
       <Card>
-        <CardHeader className="bg-blue-700 h-10" />
+        <CardHeader
+          sx={{
+            fontWeight: "bold",
+          }}
+          title={"Student Profile"}
+        />
         <CardContent>
           <form onSubmit={formik.handleSubmit}>
             <Grid container direction="row" spacing={3}>
