@@ -15,6 +15,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+import Image from "next/image";
 import Link from "next/link";
 import * as React from "react";
 
@@ -41,26 +42,27 @@ export default function ResponsiveDrawer({ window, children }: Props) {
   const drawer = (
     <div>
       <Toolbar>
-        <img src={logo.src} />
+        {/* <> */}
+        {/* This is a local import, so the 
+            height and width props are optional */}
+        <div>
+          <Image src={logo} alt="LOGO" />
+        </div>
       </Toolbar>
-
       <Divider>ISEF</Divider>
       <List>
         {[
           <Link href="/dashboard" className="sidebar-link">
-            Dashboard{" "}
+            Dashboard
           </Link>,
           <Link href="/honors-list" className="sidebar-link">
-            {" "}
-            Honor's List{" "}
+            Honor's List
           </Link>,
           <Link href="/" className="sidebar-link">
-            {" "}
-            Courses{" "}
+            Courses
           </Link>,
           <Link href="/" className="sidebar-link">
-            {" "}
-            Grades{" "}
+            Grades
           </Link>,
         ].map((text, index) => (
           // <ListItem key={text} disablePadding>
