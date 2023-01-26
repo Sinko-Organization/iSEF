@@ -18,8 +18,6 @@ import Image from "next/image";
 import Link from "next/link";
 import * as React from "react";
 
-import logo from "../../../public/assets/Sinko-Logo.png";
-
 const drawerWidth = 240;
 
 interface Props {
@@ -27,19 +25,23 @@ interface Props {
   children: React.ReactNode;
 }
 
-const links = [
-  <Link href="/dashboard" className="sidebar-link">
-    Dashboard
-  </Link>,
-  <Link href="/honors-list" className="sidebar-link">
-    Honor's List
-  </Link>,
-  <Link href="/" className="sidebar-link">
-    Courses
-  </Link>,
-  <Link href="/" className="sidebar-link">
-    Grades
-  </Link>,
+const paths = [
+  {
+    name: "Dashboard",
+    link: "/dashboard",
+  },
+  {
+    name: "Honor's List",
+    link: "/honors-list",
+  },
+  {
+    name: "Courses",
+    link: "/courses",
+  },
+  {
+    name: "Grades",
+    link: "/grades",
+  },
 ];
 
 export default function ResponsiveDrawer({ window, children }: Props) {
@@ -53,17 +55,24 @@ export default function ResponsiveDrawer({ window, children }: Props) {
     <div>
       <Toolbar>
         <div>
-          <Image src={logo} alt="LOGO" />
+          <Image
+            src="/images/sinko-logo.png"
+            alt="LOGO"
+            width={364}
+            height={204}
+          />
         </div>
       </Toolbar>
       <Divider>ISEF</Divider>
       <List>
-        {links.map((text, index) => (
+        {paths.map((path, index) => (
           <ListItemButton key={index}>
             <ListItemIcon>
               {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
             </ListItemIcon>
-            <ListItemText primary={text} />
+            <Link href={path.link} className="sidebar-link">
+              <ListItemText primary={path.name} />
+            </Link>
           </ListItemButton>
         ))}
       </List>
