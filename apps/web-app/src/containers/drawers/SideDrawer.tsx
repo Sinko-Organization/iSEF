@@ -1,7 +1,6 @@
 import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
-import { Button } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -24,13 +23,24 @@ import logo from "../../../public/assets/Sinko-Logo.png";
 const drawerWidth = 240;
 
 interface Props {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
   window?: () => Window;
   children: React.ReactNode;
 }
+
+const links = [
+  <Link href="/dashboard" className="sidebar-link">
+    Dashboard
+  </Link>,
+  <Link href="/honors-list" className="sidebar-link">
+    Honor's List
+  </Link>,
+  <Link href="/" className="sidebar-link">
+    Courses
+  </Link>,
+  <Link href="/" className="sidebar-link">
+    Grades
+  </Link>,
+];
 
 export default function ResponsiveDrawer({ window, children }: Props) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -42,37 +52,19 @@ export default function ResponsiveDrawer({ window, children }: Props) {
   const drawer = (
     <div>
       <Toolbar>
-        {/* <> */}
-        {/* This is a local import, so the 
-            height and width props are optional */}
         <div>
           <Image src={logo} alt="LOGO" />
         </div>
       </Toolbar>
       <Divider>ISEF</Divider>
       <List>
-        {[
-          <Link href="/dashboard" className="sidebar-link">
-            Dashboard
-          </Link>,
-          <Link href="/honors-list" className="sidebar-link">
-            Honor's List
-          </Link>,
-          <Link href="/" className="sidebar-link">
-            Courses
-          </Link>,
-          <Link href="/" className="sidebar-link">
-            Grades
-          </Link>,
-        ].map((text, index) => (
-          // <ListItem key={text} disablePadding>
-          <ListItemButton>
+        {links.map((text, index) => (
+          <ListItemButton key={index}>
             <ListItemIcon>
               {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
             </ListItemIcon>
             <ListItemText primary={text} />
           </ListItemButton>
-          // </ListItem>
         ))}
       </List>
       <Divider />
@@ -125,14 +117,13 @@ export default function ResponsiveDrawer({ window, children }: Props) {
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
         aria-label="mailbox folders"
       >
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Drawer
           container={container}
           variant="temporary"
           open={mobileOpen}
           onClose={handleDrawerToggle}
           ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
+            keepMounted: true,
           }}
           sx={{
             display: { xs: "block", sm: "none" },
