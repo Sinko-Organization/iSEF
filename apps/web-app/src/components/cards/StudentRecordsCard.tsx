@@ -1,3 +1,4 @@
+import { pipe } from "@mobily/ts-belt";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
@@ -15,6 +16,11 @@ import { sumBy } from "lodash";
 type Records = inferQueryOutput<"studentData.details">["studentRecords"];
 type Props = {
   records: Records;
+};
+type Result = {
+  title: string;
+  grade: string | number;
+  color: string;
 };
 
 const sampleRecords: Records = [
@@ -37,9 +43,52 @@ const sampleRecords: Records = [
     grade: 0,
     id: "1",
   },
+  {
+    schoolYear: {
+      id: "1",
+      startYear: 2021,
+      endYear: 2022,
+    },
+    course: {
+      id: "1",
+      name: "BSIT",
+    },
+    subject: {
+      id: "1",
+      name: "Introduction to Programming",
+      stubCode: "ITP 101",
+      units: 3,
+    },
+    grade: 2,
+    id: "1",
+  },
+  {
+    schoolYear: {
+      id: "1",
+      startYear: 2021,
+      endYear: 2022,
+    },
+    course: {
+      id: "1",
+      name: "BSIT",
+    },
+    subject: {
+      id: "1",
+      name: "Introduction to Programming",
+      stubCode: "ITP 101",
+      units: 3,
+    },
+    grade: 5,
+    id: "1",
+  },
 ];
 
 export default function StudentProfileCard({ records }: Props) {
+  const hasInc = records.some((record) => record.grade === 0);
+  const gwa =
+    sumBy(records, (record) => record.grade * record.subject.units) /
+    sumBy(records, (record) => record.subject.units);
+
   return (
     <>
       <Card>
@@ -66,32 +115,7 @@ export default function StudentProfileCard({ records }: Props) {
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell>
-                    {(record.grade <= 5 && record.grade >= 3) ||
-                    record.grade === 0 ? (
-                      <Tooltip title={record.grade === 0 ? "INC" : "Fail"}>
-                        <Typography
-                          className="cursor-pointer"
-                          sx={{
-                            color: "red",
-                            fontWeight: "bold",
-                            display: "inline",
-                          }}
-                        >
-                          {record.grade === 0 ? "INC" : record.grade}
-                        </Typography>
-                      </Tooltip>
-                    ) : (
-                      <Typography
-                        className="cursor-pointer"
-                        sx={{
-                          color: "green",
-                          fontWeight: "bold",
-                          display: "inline",
-                        }}
-                      >
-                        {record.grade}
-                      </Typography>
-                    )}
+                    {pipe(record.grade, evaluateGrade, displayGrade)}
                   </TableCell>
                   <TableCell>{record.subject.name}</TableCell>
                   <TableCell>{record.subject.stubCode}</TableCell>
@@ -106,12 +130,15 @@ export default function StudentProfileCard({ records }: Props) {
             >
               <TableRow>
                 <Typography sx={{ fontWeight: "bold", display: "inline" }}>
-                  GPA:
+                  GWA:{` `}
                 </Typography>
-                {sumBy(
-                  records,
-                  (record) => record.grade * record.subject.units,
-                ) / sumBy(records, (record) => record.subject.units)}
+                {hasInc
+                  ? displayGrade({
+                      title: "Incomplete",
+                      grade: "INC",
+                      color: "red",
+                    })
+                  : pipe(gwa, evaluateGrade, displayGrade)}
               </TableRow>
             </TableFooter>
           </Table>
@@ -120,3 +147,48 @@ export default function StudentProfileCard({ records }: Props) {
     </>
   );
 }
+
+const displayGrade = (result: Result) => {
+  const { title, grade, color } = result;
+  return (
+    <Tooltip title={title}>
+      <Typography
+        className="cursor-pointer"
+        sx={{
+          color,
+          display: "inline",
+        }}
+      >
+        {grade}
+      </Typography>
+    </Tooltip>
+  );
+};
+
+const evaluateGrade = (grade: number): Result => {
+  if (grade === 0) {
+    return {
+      title: "Incomplete",
+      grade: "INC",
+      color: "red",
+    };
+  } else if (grade <= 5 && grade > 3) {
+    return {
+      title: "Fail",
+      grade,
+      color: "red",
+    };
+  } else if (grade <= 3 && grade >= 1) {
+    return {
+      title: "Pass",
+      grade,
+      color: "green",
+    };
+  } else {
+    return {
+      title: "Invalid grade",
+      grade: "N/A",
+      color: "red",
+    };
+  }
+};
