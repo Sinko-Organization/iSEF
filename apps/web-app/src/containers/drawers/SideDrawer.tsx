@@ -44,6 +44,13 @@ const paths = [
   },
 ];
 
+const systempath = [
+  {
+    name: "Import",
+    link: "/import",
+  },
+];
+
 export default function ResponsiveDrawer({ window, children }: Props) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -78,16 +85,17 @@ export default function ResponsiveDrawer({ window, children }: Props) {
       </List>
       <Divider />
       <List>
-        {["Settings", "Trash", "Urgent"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
+        {/* {["Settings", "Trash", "Urgent"].map((text, index) => ( */}
+          {systempath.map((systempath, index) => (
+            <ListItemButton key={index}>
               <ListItemIcon>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <Link href={systempath.link} className="sidebar-link">
+                <ListItemText primary={systempath.name} />
+              </Link>
             </ListItemButton>
-          </ListItem>
-        ))}
+          ))}
       </List>
     </div>
   );
