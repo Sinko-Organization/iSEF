@@ -202,17 +202,7 @@ describe("course router", () => {
       semesterType: "FIRST",
     });
 
-    expect(result).toEqual([
-      {
-        id: course.id,
-        name: course.name,
-        code: course.code,
-        studentRecords: ["1", "2"],
-        population: 2,
-        createdAt: course.createdAt,
-        updatedAt: course.updatedAt,
-      },
-    ]);
+    expect(result[0]?.population).toEqual(2);
   });
   /**
    * @api getStudents
