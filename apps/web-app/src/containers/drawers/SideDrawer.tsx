@@ -26,6 +26,7 @@ interface Props {
 }
 
 const paths = [
+
   {
     name: "Dashboard",
     link: "/dashboard",
@@ -42,6 +43,7 @@ const paths = [
     name: "Grades",
     link: "/grades",
   },
+
 ];
 
 const systempath = [
@@ -71,18 +73,25 @@ export default function ResponsiveDrawer({ window, children }: Props) {
         </div>
       </Toolbar>
       <Divider>ISEF</Divider>
+      
       <List>
+        
         {paths.map((path, index) => (
           <ListItemButton key={index}>
+            
             <ListItemIcon>
               {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
             </ListItemIcon>
             <Link href={path.link} className="sidebar-link">
               <ListItemText primary={path.name} />
+              
             </Link>
+            
           </ListItemButton>
         ))}
+              
       </List>
+    
       <Divider />
       <List>
         {/* {["Settings", "Trash", "Urgent"].map((text, index) => ( */}
@@ -96,7 +105,7 @@ export default function ResponsiveDrawer({ window, children }: Props) {
               </Link>
             </ListItemButton>
           ))}
-      </List>
+      </List>  
     </div>
   );
 
@@ -138,6 +147,7 @@ export default function ResponsiveDrawer({ window, children }: Props) {
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
         aria-label="mailbox folders"
       >
+         
         <Drawer
           container={container}
           variant="temporary"
@@ -156,6 +166,8 @@ export default function ResponsiveDrawer({ window, children }: Props) {
         >
           {drawer}
         </Drawer>
+     
+       
         <Drawer
           variant="permanent"
           sx={{

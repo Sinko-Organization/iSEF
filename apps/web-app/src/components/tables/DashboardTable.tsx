@@ -25,7 +25,7 @@ const DashboardTable: FC<DashboardTableProps> = ({ rows }) => {
           <TableRow>
             <TableCell>Courses</TableCell>
             <TableCell align="right">
-              Total Population ({totalPopulation} students)
+              Total Population: <b>{totalPopulation} students</b>
             </TableCell>
           </TableRow>
         </TableHead>
