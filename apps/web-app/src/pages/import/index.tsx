@@ -12,7 +12,9 @@ import { useState } from "react";
 import { ReactSpreadsheetImport } from "react-spreadsheet-import";
 import { Result } from "react-spreadsheet-import/types/types";
 
+
 // TODO: Improve UI for this page
+
 const Import: NextPage = () => {
   const { data: session } = useSession();
   const { mutate: uploadData, isLoading } = trpc.useMutation([
@@ -51,7 +53,9 @@ const Import: NextPage = () => {
   return (
     <div className="mx-20 mt-10">
       {/* loading component */}
+      
       {isLoading && <div>Uploading...</div>}
+ 
       <div className="my-10">
         <SchoolYearSelector
           schoolYear={schoolYear}

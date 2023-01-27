@@ -113,21 +113,25 @@ export default function ResponsiveDrawer({ window, children }: Props) {
           ml: { sm: `${drawerWidth}px` },
         }}
       >
+         <Typography variant="h6" noWrap component="div" fontFamily="Raleway" backgroundColor="#653780">
         <Toolbar className="toolbar">
+  
           <IconButton
             color="inherit"
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
             sx={{ mr: 2, display: { sm: "none" } }}
+            
           >
             <MenuIcon />
           </IconButton>
 
-          <Typography variant="h6" noWrap component="div">
+         
             INTELLIGENT STUDENTS E-FOLDERS
-          </Typography>
+         
         </Toolbar>
+        </Typography>
       </AppBar>
       <Box
         component="nav"
