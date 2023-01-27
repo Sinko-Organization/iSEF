@@ -1,3 +1,4 @@
+import Button from "@mui/material/Button";
 import {
   SchoolYearSelector,
   SemesterSelector,
@@ -61,9 +62,13 @@ const Import: NextPage = () => {
       <div className="my-10">
         <SemesterSelector semester={semester} setSemester={setSemester} />
       </div>
-      <button onClick={toggleButton(true)} disabled={isLoading}>
+      <Button
+        onClick={toggleButton(true)}
+        disabled={isLoading}
+        variant="contained"
+      >
         Import File
-      </button>
+      </Button>
       <ReactSpreadsheetImport
         isOpen={open}
         onClose={toggleButton(false)}
