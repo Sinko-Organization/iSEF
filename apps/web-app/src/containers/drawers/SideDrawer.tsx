@@ -122,7 +122,7 @@ export default function ResponsiveDrawer({ window, children }: Props) {
           ml: { sm: `${drawerWidth}px` },
         }}
       >
-         <Typography variant="h6" noWrap component="div" fontFamily="Raleway" backgroundColor="#653780">
+         <Typography variant="h6" noWrap component="div" fontFamily="Raleway" style={{backgroundColor: '#653780'}}>
         <Toolbar className="toolbar">
   
           <IconButton
