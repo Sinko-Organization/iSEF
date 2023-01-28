@@ -44,6 +44,13 @@ const paths = [
   },
 ];
 
+const systemPaths = [
+  {
+    name: "Import",
+    link: "/import",
+  },
+];
+
 export default function ResponsiveDrawer({ window, children }: Props) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -64,6 +71,7 @@ export default function ResponsiveDrawer({ window, children }: Props) {
         </div>
       </Toolbar>
       <Divider>ISEF</Divider>
+
       <List>
         {paths.map((path, index) => (
           <ListItemButton key={index}>
@@ -76,17 +84,18 @@ export default function ResponsiveDrawer({ window, children }: Props) {
           </ListItemButton>
         ))}
       </List>
+
       <Divider />
       <List>
-        {["Settings", "Trash", "Urgent"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
+        {systemPaths.map((systemPath, index) => (
+          <ListItemButton key={index}>
+            <ListItemIcon>
+              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+            </ListItemIcon>
+            <Link href={systemPath.link} className="sidebar-link">
+              <ListItemText primary={systemPath.name} />
+            </Link>
+          </ListItemButton>
         ))}
       </List>
     </div>
@@ -105,21 +114,26 @@ export default function ResponsiveDrawer({ window, children }: Props) {
           ml: { sm: `${drawerWidth}px` },
         }}
       >
-        <Toolbar className="toolbar">
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
-          >
-            <MenuIcon />
-          </IconButton>
-
-          <Typography variant="h6" noWrap component="div">
+        <Typography
+          variant="h6"
+          noWrap
+          component="div"
+          fontFamily="Raleway"
+          style={{ backgroundColor: "#653780" }}
+        >
+          <Toolbar className="toolbar">
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2, display: { sm: "none" } }}
+            >
+              <MenuIcon />
+            </IconButton>
             INTELLIGENT STUDENTS E-FOLDERS
-          </Typography>
-        </Toolbar>
+          </Toolbar>
+        </Typography>
       </AppBar>
       <Box
         component="nav"
@@ -144,6 +158,7 @@ export default function ResponsiveDrawer({ window, children }: Props) {
         >
           {drawer}
         </Drawer>
+
         <Drawer
           variant="permanent"
           sx={{

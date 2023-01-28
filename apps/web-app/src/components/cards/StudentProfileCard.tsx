@@ -1,3 +1,4 @@
+import { Paper, Table, Typography, styled } from "@mui/material";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -32,6 +33,12 @@ type AlertState = {
   open: boolean;
   message: string;
 };
+const Item = styled(Paper)(({ theme }) => ({
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: "center",
+  color: theme.palette.text.secondary,
+}));
 
 export default function StudentProfileCard({
   id,
@@ -93,13 +100,36 @@ export default function StudentProfileCard({
   return (
     <>
       <Card>
-        <CardHeader
-          sx={{
-            fontWeight: "bold",
-          }}
-          title={"Student Profile"}
-        />
-        <CardContent>
+        <CardHeader title={"Student Profile"} />
+
+        <Grid container spacing={2}>
+          <Grid item xs={2}>
+            <Item>
+              <img
+                src="https://res.cloudinary.com/dmro06tbx/image/upload/v1655572255/images_hlpjxg.png"
+                className="StudentIcon"
+                alt="..."
+              />
+            </Item>
+          </Grid>
+          <Grid item xs={8}>
+            <Item>
+              <Table className="table table-sm">
+                <tbody>
+                  <td>
+                    <b>Student ID: </b>
+                    {formik.values.studentIdNumber}
+                  </td>
+                  <td>
+                    <b>Name : </b> {formik.values.lastName},{" "}
+                    {formik.values.firstName}
+                  </td>
+                </tbody>
+              </Table>
+            </Item>
+          </Grid>
+        </Grid>
+        {/* <CardContent>
           <form onSubmit={formik.handleSubmit}>
             <Grid container direction="row" spacing={3}>
               <Grid item xs={6}>
@@ -178,7 +208,7 @@ export default function StudentProfileCard({
               Edit
             </Button>
           </form>
-        </CardContent>
+        </CardContent> */}
       </Card>
       <ErrorAlert
         message={errorState.message}
