@@ -26,7 +26,6 @@ interface Props {
 }
 
 const paths = [
-
   {
     name: "Dashboard",
     link: "/dashboard",
@@ -43,7 +42,6 @@ const paths = [
     name: "Grades",
     link: "/grades",
   },
-
 ];
 
 const systemPaths = [
@@ -73,25 +71,20 @@ export default function ResponsiveDrawer({ window, children }: Props) {
         </div>
       </Toolbar>
       <Divider>ISEF</Divider>
-      
+
       <List>
-        
         {paths.map((path, index) => (
           <ListItemButton key={index}>
-            
             <ListItemIcon>
               {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
             </ListItemIcon>
             <Link href={path.link} className="sidebar-link">
               <ListItemText primary={path.name} />
-              
             </Link>
-            
           </ListItemButton>
         ))}
-              
       </List>
-    
+
       <Divider />
       <List>
           {systemPaths.map((systemPath, index) => (
@@ -121,24 +114,25 @@ export default function ResponsiveDrawer({ window, children }: Props) {
           ml: { sm: `${drawerWidth}px` },
         }}
       >
-         <Typography variant="h6" noWrap component="div" fontFamily="Raleway" style={{backgroundColor: '#653780'}}>
-        <Toolbar className="toolbar">
-  
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
-            
-          >
-            <MenuIcon />
-          </IconButton>
-
-         
+        <Typography
+          variant="h6"
+          noWrap
+          component="div"
+          fontFamily="Raleway"
+          style={{ backgroundColor: "#653780" }}
+        >
+          <Toolbar className="toolbar">
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2, display: { sm: "none" } }}
+            >
+              <MenuIcon />
+            </IconButton>
             INTELLIGENT STUDENTS E-FOLDERS
-         
-        </Toolbar>
+          </Toolbar>
         </Typography>
       </AppBar>
       <Box
@@ -146,7 +140,6 @@ export default function ResponsiveDrawer({ window, children }: Props) {
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
         aria-label="mailbox folders"
       >
-         
         <Drawer
           container={container}
           variant="temporary"
@@ -165,8 +158,7 @@ export default function ResponsiveDrawer({ window, children }: Props) {
         >
           {drawer}
         </Drawer>
-     
-       
+
         <Drawer
           variant="permanent"
           sx={{
