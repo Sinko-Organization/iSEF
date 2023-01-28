@@ -89,7 +89,7 @@ export default function StudentProfileCard({ records }: Props) {
   const gwa =
     sumBy(records, (record) => record.grade * record.subject.units) /
     sumBy(records, (record) => record.subject.units);
-  const roundedGWA = parseFloat(gwa.toFixed(2));
+  const roundedGWA = Number.parseFloat(gwa.toFixed(2));
 
   return (
     <>
@@ -141,7 +141,7 @@ export default function StudentProfileCard({ records }: Props) {
                         grade: "INC",
                         color: "red",
                       })
-                    : pipe(gwa, evaluateGrade, displayGrade)}
+                    : pipe(roundedGWA, evaluateGrade, displayGrade)}
                 </TableRow>
               </TableFooter>
             </Table>

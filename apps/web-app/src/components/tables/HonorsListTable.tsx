@@ -198,7 +198,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
           id="tableTitle"
           component="div"
         >
-          Honor's Students
+          {"Honor's Students"}
         </Typography>
       )}
       {numSelected > 0 ? (
