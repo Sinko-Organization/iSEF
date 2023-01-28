@@ -1,3 +1,4 @@
+import Button from "@mui/material/Button";
 import {
   SchoolYearSelector,
   SemesterSelector,
@@ -11,7 +12,6 @@ import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { ReactSpreadsheetImport } from "react-spreadsheet-import";
 import { Result } from "react-spreadsheet-import/types/types";
-
 
 // TODO: Improve UI for this page
 
@@ -53,9 +53,9 @@ const Import: NextPage = () => {
   return (
     <div className="mx-20 mt-10">
       {/* loading component */}
-      
+
       {isLoading && <div>Uploading...</div>}
- 
+
       <div className="my-10">
         <SchoolYearSelector
           schoolYear={schoolYear}
@@ -65,9 +65,13 @@ const Import: NextPage = () => {
       <div className="my-10">
         <SemesterSelector semester={semester} setSemester={setSemester} />
       </div>
-      <button onClick={toggleButton(true)} disabled={isLoading}>
+      <Button
+        onClick={toggleButton(true)}
+        disabled={isLoading}
+        variant="contained"
+      >
         Import File
-      </button>
+      </Button>
       <ReactSpreadsheetImport
         isOpen={open}
         onClose={toggleButton(false)}

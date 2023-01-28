@@ -144,6 +144,66 @@ describe("course router", () => {
     ]);
   });
 
+  // Test if returns the correct population
+
+  test("test if returns the correct population", async () => {
+    const ctx = await createUserSession();
+
+    // use a fixed date for createdAt and updatedAt
+
+    const caller = appRouter.createCaller(ctx);
+
+    await caller.mutation("studentData.upload", {
+      schoolYear: {
+        startYear: 2020,
+        endYear: 2021,
+      },
+      semester: "FIRST",
+      studentRecords: [
+        {
+          id: "1",
+          firstName: "John",
+          lastName: "Doe",
+          course: "BSSE",
+          yearLevel: "1",
+          grade: "1",
+          remarks: "Good",
+          subject: "Math",
+          stubCode: "1",
+          units: "3",
+        },
+        {
+          id: "2",
+          firstName: "Jane",
+          lastName: "Doe",
+          course: "BSSE",
+          yearLevel: "1",
+          grade: "1",
+          remarks: "Good",
+          subject: "Math",
+          stubCode: "2",
+          units: "3",
+        },
+      ],
+    });
+
+    const course = await ctx.prisma.course.findFirst({
+      where: {
+        code: "BSSE",
+      },
+    });
+
+    if (course === null) {
+      throw new Error("Course is null");
+    }
+
+    const result = await caller.query("course.population", {
+      schoolYear: 2020,
+      semesterType: "FIRST",
+    });
+
+    expect(result[0]?.population).toEqual(2);
+  });
   /**
    * @api getStudents
    * Test if gets all student records with the same course id
@@ -228,3 +288,5 @@ describe("course router", () => {
     });
   });
 });
+
+// Test if gets all student records with the same course id

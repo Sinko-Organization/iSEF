@@ -84,6 +84,7 @@ const sampleRecords: Records = [
 ];
 
 export default function StudentProfileCard({ records }: Props) {
+  const hasRecords = records.length > 0;
   const hasInc = records.some((record) => record.grade === 0);
   const gwa =
     sumBy(records, (record) => record.grade * record.subject.units) /
@@ -100,49 +101,55 @@ export default function StudentProfileCard({ records }: Props) {
           title={"Student Records"}
         />
         <CardContent>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell className="text-bold">Grade</TableCell>
-                <TableCell className="text-bold">Subject</TableCell>
-                <TableCell className="text-bold">Stub Code</TableCell>
-                <TableCell className="text-bold">Units</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {records.map((record, idx) => (
-                <TableRow
-                  key={`${record.id}-${record.subject.name}-${idx}`}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell>
-                    {pipe(record.grade, evaluateGrade, displayGrade)}
-                  </TableCell>
-                  <TableCell>{record.subject.name}</TableCell>
-                  <TableCell>{record.subject.stubCode}</TableCell>
-                  <TableCell>{record.subject.units}</TableCell>
+          {hasRecords ? (
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell className="text-bold">Grade</TableCell>
+                  <TableCell className="text-bold">Subject</TableCell>
+                  <TableCell className="text-bold">Stub Code</TableCell>
+                  <TableCell className="text-bold">Units</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-            <TableFooter
-              sx={{
-                mt: 2,
-              }}
-            >
-              <TableRow>
-                <Typography sx={{ fontWeight: "bold", display: "inline" }}>
-                  GWA:{` `}
-                </Typography>
-                {hasInc
-                  ? displayGrade({
-                      title: "Incomplete",
-                      grade: "INC",
-                      color: "red",
-                    })
-                  : pipe(roundedGWA, evaluateGrade, displayGrade)}
-              </TableRow>
-            </TableFooter>
-          </Table>
+              </TableHead>
+              <TableBody>
+                {records.map((record, idx) => (
+                  <TableRow
+                    key={`${record.id}-${record.subject.name}-${idx}`}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell>
+                      {pipe(record.grade, evaluateGrade, displayGrade)}
+                    </TableCell>
+                    <TableCell>{record.subject.name}</TableCell>
+                    <TableCell>{record.subject.stubCode}</TableCell>
+                    <TableCell>{record.subject.units}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+              <TableFooter
+                sx={{
+                  mt: 2,
+                }}
+              >
+                <TableRow>
+                  <Typography sx={{ fontWeight: "bold", display: "inline" }}>
+                    GWA:{` `}
+                  </Typography>
+                  {hasInc
+                    ? displayGrade({
+                        title: "Incomplete",
+                        grade: "INC",
+                        color: "red",
+                      })
+                    : pipe(gwa, evaluateGrade, displayGrade)}
+                </TableRow>
+              </TableFooter>
+            </Table>
+          ) : (
+            <Typography variant="body2" color="text.secondary">
+              No records found
+            </Typography>
+          )}
         </CardContent>
       </Card>
     </>

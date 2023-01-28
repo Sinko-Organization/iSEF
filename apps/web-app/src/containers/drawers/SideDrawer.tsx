@@ -87,17 +87,17 @@ export default function ResponsiveDrawer({ window, children }: Props) {
 
       <Divider />
       <List>
-          {systemPaths.map((systemPath, index) => (
-            <ListItemButton key={index}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <Link href={systemPath.link} className="sidebar-link">
-                <ListItemText primary={systemPath.name} />
-              </Link>
-            </ListItemButton>
-          ))}
-      </List>  
+        {systemPaths.map((systemPath, index) => (
+          <ListItemButton key={index}>
+            <ListItemIcon>
+              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+            </ListItemIcon>
+            <Link href={systemPath.link} className="sidebar-link">
+              <ListItemText primary={systemPath.name} />
+            </Link>
+          </ListItemButton>
+        ))}
+      </List>
     </div>
   );
 
