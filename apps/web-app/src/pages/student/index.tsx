@@ -2,20 +2,34 @@ import {
   StudentProfileCard,
   StudentRecordsCard,
 } from "@web-app/components/cards";
+import { CurriculumSelector } from "@web-app/containers/curriculum-selector";
 import { useCurriculumStore } from "@web-app/stores";
 import { trpc } from "@web-app/utils/trpc";
-import _ from "lodash";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 const StudentPage: NextPage = () => {
-  const { schoolYear, semesterType } = useCurriculumStore();
+  const { schoolYear, setSchoolYear, semesterType, setSemesterType } =
+    useCurriculumStore();
   const router = useRouter();
-  const { id } = router.query;
+  const { id } = router.query as { id: string };
 
-  if (typeof id !== "string") {
-    return <div>Error</div>;
-  }
+  const { data: schoolYearsData } = trpc.useQuery([
+    "schoolYear.getByStudentID",
+    {
+      studentId: id,
+    },
+  ]);
+
+  useEffect(() => {
+    if (schoolYearsData) {
+      const startYear = schoolYearsData[0]?.startYear;
+      if (startYear) {
+        setSchoolYear(startYear);
+      }
+    }
+  }, [schoolYearsData, setSchoolYear]);
 
   const studentDetails = trpc.useQuery([
     "studentData.details",
@@ -36,7 +50,6 @@ const StudentPage: NextPage = () => {
     return <div>Error</div>;
   }
 
-  console.log(data);
   return (
     <>
       {data && (
@@ -50,7 +63,15 @@ const StudentPage: NextPage = () => {
             phoneNumber={data.phoneNumber}
             address={data.address}
           />
-          {/* Student Records */}
+          {schoolYearsData && (
+            <CurriculumSelector
+              schoolYearsData={schoolYearsData}
+              curriculum={{ schoolYear, semesterType }}
+              setSchoolYear={setSchoolYear}
+              setSemesterType={setSemesterType}
+              className="mt-20"
+            />
+          )}
           <StudentRecordsCard records={data.studentRecords} />
         </div>
       )}
