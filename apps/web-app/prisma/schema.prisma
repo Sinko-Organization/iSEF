@@ -68,9 +68,9 @@ model VerificationToken {
 model Student {
     id              String          @id @default(cuid())
     studentIdNumber String          @unique @map("student_id_number")
-    firstName       String          @map("first_name")
+    firstName       String?         @map("first_name")
     middleName      String?         @map("middle_name")
-    lastName        String          @map("last_name")
+    lastName        String?         @map("last_name")
     email           String?         @unique
     phoneNumber     String?         @map("phone_number")
     address         String?

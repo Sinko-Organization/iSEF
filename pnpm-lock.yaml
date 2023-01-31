@@ -71,6 +71,7 @@ importers:
       eslint-plugin-unicorn: ^44.0.2
       eslint-plugin-vitest: ^0.0.11
       formik: ^2.2.9
+      fp-ts: ^2.13.1
       immer: ^9.0.16
       jsdom: ^20.0.1
       lodash: ^4.17.21
@@ -112,6 +113,7 @@ importers:
       '@trpc/react': 9.27.4_b2x5eodty2olqku2v5637snwpy
       '@trpc/server': 9.27.3
       formik: 2.2.9_react@18.2.0
+      fp-ts: 2.13.1
       immer: 9.0.16
       lodash: 4.17.21
       next: 12.3.1_672uxklweod7ene3nqtsh262ca
@@ -6098,6 +6100,10 @@ packages:
       react-fast-compare: 2.0.4
       tiny-warning: 1.0.3
       tslib: 1.14.1
+    dev: false
+
+  /fp-ts/2.13.1:
+    resolution: {integrity: sha512-0eu5ULPS2c/jsa1lGFneEFFEdTbembJv8e4QKXeVJ3lm/5hyve06dlKZrpxmMwJt6rYen7sxmHHK2CLaXvWuWQ==}
     dev: false
 
   /frac/1.1.2:
