@@ -26,6 +26,13 @@ const createAdminAccount = (
 });
 
 async function main() {
+  const accounts = await prisma.account.findMany();
+
+  if (accounts.length > 0) {
+    console.log("Accounts already exist.");
+    return;
+  }
+
   const hans = await prisma.account.create({
     data: createAdminAccount(
       "Hans Gabriel Daduya",
