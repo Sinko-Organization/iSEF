@@ -80,6 +80,7 @@ export const courseRouter = createAdminRouter()
       courseId: z.string(),
       schoolYear: z.number(),
       semesterType: z.enum(["FIRST", "SECOND", "SUMMER"]),
+      yearLevel: z.number().optional(),
     }),
     async resolve({ ctx, input }) {
       const course = await ctx.prisma.course.findUnique({
@@ -100,6 +101,11 @@ export const courseRouter = createAdminRouter()
                 {
                   semesterType: {
                     equals: input.semesterType,
+                  },
+                },
+                {
+                  yearLevel: {
+                    equals: input.yearLevel,
                   },
                 },
               ],

@@ -30,18 +30,21 @@ const DashboardTable: FC<DashboardTableProps> = ({ rows }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <Link href={`/course?id=${row.id}`} key={row.id}>
-              <TableRow
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {row.name}
-                </TableCell>
-                <TableCell align="right">{row.population}</TableCell>
-              </TableRow>
-            </Link>
-          ))}
+          {rows.map((row) => {
+            if (row.population === 0) return;
+            return (
+              <Link href={`/course?id=${row.id}`} key={row.id}>
+                <TableRow
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    {row.name}
+                  </TableCell>
+                  <TableCell align="right">{row.population}</TableCell>
+                </TableRow>
+              </Link>
+            );
+          })}
         </TableBody>
       </Table>
     </TableContainer>
