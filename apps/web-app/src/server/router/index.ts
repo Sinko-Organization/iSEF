@@ -10,6 +10,7 @@ import { schoolYearRouter } from "./school-year";
 import { studentRouter } from "./student";
 import { studentDataRouter } from "./student-data";
 import { userRouter } from "./user";
+import { yearLevelRouter } from "./year-level";
 
 export const appRouter = createRouter()
   .transformer(superjson)
@@ -20,7 +21,8 @@ export const appRouter = createRouter()
   .merge("schoolYear.", schoolYearRouter)
   .merge("user.", userRouter)
   .merge("honors.", honorsRouter)
-  .merge("student.", studentRouter);
+  .merge("student.", studentRouter)
+  .merge("yearLevel.", yearLevelRouter);
 
 // export type definition of API
 export type AppRouter = typeof appRouter;

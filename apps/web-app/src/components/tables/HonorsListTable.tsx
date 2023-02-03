@@ -18,16 +18,18 @@ import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import { alpha } from "@mui/material/styles";
+import type { NonNullableValues } from "@web-app/types/generics";
 import type { inferQueryOutput } from "@web-app/utils/trpc";
 import { useState } from "react";
 import type { FC } from "react";
 
 type HonorsListType = inferQueryOutput<"honors.getAll">;
 type Unpacked<T> = T extends (infer U)[] ? U : T;
-type HonorsType = Unpacked<HonorsListType>;
+type HonorsTypeRaw = Unpacked<HonorsListType>;
+type HonorsType = NonNullableValues<HonorsTypeRaw>;
 
 interface HonorsList {
-  honorsList: HonorsListType;
+  honorsList: HonorsType[];
 }
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {

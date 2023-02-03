@@ -31,7 +31,15 @@ const Index: NextPage = () => {
   return (
     <>
       <div className="mx-20 mt-10">
-        {data && <HonorsListTable honorsList={data} />}
+        {data && (
+          <HonorsListTable
+            honorsList={data.map((student) => ({
+              ...student,
+              firstName: student.firstName ?? "",
+              lastName: student.lastName ?? "",
+            }))}
+          />
+        )}
       </div>
     </>
   );

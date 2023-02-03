@@ -16,7 +16,7 @@ const Quixote = () => (
   <Document>
     <Page style={styles.body}>
       <Text style={styles.header} fixed>
-        ~ Created with react-pdf ~
+        ~ Created by Hans ~
       </Text>
       <Text style={styles.title}>Don Quijote de la Mancha</Text>
       <Text style={styles.author}>Miguel de Cervantes</Text>
