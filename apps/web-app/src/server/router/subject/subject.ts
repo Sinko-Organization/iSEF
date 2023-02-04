@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import { createAdminRouter } from "../context";
@@ -44,12 +45,19 @@ export const subjectRouter = createAdminRouter()
         },
       });
 
-      await ctx.prisma.subjectHierarchy.findFirstOrThrow({
+      const hierarchy = await ctx.prisma.subjectHierarchy.findFirst({
         where: {
           subjectId,
           courseId,
         },
       });
+
+      if (hierarchy) {
+        throw new TRPCError({
+          code: "PRECONDITION_FAILED",
+          message: "Subject Hierarchy already exists in course",
+        });
+      }
 
       return ctx.prisma.subjectHierarchy.create({
         data: {
