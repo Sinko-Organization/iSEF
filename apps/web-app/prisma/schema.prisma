@@ -133,6 +133,23 @@ model Subject {
     studentRecords StudentRecord[]
 }
 
+model SubjectHierarchy {
+    id        String   @id @default(cuid())
+    courseId  String   @map("course_id")
+    subjectId String   @map("subject_id")
+    level     Int
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+}
+
+model SubjectDependency {
+    id        String   @id @default(cuid())
+    prereqId  String   @map("prereq_id")
+    subjectId String   @map("subject_id")
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+}
+
 enum SemesterType {
     FIRST
     SECOND
