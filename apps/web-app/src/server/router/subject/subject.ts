@@ -1,7 +1,14 @@
 import { TRPCError } from "@trpc/server";
+import { P, match } from "ts-pattern";
 import { z } from "zod";
 
 import { createAdminRouter } from "../context";
+import { getSubjectStatus } from "../student-data/queries";
+import {
+  getSubjectDependencyStatus,
+  getSubjectWithDetails,
+  getSubjectsByLevel,
+} from "./queries";
 
 export const subjectRouter = createAdminRouter()
   /**
@@ -17,6 +24,134 @@ export const subjectRouter = createAdminRouter()
           units: true,
         },
       });
+    },
+  })
+  .query("getRecommendedSubjects", {
+    input: z.object({
+      studentRecords: z.array(
+        z.object({
+          id: z.string(),
+          subjectId: z.string(),
+          remark: z.enum(["Passed", "Failed"]),
+        }),
+      ),
+      studentId: z.string(),
+      courseId: z.string(),
+      schoolYearId: z.string(),
+      semesterType: z.enum(["FIRST", "SECOND", "SUMMER"] as const),
+    }),
+    async resolve({ ctx, input }) {
+      const {
+        studentRecords,
+        studentId,
+        courseId,
+        schoolYearId,
+        semesterType,
+      } = input;
+
+      const availableSubjects = await Promise.all(
+        studentRecords.map(async (record) => {
+          const { remark, subjectId } = record;
+          const subjectDetails = await getSubjectWithDetails(
+            ctx.prisma,
+            subjectId,
+            courseId,
+          );
+          return {
+            ...subjectDetails,
+            remark: remark,
+          };
+        }),
+      ).then(async (subjects) => {
+        const passedSubjects = subjects.filter(
+          (subject) => subject.remark === "Passed",
+        );
+
+        const maxLevel = Math.max(
+          ...passedSubjects.map((subject) => subject.level),
+        );
+
+        const availableSubjects = await getSubjectsByLevel(
+          ctx.prisma,
+          courseId,
+          maxLevel + 1,
+        );
+
+        return availableSubjects;
+      });
+
+      const subjectStatuses = await Promise.all(
+        availableSubjects.map(async (subjectId) => {
+          const status = await getSubjectStatus(
+            ctx.prisma,
+            subjectId,
+            studentId,
+            courseId,
+            schoolYearId,
+            semesterType,
+          );
+
+          const dependencyStatus = await getSubjectDependencyStatus(
+            ctx.prisma,
+            subjectId,
+            courseId,
+          );
+
+          const subjectDetails = await getSubjectWithDetails(
+            ctx.prisma,
+            subjectId,
+            courseId,
+          );
+
+          return {
+            ...subjectDetails,
+            subjectId,
+            status,
+            dependencyStatus,
+          };
+        }),
+      );
+
+      const recommendedSubjects = subjectStatuses
+        .filter((subject) => {
+          return match(subject)
+            .with(
+              {
+                status: P.union("Failed", "Not Taken"),
+                dependencyStatus: "Independent",
+              },
+              () => true,
+            )
+            .with(
+              {
+                status: P.union("Failed", "Not Taken"),
+                dependencyStatus: "Dependent",
+              },
+              (subj) => {
+                const { dependencies } = subj;
+
+                const dependencyIds = new Set(
+                  studentRecords.map((record) => record.subjectId),
+                );
+
+                const allDependenciesFound = dependencies.every((dependency) =>
+                  dependencyIds.has(dependency),
+                );
+
+                return allDependenciesFound;
+              },
+            )
+            .otherwise(() => false);
+        })
+        .map((subject) => ({
+          id: subject.subjectId,
+          name: subject.name,
+          stubCode: subject.stubCode,
+          units: subject.units,
+          status: subject.status,
+        }));
+
+      return recommendedSubjects;
     },
   })
   /**

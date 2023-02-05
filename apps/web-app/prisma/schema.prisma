@@ -146,6 +146,7 @@ model SubjectDependency {
     id        String   @id @default(cuid())
     prereqId  String   @map("prereq_id")
     subjectId String   @map("subject_id")
+    courseId  String   @map("course_id")
     createdAt DateTime @default(now()) @map("created_at")
     updatedAt DateTime @updatedAt @map("updated_at")
 }
