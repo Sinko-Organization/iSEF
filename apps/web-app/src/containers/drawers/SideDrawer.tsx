@@ -63,10 +63,10 @@ export default function ResponsiveDrawer({ window, children }: Props) {
       <Toolbar>
         <div>
           <Image
-            src="/images/sinko-logo.png"
+            src="/images/isef-logo.png"
             alt="LOGO"
-            width={364}
-            height={204}
+            width={270}
+            height={275}
           />
         </div>
       </Toolbar>
