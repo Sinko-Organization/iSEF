@@ -1,17 +1,25 @@
 import { CourseTable } from "@web-app/components/tables";
-import { useCurriculumStore } from "@web-app/stores";
+import { CourseOptionSelector } from "@web-app/containers/course-option-selector";
+import { useCourseOptions } from "@web-app/hooks/course";
 import { trpc } from "@web-app/utils/trpc";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 
 const CoursePage: NextPage = () => {
-  const { schoolYear, semesterType } = useCurriculumStore();
-  const router = useRouter();
-  const { id } = router.query;
+  const {
+    schoolYearsData,
+    schoolYear,
+    schoolYearStatus,
+    semesterType,
+    setSchoolYear,
+    setSemesterType,
+    yearLevel,
+    setYearLevel,
+    yearLevelsData,
+  } = useCourseOptions();
 
-  if (typeof id !== "string") {
-    return <div>Error</div>;
-  }
+  const router = useRouter();
+  const { id } = router.query as { id: string };
 
   const students = trpc.useQuery([
     "course.getStudents",
@@ -19,22 +27,33 @@ const CoursePage: NextPage = () => {
       courseId: id,
       schoolYear,
       semesterType,
+      yearLevel,
     },
   ]);
 
   const { data, isLoading, isError } = students;
 
-  if (isLoading) {
+  if (isLoading || schoolYearStatus === "loading") {
     return <div>Loading...</div>;
   }
 
-  if (isError) {
+  if (isError || schoolYearStatus === "error") {
     return <div>Error</div>;
   }
 
   return (
     <>
       <div className="mx-32 mt-10">
+        {schoolYearsData && yearLevelsData && (
+          <CourseOptionSelector
+            schoolYearsData={schoolYearsData}
+            yearLevelsData={yearLevelsData}
+            courseOptions={{ schoolYear, semesterType, yearLevel }}
+            setSchoolYear={setSchoolYear}
+            setSemesterType={setSemesterType}
+            setYearLevel={setYearLevel}
+          />
+        )}
         {data && <CourseTable students={data} />}
       </div>
     </>

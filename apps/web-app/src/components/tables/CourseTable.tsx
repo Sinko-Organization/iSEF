@@ -12,8 +12,8 @@ interface CourseTableProps {
   students: {
     id: string;
     studentIdNumber: string;
-    firstName: string;
-    lastName: string;
+    firstName: string | null;
+    lastName: string | null;
   }[];
 }
 
@@ -37,8 +37,12 @@ const CourseTable: FC<CourseTableProps> = ({ students }) => {
                 <TableCell component="th" scope="row">
                   {student.studentIdNumber}
                 </TableCell>
-                <TableCell align="right">{student.firstName}</TableCell>
-                <TableCell align="right">{student.lastName}</TableCell>
+                <TableCell align="right">
+                  {student.firstName ?? "No First Name"}
+                </TableCell>
+                <TableCell align="right">
+                  {student.lastName ?? "No Last Name"}
+                </TableCell>
               </TableRow>
             </Link>
           ))}
