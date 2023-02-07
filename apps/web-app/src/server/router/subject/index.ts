@@ -1,0 +1,1 @@
+export { subjectRouter } from "./subject";
