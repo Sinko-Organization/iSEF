@@ -87,12 +87,12 @@ const headCells: readonly HeadCell[] = [
     disablePadding: false,
     label: "General Weighted Average",
   },
-  {
-    id: "gwa",
-    numeric: true,
-    disablePadding: false,
-    label: "General Weighted Average",
-  },
+  // {
+  //   id: "gwa",
+  //   numeric: true,
+  //   disablePadding: false,
+  //   label: "General Weighted Average",
+  // },
 ];
 
 interface EnhancedTableProps {
