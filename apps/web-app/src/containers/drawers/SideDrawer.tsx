@@ -1,3 +1,5 @@
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
@@ -8,7 +10,6 @@ import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
@@ -76,7 +77,7 @@ export default function ResponsiveDrawer({ window, children }: Props) {
         {paths.map((path, index) => (
           <ListItemButton key={index}>
             <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              {index % 2 === 0 ? <DashboardIcon /> : <FormatListBulletedIcon />}
             </ListItemIcon>
             <Link href={path.link} className="sidebar-link">
               <ListItemText primary={path.name} />
