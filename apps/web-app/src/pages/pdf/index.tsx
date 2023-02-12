@@ -1,3 +1,5 @@
+/* eslint-disable import/export */
+
 /* eslint-disable react/no-unescaped-entities */
 
 /* eslint-disable jsx-a11y/alt-text */
@@ -17,22 +19,55 @@ import type { NextPage } from "next";
 const DeansList = () => (
   <Document>
     <Page style={header.page} size="A4" wrap>
-      <Text style={header.title}>College of Engineering</Text>
-      <Text style={header.headerTitle}>Dean's List</Text>
+      <Text style={header.title}>Central Philippine University </Text>
+      <Text style={header.headerTitle}>COLLEGE OF ENGINEERING</Text>
 
-      <Text style={header.header}>S.Y. "School Year" </Text>
+      <Text style={header.header}>HONOR'S LIST</Text>
 
       <View style={header.courseTable}>
         <View style={[header.row, header.courseTitle]}>
-          <Text style={[header.courseTitle, header.cell]}>"Course Title"</Text>
-          <Text style={[header.courseTitle, header.cell]}> Nth Semester</Text>
+          <Text style={[header.courseTitle, header.cell]}>NTH SEMESTER</Text>
+          <Text style={[header.courseTitle, header.cell]}>
+            S.Y. "School Year"
+          </Text>
         </View>
       </View>
 
+      <Text style={[header.header, header.border]}>YEAR LEVEL</Text>
+
       <View style={header.header}>
-        <View style={[header.row, header.border, header.padding]}>
+        <View style={[header.row, header.border]}>
+          <Text style={[header.courseTitle, header.col2]}>NO.</Text>
+          <Text style={[header.courseTitle, header.col2]}>Rank</Text>
           <Text style={[header.courseTitle, header.col1]}>Student Name</Text>
-          <Text style={[header.courseTitle, header.col1]}>Grade</Text>
+          <Text style={[header.courseTitle, header.col1]}>G.W.A</Text>
+        </View>
+      </View>
+    </Page>
+
+    <Page style={header.page} size="A4" wrap>
+      <Text style={header.title}>Central Philippine University </Text>
+      <Text style={header.headerTitle}>COLLEGE OF ENGINEERING</Text>
+
+      <Text style={header.header}>DEAN'S LIST</Text>
+
+      <View style={header.courseTable}>
+        <View style={[header.row, header.courseTitle]}>
+          <Text style={[header.courseTitle, header.cell]}>NTH SEMESTER</Text>
+          <Text style={[header.courseTitle, header.cell]}>
+            S.Y. "School Year"
+          </Text>
+        </View>
+      </View>
+
+      <Text style={[header.header, header.border]}>YEAR LEVEL</Text>
+
+      <View style={header.header}>
+        <View style={[header.row, header.border]}>
+          <Text style={[header.courseTitle, header.col2]}>NO.</Text>
+          <Text style={[header.courseTitle, header.col2]}>Rank</Text>
+          <Text style={[header.courseTitle, header.col1]}>Student Name</Text>
+          <Text style={[header.courseTitle, header.col1]}>G.W.A</Text>
         </View>
       </View>
     </Page>
@@ -53,12 +88,12 @@ const header = StyleSheet.create({
   },
   title: {
     marginBottom: 10,
-    fontSize: 35,
+    fontSize: 20,
     textAlign: "center",
     fontFamily: "Helvetica",
   },
   headerTitle: {
-    fontSize: 25,
+    fontSize: 15,
     textAlign: "center",
     fontFamily: "Helvetica",
   },
@@ -71,7 +106,7 @@ const header = StyleSheet.create({
     marginTop: 10,
     marginBottom: 15,
     textAlign: "center",
-    color: "grey",
+    color: "blue",
   },
   courseTable: {
     width: 300,
@@ -107,7 +142,11 @@ const header = StyleSheet.create({
     paddingBottom: 5,
   },
   col1: {
-    width: "28%",
+    width: "10%",
+  },
+  col2: {
+    width: "1%",
+    flexDirection: "row",
   },
 });
 
