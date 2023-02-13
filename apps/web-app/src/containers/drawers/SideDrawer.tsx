@@ -64,10 +64,10 @@ export default function ResponsiveDrawer({ window, children }: Props) {
       <Toolbar>
         <div>
           <Image
-            src="/images/sinko-logo.png"
+            src="/images/isef-logo.png"
             alt="LOGO"
-            width={364}
-            height={204}
+            width={270}
+            height={275}
           />
         </div>
       </Toolbar>
@@ -119,8 +119,9 @@ export default function ResponsiveDrawer({ window, children }: Props) {
           variant="h6"
           noWrap
           component="div"
-          fontFamily="Raleway"
-          style={{ backgroundColor: "#653780" }}
+          fontFamily="Lucida Bright"
+          // fontFamily="Times New Roman"
+          style={{ backgroundColor: "#9078b6" }}
         >
           <Toolbar className="toolbar">
             <IconButton
@@ -132,6 +133,7 @@ export default function ResponsiveDrawer({ window, children }: Props) {
             >
               <MenuIcon />
             </IconButton>
+            {/* Intelligent Students E - Folders */}
             INTELLIGENT STUDENTS E-FOLDERS
           </Toolbar>
         </Typography>

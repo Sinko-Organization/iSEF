@@ -1,5 +1,6 @@
 import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
+import { Button, Link } from "@mui/material";
 import Box from "@mui/material/Box";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -72,22 +73,16 @@ const headCells: readonly HeadCell[] = [
     label: "Student ID Number",
   },
   {
-    id: "firstName",
-    numeric: true,
-    disablePadding: false,
-    label: "First Name",
-  },
-  {
     id: "lastName",
     numeric: true,
     disablePadding: false,
     label: "Last Name",
   },
   {
-    id: "gwa",
+    id: "firstName",
     numeric: true,
     disablePadding: false,
-    label: "General Weighted Average",
+    label: "First Name",
   },
   {
     id: "gwa",
@@ -95,6 +90,12 @@ const headCells: readonly HeadCell[] = [
     disablePadding: false,
     label: "General Weighted Average",
   },
+  // {
+  //   id: "studentCourse",
+  //   numeric: true,
+  //   disablePadding: false,
+  //   label: "Student Course",
+  // },
 ];
 
 interface EnhancedTableProps {
@@ -126,23 +127,14 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              "aria-label": "select all desserts",
-            }}
-          />
-        </TableCell>
+        <TableCell padding="checkbox" />
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
             align={headCell.numeric ? "right" : "left"}
             padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
+            // style={{ backgroundColor: "#428bfe" }}
           >
             <TableSortLabel
               active={orderBy === headCell.id}
@@ -150,11 +142,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
               onClick={createSortHandler(headCell.id)}
             >
               {headCell.label}
-              {orderBy === headCell.id ? (
-                <Box component="span">
-                  {order === "desc" ? "sorted descending" : "sorted ascending"}
-                </Box>
-              ) : null}
+              {orderBy === headCell.id ? <Box component="span"></Box> : null}
             </TableSortLabel>
           </TableCell>
         ))}
@@ -163,62 +151,61 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   );
 }
 
-interface EnhancedTableToolbarProps {
-  numSelected: number;
-}
+// interface EnhancedTableToolbarProps {
+//   numSelected: number;
+// }
 
-function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-  const { numSelected } = props;
-
-  return (
-    <Toolbar
-      sx={{
-        pl: { sm: 2 },
-        pr: { xs: 1, sm: 1 },
-        ...(numSelected > 0 && {
-          bgcolor: (theme) =>
-            alpha(
-              theme.palette.primary.main,
-              theme.palette.action.activatedOpacity,
-            ),
-        }),
-      }}
-    >
-      {numSelected > 0 ? (
-        <Typography
-          sx={{ flex: "1 1 100%" }}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
-        >
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Typography
-          sx={{ flex: "1 1 100%" }}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        >
-          {"Honor's Students"}
-        </Typography>
-      )}
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      )}
-    </Toolbar>
-  );
-}
+// function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
+//   const { numSelected } = props;
+//   return (
+//     <Toolbar
+//       sx={{
+//         pl: { sm: 2 },
+//         pr: { xs: 1, sm: 1 },
+//         ...(numSelected > 0 && {
+//           bgcolor: (theme) =>
+//             alpha(
+//               theme.palette.primary.main,
+//               theme.palette.action.activatedOpacity,
+//             ),
+//         }),
+//       }}
+//     >
+//       {numSelected > 0 ? (
+//         <Typography
+//           sx={{ flex: "1 1 100%" }}
+//           color="inherit"
+//           variant="subtitle1"
+//           component="div"
+//         >
+//           {numSelected} selected
+//         </Typography>
+//       ) : (
+//         // <Typography
+//         //   sx={{ flex: "1 1 100%" }}
+//         //   variant="h6"
+//         //   id="tableTitle"
+//         //   component="div"
+//         // >
+//         //   {"Honor's Students"}
+//         // </Typography>
+//       // )}
+//       {numSelected > 0 ? (
+//         <Tooltip title="Delete">
+//           <IconButton>
+//             <DeleteIcon />
+//           </IconButton>
+//         </Tooltip>
+//       ) : (
+//         <Tooltip title="Filter list">
+//           <IconButton>
+//             <FilterListIcon />
+//           </IconButton>
+//         </Tooltip>
+//       )}
+//     </Toolbar>
+//   );
+// }
 
 const HonorsListTable: FC<HonorsList> = ({ honorsList }) => {
   const [order, setOrder] = useState<Order>("asc");
@@ -303,10 +290,10 @@ const HonorsListTable: FC<HonorsList> = ({ honorsList }) => {
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
         <TableContainer>
           <Table
-            sx={{ minWidth: 750 }}
+            sx={{ minWidth: 700 }}
             aria-labelledby="tableTitle"
             size={dense ? "small" : "medium"}
           >
@@ -329,37 +316,35 @@ const HonorsListTable: FC<HonorsList> = ({ honorsList }) => {
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
-                    <TableRow
-                      hover
-                      onClick={(event) => handleClick(event, row.firstName)}
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row.id}
-                      selected={isItemSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            "aria-labelledby": labelId,
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
+                    <>
+                      <TableRow
+                        hover
+                        onClick={(event) => handleClick(event, row.firstName)}
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={row.id}
+                        selected={isItemSelected}
                       >
-                        {row.studentIdNumber}
-                      </TableCell>
-                      <TableCell align="right">{row.firstName}</TableCell>
-                      <TableCell align="right">{row.lastName}</TableCell>
-                      <TableCell align="right">{row.gwa.toFixed(2)}</TableCell>
-                      <TableCell align="right">{row.gwa.toFixed(2)}</TableCell>
-                    </TableRow>
+                        <TableCell padding="checkbox" />
+                        <TableCell
+                          component="th"
+                          id={labelId}
+                          scope="row"
+                          padding="none"
+                        >
+                          {/* {headCells.map((headCell) => (
+                          <Link href={`/student?id=${headCell.id}`} key={headCell.id}></Link>         
+                          ))} */}
+                          {row.studentIdNumber}
+                        </TableCell>
+                        {/* <TableBody> */}
+                        <TableCell align="right">{row.lastName}</TableCell>
+                        <TableCell align="right">{row.firstName}</TableCell>
+                        <TableCell align="right">
+                          {row.gwa.toFixed(2)}
+                        </TableCell>
+                      </TableRow>
+                    </>
                   );
                 })}
               {emptyRows > 0 && (
@@ -368,14 +353,14 @@ const HonorsListTable: FC<HonorsList> = ({ honorsList }) => {
                     height: (dense ? 33 : 53) * emptyRows,
                   }}
                 >
-                  <TableCell colSpan={6} />
+                  <TableCell colSpan={3} />
                 </TableRow>
               )}
             </TableBody>
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[10, 15, 20, 25]}
           component="div"
           count={honorsList.length}
           rowsPerPage={rowsPerPage}
@@ -386,7 +371,7 @@ const HonorsListTable: FC<HonorsList> = ({ honorsList }) => {
       </Paper>
       <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
+        label="Compress List"
       />
     </Box>
   );
