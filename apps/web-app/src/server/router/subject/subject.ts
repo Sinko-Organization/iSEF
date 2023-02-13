@@ -49,6 +49,21 @@ export const subjectRouter = createAdminRouter()
         semesterType,
       } = input;
 
+      const dependencyCodes = await ctx.prisma.subject.findMany({
+        where: {
+          id: {
+            in: studentRecords.map((record) => record.subjectId),
+          },
+        },
+        select: {
+          stubCode: true,
+        },
+      });
+
+      const dependencySet = new Set(
+        dependencyCodes.map((code) => code.stubCode),
+      );
+
       const availableSubjects = await Promise.all(
         studentRecords.map(async (record) => {
           const { remark, subjectId } = record;
@@ -130,12 +145,8 @@ export const subjectRouter = createAdminRouter()
               (subj) => {
                 const { dependencies } = subj;
 
-                const dependencyIds = new Set(
-                  studentRecords.map((record) => record.subjectId),
-                );
-
                 const allDependenciesFound = dependencies.every((dependency) =>
-                  dependencyIds.has(dependency),
+                  dependencySet.has(dependency),
                 );
 
                 return allDependenciesFound;

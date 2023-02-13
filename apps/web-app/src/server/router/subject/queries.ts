@@ -1,4 +1,10 @@
+import { R } from "@mobily/ts-belt";
 import type { PrismaClient } from "@prisma/client";
+import { seDep } from "@web-app/constants/subject-dependencies";
+import {
+  getSubjectDependencies,
+  getSubjectLevel,
+} from "@web-app/models/subject-dependency";
 
 import type { SubjectDependencyType } from "./types";
 
@@ -19,30 +25,32 @@ export const getSubjectWithDetails = async (
     },
   });
 
-  const subjectLevel = await prisma.subjectHierarchy.findFirstOrThrow({
+  const { name } = await prisma.course.findFirstOrThrow({
     where: {
-      subjectId,
-      courseId,
+      id: courseId,
     },
     select: {
-      level: true,
+      name: true,
     },
   });
 
-  const subjectDependencies = await prisma.subjectDependency.findMany({
+  const { stubCode } = await prisma.subject.findFirstOrThrow({
     where: {
-      subjectId,
-      courseId,
+      id: subjectId,
     },
     select: {
-      prereqId: true,
+      stubCode: true,
     },
   });
+
+  const subjectLevel = R.getExn(getSubjectLevel(stubCode, seDep));
+
+  const subjectDependencies = R.getExn(getSubjectDependencies(stubCode, seDep));
 
   return {
     ...subject,
-    level: subjectLevel.level,
-    dependencies: subjectDependencies.map((d) => d.prereqId),
+    level: subjectLevel,
+    dependencies: subjectDependencies,
   };
 };
 
@@ -71,18 +79,18 @@ export const getSubjectDependencyStatus = async (
   subjectId: string,
   courseId: string,
 ): Promise<SubjectDependencyType> => {
-  const subjectDependencies = await prisma.subjectDependency.findFirst({
+  const { stubCode } = await prisma.subject.findFirstOrThrow({
     where: {
-      subjectId,
-      courseId,
+      id: subjectId,
     },
     select: {
-      id: true,
-      prereqId: true,
+      stubCode: true,
     },
   });
 
-  if (!subjectDependencies) {
+  const subjectDependencies = R.getExn(getSubjectDependencies(stubCode, seDep));
+
+  if (subjectDependencies.length === 0) {
     return "Independent";
   }
 
