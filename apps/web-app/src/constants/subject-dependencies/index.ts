@@ -1,11 +1,4 @@
-export type DependencyList = {
-  subjects: {
-    subjectCode: string;
-    prerequisites: string[];
-    coRequisites: string[];
-  }[];
-  enrollmentType: "Regular" | "Bridging";
-}[];
+import { DependencyList } from "./types";
 
 export const seDep: DependencyList = [
   //BRIDGING
@@ -200,6 +193,8 @@ export const seDep: DependencyList = [
         prerequisites: [],
         coRequisites: [],
       },
+
+      // tag1
       {
         subjectCode: "Engg 1009",
         prerequisites: [],

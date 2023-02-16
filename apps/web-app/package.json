@@ -19,7 +19,7 @@
     "test": "vitest run",
     "test:unit": "vitest run unit",
     "test:integration": "vitest run int --no-threads",
-    "test:watch": "vitest",
+    "test:unit-watch": "vitest run unit --watch",
     "cypress:open": "cypress open",
     "db:push": "prisma db push",
     "db:generate": "prisma generate"
