@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-nested-ternary */
 import {
   StudentProfileCard,
   StudentRecordsCard,
@@ -8,6 +9,8 @@ import { trpc } from "@web-app/utils/trpc";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+
+type Remark = "Passed" | "Failed";
 
 const StudentPage: NextPage = () => {
   const { schoolYear, setSchoolYear, semesterType, setSemesterType } =
@@ -41,6 +44,27 @@ const StudentPage: NextPage = () => {
   ]);
 
   const { data, isLoading, isError } = studentDetails;
+
+  const { data: recommendedSubjects } = trpc.useQuery([
+    "subject.getRecommendedSubjects",
+    {
+      courseId: data?.studentRecords[0]?.course?.id ?? "",
+      schoolYearId: data?.studentRecords[0]?.schoolYear?.id ?? "",
+      semesterType,
+      studentId: data?.id ?? "",
+      studentRecords:
+        data?.studentRecords.map((record) => {
+          const id = record.id ?? "";
+          const subjectId = record.subject.id ?? "";
+          const remark = record.grade ? getRemark(record.grade) : "Failed";
+          return {
+            id,
+            subjectId,
+            remark,
+          };
+        }) ?? [],
+    },
+  ]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -81,6 +105,11 @@ const StudentPage: NextPage = () => {
       )}
     </>
   );
+};
+
+const getRemark = (grade: number) => {
+  if (grade >= 1 && grade <= 3) return "Passed";
+  return "Failed";
 };
 
 export default StudentPage;

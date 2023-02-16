@@ -193,8 +193,6 @@ export const seDep: DependencyList = [
         prerequisites: [],
         coRequisites: [],
       },
-
-      // tag1
       {
         subjectCode: "Engg 1009",
         prerequisites: [],
@@ -871,6 +869,19 @@ export const seDep: DependencyList = [
 
       {
         subjectCode: "SE 4300",
+        prerequisites: [],
+        coRequisites: [],
+      },
+    ],
+    enrollmentType: "Regular",
+  },
+];
+
+export const meDept: DependencyList = [
+  {
+    subjects: [
+      {
+        subjectCode: "",
         prerequisites: [],
         coRequisites: [],
       },

@@ -43,9 +43,12 @@ export const getSubjectWithDetails = async (
     },
   });
 
-  const subjectLevel = R.getExn(getSubjectLevel(stubCode, seDep));
+  const subjectLevel = R.getWithDefault(getSubjectLevel(stubCode, seDep), 0);
 
-  const subjectDependencies = R.getExn(getSubjectDependencies(stubCode, seDep));
+  const subjectDependencies = R.getWithDefault(
+    getSubjectDependencies(stubCode, seDep),
+    [],
+  );
 
   return {
     ...subject,

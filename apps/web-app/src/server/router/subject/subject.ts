@@ -92,6 +92,8 @@ export const subjectRouter = createAdminRouter()
           maxLevel + 1,
         );
 
+        console.log(availableSubjects);
+
         return availableSubjects;
       });
 
