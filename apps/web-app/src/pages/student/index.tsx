@@ -72,7 +72,11 @@ const StudentPage: NextPage = () => {
               className="mt-20"
             />
           )}
-          <StudentRecordsCard records={data.studentRecords} />
+          <StudentRecordsCard
+            records={data.studentRecords}
+            studentId={id}
+            semesterType={semesterType}
+          />
         </div>
       )}
     </>
