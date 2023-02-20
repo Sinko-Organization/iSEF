@@ -1,9 +1,3 @@
-/* eslint-disable import/export */
-
-/* eslint-disable react/no-unescaped-entities */
-
-/* eslint-disable jsx-a11y/alt-text */
-
 /* eslint-disable import/named */
 import {
   Document,
@@ -14,65 +8,105 @@ import {
   Text,
   View,
 } from "@react-pdf/renderer";
-import type { NextPage } from "next";
+import { useCourseStore, useHonorsFilterStore } from "@web-app/stores";
+import { trpc } from "@web-app/utils/trpc";
+import type { inferQueryOutput } from "@web-app/utils/trpc";
+import type { FC } from "react";
 
-const DeansList = () => (
-  <Document>
-    <Page style={header.page} size="A4" wrap>
-      <Text style={header.title}>Central Philippine University </Text>
-      <Text style={header.headerTitle}>COLLEGE OF ENGINEERING</Text>
+type HonorsData = inferQueryOutput<"honors.getAll">;
 
-      <Text style={header.header}>HONOR'S LIST</Text>
+interface Props {
+  data: HonorsData;
+  semesterType: string;
+  schoolYear: number;
+}
 
-      <View style={header.courseTable}>
-        <View style={[header.row, header.courseTitle]}>
-          <Text style={[header.courseTitle, header.cell]}>NTH SEMESTER</Text>
-          <Text style={[header.courseTitle, header.cell]}>
-            S.Y. "School Year"
-          </Text>
+const DeansList: FC<Props> = ({ data, semesterType, schoolYear }) => {
+  return (
+    <Document>
+      <Page style={header.page} size="A4" wrap>
+        <Text style={header.title}>Central Philippine University </Text>
+        <Text style={header.headerTitle}>COLLEGE OF ENGINEERING</Text>
+
+        <Text style={header.header}>HONOR&apos;S LIST</Text>
+
+        <View style={header.courseTable}>
+          <View style={[header.row, header.courseTitle]}>
+            <Text style={[header.courseTitle, header.cell]}>
+              {semesterType}
+            </Text>
+            <Text style={[header.courseTitle, header.cell]}>
+              S.Y. {schoolYear}-{schoolYear + 1}
+            </Text>
+          </View>
         </View>
-      </View>
 
-      <Text style={[header.header, header.border]}>YEAR LEVEL</Text>
+        <Text style={[header.header, header.border]}>YEAR LEVEL</Text>
 
-      <View style={header.header}>
-        <View style={[header.row, header.border]}>
-          <Text style={[header.courseTitle, header.col2]}>NO.</Text>
-          <Text style={[header.courseTitle, header.col2]}>Rank</Text>
-          <Text style={[header.courseTitle, header.col1]}>Student Name</Text>
-          <Text style={[header.courseTitle, header.col1]}>G.W.A</Text>
+        <View style={header.header}>
+          <View style={[header.row, header.border]}>
+            <Text style={[header.courseTitle, header.col2]}>NO.</Text>
+            <Text style={[header.courseTitle, header.col2]}>ID</Text>
+            <Text style={[header.courseTitle, header.col1]}>Student Name</Text>
+            <Text style={[header.courseTitle, header.col1]}>G.W.A</Text>
+          </View>
         </View>
-      </View>
-    </Page>
 
-    <Page style={header.page} size="A4" wrap>
-      <Text style={header.title}>Central Philippine University </Text>
-      <Text style={header.headerTitle}>COLLEGE OF ENGINEERING</Text>
+        {data &&
+          data.map((student, index) => {
+            const { id, firstName, lastName, studentIdNumber, gwa } = student;
+            const hasNames = firstName && lastName;
+            const fullName = `${firstName} ${lastName}`;
+            return (
+              <View style={header.header} key={id}>
+                <View style={[header.row, header.border]}>
+                  <Text style={[header.courseTitle, header.col2]}>
+                    {index + 1}
+                  </Text>
+                  <Text style={[header.courseTitle, header.col2]}>
+                    {studentIdNumber}
+                  </Text>
+                  <Text style={[header.courseTitle, header.col1]}>
+                    {hasNames ? fullName : "No Name"}
+                  </Text>
+                  <Text style={[header.courseTitle, header.col1]}>
+                    {gwa.toFixed(2)}
+                  </Text>
+                </View>
+              </View>
+            );
+          })}
+      </Page>
 
-      <Text style={header.header}>DEAN'S LIST</Text>
+      <Page style={header.page} size="A4" wrap>
+        <Text style={header.title}>Central Philippine University </Text>
+        <Text style={header.headerTitle}>COLLEGE OF ENGINEERING</Text>
 
-      <View style={header.courseTable}>
-        <View style={[header.row, header.courseTitle]}>
-          <Text style={[header.courseTitle, header.cell]}>NTH SEMESTER</Text>
-          <Text style={[header.courseTitle, header.cell]}>
-            S.Y. "School Year"
-          </Text>
+        <Text style={header.header}>DEAN&apos; LIST</Text>
+
+        <View style={header.courseTable}>
+          <View style={[header.row, header.courseTitle]}>
+            <Text style={[header.courseTitle, header.cell]}>NTH SEMESTER</Text>
+            <Text style={[header.courseTitle, header.cell]}>
+              S.Y. &quot;School Year&quot;
+            </Text>
+          </View>
         </View>
-      </View>
 
-      <Text style={[header.header, header.border]}>YEAR LEVEL</Text>
+        <Text style={[header.header, header.border]}>YEAR LEVEL</Text>
 
-      <View style={header.header}>
-        <View style={[header.row, header.border]}>
-          <Text style={[header.courseTitle, header.col2]}>NO.</Text>
-          <Text style={[header.courseTitle, header.col2]}>Rank</Text>
-          <Text style={[header.courseTitle, header.col1]}>Student Name</Text>
-          <Text style={[header.courseTitle, header.col1]}>G.W.A</Text>
+        <View style={header.header}>
+          <View style={[header.row, header.border]}>
+            <Text style={[header.courseTitle, header.col2]}>NO.</Text>
+            <Text style={[header.courseTitle, header.col2]}>Rank</Text>
+            <Text style={[header.courseTitle, header.col1]}>Student Name</Text>
+            <Text style={[header.courseTitle, header.col1]}>G.W.A</Text>
+          </View>
         </View>
-      </View>
-    </Page>
-  </Document>
-);
+      </Page>
+    </Document>
+  );
+};
 
 Font.register({
   family: "Oswald",
@@ -150,12 +184,44 @@ const header = StyleSheet.create({
   },
 });
 
-const PdfComponent: NextPage = () => {
+const PdfComponent = () => {
+  const { semesterType, schoolYear } = useHonorsFilterStore();
+  const { course: courseId } = useCourseStore();
+
+  const { data } = trpc.useQuery(
+    [
+      "honors.getAll",
+      {
+        schoolYear,
+        yearLevel: null,
+        semesterType,
+        courseId,
+        sortBy: {
+          field: "gwa",
+          order: "desc",
+        },
+      },
+    ],
+    {
+      // handle error
+      onError: (err) => {
+        console.error(err.data?.code);
+      },
+    },
+  );
+
   return (
-    // full width
-    <PDFViewer width="100%" height="300%">
-      <DeansList />
-    </PDFViewer>
+    data &&
+    semesterType &&
+    schoolYear && (
+      <PDFViewer width="100%" height="300%">
+        <DeansList
+          data={data}
+          semesterType={semesterType}
+          schoolYear={schoolYear}
+        />
+      </PDFViewer>
+    )
   );
 };
 

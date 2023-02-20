@@ -1,15 +1,14 @@
 import { HonorsListTable } from "@web-app/components/tables";
+import { CourseSelector } from "@web-app/containers/course-selector";
 import { CurriculumSelector } from "@web-app/containers/curriculum-selector";
 import { YearLevelSelector } from "@web-app/containers/year-level-selector";
-import { useHonorsFilterStore } from "@web-app/stores";
+import { useCourseStore, useHonorsFilterStore } from "@web-app/stores";
 import { trpc } from "@web-app/utils/trpc";
 import type { NextPage } from "next";
 import { useEffect } from "react";
 
 const Index: NextPage = () => {
-  const { data: schoolYearsData, status: schoolYearStatus } = trpc.useQuery([
-    "schoolYear.getAll",
-  ]);
+  const { data: schoolYearsData } = trpc.useQuery(["schoolYear.getAll"]);
   const {
     semesterType,
     yearLevel,
@@ -18,6 +17,7 @@ const Index: NextPage = () => {
     setSemesterType,
     setYearLevel,
   } = useHonorsFilterStore();
+  const { course: courseId, setCourse } = useCourseStore();
 
   useEffect(() => {
     if (schoolYearsData) {
@@ -28,10 +28,6 @@ const Index: NextPage = () => {
     }
   }, [schoolYearsData, setSchoolYear]);
 
-  useEffect(() => {
-    console.log(yearLevel);
-  }, [yearLevel]);
-
   const { data } = trpc.useQuery(
     [
       "honors.getAll",
@@ -39,7 +35,7 @@ const Index: NextPage = () => {
         schoolYear,
         semesterType,
         yearLevel,
-        courseId: null,
+        courseId,
         sortBy: {
           field: "gwa",
           order: "desc",
@@ -49,14 +45,14 @@ const Index: NextPage = () => {
     {
       // handle error
       onError: (err) => {
-        console.log(err.data?.code);
+        console.error(err.data?.code);
       },
     },
   );
 
   return (
     <>
-      <div className="flex flex-row gap-5">
+      <div className="mx-20 flex flex-row gap-5">
         {schoolYearsData && (
           <CurriculumSelector
             schoolYearsData={schoolYearsData}
@@ -66,6 +62,7 @@ const Index: NextPage = () => {
           />
         )}
         <YearLevelSelector setYearLevel={setYearLevel} />
+        <CourseSelector setCourse={setCourse} />
       </div>
       <div className="mx-20 mt-10">
         {data && (
