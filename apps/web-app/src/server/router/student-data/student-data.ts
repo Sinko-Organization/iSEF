@@ -229,10 +229,9 @@ export const studentDataRouter = createAdminRouter()
   .mutation("upload.v2", {
     input: z.object({
       studentRecords: z.array(validStudentSchemaV2),
-      semester: z.enum(["FIRST", "SECOND", "SUMMER"]),
     }),
     async resolve({ ctx, input }) {
-      const { studentRecords, semester } = input;
+      const { studentRecords } = input;
 
       return ctx.prisma.$transaction([
         ...studentRecords.map((record) => {
@@ -242,12 +241,12 @@ export const studentDataRouter = createAdminRouter()
             endYear: _.toInteger(endYear),
           };
 
-          const complexId = `${record.id}-${record.course}-${record.stubCode}-${record.subject}-${schoolYear.startYear}-${semester}`;
+          const complexId = `${record.id}-${record.course}-${record.stubCode}-${record.subject}-${schoolYear.startYear}-${record.semesterType}`;
           return ctx.prisma.studentRecord.upsert({
             create: {
               id: complexId,
               grade: toNumericGrade(record.grade),
-              semesterType: semester as SemesterType,
+              semesterType: record.semesterType as SemesterType,
               yearLevel: _.toInteger(record.yearLevel),
               schoolYear: {
                 connectOrCreate: {

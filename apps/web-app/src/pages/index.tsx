@@ -1,11 +1,22 @@
 import type { NextPage } from "next";
+import { signIn, signOut, useSession } from "next-auth/react";
 
-const Home: NextPage = () => {
+const SignIn: NextPage = () => {
+  const { data: session } = useSession();
+  if (session) {
+    return (
+      <>
+        Signed in <br />
+        <button onClick={() => signOut()}>Sign out</button>
+      </>
+    );
+  }
   return (
     <>
-      <div>Home</div>
+      Not signed in <br />
+      <button onClick={() => signIn()}>Sign in</button>
     </>
   );
 };
 
-export default Home;
+export default SignIn;

@@ -115,9 +115,7 @@ export default function StudentProfileCard({
   ]);
 
   useEffect(() => {
-    if (recommended) {
-      console.log(recommended);
-    }
+    console.log(recommended);
   }, [recommended]);
 
   return (

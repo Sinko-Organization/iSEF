@@ -193,13 +193,25 @@ export const fields: Field<string>[] = [
     ],
   },
   {
-    label: "Number",
-    key: "number",
-    alternateMatches: ["number", "Number"],
+    label: "Semester Type",
+    key: "semesterType",
+    alternateMatches: ["Semester", "semester", "semester type"],
     fieldType: {
       type: "input",
     },
     example: "1",
+    validations: [
+      {
+        rule: "required",
+        errorMessage: "Semester Type is required",
+        level: "error",
+      },
+      {
+        rule: "regex",
+        value: "^[1-3]$",
+        errorMessage: "Semester Type must be 1, 2 or 3",
+      },
+    ],
   },
 ];
 
@@ -223,7 +235,7 @@ export const validStudentSchema = z.object({
   subject: trimmedStringSchema,
   units: trimmedStringSchema,
   schoolYear: trimmedStringSchema,
-  number: trimmedStringSchema,
+  semesterType: trimmedStringSchema,
 });
 
 const invalidStudentSchema = validStudentSchema.partial();
