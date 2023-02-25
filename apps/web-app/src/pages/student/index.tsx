@@ -31,7 +31,7 @@ const StudentPage: NextPage = () => {
     }
   }, [schoolYearsData, setSchoolYear]);
 
-  const studentDetails = trpc.useQuery([
+  const { data: studentData, status: studentDataStatus } = trpc.useQuery([
     "studentData.details",
     {
       studentId: id,
@@ -40,28 +40,26 @@ const StudentPage: NextPage = () => {
     },
   ]);
 
-  const { data, isLoading, isError } = studentDetails;
-
-  if (isLoading) {
+  if (studentDataStatus === "loading") {
     return <div>Loading...</div>;
   }
 
-  if (isError) {
+  if (studentDataStatus === "error") {
     return <div>Error</div>;
   }
 
   return (
     <>
-      {data && (
+      {studentData && (
         <div>
           <StudentProfileCard
-            id={data.id}
-            studentIdNumber={data.studentIdNumber}
-            firstName={data.firstName}
-            lastName={data.lastName}
-            email={data.email}
-            phoneNumber={data.phoneNumber}
-            address={data.address}
+            id={studentData.id}
+            studentIdNumber={studentData.studentIdNumber}
+            firstName={studentData.firstName}
+            lastName={studentData.lastName}
+            email={studentData.email}
+            phoneNumber={studentData.phoneNumber}
+            address={studentData.address}
           />
           {schoolYearsData && (
             <CurriculumSelector
@@ -73,7 +71,7 @@ const StudentPage: NextPage = () => {
             />
           )}
           <StudentRecordsCard
-            records={data.studentRecords}
+            records={studentData.studentRecords}
             studentId={id}
             semesterType={semesterType}
           />
