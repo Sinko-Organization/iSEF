@@ -19,6 +19,20 @@ export const courseRouter = createAdminRouter()
       });
     },
   })
+  .query("getById", {
+    input: z.string(),
+    resolve({ ctx, input }) {
+      return ctx.prisma.course.findUnique({
+        where: {
+          id: input,
+        },
+        select: {
+          id: true,
+          name: true,
+        },
+      });
+    },
+  })
   .query("population", {
     input: z.object({
       schoolYear: z.number(),
