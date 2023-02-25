@@ -1,8 +1,5 @@
-import DeleteIcon from "@mui/icons-material/Delete";
-import FilterListIcon from "@mui/icons-material/FilterList";
-import { Button, Link } from "@mui/material";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import Box from "@mui/material/Box";
-import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import IconButton from "@mui/material/IconButton";
 import Paper from "@mui/material/Paper";
@@ -18,9 +15,10 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import { alpha } from "@mui/material/styles";
+import { useCourseStore, useHonorsFilterStore } from "@web-app/stores";
 import type { NonNullableValues } from "@web-app/types/generics";
 import type { inferQueryOutput } from "@web-app/utils/trpc";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import type { FC } from "react";
 
@@ -90,12 +88,6 @@ const headCells: readonly HeadCell[] = [
     disablePadding: false,
     label: "General Weighted Average",
   },
-  // {
-  //   id: "studentCourse",
-  //   numeric: true,
-  //   disablePadding: false,
-  //   label: "Student Course",
-  // },
 ];
 
 interface EnhancedTableProps {
@@ -111,14 +103,7 @@ interface EnhancedTableProps {
 }
 
 function EnhancedTableHead(props: EnhancedTableProps) {
-  const {
-    onSelectAllClick,
-    order,
-    orderBy,
-    numSelected,
-    rowCount,
-    onRequestSort,
-  } = props;
+  const { order, orderBy, onRequestSort } = props;
   const createSortHandler =
     (property: keyof HonorsType) => (event: React.MouseEvent<unknown>) => {
       onRequestSort(event, property);
@@ -151,69 +136,26 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   );
 }
 
-// interface EnhancedTableToolbarProps {
-//   numSelected: number;
-// }
-
-// function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-//   const { numSelected } = props;
-//   return (
-//     <Toolbar
-//       sx={{
-//         pl: { sm: 2 },
-//         pr: { xs: 1, sm: 1 },
-//         ...(numSelected > 0 && {
-//           bgcolor: (theme) =>
-//             alpha(
-//               theme.palette.primary.main,
-//               theme.palette.action.activatedOpacity,
-//             ),
-//         }),
-//       }}
-//     >
-//       {numSelected > 0 ? (
-//         <Typography
-//           sx={{ flex: "1 1 100%" }}
-//           color="inherit"
-//           variant="subtitle1"
-//           component="div"
-//         >
-//           {numSelected} selected
-//         </Typography>
-//       ) : (
-//         // <Typography
-//         //   sx={{ flex: "1 1 100%" }}
-//         //   variant="h6"
-//         //   id="tableTitle"
-//         //   component="div"
-//         // >
-//         //   {"Honor's Students"}
-//         // </Typography>
-//       // )}
-//       {numSelected > 0 ? (
-//         <Tooltip title="Delete">
-//           <IconButton>
-//             <DeleteIcon />
-//           </IconButton>
-//         </Tooltip>
-//       ) : (
-//         <Tooltip title="Filter list">
-//           <IconButton>
-//             <FilterListIcon />
-//           </IconButton>
-//         </Tooltip>
-//       )}
-//     </Toolbar>
-//   );
-// }
-
 const HonorsListTable: FC<HonorsList> = ({ honorsList }) => {
+  const router = useRouter();
+
   const [order, setOrder] = useState<Order>("asc");
   const [orderBy, setOrderBy] = useState<keyof HonorsType>("firstName");
   const [selected, setSelected] = useState<readonly string[]>([]);
   const [page, setPage] = useState(0);
   const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const { course: courseId } = useCourseStore();
+  const { yearLevel } = useHonorsFilterStore();
+
+  const printToPDF = () => {
+    if (courseId && yearLevel) {
+      router.push("/pdf");
+    } else {
+      console.error("No course or year level selected");
+    }
+  };
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -290,7 +232,27 @@ const HonorsListTable: FC<HonorsList> = ({ honorsList }) => {
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
-        {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
+        <Toolbar
+          sx={{
+            pl: { sm: 2 },
+            pr: { xs: 1, sm: 1 },
+          }}
+        >
+          <Typography
+            sx={{ flex: "1 1 100%" }}
+            variant="h6"
+            id="tableTitle"
+            component="div"
+          >
+            Honor&apos;s List
+          </Typography>
+
+          <Tooltip title="Print to PDF" onClick={printToPDF}>
+            <IconButton aria-label="print to pdf">
+              <PictureAsPdfIcon />
+            </IconButton>
+          </Tooltip>
+        </Toolbar>
         <TableContainer>
           <Table
             sx={{ minWidth: 700 }}

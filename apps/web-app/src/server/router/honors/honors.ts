@@ -12,9 +12,8 @@ export const honorsRouter = createAdminRouter()
     input: z.object({
       schoolYear: z.number(),
       semesterType: z.enum(["FIRST", "SECOND", "SUMMER"]),
-      yearLevel: z.number().int().min(1).max(5).optional(),
-      skip: z.number().default(0),
-      take: z.number().default(10),
+      yearLevel: z.number().int().min(1).max(5).nullable(),
+      courseId: z.string().nullable(),
       sortBy: z.object({
         field: z.enum(["lastName", "gwa"]).default("lastName"),
         order: z.enum(["asc", "desc"]).default("asc"),
@@ -34,6 +33,11 @@ export const honorsRouter = createAdminRouter()
                     },
                   },
                   {
+                    grade: {
+                      gte: 1,
+                    },
+                  },
+                  {
                     schoolYear: {
                       startYear: {
                         equals: input.schoolYear,
@@ -46,7 +50,10 @@ export const honorsRouter = createAdminRouter()
                     },
                   },
                   {
-                    yearLevel: input.yearLevel,
+                    yearLevel: input.yearLevel ?? undefined,
+                  },
+                  {
+                    courseId: input.courseId ?? undefined,
                   },
                 ],
               },
@@ -114,8 +121,6 @@ export const honorsRouter = createAdminRouter()
             }),
             // filter out students with GWA <= 1.5
             A.filter((record) => record.gwa <= 1.5),
-            // get only the records that are within the skip and take
-            A.slice(input.skip, input.skip + input.take),
             // sort the records
             (records) =>
               _.orderBy(records, [input.sortBy.field], [input.sortBy.order]),
