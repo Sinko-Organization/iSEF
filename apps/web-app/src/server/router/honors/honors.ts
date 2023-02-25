@@ -19,13 +19,34 @@ export const honorsRouter = createAdminRouter()
         order: z.enum(["asc", "desc"]).default("asc"),
       }),
     }),
+    output: z.array(
+      z.object({
+        id: z.string(),
+        studentIdNumber: z.string(),
+        firstName: z.string().nullable(),
+        lastName: z.string().nullable(),
+        gwa: z.number(),
+        studentRecords: z.array(
+          z.object({
+            id: z.string(),
+            grade: z.number(),
+            subject: z.object({
+              id: z.string(),
+              name: z.string(),
+              units: z.number(),
+            }),
+            yearLevel: z.number(),
+          }),
+        ),
+      }),
+    ),
     async resolve({ ctx, input }) {
       // get all students with honors, invidual grades must be > 2.6 ang the GWA must be > 1.5
       return ctx.prisma.student
         .findMany({
           where: {
             studentRecords: {
-              every: {
+              some: {
                 AND: [
                   {
                     grade: {
@@ -119,8 +140,8 @@ export const honorsRouter = createAdminRouter()
                 gwa,
               };
             }),
-            // filter out students with GWA <= 1.5
-            A.filter((record) => record.gwa <= 1.5),
+            // filter out students with GWA <= 2 and GWA >= 1
+            A.filter((record) => record.gwa <= 2 && record.gwa >= 1),
             // sort the records
             (records) =>
               _.orderBy(records, [input.sortBy.field], [input.sortBy.order]),
