@@ -2,11 +2,12 @@ import { DependencyList } from "./types";
 
 export const seDep: DependencyList = [
   //BRIDGING
+
+  //FIRST YEAR
+
+  //First Sem
   {
     subjects: [
-      //FIRST YEAR
-
-      //First Sem
       {
         subjectCode: "EBMath 1101",
         prerequisites: [],
@@ -62,9 +63,15 @@ export const seDep: DependencyList = [
         prerequisites: [],
         coRequisites: [],
       },
+    ],
+    enrollmentType: "Bridging",
+  },
 
-      // Second Sem
+  // FIRST YEAR
+  // Second Sem
 
+  {
+    subjects: [
       {
         subjectCode: "EBMath 1201",
         prerequisites: [],
@@ -125,11 +132,14 @@ export const seDep: DependencyList = [
         prerequisites: [],
         coRequisites: [],
       },
+    ],
+    enrollmentType: "Bridging",
+  },
 
-      // SECOND YEAR
-
-      //First Sem
-
+  // SECOND YEAR
+  //First Sem
+  {
+    subjects: [
       {
         subjectCode: "EMath 1101",
         prerequisites: [],
@@ -175,9 +185,14 @@ export const seDep: DependencyList = [
         prerequisites: ["PATHFit1 M", "PATHFit2 M"],
         coRequisites: [],
       },
+    ],
+    enrollmentType: "Bridging",
+  },
 
-      //Second Sem
-
+  //SECOND YEAR
+  // Second Sem
+  {
+    subjects: [
       {
         subjectCode: "EMath 1201",
         prerequisites: ["EMath 1101"],
@@ -193,8 +208,6 @@ export const seDep: DependencyList = [
         prerequisites: [],
         coRequisites: [],
       },
-
-      // tag1
       {
         subjectCode: "Engg 1009",
         prerequisites: [],
@@ -225,11 +238,14 @@ export const seDep: DependencyList = [
         prerequisites: ["PATHFit1 M", "PATHFit2 M"],
         coRequisites: [],
       },
+    ],
+    enrollmentType: "Bridging",
+  },
 
-      // THIRD YEAR
-
-      // First Sem
-
+  // THIRD YEAR
+  // First Sem
+  {
+    subjects: [
       {
         subjectCode: "EMath 2101",
         prerequisites: ["EMath 1201"],
@@ -270,9 +286,14 @@ export const seDep: DependencyList = [
         prerequisites: [],
         coRequisites: [],
       },
+    ],
+    enrollmentType: "Bridging",
+  },
 
-      // Second Sem
-
+  // THIRD YEAR
+  // Second Sem
+  {
+    subjects: [
       {
         subjectCode: "EMath 2102",
         prerequisites: ["EMath 1102", "EMath 1202"],
@@ -303,10 +324,14 @@ export const seDep: DependencyList = [
         prerequisites: ["EMath 1102", "SE 2134"],
         coRequisites: [],
       },
+    ],
+    enrollmentType: "Bridging",
+  },
 
-      // FOURTH YEAR
-
-      // First Sem
+  // FOURTH YEAR
+  // First Sem
+  {
+    subjects: [
       {
         subjectCode: "EMath 2200",
         prerequisites: ["EMath 2101"],
@@ -337,9 +362,14 @@ export const seDep: DependencyList = [
         prerequisites: [],
         coRequisites: [],
       },
+    ],
+    enrollmentType: "Bridging",
+  },
 
-      // Second Sem
-
+  // FOURTH YEAR
+  // Second Sem
+  {
+    subjects: [
       {
         subjectCode: "Engg 1025",
         prerequisites: ["EMath 1202"],
@@ -370,9 +400,15 @@ export const seDep: DependencyList = [
         prerequisites: [],
         coRequisites: [],
       },
+    ],
+    enrollmentType: "Bridging",
+  },
 
-      // SUMMER
+  // FOURTH YEAR
+  // Summer
 
+  {
+    subjects: [
       {
         subjectCode: "Engg 1027",
         prerequisites: ["Engg 1025"],
@@ -383,11 +419,14 @@ export const seDep: DependencyList = [
         prerequisites: [],
         coRequisites: [],
       },
+    ],
+    enrollmentType: "Bridging",
+  },
 
-      // FIFTH YEAR
-
-      // First Sem
-
+  // FIFTH YEAR
+  // First Sem
+  {
+    subjects: [
       {
         subjectCode: "Engg 1030",
         prerequisites: [],
@@ -418,9 +457,13 @@ export const seDep: DependencyList = [
         prerequisites: [],
         coRequisites: [],
       },
-
-      // Second Sem
-
+    ],
+    enrollmentType: "Bridging",
+  },
+  // FIFTH YEAR
+  // Second Sem
+  {
+    subjects: [
       {
         subjectCode: "SE 4231",
         prerequisites: [],
@@ -441,9 +484,14 @@ export const seDep: DependencyList = [
         prerequisites: [],
         coRequisites: ["SE TE 2"],
       },
+    ],
+    enrollmentType: "Bridging",
+  },
 
-      // Summer
-
+  // FIFTH YEAR
+  // Summer
+  {
+    subjects: [
       {
         subjectCode: "SE 4300",
         prerequisites: [],
@@ -453,11 +501,10 @@ export const seDep: DependencyList = [
     enrollmentType: "Bridging",
   },
 
-  // REGULARS
-
+  //REGULAR
   // FIRST YEAR
-
   // First Sem
+
   {
     subjects: [
       {
@@ -525,8 +572,14 @@ export const seDep: DependencyList = [
         prerequisites: [],
         coRequisites: [],
       },
+    ],
+    enrollmentType: "Regular",
+  },
 
-      // Second Sem
+  // FIRST YEAR
+  // Second Sem
+  {
+    subjects: [
       {
         subjectCode: "EMath 1201",
         prerequisites: ["EMath 1101"],
@@ -597,11 +650,14 @@ export const seDep: DependencyList = [
         prerequisites: [],
         coRequisites: [],
       },
+    ],
+    enrollmentType: "Regular",
+  },
 
-      // SECOND YEAR
-
-      // First Sem
-
+  // SECOND YEAR
+  // First Sem
+  {
+    subjects: [
       {
         subjectCode: "EMath 2101",
         prerequisites: ["EMath 1201"],
@@ -647,9 +703,14 @@ export const seDep: DependencyList = [
         prerequisites: ["PATHFit1 M", "PATHFit2 M"],
         coRequisites: [],
       },
+    ],
+    enrollmentType: "Regular",
+  },
 
-      // Second Sem
-
+  // SECOND YEAR
+  // Second Sem
+  {
+    subjects: [
       {
         subjectCode: "EMath 2102",
         prerequisites: ["EMath 1102", "EMath 1202"],
@@ -695,9 +756,14 @@ export const seDep: DependencyList = [
         prerequisites: ["PATHFit1 M", "PATHFit2 M"],
         coRequisites: [],
       },
+    ],
+    enrollmentType: "Regular",
+  },
 
-      // Summer
-
+  // SECOND YEAR
+  // Summer
+  {
+    subjects: [
       {
         subjectCode: "GEEng 1",
         prerequisites: [],
@@ -713,11 +779,14 @@ export const seDep: DependencyList = [
         prerequisites: [],
         coRequisites: [],
       },
+    ],
+    enrollmentType: "Regular",
+  },
 
-      // THIRD YEAR
-
-      // First Sem
-
+  // THIRD YEAR
+  // First Sem
+  {
+    subjects: [
       {
         subjectCode: "EMath 2200",
         prerequisites: ["EMath 2101"],
@@ -758,8 +827,14 @@ export const seDep: DependencyList = [
         prerequisites: [],
         coRequisites: [],
       },
+    ],
+    enrollmentType: "Regular",
+  },
 
-      // Second Sem
+  // THIRD YEAR
+  // Second Sem
+  {
+    subjects: [
       {
         subjectCode: "Engg 1025",
         prerequisites: ["Emath 1202"],
@@ -795,9 +870,14 @@ export const seDep: DependencyList = [
         prerequisites: [],
         coRequisites: [],
       },
+    ],
+    enrollmentType: "Regular",
+  },
 
-      // Summer
-
+  // THIRD YEAR
+  // Summer
+  {
+    subjects: [
       {
         subjectCode: "Engg 1027",
         prerequisites: ["Engg 1025"],
@@ -808,11 +888,14 @@ export const seDep: DependencyList = [
         prerequisites: [],
         coRequisites: [],
       },
+    ],
+    enrollmentType: "Regular",
+  },
 
-      // FOURTH YEAR
-
-      // First Sem
-
+  // FOURTH YEAR
+  // First Sem
+  {
+    subjects: [
       {
         subjectCode: "Engg 1030",
         prerequisites: [],
@@ -843,9 +926,14 @@ export const seDep: DependencyList = [
         prerequisites: [],
         coRequisites: [],
       },
+    ],
+    enrollmentType: "Regular",
+  },
 
-      // Second Sem
-
+  // FOURTH YEAR
+  // Second Sem
+  {
+    subjects: [
       {
         subjectCode: "SE 4231",
         prerequisites: ["SE 4132"],
@@ -866,11 +954,28 @@ export const seDep: DependencyList = [
         prerequisites: [],
         coRequisites: [],
       },
+    ],
+    enrollmentType: "Regular",
+  },
 
-      // Summer
-
+  // FOURTH YEAR
+  // Summer
+  {
+    subjects: [
       {
         subjectCode: "SE 4300",
+        prerequisites: [],
+        coRequisites: [],
+      },
+    ],
+    enrollmentType: "Regular",
+  },
+];
+export const meDept: DependencyList = [
+  {
+    subjects: [
+      {
+        subjectCode: "",
         prerequisites: [],
         coRequisites: [],
       },
