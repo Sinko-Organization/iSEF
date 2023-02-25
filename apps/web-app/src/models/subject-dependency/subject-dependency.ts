@@ -31,19 +31,6 @@ export const getSubjectLevel = (
   );
 };
 
-export const getSubjectsByLevel = (
-  courseId: string,
-  maxLevel: number,
-  subjectDependency: DependencyList,
-) => {
-  return pipe(
-    subjectDependency,
-    A.map((dependencies) => dependencies.subjects),
-    A.flat,
-    A.takeExactly(maxLevel),
-  );
-};
-
 export const getSubjectPrerequisites = (
   subject: SubjectType,
   subjectDependency: DependencyList,
