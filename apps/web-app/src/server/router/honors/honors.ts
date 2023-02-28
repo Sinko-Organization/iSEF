@@ -12,25 +12,50 @@ export const honorsRouter = createAdminRouter()
     input: z.object({
       schoolYear: z.number(),
       semesterType: z.enum(["FIRST", "SECOND", "SUMMER"]),
-      yearLevel: z.number().int().min(1).max(5).optional(),
-      skip: z.number().default(0),
-      take: z.number().default(10),
+      yearLevel: z.number().int().min(1).max(5).nullable(),
+      courseId: z.string().nullable(),
       sortBy: z.object({
         field: z.enum(["lastName", "gwa"]).default("lastName"),
         order: z.enum(["asc", "desc"]).default("asc"),
       }),
     }),
+    output: z.array(
+      z.object({
+        id: z.string(),
+        studentIdNumber: z.string(),
+        firstName: z.string().nullable(),
+        lastName: z.string().nullable(),
+        gwa: z.number(),
+        studentRecords: z.array(
+          z.object({
+            id: z.string(),
+            grade: z.number(),
+            subject: z.object({
+              id: z.string(),
+              name: z.string(),
+              units: z.number(),
+            }),
+            yearLevel: z.number(),
+          }),
+        ),
+      }),
+    ),
     async resolve({ ctx, input }) {
       // get all students with honors, invidual grades must be > 2.6 ang the GWA must be > 1.5
       return ctx.prisma.student
         .findMany({
           where: {
             studentRecords: {
-              every: {
+              some: {
                 AND: [
                   {
                     grade: {
                       lte: 2.6,
+                    },
+                  },
+                  {
+                    grade: {
+                      gte: 1,
                     },
                   },
                   {
@@ -46,7 +71,10 @@ export const honorsRouter = createAdminRouter()
                     },
                   },
                   {
-                    yearLevel: input.yearLevel,
+                    yearLevel: input.yearLevel ?? undefined,
+                  },
+                  {
+                    courseId: input.courseId ?? undefined,
                   },
                 ],
               },
@@ -112,10 +140,8 @@ export const honorsRouter = createAdminRouter()
                 gwa,
               };
             }),
-            // filter out students with GWA <= 1.5
-            A.filter((record) => record.gwa <= 1.5),
-            // get only the records that are within the skip and take
-            A.slice(input.skip, input.skip + input.take),
+            // filter out students with GWA <= 2 and GWA >= 1
+            A.filter((record) => record.gwa <= 2 && record.gwa >= 1),
             // sort the records
             (records) =>
               _.orderBy(records, [input.sortBy.field], [input.sortBy.order]),

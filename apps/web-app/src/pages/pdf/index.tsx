@@ -1,9 +1,3 @@
-/* eslint-disable import/export */
-
-/* eslint-disable react/no-unescaped-entities */
-
-/* eslint-disable jsx-a11y/alt-text */
-
 /* eslint-disable import/named */
 import {
   Document,
@@ -14,65 +8,189 @@ import {
   Text,
   View,
 } from "@react-pdf/renderer";
-import type { NextPage } from "next";
+import { useCourseStore, useHonorsFilterStore } from "@web-app/stores";
+import { trpc } from "@web-app/utils/trpc";
+import type { inferQueryOutput } from "@web-app/utils/trpc";
+import { useRouter } from "next/router";
+import type { FC } from "react";
+import { match } from "ts-pattern";
 
-const DeansList = () => (
-  <Document>
-    <Page style={header.page} size="A4" wrap>
-      <Text style={header.title}>Central Philippine University </Text>
-      <Text style={header.headerTitle}>COLLEGE OF ENGINEERING</Text>
+type HonorsData = inferQueryOutput<"honors.getAll">;
 
-      <Text style={header.header}>HONOR'S LIST</Text>
+interface Props {
+  data: HonorsData;
+  semesterType: "FIRST" | "SECOND" | "SUMMER";
+  schoolYear: number;
+  yearLevel?: number;
+  courseName?: string;
+}
 
-      <View style={header.courseTable}>
-        <View style={[header.row, header.courseTitle]}>
-          <Text style={[header.courseTitle, header.cell]}>NTH SEMESTER</Text>
-          <Text style={[header.courseTitle, header.cell]}>
-            S.Y. "School Year"
-          </Text>
+const getYear = (yearLevel: number | undefined) => {
+  switch (yearLevel) {
+    case 0: {
+      return "Bridging";
+    }
+    case 1: {
+      return "1st Year";
+    }
+    case 2: {
+      return "2nd Year";
+    }
+    case 3: {
+      return "3rd Year";
+    }
+    case 4: {
+      return "4th Year";
+    }
+    default: {
+      return "No Year";
+    }
+  }
+};
+
+const AcademicList: FC<Props> = ({
+  data,
+  semesterType,
+  schoolYear,
+  yearLevel,
+  courseName,
+}) => {
+  const sortedData = data.sort((a, b) => a.gwa - b.gwa);
+  const honorsList = sortedData.filter(
+    (student) => student.gwa >= 1 && student.gwa <= 1.56,
+  );
+  const deansList = sortedData.filter(
+    (student) => student.gwa >= 1.57 && student.gwa <= 2,
+  );
+
+  const semster = match(semesterType)
+    .with("FIRST", () => "1st Semester")
+    .with("SECOND", () => "2nd Semester")
+    .with("SUMMER", () => "Summer")
+    .exhaustive();
+
+  return (
+    <Document>
+      <Page style={header.page} size="A4" wrap>
+        <Text style={header.title}>Central Philippine University </Text>
+        <Text style={header.headerTitle}>COLLEGE OF ENGINEERING</Text>
+
+        <View style={header.header}>
+          <Text>HONOR&apos;S LIST</Text>
+          <Text>{courseName ?? "No Course"}</Text>
         </View>
-      </View>
 
-      <Text style={[header.header, header.border]}>YEAR LEVEL</Text>
-
-      <View style={header.header}>
-        <View style={[header.row, header.border]}>
-          <Text style={[header.courseTitle, header.col2]}>NO.</Text>
-          <Text style={[header.courseTitle, header.col2]}>Rank</Text>
-          <Text style={[header.courseTitle, header.col1]}>Student Name</Text>
-          <Text style={[header.courseTitle, header.col1]}>G.W.A</Text>
+        <View style={header.courseTable}>
+          <View style={[header.row, header.courseTitle]}>
+            <Text style={[header.courseTitle, header.cell]}>{semster}</Text>
+            <Text style={[header.courseTitle, header.cell]}>
+              S.Y. {schoolYear}-{schoolYear + 1}
+            </Text>
+            <Text style={[header.courseTitle, header.cell]}>
+              {getYear(yearLevel)}
+            </Text>
+          </View>
         </View>
-      </View>
-    </Page>
 
-    <Page style={header.page} size="A4" wrap>
-      <Text style={header.title}>Central Philippine University </Text>
-      <Text style={header.headerTitle}>COLLEGE OF ENGINEERING</Text>
-
-      <Text style={header.header}>DEAN'S LIST</Text>
-
-      <View style={header.courseTable}>
-        <View style={[header.row, header.courseTitle]}>
-          <Text style={[header.courseTitle, header.cell]}>NTH SEMESTER</Text>
-          <Text style={[header.courseTitle, header.cell]}>
-            S.Y. "School Year"
-          </Text>
+        <View style={header.header}>
+          <View style={[header.row, header.border]}>
+            <Text style={[header.courseTitle, header.col2]}>NO.</Text>
+            <Text style={[header.courseTitle, header.col2]}>ID</Text>
+            <Text style={[header.courseTitle, header.col1]}>Student Name</Text>
+            <Text style={[header.courseTitle, header.col1]}>G.W.A</Text>
+          </View>
         </View>
-      </View>
 
-      <Text style={[header.header, header.border]}>YEAR LEVEL</Text>
+        {honorsList.length > 0 ? (
+          honorsList.map((student, index) => {
+            const { id, firstName, lastName, studentIdNumber, gwa } = student;
+            const hasNames = firstName && lastName;
+            const fullName = `${firstName} ${lastName}`;
+            return (
+              <View key={id}>
+                <View style={[header.row, header.border]}>
+                  <Text style={[header.courseTitle, header.col2]}>
+                    {index + 1}
+                  </Text>
+                  <Text style={[header.courseTitle, header.col2]}>
+                    {studentIdNumber}
+                  </Text>
+                  <Text style={[header.courseTitle, header.col1]}>
+                    {hasNames ? fullName : "No Name"}
+                  </Text>
+                  <Text style={[header.courseTitle, header.col1]}>
+                    {gwa.toFixed(2)}
+                  </Text>
+                </View>
+              </View>
+            );
+          })
+        ) : (
+          <Text style={header.header}>No Honor&apos;s List</Text>
+        )}
+      </Page>
 
-      <View style={header.header}>
-        <View style={[header.row, header.border]}>
-          <Text style={[header.courseTitle, header.col2]}>NO.</Text>
-          <Text style={[header.courseTitle, header.col2]}>Rank</Text>
-          <Text style={[header.courseTitle, header.col1]}>Student Name</Text>
-          <Text style={[header.courseTitle, header.col1]}>G.W.A</Text>
+      <Page style={header.page} size="A4" wrap>
+        <Text style={header.title}>Central Philippine University </Text>
+        <Text style={header.headerTitle}>COLLEGE OF ENGINEERING</Text>
+
+        <View style={header.header}>
+          <Text>DEAN&apos;S LIST</Text>
+          <Text>{courseName ?? "No Course"}</Text>
         </View>
-      </View>
-    </Page>
-  </Document>
-);
+
+        <View style={header.courseTable}>
+          <View style={[header.row, header.courseTitle]}>
+            <Text style={[header.courseTitle, header.cell]}>{semster}</Text>
+            <Text style={[header.courseTitle, header.cell]}>
+              S.Y. {schoolYear}-{schoolYear + 1}
+            </Text>
+            <Text style={[header.courseTitle, header.cell]}>
+              {getYear(yearLevel)}
+            </Text>
+          </View>
+        </View>
+
+        <View style={header.header}>
+          <View style={[header.row, header.border]}>
+            <Text style={[header.courseTitle, header.col2]}>NO.</Text>
+            <Text style={[header.courseTitle, header.col2]}>ID</Text>
+            <Text style={[header.courseTitle, header.col1]}>Student Name</Text>
+            <Text style={[header.courseTitle, header.col1]}>G.W.A</Text>
+          </View>
+        </View>
+
+        {deansList.length > 0 ? (
+          deansList.map((student, index) => {
+            const { id, firstName, lastName, studentIdNumber, gwa } = student;
+            const hasNames = firstName && lastName;
+            const fullName = `${firstName} ${lastName}`;
+            return (
+              <View key={id}>
+                <View style={[header.row, header.border]}>
+                  <Text style={[header.courseTitle, header.col2]}>
+                    {index + 1}
+                  </Text>
+                  <Text style={[header.courseTitle, header.col2]}>
+                    {studentIdNumber}
+                  </Text>
+                  <Text style={[header.courseTitle, header.col1]}>
+                    {hasNames ? fullName : "No Name"}
+                  </Text>
+                  <Text style={[header.courseTitle, header.col1]}>
+                    {gwa.toFixed(2)}
+                  </Text>
+                </View>
+              </View>
+            );
+          })
+        ) : (
+          <Text style={header.header}>No Dean&apos;s List</Text>
+        )}
+      </Page>
+    </Document>
+  );
+};
 
 Font.register({
   family: "Oswald",
@@ -150,12 +268,54 @@ const header = StyleSheet.create({
   },
 });
 
-const PdfComponent: NextPage = () => {
+const PdfComponent = () => {
+  const router = useRouter();
+  const { semesterType, schoolYear, yearLevel } = useHonorsFilterStore();
+  const { course: courseId } = useCourseStore();
+
+  if (!courseId) {
+    router.push("/honors-list");
+    return;
+  }
+
+  const { data: course } = trpc.useQuery(["course.getById", courseId]);
+
+  const { data } = trpc.useQuery(
+    [
+      "honors.getAll",
+      {
+        schoolYear,
+        yearLevel,
+        semesterType,
+        courseId,
+        sortBy: {
+          field: "gwa",
+          order: "desc",
+        },
+      },
+    ],
+    {
+      // handle error
+      onError: (err) => {
+        console.error(err.data?.code);
+      },
+    },
+  );
+
   return (
-    // full width
-    <PDFViewer width="100%" height="300%">
-      <DeansList />
-    </PDFViewer>
+    data &&
+    semesterType &&
+    schoolYear && (
+      <PDFViewer width="100%" height="300%">
+        <AcademicList
+          data={data}
+          semesterType={semesterType}
+          schoolYear={schoolYear}
+          yearLevel={yearLevel ?? undefined}
+          courseName={course?.name ?? undefined}
+        />
+      </PDFViewer>
+    )
   );
 };
 

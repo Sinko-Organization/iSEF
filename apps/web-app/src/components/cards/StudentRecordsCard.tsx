@@ -11,11 +11,15 @@ import TableRow from "@mui/material/TableRow";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import type { inferQueryOutput } from "@web-app/utils/trpc";
+import { trpc } from "@web-app/utils/trpc";
 import { sumBy } from "lodash";
+import { useEffect } from "react";
 
 type Records = inferQueryOutput<"studentData.details">["studentRecords"];
 type Props = {
   records: Records;
+  studentId: string;
+  semesterType: "FIRST" | "SECOND" | "SUMMER";
 };
 type Result = {
   title: string;
@@ -83,13 +87,36 @@ const sampleRecords: Records = [
   },
 ];
 
-export default function StudentProfileCard({ records }: Props) {
+export default function StudentProfileCard({
+  records,
+  studentId,
+  semesterType,
+}: Props) {
   const hasRecords = records.length > 0;
   const hasInc = records.some((record) => record.grade === 0);
   const gwa =
     sumBy(records, (record) => record.grade * record.subject.units) /
     sumBy(records, (record) => record.subject.units);
   const roundedGWA = Number.parseFloat(gwa.toFixed(2));
+
+  const { data: recommended } = trpc.useQuery([
+    "subject.getRecommendedSubjects",
+    {
+      studentId,
+      semesterType,
+      studentRecords: records.map((record) => ({
+        id: record.id,
+        subjectId: record.subject.id,
+        remark: record.grade <= 3 ? "Passed" : "Failed",
+      })),
+      courseId: records[0]?.course.id ?? "",
+      schoolYearId: records[0]?.schoolYear.id ?? "",
+    },
+  ]);
+
+  useEffect(() => {
+    console.log(recommended);
+  }, [recommended]);
 
   return (
     <>
