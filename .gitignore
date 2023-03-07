@@ -1,4 +1,4 @@
 node_modules
 .turbo
 
-/packages/generator/csv
+/packages/generator/csv/
