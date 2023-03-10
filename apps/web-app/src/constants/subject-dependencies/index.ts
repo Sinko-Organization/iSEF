@@ -1,11 +1,10 @@
 import { DependencyList } from "./types";
 
-export const seDep: DependencyList = [
-  //BRIDGING
 
-  //FIRST YEAR
+// NEW CURRICULUM 2022
 
-  //First Sem
+export const seDepNew: DependencyList = [
+  // FIRST YEAR - FIRST SEM - BRIDGING - NC
   {
     subjects: [
       {
@@ -67,8 +66,7 @@ export const seDep: DependencyList = [
     enrollmentType: "Bridging",
   },
 
-  // FIRST YEAR
-  // Second Sem
+  // FIRST YEAR - SECOND SEM - BRIDGING - NC
 
   {
     subjects: [
@@ -136,8 +134,7 @@ export const seDep: DependencyList = [
     enrollmentType: "Bridging",
   },
 
-  // SECOND YEAR
-  //First Sem
+  // SECOND YEAR - FIRST SEM - BRIDGING - NC
   {
     subjects: [
       {
@@ -189,8 +186,7 @@ export const seDep: DependencyList = [
     enrollmentType: "Bridging",
   },
 
-  //SECOND YEAR
-  // Second Sem
+  // SECOND YEAR - SECOND SEM - BRIDGING - NC
   {
     subjects: [
       {
@@ -242,8 +238,7 @@ export const seDep: DependencyList = [
     enrollmentType: "Bridging",
   },
 
-  // THIRD YEAR
-  // First Sem
+  // THIRD YEAR - FIRST SEM - BRIDGING - NC
   {
     subjects: [
       {
@@ -290,8 +285,7 @@ export const seDep: DependencyList = [
     enrollmentType: "Bridging",
   },
 
-  // THIRD YEAR
-  // Second Sem
+  // THIRD YEAR - SECOND SEM - BRIDGING - NC
   {
     subjects: [
       {
@@ -328,8 +322,7 @@ export const seDep: DependencyList = [
     enrollmentType: "Bridging",
   },
 
-  // FOURTH YEAR
-  // First Sem
+  // FOURTH YEAR - FIRST SEM - BRIDGING - NC
   {
     subjects: [
       {
@@ -366,8 +359,7 @@ export const seDep: DependencyList = [
     enrollmentType: "Bridging",
   },
 
-  // FOURTH YEAR
-  // Second Sem
+  // FOURTH YEAR - SECOND SEM - BRIDGING - NC
   {
     subjects: [
       {
@@ -404,8 +396,7 @@ export const seDep: DependencyList = [
     enrollmentType: "Bridging",
   },
 
-  // FOURTH YEAR
-  // Summer
+  // FOURTH YEAR - SUMMER - BRIDGING - NC
 
   {
     subjects: [
@@ -423,8 +414,7 @@ export const seDep: DependencyList = [
     enrollmentType: "Bridging",
   },
 
-  // FIFTH YEAR
-  // First Sem
+  // FIFTH YEAR - FIRST SEM - BRIDGING - NC
   {
     subjects: [
       {
@@ -460,8 +450,9 @@ export const seDep: DependencyList = [
     ],
     enrollmentType: "Bridging",
   },
-  // FIFTH YEAR
-  // Second Sem
+  
+  // FIFTH YEAR - SECOND SEM - BRIDGING - NC
+
   {
     subjects: [
       {
@@ -488,8 +479,7 @@ export const seDep: DependencyList = [
     enrollmentType: "Bridging",
   },
 
-  // FIFTH YEAR
-  // Summer
+  // FIFTH YEAR - SUMMER - BRIDGING - NC
   {
     subjects: [
       {
@@ -501,9 +491,8 @@ export const seDep: DependencyList = [
     enrollmentType: "Bridging",
   },
 
-  //REGULAR
-  // FIRST YEAR
-  // First Sem
+
+  // FIRST YEAR - FIRST SEM - REGULAR - NC
 
   {
     subjects: [
@@ -576,8 +565,7 @@ export const seDep: DependencyList = [
     enrollmentType: "Regular",
   },
 
-  // FIRST YEAR
-  // Second Sem
+  // FIRST YEAR - SECOND SEM - REGULAR - NC
   {
     subjects: [
       {
@@ -654,8 +642,7 @@ export const seDep: DependencyList = [
     enrollmentType: "Regular",
   },
 
-  // SECOND YEAR
-  // First Sem
+// SECOND YEAR - FIRST SEM - REGULAR - NC
   {
     subjects: [
       {
@@ -707,8 +694,7 @@ export const seDep: DependencyList = [
     enrollmentType: "Regular",
   },
 
-  // SECOND YEAR
-  // Second Sem
+// SECOND YEAR - SECOND SEM - REGULAR - NC
   {
     subjects: [
       {
@@ -760,8 +746,7 @@ export const seDep: DependencyList = [
     enrollmentType: "Regular",
   },
 
-  // SECOND YEAR
-  // Summer
+// SECOND YEAR - SUMMER - REGULAR - NC
   {
     subjects: [
       {
@@ -783,8 +768,7 @@ export const seDep: DependencyList = [
     enrollmentType: "Regular",
   },
 
-  // THIRD YEAR
-  // First Sem
+  // THIRD YEAR - FIRST SEM - REGULAR - NC
   {
     subjects: [
       {
@@ -831,8 +815,7 @@ export const seDep: DependencyList = [
     enrollmentType: "Regular",
   },
 
-  // THIRD YEAR
-  // Second Sem
+  // THIRD YEAR - SECOND SEM - REGULAR - NC
   {
     subjects: [
       {
@@ -874,8 +857,8 @@ export const seDep: DependencyList = [
     enrollmentType: "Regular",
   },
 
-  // THIRD YEAR
-  // Summer
+  // THIRD YEAR - SUMMER - REGULAR - NC
+
   {
     subjects: [
       {
@@ -892,8 +875,7 @@ export const seDep: DependencyList = [
     enrollmentType: "Regular",
   },
 
-  // FOURTH YEAR
-  // First Sem
+  // FOURTH YEAR - FIRST SEM - REGULAR - NC
   {
     subjects: [
       {
@@ -930,8 +912,7 @@ export const seDep: DependencyList = [
     enrollmentType: "Regular",
   },
 
-  // FOURTH YEAR
-  // Second Sem
+  // FOURTH YEAR - SECOND SEM - REGULAR - NC
   {
     subjects: [
       {
@@ -958,8 +939,7 @@ export const seDep: DependencyList = [
     enrollmentType: "Regular",
   },
 
-  // FOURTH YEAR
-  // Summer
+  // FOURTH YEAR - SUMMER - REGULAR - NC
   {
     subjects: [
       {
@@ -971,15 +951,470 @@ export const seDep: DependencyList = [
     enrollmentType: "Regular",
   },
 ];
-export const meDept: DependencyList = [
+
+//                            *************************** OLD CURRICULUM (2018) ***************************
+
+// FIRST YEAR - FIRST SEM - REGULAR - OC
+export const seDeptOld: DependencyList = [
   {
     subjects: [
       {
-        subjectCode: "",
+        subjectCode: "EMath 1101",
+        prerequisites: [],
+        coRequisites: [],
+      },
+      {
+        subjectCode: "EMath 1102",
+        prerequisites: [],
+        coRequisites: [],
+      },
+      {
+        subjectCode: "Engg 1001",
+        prerequisites: [],
+        coRequisites: [],
+      },
+      {
+        subjectCode: "SE 1121",
+        prerequisites: [],
+        coRequisites: [],
+      },
+      {
+        subjectCode: "GEMath 1",
+        prerequisites: [],
+        coRequisites: [],
+      },
+      {
+        subjectCode: "GESocSci 6",
+        prerequisites: [],
+        coRequisites: [],
+      },
+      {
+        subjectCode: "NSTP1-CWTS",
+        prerequisites: [],
+        coRequisites: [],
+      },
+      {
+        subjectCode: "NSTP1-LTS",
+        prerequisites: [],
+        coRequisites: [],
+      },
+      {
+        subjectCode: "NSTP1-ROTC",
+        prerequisites: [],
+        coRequisites: [],
+      },
+      {
+        subjectCode: "PE 2B(M)",
+        prerequisites: [],
+        coRequisites: [],
+      },
+      {
+        subjectCode: "PE 1a(W)",
+        prerequisites: [],
+        coRequisites: [],
+      },
+      {
+        subjectCode: "RE 1",
+        prerequisites: [],
+        coRequisites: [],
+      },
+      {
+        subjectCode: "SEAL 1",
         prerequisites: [],
         coRequisites: [],
       },
     ],
     enrollmentType: "Regular",
   },
+  // FIRST YEAR - SECOND SEM - REGULAR - OC
+  {
+    subjects: [
+      {
+        subjectCode: "EMath 1201",
+        prerequisites: ["EMath 1101"],
+        coRequisites: [],
+      },
+      {
+        subjectCode: "EMath 1202",
+        prerequisites: ["EMath 1101", "GEMath 1"],
+        coRequisites: [],
+      },
+      {
+        subjectCode: "Engg 1006",
+        prerequisites: [],
+        coRequisites: [],
+      },
+      {
+        subjectCode: "Engg 1009",
+        prerequisites: [],
+        coRequisites: ["EMath 1201"],
+      },
+      {
+        subjectCode: "SE 1221",
+        prerequisites: ["SE 1121"],
+        coRequisites: [],
+      },
+      {
+        subjectCode: "SE 1222",
+        prerequisites: [],
+        coRequisites: ["SE 1223"],
+      },
+      {
+        subjectCode: "SE 1223",
+        prerequisites: ["SE 1121"],
+        coRequisites: [],
+      },
+      {
+        subjectCode: "NSTP2-CTWS",
+        prerequisites: ["NSTP1-CWTS"],
+        coRequisites: [],
+      },
+      {
+        subjectCode: "NSTP2-LTS",
+        prerequisites: ["NSTP1-LTS"],
+        coRequisites: [],
+      },
+      {
+        subjectCode: "NSTP2-ROTC",
+        prerequisites: ["NSTP1-ROTC"],
+        coRequisites:[],
+      },
+      {
+        subjectCode: "PE 1a(M)",
+        prerequisites: [],
+        coRequisites: [],
+      },
+      {
+        subjectCode: "PE 2B(W)",
+        prerequisites: [],
+        coRequisites: [],
+      },
+      {
+        subjectCode: "RE 2",
+        prerequisites: [],
+        coRequisites: [],
+      },
+      {
+        subjectCode: "SEAL 2",
+        prerequisites: [],
+        coRequisites: [],
+      },
+    ],
+    enrollmentType: "Regular",
+  },
+
+    // FIRST YEAR - SUMMER - REGULAR - OC
+
+  {
+    subjects: [
+      {
+        subjectCode: "GESocSci 1",
+        prerequisites: [],
+        coRequisites: [],
+      },
+      {
+        subjectCode: "GESocSci 2",
+        prerequisites: [],
+        coRequisites: [],
+      },
+      {
+        subjectCode: "GEHum 1",
+        prerequisites: [],
+        coRequisites: [],
+      },
+    ],
+    enrollmentType: "Regular",
+  },
+
+  // SECOND YEAR - FIRST SEM - REGULAR - OC
+{
+  subjects: [
+    {
+      subjectCode: "EMath 2101",
+      prerequisites: ["EMath 1201", "Emath 1202"],
+      coRequisites: [],
+    },
+    {
+      subjectCode: "EMath 2102",
+      prerequisites: ["EMath 1102", "EMath 1202"],
+      coRequisites: [],
+    },
+    {
+      subjectCode: "EE 2121",
+      prerequisites: ["Engg 1009"],
+      coRequisites: [],
+    },
+    {
+      subjectCode: "SE 2121",
+      prerequisites: ["EMath 1102", "SE 1222"],
+      coRequisites: [],
+    },
+    {
+      subjectCode: "SE 2122",
+      prerequisites: ["SE 1222", "SE 1223"],
+      coRequisites: [],
+    },
+    {
+      subjectCode: "SE 2123",
+      prerequisites: ["SE 1222", "SE 1223"],
+      coRequisites: [],
+    },
+    {
+      subjectCode: "SE 2124",
+      prerequisites: ["SE 1223"],
+      coRequisites: [],
+    },
+    {
+      subjectCode: "SE 2125",
+      prerequisites: ["SE 1222", "SE 1223"],
+      coRequisites: ["SE 2121"],
+    },
+    {
+      subjectCode: "PE 3a",
+      prerequisites: [],
+      coRequisites: [],
+    },
+  ],
+  enrollmentType: "Regular",
+},
+
+  // SECOND YEAR - SECOND SEM - REGULAR - OC
+
+{
+  subjects: [
+    {
+      subjectCode: "EMath 2200",
+      prerequisites: ["EMath 2101"],
+      coRequisites: [],
+    },
+    {
+      subjectCode: "SE 2221",
+      prerequisites: ["EMath 2102", "SE 1222"],
+      coRequisites: [],
+    },
+    {
+      subjectCode: "SE 2222",
+      prerequisites: ["SE 1121", "EE 2121"],
+      coRequisites: [],
+    },
+    {
+      subjectCode: "SE 2223",
+      prerequisites: ["SE 2122", "SE 2125"],
+      coRequisites: [],
+    },
+    {
+      subjectCode: "SE 2224",
+      prerequisites: [],
+      coRequisites: ["SE 2222"],
+    },
+    {
+      subjectCode: "SE 2225",
+      prerequisites: ['SE 2124'],
+      coRequisites: [],
+    },
+    {
+      subjectCode: "SE 2226",
+      prerequisites: ["EMath 1102", "SE2125"],
+      coRequisites: [],
+    },
+    {
+      subjectCode: "PE 4a(W)",
+      prerequisites: [],
+      coRequisites: [],
+    },
+    {
+      subjectCode: "PE 4a (M)",
+      prerequisites: [],
+      coRequisites: [],
+    },
+  ],
+  enrollmentType: "Regular",
+},
+
+// SECOND YEAR - SUMMER - REGULAR - OC
+{
+  subjects: [
+    {
+      subjectCode: "GEEng 1",
+      prerequisites: [],
+      coRequisites: [],
+    },
+    {
+      subjectCode: "GESocSci 3",
+      prerequisites: [],
+      coRequisites: [],
+    },
+    {
+      subjectCode: "GESocSci 4",
+      prerequisites: [],
+      coRequisites: [],
+    },
+  ],
+  enrollmentType: "Regular",
+},
+
+  // THIRD YEAR - FIRST SEM - REGULAR - OC
+{
+  subjects: [
+    {
+      subjectCode: "Engg 1025",
+      prerequisites: [],
+      coRequisites: [],
+    },
+    {
+      subjectCode:"SE 3121",
+      prerequisites: ["EMath 1202", "EMath 2200", "SE 2221"],
+      coRequisites: [],
+    },
+    {
+      subjectCode: "SE 3122",
+      prerequisites: ["SE 2123", "SE 2222"],
+      coRequisites: [],
+    },
+    {
+      subjectCode: "SE 3123",
+      prerequisites: ["SE 2223", "SE 2225", "SE2226"],
+      coRequisites: [],
+    },
+    {
+      subjectCode: "SE 3124",
+      prerequisites: ["SE 2225"],
+      coRequisites: [],
+    },
+    {
+      subjectCode: "SE 3125",
+      prerequisites: [],
+      coRequisites: ["SE 3123"],
+    },
+    {
+      subjectCode: "SE 3126",
+      prerequisites: [],
+      coRequisites: ['SE 3123'],
+    },
+    {
+      subjectCode: "GESocSci 5",
+      prerequisites: [],
+      coRequisites: [],
+    }
+  ],
+  enrollmentType: "Regular",
+},
+
+//  THIRD YEAR - SECOND SEM - REGULAR - OC
+
+{
+  subjects: [
+    {
+      subjectCode: "Engg 1027",
+      prerequisites: [],
+      coRequisites: [],
+    },
+    {
+      subjectCode: "Engg 1030",
+      prerequisites: [],
+      coRequisites: [],
+    },
+    {
+      subjectCode: "Engg 1031",
+      prerequisites: [],
+      coRequisites: [],
+    },
+    {
+      subjectCode: "Engg 1034",
+      prerequisites: [],
+      coRequisites: ["Engg 1030"],
+    },
+    {
+      subjectCode: "SE 3221",
+      prerequisites: ["SE 3122"],
+      coRequisites: [],
+    },
+    {
+      subjectCode: "SE 3222",
+      prerequisites: ["SE 3121"],
+      coRequisites: [],
+    },
+    {
+      subjectCode: "SE 3223",
+      prerequisites: ["SE 3123"],
+      coRequisites: [],
+    },
+    {
+      subjectCode: "SE TE 1",
+      prerequisites: [],
+      coRequisites: [],
+    },
+  ],
+  enrollmentType: "Regular",
+},
+  // THIRD YEAR - SUMMER - REGULAR - OC
+{
+  subjects: [
+    {
+      subjectCode: "Fil 12",
+      prerequisites: [],
+      coRequisites: [],
+    },
+    {
+      subjectCode: "Fil 13",
+      prerequisites: [],
+      coRequisites: [],
+    },
+    {
+      subjectCode: "CELit",
+      prerequisites: [],
+      coRequisites: [],
+    },
+  ],
+  enrollmentType: "Regular",
+},
+
+// FOURTH YEAR - FIRST SEM - REGULAR - OC
+{
+  subjects: [
+    {
+      subjectCode: "SE 4121",
+      prerequisites: ["SE 3222"],
+      coRequisites: [],
+    },
+    {
+      subjectCode: "SE 4122",
+      prerequisites: [],
+      coRequisites: [],
+    },
+    {
+      subjectCode: "SE TE 2",
+      prerequisites: [],
+      coRequisites: [],
+    },
+    {
+      subjectCode: "SE TE 3",
+      prerequisites: [],
+      coRequisites: [],
+    },
+  ],
+  enrollmentType: "Regular",
+},
+{
+  subjects: [
+    {
+      subjectCode: "SE 4221",
+      prerequisites: [],
+      coRequisites: [],
+    },
+  ],
+  enrollmentType: "Regular",
+},
 ];
+// export const meDept: DependencyList = [
+//   {
+//     subjects: [
+//       {
+//         subjectCode: "",
+//         prerequisites: [],
+//         coRequisites: [],
+//       },
+//     ],
+//     enrollmentType: "Regular",
+//   },
+// ];
