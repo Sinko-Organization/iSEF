@@ -45,7 +45,9 @@ export const getSubjectWithDetails = async (
 
   const subjectLevel = R.getExn(getSubjectLevel(stubCode, seDepNew));
 
-  const subjectDependencies = R.getExn(getSubjectDependencies(stubCode, seDepNew));
+  const subjectDependencies = R.getExn(
+    getSubjectDependencies(stubCode, seDepNew),
+  );
 
   return {
     ...subject,
@@ -88,7 +90,9 @@ export const getSubjectDependencyStatus = async (
     },
   });
 
-  const subjectDependencies = R.getExn(getSubjectDependencies(stubCode, seDepNew));
+  const subjectDependencies = R.getExn(
+    getSubjectDependencies(stubCode, seDepNew),
+  );
 
   if (subjectDependencies.length === 0) {
     return "Independent";
