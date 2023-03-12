@@ -1,6 +1,6 @@
 import { R } from "@mobily/ts-belt";
 import type { PrismaClient } from "@prisma/client";
-import { seDep } from "@web-app/constants/subject-dependencies";
+import { seDepNew } from "@web-app/constants/subject-dependencies";
 import {
   getSubjectDependencies,
   getSubjectLevel,
@@ -43,9 +43,11 @@ export const getSubjectWithDetails = async (
     },
   });
 
-  const subjectLevel = R.getExn(getSubjectLevel(stubCode, seDep));
+  const subjectLevel = R.getExn(getSubjectLevel(stubCode, seDepNew));
 
-  const subjectDependencies = R.getExn(getSubjectDependencies(stubCode, seDep));
+  const subjectDependencies = R.getExn(
+    getSubjectDependencies(stubCode, seDepNew),
+  );
 
   return {
     ...subject,
@@ -88,7 +90,9 @@ export const getSubjectDependencyStatus = async (
     },
   });
 
-  const subjectDependencies = R.getExn(getSubjectDependencies(stubCode, seDep));
+  const subjectDependencies = R.getExn(
+    getSubjectDependencies(stubCode, seDepNew),
+  );
 
   if (subjectDependencies.length === 0) {
     return "Independent";
