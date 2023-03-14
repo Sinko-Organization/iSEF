@@ -1,6 +1,7 @@
 import {
   StudentProfileCard,
   StudentRecordsCard,
+  SubjectRecomendationsCard,
 } from "@web-app/components/cards";
 import { CurriculumSelector } from "@web-app/containers/curriculum-selector";
 import { useCurriculumStore } from "@web-app/stores";
@@ -70,8 +71,9 @@ const StudentPage: NextPage = () => {
               className="mt-20"
             />
           )}
-          <StudentRecordsCard
-            records={studentData.studentRecords}
+          <StudentRecordsCard records={studentData.studentRecords} />
+          <div className="mt-20" />
+          <SubjectRecomendationsCard
             studentId={id}
             semesterType={semesterType}
           />
