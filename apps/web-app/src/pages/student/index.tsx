@@ -4,6 +4,7 @@ import {
   SubjectRecomendationsCard,
 } from "@web-app/components/cards";
 import { CurriculumSelector } from "@web-app/containers/curriculum-selector";
+import StudentProfileSelector from "@web-app/containers/student-profile-selector/StudentProfileSelector";
 import { useCurriculumStore } from "@web-app/stores";
 import { trpc } from "@web-app/utils/trpc";
 import type { NextPage } from "next";
@@ -32,12 +33,13 @@ const StudentPage: NextPage = () => {
     }
   }, [schoolYearsData, setSchoolYear]);
 
+  console.log(schoolYear === 0 ? "Undefined" : schoolYear);
+
   const { data: studentData, status: studentDataStatus } = trpc.useQuery([
     "studentData.details",
     {
       studentId: id,
-      schoolYear,
-      semesterType,
+      schoolYear: schoolYear === 0 ? undefined : schoolYear,
     },
   ]);
 
@@ -62,13 +64,20 @@ const StudentPage: NextPage = () => {
             phoneNumber={studentData.phoneNumber}
             address={studentData.address}
           />
-          {schoolYearsData && (
+          {/* {schoolYearsData && (
             <CurriculumSelector
               schoolYearsData={schoolYearsData}
               curriculum={{ schoolYear, semesterType }}
               setSchoolYear={setSchoolYear}
               setSemesterType={setSemesterType}
               className="mt-20"
+            />
+          )} */}
+
+          {schoolYearsData && (
+            <StudentProfileSelector
+              schoolYearsData={schoolYearsData}
+              setSchoolYear={setSchoolYear}
             />
           )}
           <StudentRecordsCard records={studentData.studentRecords} />
