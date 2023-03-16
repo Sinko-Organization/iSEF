@@ -1,4 +1,5 @@
 import { SemesterType } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { toNumericGrade } from "@web-app/helpers";
 import { validStudentSchema } from "@web-app/types/spreadsheet";
@@ -15,10 +16,23 @@ export const studentDataRouter = createAdminRouter()
   .query("details", {
     input: z.object({
       studentId: z.string(),
-      schoolYear: z.number(),
-      semesterType: z.enum(["FIRST", "SECOND", "SUMMER"]),
+      schoolYear: z.number().optional(),
     }),
     async resolve({ ctx, input }) {
+      console.log(input.schoolYear ?? "undefined");
+      const schoolYearFilter: Prisma.StudentRecordWhereInput["AND"] =
+        !input.schoolYear
+          ? []
+          : [
+              {
+                schoolYear: {
+                  startYear: {
+                    equals: input.schoolYear,
+                  },
+                },
+              },
+            ];
+
       return ctx.prisma.student.findFirstOrThrow({
         where: {
           id: input.studentId,
@@ -33,23 +47,11 @@ export const studentDataRouter = createAdminRouter()
           phoneNumber: true,
           studentRecords: {
             where: {
-              AND: [
-                {
-                  schoolYear: {
-                    startYear: {
-                      equals: input.schoolYear,
-                    },
-                  },
-                },
-                {
-                  semesterType: {
-                    equals: input.semesterType,
-                  },
-                },
-              ],
+              AND: schoolYearFilter,
             },
             select: {
               id: true,
+              semesterType: true,
               grade: true,
               course: {
                 select: {

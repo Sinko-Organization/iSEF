@@ -14,6 +14,14 @@ import type { inferQueryOutput } from "@web-app/utils/trpc";
 import { sumBy } from "lodash";
 
 type Records = inferQueryOutput<"studentData.details">["studentRecords"];
+type Record = Records[number];
+type OmittedSemesterRecord = Omit<Record, "semesterType">;
+type SortedRecords = {
+  first: OmittedSemesterRecord;
+  second: OmittedSemesterRecord;
+  summer: OmittedSemesterRecord;
+};
+
 type Props = {
   records: Records;
 };
@@ -22,66 +30,6 @@ type Result = {
   grade: string | number;
   color: string;
 };
-
-const sampleRecords: Records = [
-  {
-    schoolYear: {
-      id: "1",
-      startYear: 2021,
-      endYear: 2022,
-    },
-    course: {
-      id: "1",
-      name: "BSIT",
-    },
-    subject: {
-      id: "1",
-      name: "Introduction to Programming",
-      stubCode: "ITP 101",
-      units: 3,
-    },
-    grade: 0,
-    id: "1",
-  },
-  {
-    schoolYear: {
-      id: "1",
-      startYear: 2021,
-      endYear: 2022,
-    },
-    course: {
-      id: "1",
-      name: "BSIT",
-    },
-    subject: {
-      id: "1",
-      name: "Introduction to Programming",
-      stubCode: "ITP 101",
-      units: 3,
-    },
-    grade: 2,
-    id: "1",
-  },
-  {
-    schoolYear: {
-      id: "1",
-      startYear: 2021,
-      endYear: 2022,
-    },
-    course: {
-      id: "1",
-      name: "BSIT",
-    },
-    subject: {
-      id: "1",
-      name: "Introduction to Programming",
-      stubCode: "ITP 101",
-      units: 3,
-    },
-    grade: 5,
-    id: "1",
-  },
-];
 
 export default function StudentProfileCard({ records }: Props) {
   const hasRecords = records.length > 0;
@@ -109,6 +57,7 @@ export default function StudentProfileCard({ records }: Props) {
                   <TableCell className="text-bold">Subject</TableCell>
                   <TableCell className="text-bold">Stub Code</TableCell>
                   <TableCell className="text-bold">Units</TableCell>
+                  <TableCell className="text-bold">Semester</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -123,6 +72,7 @@ export default function StudentProfileCard({ records }: Props) {
                     <TableCell>{record.subject.name}</TableCell>
                     <TableCell>{record.subject.stubCode}</TableCell>
                     <TableCell>{record.subject.units}</TableCell>
+                    <TableCell>{record.semesterType}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
