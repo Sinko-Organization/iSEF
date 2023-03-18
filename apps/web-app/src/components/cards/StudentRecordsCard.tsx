@@ -10,6 +10,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+import { SemesterType } from "@prisma/client";
 import type { inferQueryOutput } from "@web-app/utils/trpc";
 import { sumBy } from "lodash";
 
@@ -17,9 +18,9 @@ type Records = inferQueryOutput<"studentData.details">["studentRecords"];
 type Record = Records[number];
 type OmittedSemesterRecord = Omit<Record, "semesterType">;
 type SortedRecords = {
-  first: OmittedSemesterRecord;
-  second: OmittedSemesterRecord;
-  summer: OmittedSemesterRecord;
+  FIRST: OmittedSemesterRecord;
+  SECOND: OmittedSemesterRecord;
+  SUMMER: OmittedSemesterRecord;
 };
 
 type Props = {
@@ -31,6 +32,15 @@ type Result = {
   color: string;
 };
 
+export const groupBy = (arr: Records, key: any) => {
+  return arr.reduce((acc: any, obj: any) => {
+    const groupKey = obj[key];
+    acc[groupKey] = acc[groupKey] || [];
+    acc[groupKey].push(obj);
+    return acc;
+  }, {});
+};
+
 export default function StudentProfileCard({ records }: Props) {
   const hasRecords = records.length > 0;
   const hasInc = records.some((record) => record.grade === 0);
@@ -39,6 +49,10 @@ export default function StudentProfileCard({ records }: Props) {
     sumBy(records, (record) => record.subject.units);
   const roundedGWA = Number.parseFloat(gwa.toFixed(2));
 
+  const sortedRecords = groupBy(records, "semesterType");
+  // returns {FIRST:{...}, SECOND:{...}, SUMMER:{...}}
+
+  console.log(sortedRecords);
   return (
     <>
       <Card>
@@ -50,6 +64,70 @@ export default function StudentProfileCard({ records }: Props) {
         />
         <CardContent>
           {hasRecords ? (
+            Object.keys(sortedRecords).map((key: string, idx: number) => (
+              <Table
+                key={`${key}`}
+                sx={{ minWidth: 650 }}
+                aria-label="simple table"
+              >
+                <TableHead>
+                  <div>Semester: {key}</div>
+                  <div>
+                    School Year: {sortedRecords[key][0].schoolYear.startYear} -{" "}
+                    {sortedRecords[key][0].schoolYear.endYear}
+                  </div>
+                  <TableRow>
+                    <TableCell className="text-bold">Grade</TableCell>
+                    <TableCell className="text-bold">Subject</TableCell>
+                    <TableCell className="text-bold">Stub Code</TableCell>
+                    <TableCell className="text-bold">Units</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {sortedRecords[key].map((record: Record) => (
+                    <TableRow key={record.id}>
+                      <TableCell className="text-bold">
+                        {record.grade}
+                      </TableCell>
+                      <TableCell className="text-bold">
+                        {record.subject.name}
+                      </TableCell>
+                      <TableCell className="text-bold">
+                        {record.subject.stubCode}
+                      </TableCell>
+                      <TableCell className="text-bold">
+                        {record.subject.units}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+
+                <TableFooter
+                  sx={{
+                    mt: 2,
+                  }}
+                >
+                  <TableRow>
+                    <Typography sx={{ fontWeight: "bold", display: "inline" }}>
+                      GWA:{` `}
+                    </Typography>
+                    {hasInc
+                      ? displayGrade({
+                          title: "Incomplete",
+                          grade: "INC",
+                          color: "red",
+                        })
+                      : pipe(roundedGWA, evaluateGrade, displayGrade)}
+                  </TableRow>
+                </TableFooter>
+              </Table>
+            ))
+          ) : (
+            <Typography variant="body2" color="text.secondary">
+              No records found
+            </Typography>
+          )}
+          {/* {hasRecords ? (
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
@@ -58,6 +136,7 @@ export default function StudentProfileCard({ records }: Props) {
                   <TableCell className="text-bold">Stub Code</TableCell>
                   <TableCell className="text-bold">Units</TableCell>
                   <TableCell className="text-bold">Semester</TableCell>
+                  <TableCell className="text-bold">School Year</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -73,6 +152,9 @@ export default function StudentProfileCard({ records }: Props) {
                     <TableCell>{record.subject.stubCode}</TableCell>
                     <TableCell>{record.subject.units}</TableCell>
                     <TableCell>{record.semesterType}</TableCell>
+                    <TableCell>
+                      {record.schoolYear.startYear}-{record.schoolYear.endYear}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -99,7 +181,7 @@ export default function StudentProfileCard({ records }: Props) {
             <Typography variant="body2" color="text.secondary">
               No records found
             </Typography>
-          )}
+          )} */}
         </CardContent>
       </Card>
     </>
