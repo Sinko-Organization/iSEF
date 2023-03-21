@@ -1,20 +1,21 @@
 import type { NextPage } from "next";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 const SignIn: NextPage = () => {
+  const router = useRouter();
   const { data: session } = useSession();
   if (session) {
-    return (
-      <>
-        Signed in <br />
-        <button onClick={() => signOut()}>Sign out</button>
-      </>
-    );
+    router.push("/dashboard");
   }
   return (
     <>
-      Not signed in <br />
-      <button onClick={() => signIn()}>Sign in</button>
+      {!session && (
+        <>
+          Not signed in <br />
+          <button onClick={() => signIn()}>Sign in</button>
+        </>
+      )}
     </>
   );
 };
