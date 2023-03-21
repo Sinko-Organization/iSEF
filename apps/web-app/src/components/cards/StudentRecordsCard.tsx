@@ -10,18 +10,11 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import { SemesterType } from "@prisma/client";
 import type { inferQueryOutput } from "@web-app/utils/trpc";
 import { sumBy } from "lodash";
 
 type Records = inferQueryOutput<"studentData.details">["studentRecords"];
 type Record = Records[number];
-// type OmittedSemesterRecord = Omit<Record, "semesterType">;
-// type SortedRecords = {
-//   FIRST: OmittedSemesterRecord;
-//   SECOND: OmittedSemesterRecord;
-//   SUMMER: OmittedSemesterRecord;
-// };
 
 type Props = {
   records: Records;
@@ -53,10 +46,6 @@ export const roundedSemGwa = (semRecords: Records) => {
 export default function StudentProfileCard({ records }: Props) {
   const hasRecords = records.length > 0;
   const hasInc = records.some((record) => record.grade === 0);
-  // const gwa =
-  //   sumBy(records, (record) => record.grade * record.subject.units) /
-  //   sumBy(records, (record) => record.subject.units);
-  // const roundedGWA = Number.parseFloat(gwa.toFixed(2));
 
   const sortedRecords = groupBy(records, "semesterType");
   // returns {FIRST:{...}, SECOND:{...}, SUMMER:{...}}
