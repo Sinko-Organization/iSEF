@@ -15,12 +15,6 @@ import { sumBy } from "lodash";
 
 type Records = inferQueryOutput<"studentData.details">["studentRecords"];
 type Record = Records[number];
-type OmittedSemesterRecord = Omit<Record, "semesterType">;
-type SortedRecords = {
-  first: OmittedSemesterRecord;
-  second: OmittedSemesterRecord;
-  summer: OmittedSemesterRecord;
-};
 
 type Props = {
   records: Records;
@@ -31,13 +25,30 @@ type Result = {
   color: string;
 };
 
+export const groupBy = (arr: Records, key: any) => {
+  // eslint-disable-next-line unicorn/no-array-reduce
+  return arr.reduce((acc: any, obj: any) => {
+    const groupKey = obj[key];
+    acc[groupKey] = acc[groupKey] || [];
+    acc[groupKey].push(obj);
+    return acc;
+  }, {});
+};
+
+export const roundedSemGwa = (semRecords: Records) => {
+  const gwa =
+    sumBy(semRecords, (record) => record.grade * record.subject.units) /
+    sumBy(semRecords, (record) => record.subject.units);
+
+  return Number.parseFloat(gwa.toFixed(2));
+};
+
 export default function StudentProfileCard({ records }: Props) {
   const hasRecords = records.length > 0;
   const hasInc = records.some((record) => record.grade === 0);
-  const gwa =
-    sumBy(records, (record) => record.grade * record.subject.units) /
-    sumBy(records, (record) => record.subject.units);
-  const roundedGWA = Number.parseFloat(gwa.toFixed(2));
+
+  const sortedRecords = groupBy(records, "semesterType");
+  // returns {FIRST:{...}, SECOND:{...}, SUMMER:{...}}
 
   return (
     <>
@@ -50,51 +61,68 @@ export default function StudentProfileCard({ records }: Props) {
         />
         <CardContent>
           {hasRecords ? (
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell className="text-bold">Grade</TableCell>
-                  <TableCell className="text-bold">Subject</TableCell>
-                  <TableCell className="text-bold">Stub Code</TableCell>
-                  <TableCell className="text-bold">Units</TableCell>
-                  <TableCell className="text-bold">Semester</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {records.map((record, idx) => (
-                  <TableRow
-                    key={`${record.id}-${record.subject.name}-${idx}`}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell>
-                      {pipe(record.grade, evaluateGrade, displayGrade)}
-                    </TableCell>
-                    <TableCell>{record.subject.name}</TableCell>
-                    <TableCell>{record.subject.stubCode}</TableCell>
-                    <TableCell>{record.subject.units}</TableCell>
-                    <TableCell>{record.semesterType}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-              <TableFooter
-                sx={{
-                  mt: 2,
-                }}
+            Object.keys(sortedRecords).map((key: string) => (
+              <Table
+                key={`${key}`}
+                sx={{ minWidth: 650 }}
+                aria-label="simple table"
               >
-                <TableRow>
-                  <Typography sx={{ fontWeight: "bold", display: "inline" }}>
-                    GWA:{` `}
-                  </Typography>
-                  {hasInc
-                    ? displayGrade({
-                        title: "Incomplete",
-                        grade: "INC",
-                        color: "red",
-                      })
-                    : pipe(roundedGWA, evaluateGrade, displayGrade)}
-                </TableRow>
-              </TableFooter>
-            </Table>
+                <TableHead>
+                  <div>Semester: {key}</div>
+                  <div>
+                    School Year: {sortedRecords[key][0].schoolYear.startYear} -{" "}
+                    {sortedRecords[key][0].schoolYear.endYear}
+                  </div>
+                  <TableRow>
+                    <TableCell className="text-bold">Grade</TableCell>
+                    <TableCell className="text-bold">Subject</TableCell>
+                    <TableCell className="text-bold">Stub Code</TableCell>
+                    <TableCell className="text-bold">Units</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {sortedRecords[key].map((record: Record) => (
+                    <TableRow key={record.id}>
+                      <TableCell className="text-bold">
+                        {record.grade}
+                      </TableCell>
+                      <TableCell className="text-bold">
+                        {record.subject.name}
+                      </TableCell>
+                      <TableCell className="text-bold">
+                        {record.subject.stubCode}
+                      </TableCell>
+                      <TableCell className="text-bold">
+                        {record.subject.units}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+
+                <TableFooter
+                  sx={{
+                    mt: 2,
+                  }}
+                >
+                  <TableRow>
+                    <Typography sx={{ fontWeight: "bold", display: "inline" }}>
+                      GWA:{` `}
+                    </Typography>
+                    {hasInc
+                      ? displayGrade({
+                          title: "Incomplete",
+                          grade: "INC",
+                          color: "red",
+                        })
+                      : pipe(
+                          roundedSemGwa(sortedRecords[key]),
+                          evaluateGrade,
+                          displayGrade,
+                        )}
+                  </TableRow>
+                </TableFooter>
+              </Table>
+            ))
           ) : (
             <Typography variant="body2" color="text.secondary">
               No records found
