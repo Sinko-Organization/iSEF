@@ -64,16 +64,6 @@ const StudentPage: NextPage = () => {
             phoneNumber={studentData.phoneNumber}
             address={studentData.address}
           />
-          {/* {schoolYearsData && (
-            <CurriculumSelector
-              schoolYearsData={schoolYearsData}
-              curriculum={{ schoolYear, semesterType }}
-              setSchoolYear={setSchoolYear}
-              setSemesterType={setSemesterType}
-              className="mt-20"
-            />
-          )} */}
-
           {schoolYearsData && (
             <StudentProfileSelector
               schoolYearsData={schoolYearsData}
