@@ -53,75 +53,71 @@ export default function StudentProfileCard({ records }: Props) {
   return (
     <>
       <Card>
-        <CardHeader
-          sx={{
-            fontWeight: "bold",
-          }}
-          title={"Student Records"}
-        />
+        <CardHeader title={"Student Records"} />
         <CardContent>
           {hasRecords ? (
             Object.keys(sortedRecords).map((key: string) => (
-              <Table
-                key={`${key}`}
-                sx={{ minWidth: 650 }}
-                aria-label="simple table"
-              >
-                <TableHead>
-                  <div>Semester: {key}</div>
-                  <div>
-                    School Year: {sortedRecords[key][0].schoolYear.startYear} -{" "}
-                    {sortedRecords[key][0].schoolYear.endYear}
-                  </div>
-                  <TableRow>
-                    <TableCell className="text-bold">Grade</TableCell>
-                    <TableCell className="text-bold">Subject</TableCell>
-                    <TableCell className="text-bold">Stub Code</TableCell>
-                    <TableCell className="text-bold">Units</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {sortedRecords[key].map((record: Record) => (
-                    <TableRow key={record.id}>
-                      <TableCell className="text-bold">
-                        {record.grade}
-                      </TableCell>
-                      <TableCell className="text-bold">
-                        {record.subject.name}
-                      </TableCell>
-                      <TableCell className="text-bold">
-                        {record.subject.stubCode}
-                      </TableCell>
-                      <TableCell className="text-bold">
-                        {record.subject.units}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
+              <Card key={`${key}`} className="mb-5">
+                <CardHeader title={`Semester: ${key}`} />
+                <CardHeader
+                  title={`School Year ${sortedRecords[key][0].schoolYear.startYear}-${sortedRecords[key][0].schoolYear.endYear}`}
+                />
+                <CardContent>
+                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell className="text-bold">Grade</TableCell>
+                        <TableCell className="text-bold">Subject</TableCell>
+                        <TableCell className="text-bold">Stub Code</TableCell>
+                        <TableCell className="text-bold">Units</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {sortedRecords[key].map((record: Record) => (
+                        <TableRow key={record.id}>
+                          <TableCell className="text-bold">
+                            {record.grade}
+                          </TableCell>
+                          <TableCell className="text-bold">
+                            {record.subject.name}
+                          </TableCell>
+                          <TableCell className="text-bold">
+                            {record.subject.stubCode}
+                          </TableCell>
+                          <TableCell className="text-bold">
+                            {record.subject.units}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
 
-                <TableFooter
-                  sx={{
-                    mt: 2,
-                  }}
-                >
-                  <TableRow>
-                    <Typography sx={{ fontWeight: "bold", display: "inline" }}>
-                      GWA:{` `}
-                    </Typography>
-                    {hasInc
-                      ? displayGrade({
-                          title: "Incomplete",
-                          grade: "INC",
-                          color: "red",
-                        })
-                      : pipe(
-                          roundedSemGwa(sortedRecords[key]),
-                          evaluateGrade,
-                          displayGrade,
-                        )}
-                  </TableRow>
-                </TableFooter>
-              </Table>
+                    <TableFooter
+                      sx={{
+                        mt: 2,
+                      }}
+                    >
+                      <TableRow>
+                        <Typography
+                          sx={{ fontWeight: "bold", display: "inline" }}
+                        >
+                          GWA:{` `}
+                        </Typography>
+                        {hasInc
+                          ? displayGrade({
+                              title: "Incomplete",
+                              grade: "INC",
+                              color: "red",
+                            })
+                          : pipe(
+                              roundedSemGwa(sortedRecords[key]),
+                              evaluateGrade,
+                              displayGrade,
+                            )}
+                      </TableRow>
+                    </TableFooter>
+                  </Table>
+                </CardContent>
+              </Card>
             ))
           ) : (
             <Typography variant="body2" color="text.secondary">
