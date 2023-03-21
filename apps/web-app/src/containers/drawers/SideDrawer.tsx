@@ -135,6 +135,13 @@ export default function ResponsiveDrawer({ window, children }: Props) {
             </IconButton>
             {/* Intelligent Students E - Folders */}
             INTELLIGENT STUDENTS E-FOLDERS
+            {/*Log Out Button */}
+            {/* <Typography
+            noWrap
+            component="div"
+            style={{textAlign: "right"}}>
+              Log Out
+            </Typography> */}
           </Toolbar>
         </Typography>
       </AppBar>
