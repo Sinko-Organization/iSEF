@@ -43,9 +43,12 @@ export const roundedSemGwa = (semRecords: Records) => {
   return Number.parseFloat(gwa.toFixed(2));
 };
 
+export const hasInc = (semRecords: Records) => {
+  return semRecords.some((record) => record.grade === 0);
+};
+
 export default function StudentProfileCard({ records }: Props) {
   const hasRecords = records.length > 0;
-  const hasInc = records.some((record) => record.grade === 0);
 
   const sortedRecords = groupBy(records, "semesterType");
   // returns {FIRST:{...}, SECOND:{...}, SUMMER:{...}}
@@ -102,7 +105,7 @@ export default function StudentProfileCard({ records }: Props) {
                         >
                           GWA:{` `}
                         </Typography>
-                        {hasInc
+                        {hasInc(sortedRecords[key])
                           ? displayGrade({
                               title: "Incomplete",
                               grade: "INC",
