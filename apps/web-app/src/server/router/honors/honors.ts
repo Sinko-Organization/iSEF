@@ -110,6 +110,7 @@ export const honorsRouter = createAdminRouter()
               select: {
                 id: true,
                 grade: true,
+                // courseId: true,
                 subject: {
                   select: {
                     id: true,

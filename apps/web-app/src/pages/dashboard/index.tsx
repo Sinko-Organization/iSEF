@@ -51,7 +51,7 @@ const DashboardPage: NextPage = () => {
           setSemesterType={setSemesterType}
         />
       )}
-      {courseData && <DashboardTable rows={courseData} />}
+      {/* {courseData && <DashboardTable rows={courseData}/>} */}
     </div>
   );
 };

@@ -56,6 +56,8 @@ function getComparator<Key extends keyof any>(
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
+// type HeadCellId = keyof HonorsType | 'courseId'
+
 interface HeadCell {
   disablePadding: boolean;
   id: keyof HonorsType;
@@ -70,6 +72,12 @@ const headCells: readonly HeadCell[] = [
     disablePadding: true,
     label: "Student ID Number",
   },
+  // {
+  //   id: "courseId",
+  //   numeric: false,
+  //   disablePadding: true,
+  //   label: "Student Course",
+  // },
   {
     id: "lastName",
     numeric: true,
@@ -300,6 +308,7 @@ const HonorsListTable: FC<HonorsList> = ({ honorsList }) => {
                           {row.studentIdNumber}
                         </TableCell>
                         {/* <TableBody> */}
+                        {/* <TableCell align="right">{row.courseId}</TableCell> */}
                         <TableCell align="right">{row.lastName}</TableCell>
                         <TableCell align="right">{row.firstName}</TableCell>
                         <TableCell align="right">
