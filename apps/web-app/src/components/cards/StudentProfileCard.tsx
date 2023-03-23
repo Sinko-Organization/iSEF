@@ -117,12 +117,12 @@ export default function StudentProfileCard({
               <Table className="table table-sm">
                 <tbody>
                   <td>
-                    <b>Student ID: </b>
-                    {formik.values.studentIdNumber}
-                  </td>
-                  <td>
                     <b>Name : </b> {formik.values.lastName},{" "}
                     {formik.values.firstName}
+                  </td>
+                  <td>
+                    <b>Student ID: </b>
+                    {formik.values.studentIdNumber}
                   </td>
                 </tbody>
               </Table>

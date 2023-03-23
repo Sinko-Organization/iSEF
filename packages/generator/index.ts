@@ -6,17 +6,14 @@ type Student = {
   firstName: string;
   lastName: string;
 };
-
 const generateNames = (count: number) => {
   const names = [] as Student[];
-
   for (let i = 0; i < count; i++) {
     names.push({
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
     });
   }
-
   const schema: Schema<Student> = [
     {
       column: "First Name",
@@ -27,11 +24,9 @@ const generateNames = (count: number) => {
       value: (row) => row.lastName,
     },
   ];
-
   writeXlsxFile(names, {
     schema,
     filePath: "names.xlsx",
   });
 };
-
 generateNames(8279);

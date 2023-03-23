@@ -2,6 +2,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import { SemesterType } from "@prisma/client";
+import Search from "@web-app/components/search";
 import { capitalize } from "lodash";
 import type { FC, HTMLAttributes } from "react";
 
@@ -16,6 +17,8 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
     yearLevel: number;
   }[];
   courseOptions: CourseOptionsType;
+  searchText: string;
+  setSearchText: (text: string) => void;
   setSchoolYear: (schoolYear: number) => void;
   setSemesterType: (semesterType: SemesterType) => void;
   setYearLevel: (yearLevel: number) => void;
@@ -34,6 +37,8 @@ const CourseOptionSelector: FC<Props> = ({
   setSemesterType,
   yearLevelsData,
   setYearLevel,
+  searchText,
+  setSearchText,
   ...props
 }) => {
   return (
@@ -95,6 +100,7 @@ const CourseOptionSelector: FC<Props> = ({
               </MenuItem>
             ))}
           </Select>
+          <Search text={searchText} onChangeText={setSearchText} />
         </div>
       </div>
     </div>

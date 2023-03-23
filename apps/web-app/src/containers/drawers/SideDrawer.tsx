@@ -15,6 +15,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+import { signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import * as React from "react";
@@ -135,6 +136,12 @@ export default function ResponsiveDrawer({ window, children }: Props) {
             </IconButton>
             {/* Intelligent Students E - Folders */}
             INTELLIGENT STUDENTS E-FOLDERS
+            {/*LOG OUT BUTTON*/}
+            <Box sx={{ display: "flex", marginLeft: 90 }}>
+              <Typography fontFamily="monospace">
+                <button onClick={() => signOut()}>Log Out</button>
+              </Typography>
+            </Box>
           </Toolbar>
         </Typography>
       </AppBar>

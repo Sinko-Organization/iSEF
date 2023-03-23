@@ -1,5 +1,5 @@
 import { TRPCError } from "@trpc/server";
-import { P, match } from "ts-pattern";
+import { seDeptOld } from "@web-app/constants/subject-dependencies";
 import { z } from "zod";
 
 import { createAdminRouter } from "../context";
@@ -28,139 +28,135 @@ export const subjectRouter = createAdminRouter()
   })
   .query("getRecommendedSubjects", {
     input: z.object({
-      studentRecords: z.array(
-        z.object({
-          id: z.string(),
-          subjectId: z.string(),
-          remark: z.enum(["Passed", "Failed"]),
-        }),
-      ),
       studentId: z.string(),
-      courseId: z.string(),
-      schoolYearId: z.string(),
-      semesterType: z.enum(["FIRST", "SECOND", "SUMMER"] as const),
+      enrollmentType: z.enum(["Regular", "Bridging"]),
     }),
+    output: z.array(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+        stubCode: z.string(),
+        units: z.number(),
+        status: z.enum(["Failed", "Not Taken"]),
+      }),
+    ),
     async resolve({ ctx, input }) {
-      const {
-        studentRecords,
-        studentId,
-        courseId,
-        schoolYearId,
-        semesterType,
-      } = input;
+      const { studentId, enrollmentType } = input;
 
+      // get either bridging or regular
+      const specifcDependecies = seDeptOld.filter(
+        (subject) => subject.enrollmentType === enrollmentType,
+      );
+
+      // get only subject codes
+      const dependencyList = specifcDependecies.flatMap((subject) =>
+        subject.subjects.map((subj) => subj.subjectCode),
+      );
+
+      // query subjects from db those that match the codes
       const dependencyCodes = await ctx.prisma.subject.findMany({
         where: {
-          id: {
-            in: studentRecords.map((record) => record.subjectId),
+          stubCode: {
+            in: dependencyList,
           },
         },
         select: {
+          id: true,
+          name: true,
           stubCode: true,
+          units: true,
         },
       });
 
-      const dependencySet = new Set(
-        dependencyCodes.map((code) => code.stubCode),
-      );
-
-      const availableSubjects = await Promise.all(
-        studentRecords.map(async (record) => {
-          const { remark, subjectId } = record;
-          const subjectDetails = await getSubjectWithDetails(
-            ctx.prisma,
-            subjectId,
-            courseId,
-          );
-          return {
-            ...subjectDetails,
-            remark: remark,
-          };
-        }),
-      ).then(async (subjects) => {
-        const passedSubjects = subjects.filter(
-          (subject) => subject.remark === "Passed",
-        );
-
-        const maxLevel = Math.max(
-          ...passedSubjects.map((subject) => subject.level),
-        );
-
-        const availableSubjects = await getSubjectsByLevel(
-          ctx.prisma,
-          courseId,
-          maxLevel + 1,
-        );
-
-        return availableSubjects;
+      // find all student records with the same stub code
+      const studentRecords = await ctx.prisma.studentRecord.findMany({
+        where: {
+          studentId,
+          subject: {
+            stubCode: {
+              in: dependencyCodes.map((subj) => subj.stubCode),
+            },
+          },
+        },
+        select: {
+          grade: true,
+          subject: {
+            select: {
+              id: true,
+              name: true,
+              stubCode: true,
+              units: true,
+            },
+          },
+        },
       });
 
-      const subjectStatuses = await Promise.all(
-        availableSubjects.map(async (subjectId) => {
-          const status = await getSubjectStatus(
-            ctx.prisma,
-            subjectId,
-            studentId,
-            courseId,
-            schoolYearId,
-            semesterType,
-          );
+      const notTakenSubjects = dependencyCodes
+        .filter(
+          (subj) =>
+            !studentRecords.some(
+              (record) => record.subject.stubCode === subj.stubCode,
+            ),
+        )
+        .map((subj) => ({
+          ...subj,
+          status: "Not Taken",
+        }));
 
-          const dependencyStatus = await getSubjectDependencyStatus(
-            ctx.prisma,
-            subjectId,
-            courseId,
-          );
-
-          const subjectDetails = await getSubjectWithDetails(
-            ctx.prisma,
-            subjectId,
-            courseId,
-          );
-
+      const recordSet = [
+        ...studentRecords.map((record) => {
+          const passed = record.grade >= 1 && record.grade <= 3;
           return {
-            ...subjectDetails,
-            subjectId,
-            status,
-            dependencyStatus,
+            id: record.subject.id,
+            name: record.subject.name,
+            stubCode: record.subject.stubCode,
+            units: record.subject.units,
+            status: passed ? "Passed" : "Failed",
           };
         }),
-      );
+        ...notTakenSubjects,
+      ] as {
+        id: string;
+        name: string;
+        stubCode: string;
+        units: number;
+        status: "Passed" | "Failed" | "Not Taken";
+      }[];
 
-      const recommendedSubjects = subjectStatuses
+      // get the list of recordSet, filter out passed subjects, subjects who's dependencies are failed,
+      // also add subjects that are in the dependencyCodes because they're not taken
+      const recommendedSubjects = recordSet
+        .filter(
+          (subject) =>
+            subject.status === "Failed" || subject.status === "Not Taken",
+        )
         .filter((subject) => {
-          return match(subject)
-            .with(
-              {
-                status: P.union("Failed", "Not Taken"),
-                dependencyStatus: "Independent",
-              },
-              () => true,
-            )
-            .with(
-              {
-                status: P.union("Failed", "Not Taken"),
-                dependencyStatus: "Dependent",
-              },
-              (subj) => {
-                const { dependencies } = subj;
+          // filter those whose dependencies aren't passed
+          const dependencies =
+            specifcDependecies
+              .find((level) =>
+                level.subjects.find(
+                  (subj) => subj.subjectCode === subject.stubCode,
+                ),
+              )
+              ?.subjects.find((subj) => subj.subjectCode === subject.stubCode)
+              ?.prerequisites ?? [];
 
-                const allDependenciesFound = dependencies.every((dependency) =>
-                  dependencySet.has(dependency),
-                );
+          const allDependenciesFound = dependencies.every((dependency) =>
+            recordSet.some(
+              (record) =>
+                record.stubCode === dependency && record.status === "Passed",
+            ),
+          );
 
-                return allDependenciesFound;
-              },
-            )
-            .otherwise(() => false);
-        })
-        .map((subject) => ({
-          id: subject.subjectId,
-          name: subject.name,
-          stubCode: subject.stubCode,
-          units: subject.units,
-          status: subject.status,
-        }));
+          return allDependenciesFound;
+        }) as {
+        id: string;
+        name: string;
+        stubCode: string;
+        units: number;
+        status: "Failed" | "Not Taken";
+      }[];
 
       return recommendedSubjects;
     },
