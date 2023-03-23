@@ -35,6 +35,10 @@ export const honorsRouter = createAdminRouter()
               name: z.string(),
               units: z.number(),
             }),
+            course: z.object({
+              id: z.string(),
+              name: z.string(),
+            }),
             yearLevel: z.number(),
           }),
         ),
@@ -115,6 +119,12 @@ export const honorsRouter = createAdminRouter()
                     id: true,
                     name: true,
                     units: true,
+                  },
+                },
+                course: {
+                  select: {
+                    id: true,
+                    name: true,
                   },
                 },
                 yearLevel: true,
