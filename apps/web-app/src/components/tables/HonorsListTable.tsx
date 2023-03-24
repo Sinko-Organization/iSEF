@@ -97,7 +97,6 @@ const headCells: readonly HeadCell[] = [
 interface EnhancedTableProps {
   numSelected: number;
   onRequestSort: (event: React.MouseEvent<unknown>, property: string) => void;
-  onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   order: Order;
   orderBy: string;
   rowCount: number;
@@ -165,46 +164,8 @@ const HonorsListTable: FC<HonorsList> = ({ honorsList }) => {
     setOrderBy(property);
   };
 
-  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-      const newSelected = honorsList.map((n) => n.firstName);
-      setSelected(newSelected);
-      return;
-    }
-    setSelected([]);
-  };
-
-  const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected: readonly string[] = [];
-
-    switch (selectedIndex) {
-      case -1: {
-        newSelected = [...selected, name];
-
-        break;
-      }
-      case 0: {
-        newSelected = [...selected.slice(1)];
-
-        break;
-      }
-      case selected.length - 1: {
-        newSelected = [...selected.slice(0, -1)];
-
-        break;
-      }
-      default: {
-        if (selectedIndex > 0) {
-          newSelected = [
-            ...selected.slice(0, selectedIndex),
-            ...selected.slice(selectedIndex + 1),
-          ];
-        }
-      }
-    }
-
-    setSelected(newSelected);
+  const handleClick = (event: React.MouseEvent<unknown>, id: string) => {
+    router.push(`student?id=${id}`);
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -258,7 +219,6 @@ const HonorsListTable: FC<HonorsList> = ({ honorsList }) => {
               numSelected={selected.length}
               order={order}
               orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
               rowCount={honorsList.length}
             />
@@ -276,7 +236,7 @@ const HonorsListTable: FC<HonorsList> = ({ honorsList }) => {
                     <>
                       <TableRow
                         hover
-                        onClick={(event) => handleClick(event, row.firstName)}
+                        onClick={(event) => handleClick(event, row.id)}
                         aria-checked={isItemSelected}
                         tabIndex={-1}
                         key={row.id}
@@ -291,7 +251,6 @@ const HonorsListTable: FC<HonorsList> = ({ honorsList }) => {
                         >
                           {row.studentIdNumber}
                         </TableCell>
-                        {/* <TableBody> */}
                         <TableCell align="right">{row.lastName}</TableCell>
                         <TableCell align="right">{row.firstName}</TableCell>
                         <TableCell align="right">
