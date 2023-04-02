@@ -129,7 +129,7 @@ export default function StudentProfileCard({
             </Item>
           </Grid>
         </Grid>
-        {/* <CardContent>
+        <CardContent>
           <form onSubmit={formik.handleSubmit}>
             <Grid container direction="row" spacing={3}>
               <Grid item xs={6}>
@@ -208,7 +208,7 @@ export default function StudentProfileCard({
               Edit
             </Button>
           </form>
-        </CardContent> */}
+        </CardContent>
       </Card>
       <ErrorAlert
         message={errorState.message}
