@@ -18,7 +18,9 @@ export const useCourseOptions = () => {
 
   useEffect(() => {
     if (schoolYearsData) {
-      const startYear = schoolYearsData[0]?.startYear;
+      const startYear = schoolYearsData.find(
+        (year) => year.startYear === schoolYear,
+      )?.startYear;
       if (startYear) {
         setSchoolYear(startYear);
       }
@@ -29,7 +31,14 @@ export const useCourseOptions = () => {
         setYearLevel(level);
       }
     }
-  }, [schoolYearsData, setSchoolYear, setYearLevel, yearLevel, yearLevelsData]);
+  }, [
+    schoolYear,
+    schoolYearsData,
+    setSchoolYear,
+    setYearLevel,
+    yearLevel,
+    yearLevelsData,
+  ]);
 
   return {
     schoolYearsData,

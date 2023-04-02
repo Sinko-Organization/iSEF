@@ -16,12 +16,15 @@ const DashboardPage: NextPage = () => {
 
   useEffect(() => {
     if (schoolYearsData) {
-      const startYear = schoolYearsData[0]?.startYear;
+      const startYear = schoolYearsData.find(
+        (year) => year.startYear === schoolYear,
+      )?.startYear;
+
       if (startYear) {
         setSchoolYear(startYear);
       }
     }
-  }, [schoolYearsData, setSchoolYear]);
+  }, [schoolYear, schoolYearsData, setSchoolYear]);
 
   const { data: courseData, status: courseStatus } = trpc.useQuery([
     "course.population",
