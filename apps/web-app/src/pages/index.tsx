@@ -1,14 +1,18 @@
+import { AccountError } from "@web-app/components/errors";
+import { trpc } from "@web-app/utils/trpc";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
 const SignIn = () => {
   const router = useRouter();
   const { data: session } = useSession();
-  if (session) {
+  const { data: userRole } = trpc.useQuery(["user.role"]);
+  if (session && userRole?.role === "admin") {
     router.push("/dashboard");
   }
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      {session && userRole?.role !== "admin" && <AccountError />}
       {!session && (
         <div className="max-w-md w-full space-y-8">
           <div>

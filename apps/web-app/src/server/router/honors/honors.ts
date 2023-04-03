@@ -95,6 +95,7 @@ export const honorsRouter = createAdminRouter()
                   {
                     grade: {
                       lte: 2.6,
+                      gte: 1,
                     },
                   },
                   {

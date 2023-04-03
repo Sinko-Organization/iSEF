@@ -1,3 +1,4 @@
+import { EducationLoader } from "@web-app/components/loaders";
 import { DashboardTable } from "@web-app/components/tables";
 import { CurriculumSelector } from "@web-app/containers/curriculum-selector";
 import { useCurriculumStore } from "@web-app/stores";
@@ -36,7 +37,7 @@ const DashboardPage: NextPage = () => {
 
   // loading
   if (courseStatus === "loading" || schoolYearStatus === "loading") {
-    return <div>Loading...</div>;
+    return <EducationLoader />;
   }
 
   // error
