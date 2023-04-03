@@ -32,13 +32,17 @@ const CurriculumSelector: FC<CurriculumSelectorProps> = ({
     <div {...props}>
       <div className="flex flex-row gap-5">
         <div className="flex flex-row gap-5">
-          <InputLabel className="mt-auto">School Year:</InputLabel>
+          <InputLabel className="mt-auto" sx={{ color: "text.secondary" }}>
+            School Year
+          </InputLabel>
           <Select
             sx={{
               maxWidth: 200,
             }}
             variant="standard"
-            defaultValue={curriculum.schoolYear}
+            label="School Year"
+            labelId="school-year-select-label"
+            value={curriculum.schoolYear}
             onChange={(e) => setSchoolYear(Number(e.target.value))}
           >
             {schoolYearsData.map((year) => (
@@ -50,13 +54,17 @@ const CurriculumSelector: FC<CurriculumSelectorProps> = ({
         </div>
 
         <div className="flex flex-row gap-5">
-          <InputLabel className="mt-auto">Semester Type:</InputLabel>
+          <InputLabel className="mt-auto" sx={{ color: "text.secondary" }}>
+            Semester Type
+          </InputLabel>
           <Select
             sx={{
-              maxWidth: 100,
+              maxWidth: 150,
             }}
             variant="standard"
-            defaultValue={curriculum.semesterType}
+            label="Semester Type"
+            labelId="semester-type-select-label"
+            value={curriculum.semesterType}
             onChange={(e) => setSemesterType(e.target.value as SemesterType)}
           >
             {Object.values(SemesterType).map((semesterType) => (
