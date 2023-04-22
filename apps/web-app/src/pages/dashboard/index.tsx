@@ -1,3 +1,4 @@
+import { EducationLoader } from "@web-app/components/loaders";
 import { DashboardTable } from "@web-app/components/tables";
 import { CurriculumSelector } from "@web-app/containers/curriculum-selector";
 import { useCurriculumStore } from "@web-app/stores";
@@ -16,12 +17,15 @@ const DashboardPage: NextPage = () => {
 
   useEffect(() => {
     if (schoolYearsData) {
-      const startYear = schoolYearsData[0]?.startYear;
+      const startYear = schoolYearsData.find(
+        (year) => year.startYear === schoolYear,
+      )?.startYear;
+
       if (startYear) {
         setSchoolYear(startYear);
       }
     }
-  }, [schoolYearsData, setSchoolYear]);
+  }, [schoolYear, schoolYearsData, setSchoolYear]);
 
   const { data: courseData, status: courseStatus } = trpc.useQuery([
     "course.population",
@@ -33,7 +37,7 @@ const DashboardPage: NextPage = () => {
 
   // loading
   if (courseStatus === "loading" || schoolYearStatus === "loading") {
-    return <div>Loading...</div>;
+    return <EducationLoader />;
   }
 
   // error

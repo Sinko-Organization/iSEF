@@ -1,3 +1,4 @@
+import { EducationLoader } from "@web-app/components/loaders";
 import { trpc } from "@web-app/utils/trpc";
 import { useRouter } from "next/router";
 import type { FC } from "react";
@@ -15,7 +16,7 @@ const AdminRoute: FC<Props> = ({ children }) => {
   }
 
   if (!user) {
-    return <div>Loading...</div>;
+    return <EducationLoader />;
   }
 
   if (user.role !== "admin") {
