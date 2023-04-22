@@ -12,9 +12,9 @@ export type DependencyListV2 = {
     subjectCode: string;
     prerequisites: string[];
     coRequisites: string[];
+    yearStanding?: number;
   }[];
   enrollmentType: "Regular" | "Bridging";
-  yearStanding?: number;
   yearLevel: number;
   semesterType: "FIRST" | "SECOND" | "SUMMER";
 }[];
