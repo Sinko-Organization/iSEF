@@ -1,4 +1,3 @@
-import { EducationLoader } from "@web-app/components/loaders";
 import { CourseTable } from "@web-app/components/tables";
 import { CourseOptionSelector } from "@web-app/containers/course-option-selector";
 import { useCourseOptions } from "@web-app/hooks/course";
@@ -57,7 +56,7 @@ const CoursePage: NextPage = () => {
   }, [data, searchText]);
 
   if (isLoading || schoolYearStatus === "loading") {
-    return <EducationLoader />;
+    return <div>Loading...</div>;
   }
 
   if (isError || schoolYearStatus === "error") {

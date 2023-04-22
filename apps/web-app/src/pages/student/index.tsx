@@ -3,7 +3,6 @@ import {
   StudentRecordsCard,
   SubjectRecomendationsCard,
 } from "@web-app/components/cards";
-import { EducationLoader } from "@web-app/components/loaders";
 import { CurriculumSelector } from "@web-app/containers/curriculum-selector";
 import StudentProfileSelector from "@web-app/containers/student-profile-selector/StudentProfileSelector";
 import { useCurriculumStore } from "@web-app/stores";
@@ -45,7 +44,7 @@ const StudentPage: NextPage = () => {
   ]);
 
   if (studentDataStatus === "loading") {
-    return <EducationLoader />;
+    return <div>Loading...</div>;
   }
 
   if (studentDataStatus === "error") {

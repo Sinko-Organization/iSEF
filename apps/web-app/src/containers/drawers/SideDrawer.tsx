@@ -76,19 +76,14 @@ export default function ResponsiveDrawer({ window, children }: Props) {
 
       <List>
         {paths.map((path, index) => (
-          <Link href={path.link} className="sidebar-link" key={index}>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? (
-                  <DashboardIcon />
-                ) : (
-                  <FormatListBulletedIcon />
-                )}
-              </ListItemIcon>
-
+          <ListItemButton key={index}>
+            <ListItemIcon>
+              {index % 2 === 0 ? <DashboardIcon /> : <FormatListBulletedIcon />}
+            </ListItemIcon>
+            <Link href={path.link} className="sidebar-link">
               <ListItemText primary={path.name} />
-            </ListItemButton>
-          </Link>
+            </Link>
+          </ListItemButton>
         ))}
       </List>
 
