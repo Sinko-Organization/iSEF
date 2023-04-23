@@ -1,14 +1,8 @@
 import { TRPCError } from "@trpc/server";
-import { seDeptOld } from "@web-app/constants/subject-dependencies";
+import { seDeptOld } from "@web-app/models/subject-dependencies";
 import { z } from "zod";
 
 import { createAdminRouter } from "../context";
-import { getSubjectStatus } from "../student-data/queries";
-import {
-  getSubjectDependencyStatus,
-  getSubjectWithDetails,
-  getSubjectsByLevel,
-} from "./queries";
 
 export const subjectRouter = createAdminRouter()
   /**

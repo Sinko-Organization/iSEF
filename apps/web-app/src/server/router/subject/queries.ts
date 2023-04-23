@@ -1,6 +1,6 @@
 import { R } from "@mobily/ts-belt";
 import type { PrismaClient } from "@prisma/client";
-import { seDepNew } from "@web-app/constants/subject-dependencies";
+import { seDepNew } from "@web-app/models/subject-dependencies";
 import {
   getSubjectDependencies,
   getSubjectLevel,
