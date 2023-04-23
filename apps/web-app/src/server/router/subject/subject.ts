@@ -35,6 +35,7 @@ export const subjectRouter = createAdminRouter()
         stubCode: z.string(),
         units: z.number(),
         status: z.enum(["Failed", "Not Taken"]),
+        yearLevel: z.number(),
       }),
     ),
     async resolve({ ctx, input }) {
@@ -140,7 +141,13 @@ export const subjectRouter = createAdminRouter()
             yearLevel: record.yearLevel,
           };
         }),
-        ...notTakenSubjects,
+        ...notTakenSubjects.map((subj) => ({
+          ...subj,
+          yearLevel:
+            studentRecords.find(
+              (record) => record.subject.stubCode === subj.stubCode,
+            )?.yearLevel ?? 0,
+        })),
       ] as {
         id: string;
         name: string;
