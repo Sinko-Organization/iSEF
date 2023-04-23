@@ -1,5 +1,7 @@
 import { TRPCError } from "@trpc/server";
-import { seDeptOld } from "@web-app/models/subject-dependencies";
+import { dependencyListV2Schema } from "@web-app/models/subject-dependencies/schema";
+import { seDeptOld } from "@web-app/models/subject-dependencies/software";
+import { P, match } from "ts-pattern";
 import { z } from "zod";
 
 import { createAdminRouter } from "../context";
@@ -24,6 +26,7 @@ export const subjectRouter = createAdminRouter()
     input: z.object({
       studentId: z.string(),
       enrollmentType: z.enum(["Regular", "Bridging"]),
+      dependency: dependencyListV2Schema.optional().default(seDeptOld),
     }),
     output: z.array(
       z.object({
@@ -35,10 +38,10 @@ export const subjectRouter = createAdminRouter()
       }),
     ),
     async resolve({ ctx, input }) {
-      const { studentId, enrollmentType } = input;
+      const { studentId, enrollmentType, dependency } = input;
 
       // get either bridging or regular
-      const specifcDependecies = seDeptOld.filter(
+      const specifcDependecies = dependency.filter(
         (subject) => subject.enrollmentType === enrollmentType,
       );
 
@@ -73,6 +76,7 @@ export const subjectRouter = createAdminRouter()
           },
         },
         select: {
+          yearLevel: true,
           grade: true,
           subject: {
             select: {
@@ -84,6 +88,33 @@ export const subjectRouter = createAdminRouter()
           },
         },
       });
+
+      // get the lowest year level based on the student records
+      // eslint-disable-next-line unicorn/no-array-reduce
+      const lowestYearLevel = studentRecords.reduce(
+        (prev, curr) => (prev < curr.yearLevel ? prev : curr.yearLevel),
+        0,
+      );
+
+      // for each subject in the dependency, if the yearStanding exists
+      const validYearStandingSubjects = specifcDependecies.filter((subject) =>
+        subject.subjects.filter((subj) => {
+          const { yearStanding } = subj;
+          return match(yearStanding)
+            .with(undefined, () => true)
+            .with("ALL", () => true)
+            .with(P.number, (yearStanding) => {
+              return yearStanding <= lowestYearLevel;
+            })
+            .exhaustive();
+        }),
+      );
+
+      const dependencyListV2 = new Set(
+        validYearStandingSubjects.flatMap((subject) =>
+          subject.subjects.map((subj) => subj.subjectCode),
+        ),
+      );
 
       const notTakenSubjects = dependencyCodes
         .filter(
@@ -106,6 +137,7 @@ export const subjectRouter = createAdminRouter()
             stubCode: record.subject.stubCode,
             units: record.subject.units,
             status: passed ? "Passed" : "Failed",
+            yearLevel: record.yearLevel,
           };
         }),
         ...notTakenSubjects,
@@ -115,11 +147,13 @@ export const subjectRouter = createAdminRouter()
         stubCode: string;
         units: number;
         status: "Passed" | "Failed" | "Not Taken";
+        yearLevel: number;
       }[];
 
       // get the list of recordSet, filter out passed subjects, subjects who's dependencies are failed,
       // also add subjects that are in the dependencyCodes because they're not taken
       const recommendedSubjects = recordSet
+        .filter((record) => dependencyListV2.has(record.stubCode))
         .filter(
           (subject) =>
             subject.status === "Failed" || subject.status === "Not Taken",
@@ -150,6 +184,7 @@ export const subjectRouter = createAdminRouter()
         stubCode: string;
         units: number;
         status: "Failed" | "Not Taken";
+        yearLevel: number;
       }[];
 
       return recommendedSubjects;
