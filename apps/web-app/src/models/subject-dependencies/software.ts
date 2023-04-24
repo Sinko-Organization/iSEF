@@ -65,6 +65,7 @@ export const seDepNew: DependencyListV2 = [
     enrollmentType: "Bridging",
     semesterType: "FIRST",
     yearLevel: 1,
+    creditUnits: 23,
   },
 
   // FIRST YEAR - SECOND SEM - BRIDGING - NC
@@ -135,6 +136,7 @@ export const seDepNew: DependencyListV2 = [
     enrollmentType: "Bridging",
     semesterType: "SECOND",
     yearLevel: 1,
+    creditUnits: 26,
   },
 
   // SECOND YEAR - FIRST SEM - BRIDGING - NC
@@ -189,6 +191,7 @@ export const seDepNew: DependencyListV2 = [
     enrollmentType: "Bridging",
     semesterType: "FIRST",
     yearLevel: 2,
+    creditUnits: 25,
   },
 
   // SECOND YEAR - SECOND SEM - BRIDGING - NC
@@ -243,6 +246,7 @@ export const seDepNew: DependencyListV2 = [
     enrollmentType: "Bridging",
     semesterType: "SECOND",
     yearLevel: 2,
+    creditUnits: 21,
   },
 
   // THIRD YEAR - FIRST SEM - BRIDGING - NC
@@ -292,6 +296,7 @@ export const seDepNew: DependencyListV2 = [
     enrollmentType: "Bridging",
     semesterType: "FIRST",
     yearLevel: 3,
+    creditUnits: 25,
   },
 
   // THIRD YEAR - SECOND SEM - BRIDGING - NC
@@ -331,6 +336,7 @@ export const seDepNew: DependencyListV2 = [
     enrollmentType: "Bridging",
     semesterType: "SECOND",
     yearLevel: 3,
+    creditUnits: 18,
   },
 
   // FOURTH YEAR - FIRST SEM - BRIDGING - NC
@@ -370,6 +376,7 @@ export const seDepNew: DependencyListV2 = [
     enrollmentType: "Bridging",
     semesterType: "FIRST",
     yearLevel: 4,
+    creditUnits: 18,
   },
 
   // FOURTH YEAR - SECOND SEM - BRIDGING - NC
@@ -410,6 +417,7 @@ export const seDepNew: DependencyListV2 = [
     enrollmentType: "Bridging",
     semesterType: "SECOND",
     yearLevel: 4,
+    creditUnits: 19,
   },
 
   // FOURTH YEAR - SUMMER - BRIDGING - NC
@@ -431,6 +439,7 @@ export const seDepNew: DependencyListV2 = [
     enrollmentType: "Bridging",
     semesterType: "SUMMER",
     yearLevel: 4,
+    creditUnits: 6,
   },
 
   // FIFTH YEAR - FIRST SEM - BRIDGING - NC
@@ -464,7 +473,7 @@ export const seDepNew: DependencyListV2 = [
         coRequisites: [],
       },
       {
-        subjectCode: "SE TE 1",
+        subjectCode: ["SE 3224", "SE 3225", "SE 3226"],
         prerequisites: [],
         coRequisites: [],
       },
@@ -472,6 +481,7 @@ export const seDepNew: DependencyListV2 = [
     enrollmentType: "Bridging",
     semesterType: "FIRST",
     yearLevel: 5,
+    creditUnits: 20,
   },
 
   // FIFTH YEAR - SECOND SEM - BRIDGING - NC
@@ -503,6 +513,7 @@ export const seDepNew: DependencyListV2 = [
     enrollmentType: "Bridging",
     semesterType: "SECOND",
     yearLevel: 5,
+    creditUnits: 12,
   },
 
   // FIFTH YEAR - SUMMER - BRIDGING - NC
@@ -518,6 +529,7 @@ export const seDepNew: DependencyListV2 = [
     enrollmentType: "Bridging",
     semesterType: "SUMMER",
     yearLevel: 5,
+    creditUnits: 3,
   },
 
   // FIRST YEAR - FIRST SEM - REGULAR - NC
@@ -593,6 +605,7 @@ export const seDepNew: DependencyListV2 = [
     enrollmentType: "Regular",
     semesterType: "FIRST",
     yearLevel: 1,
+    creditUnits: 29,
   },
 
   // FIRST YEAR - SECOND SEM - REGULAR - NC
@@ -672,6 +685,7 @@ export const seDepNew: DependencyListV2 = [
     enrollmentType: "Regular",
     semesterType: "SECOND",
     yearLevel: 1,
+    creditUnits: 28,
   },
 
   // SECOND YEAR - FIRST SEM - REGULAR - NC
@@ -726,6 +740,7 @@ export const seDepNew: DependencyListV2 = [
     enrollmentType: "Regular",
     semesterType: "FIRST",
     yearLevel: 2,
+    creditUnits: 24,
   },
 
   // SECOND YEAR - SECOND SEM - REGULAR - NC
@@ -780,6 +795,7 @@ export const seDepNew: DependencyListV2 = [
     enrollmentType: "Regular",
     semesterType: "SECOND",
     yearLevel: 2,
+    creditUnits: 23,
   },
 
   // SECOND YEAR - SUMMER - REGULAR - NC
@@ -804,6 +820,7 @@ export const seDepNew: DependencyListV2 = [
     enrollmentType: "Regular",
     semesterType: "SUMMER",
     yearLevel: 2,
+    creditUnits: 9,
   },
 
   // THIRD YEAR - FIRST SEM - REGULAR - NC
@@ -853,6 +870,7 @@ export const seDepNew: DependencyListV2 = [
     enrollmentType: "Regular",
     semesterType: "FIRST",
     yearLevel: 3,
+    creditUnits: 24,
   },
 
   // THIRD YEAR - SECOND SEM - REGULAR - NC
@@ -898,6 +916,7 @@ export const seDepNew: DependencyListV2 = [
     enrollmentType: "Regular",
     semesterType: "SECOND",
     yearLevel: 3,
+    creditUnits: 22,
   },
 
   // THIRD YEAR - SUMMER - REGULAR - NC
@@ -919,6 +938,7 @@ export const seDepNew: DependencyListV2 = [
     enrollmentType: "Regular",
     semesterType: "SUMMER",
     yearLevel: 3,
+    creditUnits: 6,
   },
 
   // FOURTH YEAR - FIRST SEM - REGULAR - NC
@@ -961,6 +981,7 @@ export const seDepNew: DependencyListV2 = [
     enrollmentType: "Regular",
     semesterType: "FIRST",
     yearLevel: 4,
+    creditUnits: 20,
   },
 
   // FOURTH YEAR - SECOND SEM - REGULAR - NC
@@ -993,6 +1014,7 @@ export const seDepNew: DependencyListV2 = [
     enrollmentType: "Regular",
     semesterType: "SECOND",
     yearLevel: 4,
+    creditUnits: 12,
   },
 
   // FOURTH YEAR - SUMMER - REGULAR - NC
@@ -1008,6 +1030,7 @@ export const seDepNew: DependencyListV2 = [
     enrollmentType: "Regular",
     semesterType: "SUMMER",
     yearLevel: 4,
+    creditUnits: 3,
   },
 ];
 
@@ -1086,6 +1109,7 @@ export const seDeptOld: DependencyListV2 = [
     enrollmentType: "Regular",
     semesterType: "FIRST",
     yearLevel: 1,
+    creditUnits: 29,
   },
   // FIRST YEAR - SECOND SEM - REGULAR - OC
   {
@@ -1164,6 +1188,7 @@ export const seDeptOld: DependencyListV2 = [
     enrollmentType: "Regular",
     semesterType: "SECOND",
     yearLevel: 1,
+    creditUnits: 28,
   },
 
   // FIRST YEAR - SUMMER - REGULAR - OC
@@ -1189,6 +1214,7 @@ export const seDeptOld: DependencyListV2 = [
     enrollmentType: "Regular",
     semesterType: "SUMMER",
     yearLevel: 1,
+    creditUnits: 9,
   },
 
   // SECOND YEAR - FIRST SEM - REGULAR - OC
@@ -1243,6 +1269,7 @@ export const seDeptOld: DependencyListV2 = [
     enrollmentType: "Regular",
     semesterType: "FIRST",
     yearLevel: 2,
+    creditUnits: 27,
   },
 
   // SECOND YEAR - SECOND SEM - REGULAR - OC
@@ -1298,6 +1325,7 @@ export const seDeptOld: DependencyListV2 = [
     enrollmentType: "Regular",
     semesterType: "SECOND",
     yearLevel: 2,
+    creditUnits: 23,
   },
 
   // SECOND YEAR - SUMMER - REGULAR - OC
@@ -1322,6 +1350,7 @@ export const seDeptOld: DependencyListV2 = [
     enrollmentType: "Regular",
     semesterType: "SUMMER",
     yearLevel: 2,
+    creditUnits: 9,
   },
 
   // THIRD YEAR - FIRST SEM - REGULAR - OC
@@ -1372,6 +1401,7 @@ export const seDeptOld: DependencyListV2 = [
     enrollmentType: "Regular",
     semesterType: "FIRST",
     yearLevel: 3,
+    creditUnits: 25,
   },
 
   //  THIRD YEAR - SECOND SEM - REGULAR - OC
@@ -1426,6 +1456,7 @@ export const seDeptOld: DependencyListV2 = [
     enrollmentType: "Regular",
     semesterType: "SECOND",
     yearLevel: 3,
+    creditUnits: 26,
   },
   // THIRD YEAR - SUMMER - REGULAR - OC
   {
@@ -1449,6 +1480,7 @@ export const seDeptOld: DependencyListV2 = [
     enrollmentType: "Regular",
     semesterType: "SUMMER",
     yearLevel: 3,
+    creditUnits: 9,
   },
 
   // FOURTH YEAR - FIRST SEM - REGULAR - OC
@@ -1481,6 +1513,7 @@ export const seDeptOld: DependencyListV2 = [
     enrollmentType: "Regular",
     semesterType: "FIRST",
     yearLevel: 4,
+    creditUnits: 12,
   },
 
   // FOURTH YEAR - SECOND SEM - REGULAR - OC
@@ -1496,6 +1529,7 @@ export const seDeptOld: DependencyListV2 = [
     enrollmentType: "Regular",
     semesterType: "SECOND",
     yearLevel: 4,
+    creditUnits: 5,
   },
 
   // FIRST YEAR - FIRST SEM - BRIDGING - OC
@@ -1561,6 +1595,7 @@ export const seDeptOld: DependencyListV2 = [
     enrollmentType: "Bridging",
     semesterType: "FIRST",
     yearLevel: 1,
+    creditUnits: 23,
   },
 
   // FIRST YEAR - SECOND SEM - BRIDGING - OC
@@ -1631,6 +1666,7 @@ export const seDeptOld: DependencyListV2 = [
     enrollmentType: "Bridging",
     semesterType: "SECOND",
     yearLevel: 1,
+    creditUnits: 26,
   },
 
   // FIRST YEAR - SUMMER - BRIDGING - OC
@@ -1656,6 +1692,7 @@ export const seDeptOld: DependencyListV2 = [
     enrollmentType: "Bridging",
     semesterType: "SUMMER",
     yearLevel: 1,
+    creditUnits: 9,
   },
 
   // SECOND YEAR - FIRST SEM - BRIDGING - OC
@@ -1705,6 +1742,7 @@ export const seDeptOld: DependencyListV2 = [
     enrollmentType: "Bridging",
     semesterType: "FIRST",
     yearLevel: 2,
+    creditUnits: 25,
   },
 
   // SECOND YEAR - SECOND SEM - BRIDGING - OC
@@ -1760,6 +1798,7 @@ export const seDeptOld: DependencyListV2 = [
     enrollmentType: "Bridging",
     semesterType: "SECOND",
     yearLevel: 2,
+    creditUnits: 21,
   },
 
   // SECOND YEAR - FIRST YEAR - BRIDGING - OC
@@ -1810,6 +1849,7 @@ export const seDeptOld: DependencyListV2 = [
     enrollmentType: "Bridging",
     semesterType: "FIRST",
     yearLevel: 2,
+    creditUnits: 28,
   },
 
   // THIRD YEAR - SECOND SEM - BRIDGING - OC
@@ -1855,6 +1895,7 @@ export const seDeptOld: DependencyListV2 = [
     enrollmentType: "Bridging",
     semesterType: "SECOND",
     yearLevel: 2,
+    creditUnits: 21,
   },
 
   // FOURTH YEAR - FIRST SEM - BRIDGING - OC
@@ -1901,6 +1942,7 @@ export const seDeptOld: DependencyListV2 = [
     enrollmentType: "Bridging",
     semesterType: "FIRST",
     yearLevel: 2,
+    creditUnits: 22,
   },
 
   // FOURTH YEAR - SECOND SEM - BRDGING - OC
@@ -1954,6 +1996,7 @@ export const seDeptOld: DependencyListV2 = [
     enrollmentType: "Bridging",
     semesterType: "SECOND",
     yearLevel: 2,
+    creditUnits: 26,
   },
 
   // FIFTH YEAR - FIRST SEM - BRIDGING - OC
@@ -1987,6 +2030,7 @@ export const seDeptOld: DependencyListV2 = [
     enrollmentType: "Bridging",
     semesterType: "FIRST",
     yearLevel: 2,
+    creditUnits: 12,
   },
 
   // FIFTH YEAR - SECOND SEM - BRIDGING - OC
@@ -2003,5 +2047,6 @@ export const seDeptOld: DependencyListV2 = [
     enrollmentType: "Bridging",
     semesterType: "SECOND",
     yearLevel: 2,
+    creditUnits: 5,
   },
 ];

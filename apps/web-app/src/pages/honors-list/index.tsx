@@ -1,3 +1,4 @@
+import { EducationLoader } from "@web-app/components/loaders";
 import { HonorsListTable } from "@web-app/components/tables";
 import { CourseSelector } from "@web-app/containers/course-selector";
 import { CurriculumSelector } from "@web-app/containers/curriculum-selector";
@@ -49,6 +50,10 @@ const Index: NextPage = () => {
       },
     },
   );
+
+  if (!data || !schoolYearsData) {
+    return <EducationLoader />;
+  }
 
   return (
     <>

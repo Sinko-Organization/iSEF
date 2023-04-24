@@ -4,7 +4,6 @@ import {
   SubjectRecomendationsCard,
 } from "@web-app/components/cards";
 import { EducationLoader } from "@web-app/components/loaders";
-import { CurriculumSelector } from "@web-app/containers/curriculum-selector";
 import StudentProfileSelector from "@web-app/containers/student-profile-selector/StudentProfileSelector";
 import { useCurriculumStore } from "@web-app/stores";
 import { trpc } from "@web-app/utils/trpc";
@@ -13,8 +12,7 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 const StudentPage: NextPage = () => {
-  const { schoolYear, setSchoolYear, semesterType, setSemesterType } =
-    useCurriculumStore();
+  const { schoolYear, setSchoolYear, semesterType } = useCurriculumStore();
   const router = useRouter();
   const { id } = router.query as { id: string };
 
@@ -33,8 +31,6 @@ const StudentPage: NextPage = () => {
       }
     }
   }, [schoolYearsData, setSchoolYear]);
-
-  console.log(schoolYear === 0 ? "Undefined" : schoolYear);
 
   const { data: studentData, status: studentDataStatus } = trpc.useQuery([
     "studentData.details",

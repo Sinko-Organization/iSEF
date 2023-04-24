@@ -8,12 +8,13 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import { trpc } from "@web-app/utils/trpc";
+import _ from "lodash";
+import { match } from "ts-pattern";
 
 type Props = {
   studentId: string;
   semesterType: "FIRST" | "SECOND" | "SUMMER";
 };
-
 export default function StudentProfileCard({ studentId }: Props) {
   const { data: recommended } = trpc.useQuery([
     "subject.getRecommendedSubjects",
@@ -22,6 +23,32 @@ export default function StudentProfileCard({ studentId }: Props) {
       enrollmentType: "Regular",
     },
   ]);
+
+  const groupedByYearLevel = _(recommended)
+    .groupBy("yearLevel")
+    .map((subjects, yearLevel) => ({
+      subjects: subjects
+        .map((subject) => {
+          const { yearLevel: _, ...rest } = subject;
+          return rest;
+        })
+        .sort(
+          // sort by this order
+          // FIRST > SECOND > SUMMER
+          (a) => {
+            return match(a.semesterType)
+              .with("FIRST", () => 1)
+              .with("SECOND", () => -1)
+              .with("SUMMER", () => 0)
+              .exhaustive();
+          },
+        ),
+      yearLevel: Number.parseInt(yearLevel),
+    }))
+    .orderBy("yearLevel")
+    .value();
+
+  console.log(groupedByYearLevel);
 
   return (
     <>
@@ -38,7 +65,7 @@ export default function StudentProfileCard({ studentId }: Props) {
               <TableHead>
                 <TableRow>
                   <TableCell className="text-bold">Subject</TableCell>
-                  <TableCell className="text-bold">Stubcode</TableCell>
+                  <TableCell className="text-bold">Subject Code</TableCell>
                   <TableCell className="text-bold">Status</TableCell>
                 </TableRow>
               </TableHead>

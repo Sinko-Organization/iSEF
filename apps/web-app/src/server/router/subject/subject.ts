@@ -34,8 +34,9 @@ export const subjectRouter = createAdminRouter()
         name: z.string(),
         stubCode: z.string(),
         units: z.number(),
-        status: z.enum(["Failed", "Not Taken"]),
+        status: z.string(),
         yearLevel: z.number(),
+        semesterType: z.enum(["FIRST", "SECOND", "SUMMER"]),
       }),
     ),
     async resolve({ ctx, input }) {
@@ -51,11 +52,18 @@ export const subjectRouter = createAdminRouter()
         subject.subjects.map((subj) => subj.subjectCode),
       );
 
+      const parsedDependencyList = match(dependencyList)
+        .with(P.array(P.string), (dependencyList) => dependencyList)
+        .with(P.array(P.array(P.string)), (dependencyList) =>
+          dependencyList.flat(),
+        )
+        .run();
+
       // query subjects from db those that match the codes
       const dependencyCodes = await ctx.prisma.subject.findMany({
         where: {
           stubCode: {
-            in: dependencyList,
+            in: parsedDependencyList,
           },
         },
         select: {
@@ -79,6 +87,7 @@ export const subjectRouter = createAdminRouter()
         select: {
           yearLevel: true,
           grade: true,
+          semesterType: true,
           subject: {
             select: {
               id: true,
@@ -113,7 +122,7 @@ export const subjectRouter = createAdminRouter()
 
       const dependencyListV2 = new Set(
         validYearStandingSubjects.flatMap((subject) =>
-          subject.subjects.map((subj) => subj.subjectCode),
+          subject.subjects.flatMap((subj) => subj.subjectCode),
         ),
       );
 
@@ -127,6 +136,30 @@ export const subjectRouter = createAdminRouter()
         .map((subj) => ({
           ...subj,
           status: "Not Taken",
+          yearLevel: dependency.find
+            ? dependency.find((level) =>
+                level.subjects.find((subjects) =>
+                  match(subjects.subjectCode)
+                    .with(P.string, (code) => code === subj.stubCode)
+                    .with(P.array(P.string), (code) =>
+                      code.includes(subj.stubCode),
+                    )
+                    .exhaustive(),
+                ),
+              )?.yearLevel ?? 0
+            : 0,
+          semesterType: dependency.find
+            ? dependency.find((level) =>
+                level.subjects.find((subjects) =>
+                  match(subjects.subjectCode)
+                    .with(P.string, (code) => code === subj.stubCode)
+                    .with(P.array(P.string), (code) =>
+                      code.includes(subj.stubCode),
+                    )
+                    .exhaustive(),
+                ),
+              )?.semesterType ?? "FIRST"
+            : "FIRST",
         }));
 
       const recordSet = [
@@ -139,25 +172,15 @@ export const subjectRouter = createAdminRouter()
             units: record.subject.units,
             status: passed ? "Passed" : "Failed",
             yearLevel: record.yearLevel,
+            semesterType: record.semesterType,
           };
         }),
         ...notTakenSubjects.map((subj) => ({
           ...subj,
-          yearLevel:
-            studentRecords.find(
-              (record) => record.subject.stubCode === subj.stubCode,
-            )?.yearLevel ?? 0,
         })),
-      ] as {
-        id: string;
-        name: string;
-        stubCode: string;
-        units: number;
-        status: "Passed" | "Failed" | "Not Taken";
-        yearLevel: number;
-      }[];
+      ];
 
-      // get the list of recordSet, filter out passed subjects, subjects who's dependencies are failed,
+      // get the list of recordSet, filter out p~sed subjects, subjects who's dependencies are failed,
       // also add subjects that are in the dependencyCodes because they're not taken
       const recommendedSubjects = recordSet
         .filter((record) => dependencyListV2.has(record.stubCode))
@@ -174,8 +197,14 @@ export const subjectRouter = createAdminRouter()
                   (subj) => subj.subjectCode === subject.stubCode,
                 ),
               )
-              ?.subjects.find((subj) => subj.subjectCode === subject.stubCode)
-              ?.prerequisites ?? [];
+              ?.subjects.find((subj) =>
+                match(subj.subjectCode)
+                  .with(P.string, (code) => code === subject.stubCode)
+                  .with(P.array(P.string), (code) =>
+                    code.includes(subject.stubCode),
+                  )
+                  .exhaustive(),
+              )?.prerequisites ?? [];
 
           const allDependenciesFound = dependencies.every((dependency) =>
             recordSet.some(
@@ -185,14 +214,7 @@ export const subjectRouter = createAdminRouter()
           );
 
           return allDependenciesFound;
-        }) as {
-        id: string;
-        name: string;
-        stubCode: string;
-        units: number;
-        status: "Failed" | "Not Taken";
-        yearLevel: number;
-      }[];
+        });
 
       return recommendedSubjects;
     },
