@@ -49,21 +49,20 @@ export const subjectRouter = createAdminRouter()
 
       // get only subject codes
       const dependencyList = specifcDependecies.flatMap((subject) =>
-        subject.subjects.map((subj) => subj.subjectCode),
+        subject.subjects.map((subj) =>
+          match(subj)
+            .with({ type: "regular" }, (s) => s.subjectCode)
+            .with({ type: undefined }, (s) => s.subjectCode)
+            .with({ type: "elective" }, (s) => s.referenceCode)
+            .exhaustive(),
+        ),
       );
-
-      const parsedDependencyList = match(dependencyList)
-        .with(P.array(P.string), (dependencyList) => dependencyList)
-        .with(P.array(P.array(P.string)), (dependencyList) =>
-          dependencyList.flat(),
-        )
-        .run();
 
       // query subjects from db those that match the codes
       const dependencyCodes = await ctx.prisma.subject.findMany({
         where: {
           stubCode: {
-            in: parsedDependencyList,
+            in: dependencyList,
           },
         },
         select: {
