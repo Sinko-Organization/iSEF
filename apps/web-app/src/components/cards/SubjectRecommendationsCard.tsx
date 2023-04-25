@@ -24,6 +24,31 @@ export default function StudentProfileCard({ studentId }: Props) {
     },
   ]);
 
+  const { data: recommendedV2 } = trpc.useQuery([
+    "subject.getRecommendedSubjectsV2",
+    {
+      studentId,
+      enrollmentType: "Regular",
+    },
+  ]);
+
+  if (!recommendedV2) {
+    return <></>;
+  }
+
+  console.log(
+    recommendedV2?.dependencyCodes.map((d) => d.stubCode),
+    recommendedV2?.parsedDependencyList,
+  );
+
+  const depCode = recommendedV2.dependencyCodes.map((d) => d.stubCode);
+  const parsedCode = recommendedV2.parsedDependencyList;
+
+  // use lodash and find the difference between the two arrays
+  const difference = _.difference(parsedCode, depCode);
+
+  console.log(difference);
+
   const groupedByYearLevel = _(recommended)
     .groupBy("yearLevel")
     .map((subjects, yearLevel) => ({
@@ -48,8 +73,6 @@ export default function StudentProfileCard({ studentId }: Props) {
     .orderBy("yearLevel")
     .value();
 
-  console.log(groupedByYearLevel);
-
   return (
     <>
       <Card>
@@ -67,6 +90,8 @@ export default function StudentProfileCard({ studentId }: Props) {
                   <TableCell className="text-bold">Subject</TableCell>
                   <TableCell className="text-bold">Subject Code</TableCell>
                   <TableCell className="text-bold">Status</TableCell>
+                  <TableCell className="text-bold">Year Level</TableCell>
+                  <TableCell className="text-bold">Semester Type</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -78,6 +103,10 @@ export default function StudentProfileCard({ studentId }: Props) {
                     <TableCell>{subj.name}</TableCell>
                     <TableCell>{subj.stubCode}</TableCell>
                     <TableCell>{subj.status}</TableCell>
+                    <TableCell>{subj.yearLevel}</TableCell>
+                    <TableCell className="capitalize">
+                      {subj.semesterType.toLowerCase()}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

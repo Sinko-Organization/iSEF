@@ -1312,7 +1312,7 @@ export const seDeptOld: DependencyListV2 = [
         coRequisites: [],
       },
       {
-        subjectCode: "PE 4a(W)",
+        subjectCode: "PE 4a (W)",
         prerequisites: [],
         coRequisites: [],
       },
@@ -1472,7 +1472,7 @@ export const seDeptOld: DependencyListV2 = [
         coRequisites: [],
       },
       {
-        subjectCode: "CELit",
+        subjectCode: "CELit 1",
         prerequisites: [],
         coRequisites: [],
       },

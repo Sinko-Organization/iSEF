@@ -219,6 +219,53 @@ export const subjectRouter = createAdminRouter()
       return recommendedSubjects;
     },
   })
+  .query("getRecommendedSubjectsV2", {
+    input: z.object({
+      studentId: z.string(),
+      enrollmentType: z.enum(["Regular", "Bridging"]),
+      dependency: dependencyListV2Schema.optional().default(seDeptOld),
+    }),
+    async resolve({ ctx, input }) {
+      const { studentId, enrollmentType, dependency } = input;
+
+      // get either bridging or regular
+      const specifcDependecies = dependency.filter(
+        (subject) => subject.enrollmentType === enrollmentType,
+      );
+
+      // get only subject codes
+      const dependencyList = specifcDependecies.flatMap((subject) =>
+        subject.subjects.map((subj) => subj.subjectCode),
+      );
+
+      const parsedDependencyList = match(dependencyList)
+        .with(P.array(P.string), (dependencyList) => dependencyList)
+        .with(P.array(P.array(P.string)), (dependencyList) =>
+          dependencyList.flat(),
+        )
+        .run();
+
+      // query subjects from db those that match the codes
+      const dependencyCodes = await ctx.prisma.subject.findMany({
+        where: {
+          stubCode: {
+            in: parsedDependencyList,
+          },
+        },
+        select: {
+          id: true,
+          name: true,
+          stubCode: true,
+          units: true,
+        },
+      });
+
+      return {
+        dependencyCodes,
+        parsedDependencyList,
+      };
+    },
+  })
   /**
    * Mutations
    */
