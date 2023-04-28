@@ -1,14 +1,11 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { TRPCError } from "@trpc/server";
-import { seDeptOld } from "@web-app/constants/subject-dependencies";
+import { seDeptOld } from "@web-app/models/subject-dependencies/software";
+import { P, match } from "ts-pattern";
 import { z } from "zod";
 
 import { createAdminRouter } from "../context";
-import { getSubjectStatus } from "../student-data/queries";
-import {
-  getSubjectDependencyStatus,
-  getSubjectWithDetails,
-  getSubjectsByLevel,
-} from "./queries";
 
 export const subjectRouter = createAdminRouter()
   /**
@@ -30,6 +27,7 @@ export const subjectRouter = createAdminRouter()
     input: z.object({
       studentId: z.string(),
       enrollmentType: z.enum(["Regular", "Bridging"]),
+      course: z.enum(["SE", "CE"]),
     }),
     output: z.array(
       z.object({
@@ -37,20 +35,33 @@ export const subjectRouter = createAdminRouter()
         name: z.string(),
         stubCode: z.string(),
         units: z.number(),
-        status: z.enum(["Failed", "Not Taken"]),
+        status: z.string(),
+        yearLevel: z.number(),
+        semesterType: z.enum(["FIRST", "SECOND", "SUMMER"]),
       }),
     ),
     async resolve({ ctx, input }) {
-      const { studentId, enrollmentType } = input;
+      const { studentId, enrollmentType, course } = input;
+
+      const dependency = match(course)
+        .with("SE", () => seDeptOld)
+        .with("CE", () => seDeptOld)
+        .run();
 
       // get either bridging or regular
-      const specifcDependecies = seDeptOld.filter(
+      const specifcDependecies = dependency.filter(
         (subject) => subject.enrollmentType === enrollmentType,
       );
 
       // get only subject codes
       const dependencyList = specifcDependecies.flatMap((subject) =>
-        subject.subjects.map((subj) => subj.subjectCode),
+        subject.subjects.map((subj) =>
+          match(subj)
+            .with({ type: "regular" }, (s) => s.subjectCode)
+            .with({ type: undefined }, (s) => s.subjectCode)
+            .with({ type: "elective" }, (s) => s.referenceCode)
+            .exhaustive(),
+        ),
       );
 
       // query subjects from db those that match the codes
@@ -79,7 +90,9 @@ export const subjectRouter = createAdminRouter()
           },
         },
         select: {
+          yearLevel: true,
           grade: true,
+          semesterType: true,
           subject: {
             select: {
               id: true,
@@ -91,6 +104,33 @@ export const subjectRouter = createAdminRouter()
         },
       });
 
+      // get the lowest year level based on the student records
+      // eslint-disable-next-line unicorn/no-array-reduce
+      const lowestYearLevel = studentRecords.reduce(
+        (prev, curr) => (prev < curr.yearLevel ? prev : curr.yearLevel),
+        0,
+      );
+
+      // for each subject in the dependency, if the yearStanding exists
+      const validYearStandingSubjects = specifcDependecies.filter((subject) =>
+        subject.subjects.filter((subj) => {
+          const { yearStanding } = subj;
+          return match(yearStanding)
+            .with(undefined, () => true)
+            .with("ALL", () => true)
+            .with(P.number, (yearStanding) => {
+              return yearStanding <= lowestYearLevel;
+            })
+            .exhaustive();
+        }),
+      );
+
+      const dependencyListV2 = new Set(
+        validYearStandingSubjects.flatMap((subject) =>
+          subject.subjects.flatMap((subj) => subj.subjectCode),
+        ),
+      );
+
       const notTakenSubjects = dependencyCodes
         .filter(
           (subj) =>
@@ -101,6 +141,30 @@ export const subjectRouter = createAdminRouter()
         .map((subj) => ({
           ...subj,
           status: "Not Taken",
+          yearLevel: dependency.find
+            ? dependency.find((level) =>
+                level.subjects.find((subjects) =>
+                  match(subjects.subjectCode)
+                    .with(P.string, (code) => code === subj.stubCode)
+                    .with(P.array(P.string), (code) =>
+                      code.includes(subj.stubCode),
+                    )
+                    .exhaustive(),
+                ),
+              )?.yearLevel ?? 0
+            : 0,
+          semesterType: dependency.find
+            ? dependency.find((level) =>
+                level.subjects.find((subjects) =>
+                  match(subjects.subjectCode)
+                    .with(P.string, (code) => code === subj.stubCode)
+                    .with(P.array(P.string), (code) =>
+                      code.includes(subj.stubCode),
+                    )
+                    .exhaustive(),
+                ),
+              )?.semesterType ?? "FIRST"
+            : "FIRST",
         }));
 
       const recordSet = [
@@ -112,20 +176,19 @@ export const subjectRouter = createAdminRouter()
             stubCode: record.subject.stubCode,
             units: record.subject.units,
             status: passed ? "Passed" : "Failed",
+            yearLevel: record.yearLevel,
+            semesterType: record.semesterType,
           };
         }),
-        ...notTakenSubjects,
-      ] as {
-        id: string;
-        name: string;
-        stubCode: string;
-        units: number;
-        status: "Passed" | "Failed" | "Not Taken";
-      }[];
+        ...notTakenSubjects.map((subj) => ({
+          ...subj,
+        })),
+      ];
 
-      // get the list of recordSet, filter out passed subjects, subjects who's dependencies are failed,
+      // get the list of recordSet, filter out p~sed subjects, subjects who's dependencies are failed,
       // also add subjects that are in the dependencyCodes because they're not taken
       const recommendedSubjects = recordSet
+        .filter((record) => dependencyListV2.has(record.stubCode))
         .filter(
           (subject) =>
             subject.status === "Failed" || subject.status === "Not Taken",
@@ -139,8 +202,14 @@ export const subjectRouter = createAdminRouter()
                   (subj) => subj.subjectCode === subject.stubCode,
                 ),
               )
-              ?.subjects.find((subj) => subj.subjectCode === subject.stubCode)
-              ?.prerequisites ?? [];
+              ?.subjects.find((subj) =>
+                match(subj.subjectCode)
+                  .with(P.string, (code) => code === subject.stubCode)
+                  .with(P.array(P.string), (code) =>
+                    code.includes(subject.stubCode),
+                  )
+                  .exhaustive(),
+              )?.prerequisites ?? [];
 
           const allDependenciesFound = dependencies.every((dependency) =>
             recordSet.some(
@@ -150,15 +219,61 @@ export const subjectRouter = createAdminRouter()
           );
 
           return allDependenciesFound;
-        }) as {
-        id: string;
-        name: string;
-        stubCode: string;
-        units: number;
-        status: "Failed" | "Not Taken";
-      }[];
+        });
 
       return recommendedSubjects;
+    },
+  })
+  .query("getRecommendedSubjectsV2", {
+    input: z.object({
+      studentId: z.string(),
+      enrollmentType: z.enum(["Regular", "Bridging"]),
+      course: z.enum(["SE", "CE"]),
+    }),
+    async resolve({ ctx, input }) {
+      const { studentId, enrollmentType, course } = input;
+
+      const dependency = match(course)
+        .with("SE", () => seDeptOld)
+        .with("CE", () => seDeptOld)
+        .run();
+
+      // get either bridging or regular
+      const specifcDependecies = dependency.filter(
+        (subject) => subject.enrollmentType === enrollmentType,
+      );
+
+      // get only subject codes
+      const dependencyList = specifcDependecies.flatMap((subject) =>
+        subject.subjects.map((subj) => subj.subjectCode),
+      );
+
+      const parsedDependencyList = match(dependencyList)
+        .with(P.array(P.string), (dependencyList) => dependencyList)
+        .with(P.array(P.array(P.string)), (dependencyList) =>
+          dependencyList.flat(),
+        )
+        .run();
+
+      // query subjects from db those that match the codes
+      const dependencyCodes = await ctx.prisma.subject.findMany({
+        where: {
+          stubCode: {
+            in: parsedDependencyList,
+          },
+        },
+        select: {
+          id: true,
+          name: true,
+          stubCode: true,
+          units: true,
+        },
+      });
+
+      return {
+        dependencyCodes,
+        parsedDependencyList,
+      };
     },
   })
   /**
