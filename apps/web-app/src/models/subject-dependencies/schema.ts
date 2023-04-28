@@ -11,7 +11,7 @@ export const dependencyListV2Schema = z.array(
           yearStanding: z.union([z.number(), z.literal("ALL")]).optional(),
           units: z.number().optional(),
           name: z.string().optional(),
-          type: z.literal("regular").optional(),
+          type: z.literal("regular"),
         }),
         z.object({
           subjectCode: z.string(),
