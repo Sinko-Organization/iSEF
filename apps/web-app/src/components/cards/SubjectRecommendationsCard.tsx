@@ -21,6 +21,7 @@ export default function StudentProfileCard({ studentId }: Props) {
     {
       studentId,
       enrollmentType: "Regular",
+      course: "SE",
     },
   ]);
 
@@ -29,6 +30,7 @@ export default function StudentProfileCard({ studentId }: Props) {
     {
       studentId,
       enrollmentType: "Regular",
+      course: "SE",
     },
   ]);
 
@@ -49,29 +51,29 @@ export default function StudentProfileCard({ studentId }: Props) {
 
   console.log(difference);
 
-  const groupedByYearLevel = _(recommended)
-    .groupBy("yearLevel")
-    .map((subjects, yearLevel) => ({
-      subjects: subjects
-        .map((subject) => {
-          const { yearLevel: _, ...rest } = subject;
-          return rest;
-        })
-        .sort(
-          // sort by this order
-          // FIRST > SECOND > SUMMER
-          (a) => {
-            return match(a.semesterType)
-              .with("FIRST", () => 1)
-              .with("SECOND", () => -1)
-              .with("SUMMER", () => 0)
-              .exhaustive();
-          },
-        ),
-      yearLevel: Number.parseInt(yearLevel),
-    }))
-    .orderBy("yearLevel")
-    .value();
+  // const groupedByYearLevel = _(recommended)
+  //   .groupBy("yearLevel")
+  //   .map((subjects, yearLevel) => ({
+  //     subjects: subjects
+  //       .map((subject) => {
+  //         const { yearLevel: _, ...rest } = subject;
+  //         return rest;
+  //       })
+  //       .sort(
+  //         // sort by this order
+  //         // FIRST > SECOND > SUMMER
+  //         (a) => {
+  //           return match(a.semesterType)
+  //             .with("FIRST", () => 1)
+  //             .with("SECOND", () => -1)
+  //             .with("SUMMER", () => 0)
+  //             .exhaustive();
+  //         },
+  //       ),
+  //     yearLevel: Number.parseInt(yearLevel),
+  //   }))
+  //   .orderBy("yearLevel")
+  //   .value();
 
   return (
     <>

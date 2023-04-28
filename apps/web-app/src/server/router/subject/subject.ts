@@ -1,5 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { TRPCError } from "@trpc/server";
-import { dependencyListV2Schema } from "@web-app/models/subject-dependencies/schema";
 import { seDeptOld } from "@web-app/models/subject-dependencies/software";
 import { P, match } from "ts-pattern";
 import { z } from "zod";
@@ -26,7 +27,7 @@ export const subjectRouter = createAdminRouter()
     input: z.object({
       studentId: z.string(),
       enrollmentType: z.enum(["Regular", "Bridging"]),
-      dependency: dependencyListV2Schema.optional().default(seDeptOld),
+      course: z.enum(["SE", "CE"]),
     }),
     output: z.array(
       z.object({
@@ -40,7 +41,12 @@ export const subjectRouter = createAdminRouter()
       }),
     ),
     async resolve({ ctx, input }) {
-      const { studentId, enrollmentType, dependency } = input;
+      const { studentId, enrollmentType, course } = input;
+
+      const dependency = match(course)
+        .with("SE", () => seDeptOld)
+        .with("CE", () => seDeptOld)
+        .run();
 
       // get either bridging or regular
       const specifcDependecies = dependency.filter(
@@ -222,10 +228,15 @@ export const subjectRouter = createAdminRouter()
     input: z.object({
       studentId: z.string(),
       enrollmentType: z.enum(["Regular", "Bridging"]),
-      dependency: dependencyListV2Schema.optional().default(seDeptOld),
+      course: z.enum(["SE", "CE"]),
     }),
     async resolve({ ctx, input }) {
-      const { studentId, enrollmentType, dependency } = input;
+      const { studentId, enrollmentType, course } = input;
+
+      const dependency = match(course)
+        .with("SE", () => seDeptOld)
+        .with("CE", () => seDeptOld)
+        .run();
 
       // get either bridging or regular
       const specifcDependecies = dependency.filter(
