@@ -2,6 +2,7 @@
 // @ts-nocheck
 import { TRPCError } from "@trpc/server";
 import { seDeptOld } from "@web-app/models/subject-dependencies/software";
+import _ from "lodash";
 import { P, match } from "ts-pattern";
 import { z } from "zod";
 
@@ -231,15 +232,15 @@ export const subjectRouter = createAdminRouter()
       course: z.enum(["SE", "CE"]),
     }),
     async resolve({ ctx, input }) {
-      const { studentId, enrollmentType, course } = input;
+      const { enrollmentType, course } = input;
 
-      const dependency = match(course)
+      const selectedDep = match(course)
         .with("SE", () => seDeptOld)
         .with("CE", () => seDeptOld)
         .run();
 
       // get either bridging or regular
-      const specifcDependecies = dependency.filter(
+      const specifcDependecies = selectedDep.filter(
         (subject) => subject.enrollmentType === enrollmentType,
       );
 
@@ -248,18 +249,11 @@ export const subjectRouter = createAdminRouter()
         subject.subjects.map((subj) => subj.subjectCode),
       );
 
-      const parsedDependencyList = match(dependencyList)
-        .with(P.array(P.string), (dependencyList) => dependencyList)
-        .with(P.array(P.array(P.string)), (dependencyList) =>
-          dependencyList.flat(),
-        )
-        .run();
-
       // query subjects from db those that match the codes
       const dependencyCodes = await ctx.prisma.subject.findMany({
         where: {
           stubCode: {
-            in: parsedDependencyList,
+            in: dependencyList,
           },
         },
         select: {
@@ -270,10 +264,108 @@ export const subjectRouter = createAdminRouter()
         },
       });
 
-      return {
-        dependencyCodes,
-        parsedDependencyList,
-      };
+      // get the codes of the subjects that are not in the db
+      const missingCodes = _.difference(
+        dependencyList,
+        dependencyCodes.map((subj) => subj.stubCode),
+      );
+
+      console.log(missingCodes);
+
+      // get the subjects from the dependency that are not in the db
+      const missingDependencies = specifcDependecies
+        .flatMap((subject) => subject.subjects)
+        .filter((subj) =>
+          match(subj)
+            .with({ type: "regular" }, (s) =>
+              missingCodes.includes(s.subjectCode),
+            )
+            .with({ type: "elective" }, (s) =>
+              missingCodes.includes(s.referenceCode),
+            )
+            .exhaustive(),
+        )
+        .map((dep) => {
+          const { subjectCode, name, units } = dep;
+          const dependency = specifcDependecies.find((level) =>
+            level.subjects.find((subjects) =>
+              match(subjects)
+                .with({ type: "regular" }, (s) => s.subjectCode === subjectCode)
+                .with(
+                  { type: "elective" },
+                  (s) => s.referenceCode === subjectCode,
+                )
+                .exhaustive(),
+            ),
+          );
+
+          if (!dependency) {
+            throw new Error("Dependency not found in the dependency list");
+          }
+
+          return {
+            id: dependency.id,
+            status: "NOT TAKEN",
+            stubCode: subjectCode,
+            name: name ?? "N/A",
+            units: units ?? 0,
+            yearLevel: dependency.yearLevel,
+            semesterType: dependency.semesterType,
+          };
+        });
+
+      const existingDependencies = specifcDependecies
+        .flatMap((subject) => subject.subjects)
+        .filter((subj) =>
+          match(subj)
+            .with({ type: "regular" }, (s) =>
+              dependencyCodes
+                .map((code) => code.stubCode)
+                .includes(s.subjectCode),
+            )
+            .with({ type: "elective" }, (s) =>
+              dependencyCodes
+                .map((code) => code.stubCode)
+                .includes(s.referenceCode),
+            )
+            .exhaustive(),
+        )
+        .map((dep) => {
+          const { subjectCode } = dep;
+          const dependency = dependencyCodes.find(
+            (code) => code.stubCode === subjectCode,
+          );
+          if (!dependency) {
+            throw new Error("Dependency not found");
+          }
+
+          const dependencySubj = specifcDependecies.find((level) =>
+            level.subjects.find((subjects) =>
+              match(subjects)
+                .with({ type: "regular" }, (s) => s.subjectCode === subjectCode)
+                .with(
+                  { type: "elective" },
+                  (s) => s.referenceCode === subjectCode,
+                )
+                .exhaustive(),
+            ),
+          );
+
+          if (!dependencySubj) {
+            throw new Error("Dependency not found");
+          }
+          return {
+            id: dependency.id,
+            status: "NOT TAKEN",
+            stubCode: subjectCode,
+            name: dependency.name,
+            units: dependency.units,
+            yearLevel: dependencySubj.yearLevel,
+            semesterType: dependencySubj.semesterType,
+          };
+        });
+
+      return [...existingDependencies, ...missingDependencies];
     },
   })
   /**
