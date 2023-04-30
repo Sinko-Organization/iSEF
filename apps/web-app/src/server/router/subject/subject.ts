@@ -270,32 +270,15 @@ export const subjectRouter = createAdminRouter()
         dependencyCodes.map((subj) => subj.stubCode),
       );
 
-      console.log(missingCodes);
-
       // get the subjects from the dependency that are not in the db
       const missingDependencies = specifcDependecies
         .flatMap((subject) => subject.subjects)
-        .filter((subj) =>
-          match(subj)
-            .with({ type: "regular" }, (s) =>
-              missingCodes.includes(s.subjectCode),
-            )
-            .with({ type: "elective" }, (s) =>
-              missingCodes.includes(s.referenceCode),
-            )
-            .exhaustive(),
-        )
+        .filter((subj) => missingCodes.includes(subj.subjectCode))
         .map((dep) => {
           const { subjectCode, name, units } = dep;
           const dependency = specifcDependecies.find((level) =>
-            level.subjects.find((subjects) =>
-              match(subjects)
-                .with({ type: "regular" }, (s) => s.subjectCode === subjectCode)
-                .with(
-                  { type: "elective" },
-                  (s) => s.referenceCode === subjectCode,
-                )
-                .exhaustive(),
+            level.subjects.find(
+              (subjects) => subjects.subjectCode === subjectCode,
             ),
           );
 
@@ -317,18 +300,9 @@ export const subjectRouter = createAdminRouter()
       const existingDependencies = specifcDependecies
         .flatMap((subject) => subject.subjects)
         .filter((subj) =>
-          match(subj)
-            .with({ type: "regular" }, (s) =>
-              dependencyCodes
-                .map((code) => code.stubCode)
-                .includes(s.subjectCode),
-            )
-            .with({ type: "elective" }, (s) =>
-              dependencyCodes
-                .map((code) => code.stubCode)
-                .includes(s.referenceCode),
-            )
-            .exhaustive(),
+          dependencyCodes
+            .map((code) => code.stubCode)
+            .includes(subj.subjectCode),
         )
         .map((dep) => {
           const { subjectCode } = dep;
@@ -340,14 +314,8 @@ export const subjectRouter = createAdminRouter()
           }
 
           const dependencySubj = specifcDependecies.find((level) =>
-            level.subjects.find((subjects) =>
-              match(subjects)
-                .with({ type: "regular" }, (s) => s.subjectCode === subjectCode)
-                .with(
-                  { type: "elective" },
-                  (s) => s.referenceCode === subjectCode,
-                )
-                .exhaustive(),
+            level.subjects.find(
+              (subjects) => subjects.subjectCode === subjectCode,
             ),
           );
 
