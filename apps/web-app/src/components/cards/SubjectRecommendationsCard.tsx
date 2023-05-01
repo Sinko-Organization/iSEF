@@ -88,10 +88,14 @@ export default function StudentProfileCard({ studentId }: Props) {
                           .map((message) =>
                             match(message)
                               .with(P.string, (str) => str)
-                              .with({ type: "Failed Prerequisite" }, (res) =>
-                                res.failedPrerequisites
-                                  .map((prereq) => prereq)
-                                  .join(", "),
+                              .with(
+                                { type: "Failed Prerequisite" },
+                                (res) =>
+                                  "(Failed Prerequisities: " +
+                                  res.failedPrerequisites
+                                    .map((prereq) => prereq)
+                                    .join(", ") +
+                                  ")",
                               )
                               .exhaustive(),
                           )
