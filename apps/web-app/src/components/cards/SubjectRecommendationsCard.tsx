@@ -8,21 +8,13 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import { trpc } from "@web-app/utils/trpc";
+import { P, match } from "ts-pattern";
 
 type Props = {
   studentId: string;
   semesterType: "FIRST" | "SECOND" | "SUMMER";
 };
 export default function StudentProfileCard({ studentId }: Props) {
-  const { data: recommended } = trpc.useQuery([
-    "subject.getRecommendedSubjects",
-    {
-      studentId,
-      enrollmentType: "Regular",
-      course: "SE",
-    },
-  ]);
-
   const { data: recommendedV2 } = trpc.useQuery([
     "subject.getRecommendedSubjectsV2",
     {
@@ -32,7 +24,7 @@ export default function StudentProfileCard({ studentId }: Props) {
     },
   ]);
 
-  if (!recommendedV2 || !recommended) {
+  if (!recommendedV2) {
     return <></>;
   }
 
@@ -58,6 +50,7 @@ export default function StudentProfileCard({ studentId }: Props) {
                   <TableCell className="text-bold">Status</TableCell>
                   <TableCell className="text-bold">Year Level</TableCell>
                   <TableCell className="text-bold">Semester Type</TableCell>
+                  <TableCell className="text-bold">Message</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -89,6 +82,20 @@ export default function StudentProfileCard({ studentId }: Props) {
                       <TableCell>{subj.yearLevel}</TableCell>
                       <TableCell className="capitalize">
                         {subj.semesterType.toLowerCase()}
+                      </TableCell>
+                      <TableCell>
+                        {subj.messages
+                          .map((message) =>
+                            match(message)
+                              .with(P.string, (str) => str)
+                              .with({ type: "Failed Prerequisite" }, (res) =>
+                                res.failedPrerequisites
+                                  .map((prereq) => prereq)
+                                  .join(", "),
+                              )
+                              .exhaustive(),
+                          )
+                          .join(", ")}
                       </TableCell>
                     </TableRow>
                   ))}
