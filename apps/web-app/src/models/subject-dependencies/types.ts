@@ -1,0 +1,14 @@
+import { z } from "zod";
+
+import { dependencyListV2Schema } from "./schema";
+
+export type DependencyList = {
+  subjects: {
+    subjectCode: string;
+    prerequisites: string[];
+    coRequisites: string[];
+  }[];
+  enrollmentType: "Regular" | "Bridging";
+}[];
+
+export type DependencyListV2 = z.infer<typeof dependencyListV2Schema>;
