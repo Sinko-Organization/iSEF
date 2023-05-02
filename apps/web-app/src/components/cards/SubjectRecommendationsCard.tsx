@@ -37,7 +37,7 @@ export default function StudentProfileCard({ studentId }: Props) {
           sx={{
             fontWeight: "bold",
           }}
-          title={"Subject Recommendations"}
+          title={"All Subjects"}
         />
         <CardContent>
           {recommendedV2 ? (
@@ -96,6 +96,15 @@ export default function StudentProfileCard({ studentId }: Props) {
                                     .map((prereq) => prereq)
                                     .join(", ") +
                                   ")",
+                              )
+                              .with(
+                                { type: "Low Year Standing" },
+                                (res) =>
+                                  `(Year Standing: ${res.yearStanding}, Current Year Level: ${res.currentYearLevel})`,
+                              )
+                              .with(
+                                { type: "Failed" },
+                                (res) => `(Failed: ${res.grade})`,
                               )
                               .exhaustive(),
                           )

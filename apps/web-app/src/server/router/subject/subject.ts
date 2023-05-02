@@ -1,6 +1,5 @@
 /* eslint-disable unicorn/consistent-destructuring */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
 import { TRPCError } from "@trpc/server";
 import { seDeptOld } from "@web-app/models/subject-dependencies/software";
 import _ from "lodash";
@@ -8,7 +7,7 @@ import { P, match } from "ts-pattern";
 import { z } from "zod";
 
 import { createAdminRouter } from "../context";
-import { InvalidSubject } from "./types";
+import { Status, SubjectStatuses } from "./types";
 
 export const subjectRouter = createAdminRouter()
   /**
@@ -140,9 +139,15 @@ export const subjectRouter = createAdminRouter()
           ),
       );
 
+      const passedSubjects = new Set(
+        studentRecords
+          .filter((record) => record.grade <= 3 && record.grade >= 1)
+          .map((record) => record.subject.stubCode),
+      );
+
       const failedSubjects = new Set(
         studentRecords
-          .filter((record) => record.grade > 3)
+          .filter((record) => record.grade > 3 || record.grade === 0)
           .map((record) => record.subject.stubCode),
       );
 
@@ -153,8 +158,9 @@ export const subjectRouter = createAdminRouter()
           .map((subj) => {
             return {
               stubCode: subj.subjectCode,
-              failedPrerequisites: subj.prerequisites.filter((prereq) =>
-                failedSubjects.has(prereq),
+              failedPrerequisites: subj.prerequisites.filter(
+                (prereq) =>
+                  failedSubjects.has(prereq) || notTakenSubjects.has(prereq),
               ),
             };
           })
@@ -171,7 +177,7 @@ export const subjectRouter = createAdminRouter()
       const missingDependencies = specifcDependecies
         .flatMap((subject) => subject.subjects)
         .filter((subj) => missingCodes.includes(subj.subjectCode))
-        .map((dep) => {
+        .map((dep, index) => {
           const { subjectCode, name, units } = dep;
           const dependency = specifcDependecies.find((level) =>
             level.subjects.find(
@@ -184,7 +190,7 @@ export const subjectRouter = createAdminRouter()
           }
 
           return {
-            id: dependency.id,
+            id: index,
             stubCode: subjectCode,
             name: name ?? "N/A",
             units: units ?? 0,
@@ -232,18 +238,41 @@ export const subjectRouter = createAdminRouter()
 
       const mappedResults = result.map((subj) => {
         const { stubCode } = subj;
-        const messages: InvalidSubject[] = [];
+        const messages: SubjectStatuses[] = [];
 
         if (invalidYearStandingSubjects.has(stubCode)) {
-          messages.push("Low Year Standing");
+          const yearStanding = specifcDependecies
+            .flatMap((subject) => subject.subjects)
+            .find((subj) => subj.subjectCode === stubCode)?.yearStanding;
+
+          if (yearStanding) {
+            messages.push({
+              type: "Low Year Standing",
+              yearStanding,
+              currentYearLevel,
+            });
+          }
         }
 
         if (notTakenSubjects.has(stubCode)) {
           messages.push("Not Taken");
         }
 
+        if (passedSubjects.has(stubCode)) {
+          messages.push("Passed");
+        }
+
         if (failedSubjects.has(stubCode)) {
-          messages.push("Failed");
+          const grade = studentRecords.find(
+            (record) => record.subject.stubCode === stubCode,
+          )?.grade;
+
+          if (grade !== undefined) {
+            messages.push({
+              type: "Failed",
+              grade: grade === 0 ? "INC" : grade,
+            });
+          }
         }
 
         // eslint-disable-next-line unicorn/no-array-for-each
@@ -256,13 +285,20 @@ export const subjectRouter = createAdminRouter()
           }
         });
 
-        const notTakenButOk =
+        const hasFailedButOk =
+          messages.some((message) =>
+            match(message)
+              .with({ type: "Failed" }, () => true)
+              .otherwise(() => false),
+          ) && messages.length === 1;
+        const isOnlyNotTaken =
           messages.includes("Not Taken") && messages.length === 1;
+
+        const isValid = hasFailedButOk || isOnlyNotTaken;
 
         return {
           ...subj,
-          status:
-            messages.length === 0 || notTakenButOk ? "Taken" : "Not Taken",
+          status: (isValid ? "Valid" : "Invalid") as Status,
           messages,
         };
       });
