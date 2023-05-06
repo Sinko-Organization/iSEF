@@ -1,5 +1,4 @@
 /* eslint-disable unicorn/no-array-reduce */
-import { Either, left, right } from "@effect/data/Either";
 import type { SemesterType } from "@prisma/client";
 import { engineeringDependencies } from "@web-app/models/subject-dependencies";
 import type { inferQueryOutput } from "@web-app/utils/trpc";
@@ -9,9 +8,9 @@ type StudentRecords = NonNullable<
   inferQueryOutput<"studentData.details">["studentRecords"]
 >;
 
-type ErrorResult = "Empty student records" | "No student records found";
+export type ErrorResult = "Empty student records" | "No student records found";
 
-type SuccessResult = {
+export type SuccessResult = {
   enrollmentType: "Bridging" | "Regular";
   yearLevel: number;
   semesterType: SemesterType;
@@ -23,11 +22,11 @@ const semesterArray: SemesterType[] = ["FIRST", "SECOND", "SUMMER"];
 
 export const getUserInfo = (
   studentRecords: StudentRecords,
-): Either<ErrorResult, SuccessResult> => {
+): ErrorResult | SuccessResult => {
   const firstRecord = studentRecords[0];
 
   if (!firstRecord) {
-    return left("Empty student records");
+    return "Empty student records";
   }
 
   // get the highest year level
@@ -43,7 +42,7 @@ export const getUserInfo = (
   const firstHighestRecord = highestRecords[0];
 
   if (!firstHighestRecord) {
-    return left("No student records found");
+    return "No student records found";
   }
 
   const highestSemesterType = highestRecords.reduce((prev, curr) => {
@@ -110,12 +109,12 @@ export const getUserInfo = (
   }
 
   if (!enrollmentType) {
-    return left("No student records found");
+    return "No student records found";
   }
 
-  return right({
+  return {
     enrollmentType,
     yearLevel: nextYearLevel,
     semesterType: nextSemesterType,
-  });
+  };
 };

@@ -1,4 +1,3 @@
-import { isLeft } from "@effect/data/Either";
 import {
   StudentProfileCard,
   StudentRecordsCard,
@@ -50,17 +49,13 @@ const StudentPage: NextPage = () => {
     return <div>Error</div>;
   }
 
-  const userInfoResult = getUserInfo(studentData.studentRecords);
-
-  if (isLeft(userInfoResult)) {
-    return <div>{userInfoResult.left}</div>;
-  }
-
-  const userInfo = userInfoResult.right;
+  const userInfo = getUserInfo(studentData.studentRecords);
+  const isSuccess = typeof userInfo !== "string";
 
   return (
     <>
-      {studentData && (
+      {!isSuccess && userInfo}
+      {studentData && isSuccess && (
         <div>
           <StudentProfileCard
             id={studentData.id}
