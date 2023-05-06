@@ -1,1 +1,2 @@
-export { toNumericGrade } from "./to-numeric-grade";
+export { toNumericGrade } from "./toNumericGrade";
+export { getUserInfo } from "./getUserInfo";

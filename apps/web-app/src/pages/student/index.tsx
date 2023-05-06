@@ -5,6 +5,7 @@ import {
 } from "@web-app/components/cards";
 import { EducationLoader } from "@web-app/components/loaders";
 import StudentProfileSelector from "@web-app/containers/student-profile-selector/StudentProfileSelector";
+import { getUserInfo } from "@web-app/helpers";
 import { useCurriculumStore } from "@web-app/stores";
 import { trpc } from "@web-app/utils/trpc";
 import type { NextPage } from "next";
@@ -44,13 +45,17 @@ const StudentPage: NextPage = () => {
     return <EducationLoader />;
   }
 
-  if (studentDataStatus === "error") {
+  if (studentDataStatus === "error" || !studentData) {
     return <div>Error</div>;
   }
 
+  const userInfo = getUserInfo(studentData.studentRecords);
+  const isSuccess = typeof userInfo !== "string";
+
   return (
     <>
-      {studentData && (
+      {!isSuccess && userInfo}
+      {studentData && isSuccess && (
         <div>
           <StudentProfileCard
             id={studentData.id}
@@ -60,6 +65,7 @@ const StudentPage: NextPage = () => {
             email={studentData.email}
             phoneNumber={studentData.phoneNumber}
             address={studentData.address}
+            userInfo={userInfo}
           />
           {schoolYearsData && (
             <StudentProfileSelector
