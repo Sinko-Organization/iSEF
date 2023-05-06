@@ -1,3 +1,4 @@
+import { isLeft } from "@effect/data/Either";
 import {
   StudentProfileCard,
   StudentRecordsCard,
@@ -5,6 +6,7 @@ import {
 } from "@web-app/components/cards";
 import { EducationLoader } from "@web-app/components/loaders";
 import StudentProfileSelector from "@web-app/containers/student-profile-selector/StudentProfileSelector";
+import { getUserInfo } from "@web-app/helpers";
 import { useCurriculumStore } from "@web-app/stores";
 import { trpc } from "@web-app/utils/trpc";
 import type { NextPage } from "next";
@@ -44,9 +46,17 @@ const StudentPage: NextPage = () => {
     return <EducationLoader />;
   }
 
-  if (studentDataStatus === "error") {
+  if (studentDataStatus === "error" || !studentData) {
     return <div>Error</div>;
   }
+
+  const userInfoResult = getUserInfo(studentData.studentRecords);
+
+  if (isLeft(userInfoResult)) {
+    return <div>{userInfoResult.left}</div>;
+  }
+
+  const userInfo = userInfoResult.right;
 
   return (
     <>
@@ -60,6 +70,7 @@ const StudentPage: NextPage = () => {
             email={studentData.email}
             phoneNumber={studentData.phoneNumber}
             address={studentData.address}
+            userInfo={userInfo}
           />
           {schoolYearsData && (
             <StudentProfileSelector

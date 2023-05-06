@@ -31,12 +31,3 @@ export const dependencyListV2Schema = z.array(
     creditUnits: z.number(),
   }),
 );
-
-const subjectSchema = z.object({
-  subjectCode: z.string(),
-  prerequisites: z.array(z.string()),
-  coRequisites: z.array(z.string()),
-  yearStanding: z.union([z.number(), z.literal("ALL")]).optional(),
-  units: z.number().optional(),
-  name: z.string().optional(),
-});

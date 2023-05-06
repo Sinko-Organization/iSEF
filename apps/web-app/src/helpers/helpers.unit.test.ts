@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { toNumericGrade } from "./to-numeric-grade";
+import { toNumericGrade } from "./toNumericGrade";
 
 describe("to-numeric-grade function", () => {
   it("returns a number from 0 to 5", () => {

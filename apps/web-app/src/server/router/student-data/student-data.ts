@@ -19,7 +19,6 @@ export const studentDataRouter = createAdminRouter()
       schoolYear: z.number().optional(),
     }),
     async resolve({ ctx, input }) {
-      console.log(input.schoolYear ?? "undefined");
       const schoolYearFilter: Prisma.StudentRecordWhereInput["AND"] =
         !input.schoolYear
           ? []
@@ -53,6 +52,7 @@ export const studentDataRouter = createAdminRouter()
               id: true,
               semesterType: true,
               grade: true,
+              yearLevel: true,
               course: {
                 select: {
                   id: true,

@@ -1,10 +1,12 @@
-import { Paper, Table, Typography, styled } from "@mui/material";
+/* eslint-disable @next/next/no-img-element */
+import { Paper, Table, styled } from "@mui/material";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
+import { SemesterType } from "@prisma/client";
 import { ErrorAlert, SuccessAlert } from "@web-app/components/alerts";
 import { trpc } from "@web-app/utils/trpc";
 import type { inferMutationInput } from "@web-app/utils/trpc";
@@ -27,6 +29,12 @@ type Props = {
   [P in keyof StudentProfileCardProps]: P extends "id"
     ? string
     : StudentProfileCardProps[P] | null;
+} & {
+  userInfo: {
+    enrollmentType: "Bridging" | "Regular";
+    yearLevel: number;
+    semesterType: SemesterType;
+  };
 };
 
 type AlertState = {
@@ -48,6 +56,7 @@ export default function StudentProfileCard({
   email,
   phoneNumber,
   address,
+  userInfo,
 }: Props) {
   const [errorState, setErrorState] = useState<AlertState>({
     open: false,
@@ -62,7 +71,7 @@ export default function StudentProfileCard({
     isError,
     error,
   } = trpc.useMutation(["student.update"]);
-  const formik = useFormik<Omit<Props, "id">>({
+  const formik = useFormik<Omit<Props, "id" | "userInfo">>({
     initialValues: {
       studentIdNumber,
       firstName,
@@ -113,7 +122,7 @@ export default function StudentProfileCard({
             </Item>
           </Grid>
           <Grid item xs={8}>
-            <Item>
+            <Item className="flex flex-col gap-5">
               <Table className="table table-sm">
                 <tbody>
                   <td>
@@ -123,6 +132,21 @@ export default function StudentProfileCard({
                   <td>
                     <b>Student ID: </b>
                     {formik.values.studentIdNumber}
+                  </td>
+                </tbody>
+              </Table>
+              <Table className="table table-sm">
+                <tbody>
+                  <td>
+                    <b>Enrollment Type : </b> {userInfo.enrollmentType}
+                  </td>
+                  <td>
+                    <b>Current Year Level: </b>
+                    {userInfo.yearLevel}
+                  </td>
+                  <td className="capitalize">
+                    <b>Current Semester: </b>
+                    {userInfo.semesterType.toLowerCase()}
                   </td>
                 </tbody>
               </Table>

@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@chakra-ui/react": "^2.3.6",
+    "@effect/data": "^0.12.2",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
     "@mobily/ts-belt": "^3.13.1",
