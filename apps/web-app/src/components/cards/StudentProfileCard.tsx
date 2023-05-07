@@ -31,6 +31,7 @@ type Props = {
     : StudentProfileCardProps[P] | null;
 } & {
   userInfo: {
+    course: string;
     enrollmentType: "Bridging" | "Regular";
     yearLevel: number;
     semesterType: SemesterType;
@@ -139,6 +140,10 @@ export default function StudentProfileCard({
                 <tbody>
                   <td>
                     <b>Enrollment Type : </b> {userInfo.enrollmentType}
+                  </td>
+                  <td className="capitalize">
+                    <b>Current Course: </b>
+                    {userInfo.course.toLowerCase()}
                   </td>
                   <td>
                     <b>Current Year Level: </b>

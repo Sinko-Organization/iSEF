@@ -74,8 +74,8 @@ const Index: NextPage = () => {
           <HonorsListTable
             honorsList={data.map((student) => ({
               ...student,
-              firstName: student.firstName ?? "",
-              lastName: student.lastName ?? "",
+              firstName: student.firstName ?? "---",
+              lastName: student.lastName ?? "---",
             }))}
           />
         )}

@@ -1,6 +1,7 @@
 /* eslint-disable unicorn/no-array-reduce */
 import type { SemesterType } from "@prisma/client";
 import { engineeringDependencies } from "@web-app/models/subject-dependencies";
+import type { Courses } from "@web-app/models/subject-dependencies/types";
 import type { inferQueryOutput } from "@web-app/utils/trpc";
 import { match } from "ts-pattern";
 
@@ -11,6 +12,7 @@ type StudentRecords = NonNullable<
 export type ErrorResult = "Empty student records" | "No student records found";
 
 export type SuccessResult = {
+  course: Courses;
   enrollmentType: "Bridging" | "Regular";
   yearLevel: number;
   semesterType: SemesterType;
@@ -69,8 +71,11 @@ export const getUserInfo = (
   const subjectCodes = studentRecords.map((record) => record.subject.stubCode);
 
   let enrollmentType: "Bridging" | "Regular" | null = null;
+  let currentCourse: string | null = null;
 
-  for (const [, dependencyRecord] of Object.entries(engineeringDependencies)) {
+  for (const [course, dependencyRecord] of Object.entries(
+    engineeringDependencies,
+  )) {
     for (const [, dependency] of Object.entries(dependencyRecord)) {
       const bridgingSubjects = new Set(
         dependency
@@ -96,6 +101,7 @@ export const getUserInfo = (
 
       if (isBridging) {
         enrollmentType = "Bridging";
+        currentCourse = course;
       }
 
       const isRegular = subjectCodes.every((subjectCode) =>
@@ -104,6 +110,7 @@ export const getUserInfo = (
 
       if (isRegular) {
         enrollmentType = "Regular";
+        currentCourse = course;
       }
     }
   }
@@ -112,7 +119,12 @@ export const getUserInfo = (
     return "No student records found";
   }
 
+  if (!currentCourse) {
+    return "No student records found";
+  }
+
   return {
+    course: currentCourse as Courses,
     enrollmentType,
     yearLevel: nextYearLevel,
     semesterType: nextSemesterType,

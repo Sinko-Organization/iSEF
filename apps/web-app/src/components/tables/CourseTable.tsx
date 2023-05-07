@@ -38,11 +38,9 @@ const CourseTable: FC<CourseTableProps> = ({ students }) => {
                   {student.studentIdNumber}
                 </TableCell>
                 <TableCell align="right">
-                  {student.firstName ?? "No First Name"}
+                  {student.firstName ?? "---"}
                 </TableCell>
-                <TableCell align="right">
-                  {student.lastName ?? "No Last Name"}
-                </TableCell>
+                <TableCell align="right">{student.lastName ?? "---"}</TableCell>
               </TableRow>
             </Link>
           ))}

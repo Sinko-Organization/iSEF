@@ -1,34 +1,74 @@
+import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import type { SelectChangeEvent } from "@mui/material/Select";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
+import type { Courses } from "@web-app/models/subject-dependencies/types";
 import { trpc } from "@web-app/utils/trpc";
+import { useState } from "react";
+import type { FC } from "react";
 import { P, match } from "ts-pattern";
 
 type Props = {
   studentId: string;
   semesterType: "FIRST" | "SECOND" | "SUMMER";
+  enrollmentType: "Regular" | "Bridging";
+  course: Courses;
 };
-export default function StudentProfileCard({ studentId }: Props) {
+
+type SelectionProps = {
+  version: string;
+  handleChange: (event: SelectChangeEvent) => void;
+};
+
+export const BasicSelect: FC<SelectionProps> = ({ version, handleChange }) => {
+  return (
+    <Box sx={{ minWidth: 120 }}>
+      <FormControl fullWidth>
+        <InputLabel>Version</InputLabel>
+        <Select value={version} label="Version" onChange={handleChange}>
+          <MenuItem value={"1"}>2018-2019</MenuItem>
+          <MenuItem value={"2"}>2022-2023</MenuItem>
+        </Select>
+      </FormControl>
+    </Box>
+  );
+};
+
+export default function StudentProfileCard({
+  studentId,
+  enrollmentType,
+  course,
+}: Props) {
+  const [version, setVersion] = useState<string>("1");
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setVersion(event.target.value as string);
+  };
+
   const { data: recommendedV2 } = trpc.useQuery([
     "subject.getRecommendedSubjectsV2",
     {
       studentId,
-      enrollmentType: "Regular",
-      course: "SE",
+      enrollmentType,
+      course,
+      versionNumber: Number.parseInt(version),
     },
   ]);
 
   if (!recommendedV2) {
     return <></>;
   }
-
-  console.log(recommendedV2);
 
   return (
     <>
@@ -38,6 +78,7 @@ export default function StudentProfileCard({ studentId }: Props) {
             fontWeight: "bold",
           }}
           title={"All Subjects"}
+          action={<BasicSelect version={version} handleChange={handleChange} />}
         />
         <CardContent>
           {recommendedV2 ? (
