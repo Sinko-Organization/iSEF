@@ -1,7 +1,7 @@
 /* eslint-disable unicorn/consistent-destructuring */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 import { TRPCError } from "@trpc/server";
-import { seDeptOld } from "@web-app/models/subject-dependencies/software";
+import { engineeringDependencies } from "@web-app/models/subject-dependencies";
 import _ from "lodash";
 import { P, match } from "ts-pattern";
 import { z } from "zod";
@@ -29,15 +29,20 @@ export const subjectRouter = createAdminRouter()
     input: z.object({
       studentId: z.string(),
       enrollmentType: z.enum(["Regular", "Bridging"]),
-      course: z.enum(["SE", "CE"]),
+      course: z.enum(["Software", "Civil", "Electronics", "Mechanical"]),
+      versionNumber: z.number().int().nonnegative(),
     }),
     async resolve({ ctx, input }) {
-      const { studentId, enrollmentType, course } = input;
+      const { studentId, enrollmentType, course, versionNumber } = input;
 
-      const selectedDep = match(course)
-        .with("SE", () => seDeptOld)
-        .with("CE", () => seDeptOld)
-        .run();
+      const selectedDep = engineeringDependencies[course][versionNumber];
+
+      if (!selectedDep) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "No dependencies found",
+        });
+      }
 
       // get either bridging or regular
       const specifcDependecies = selectedDep.filter(
@@ -299,7 +304,7 @@ export const subjectRouter = createAdminRouter()
         return {
           ...subj,
           status: (isValid ? "Valid" : "Invalid") as Status,
-          messages,
+          messages: messages.includes("Passed") ? ["Passed"] : messages,
         };
       });
 

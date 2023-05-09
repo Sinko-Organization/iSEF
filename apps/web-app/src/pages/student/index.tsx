@@ -78,6 +78,9 @@ const StudentPage: NextPage = () => {
           <SubjectRecomendationsCard
             studentId={id}
             semesterType={semesterType}
+            enrollmentType={userInfo.enrollmentType}
+            course={userInfo.course}
+            userInfo={userInfo}
           />
         </div>
       )}

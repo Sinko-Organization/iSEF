@@ -1,26 +1,91 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import FilterListIcon from "@mui/icons-material/FilterList";
+import InfoTwoToneIcon from "@mui/icons-material/InfoTwoTone";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import type { SelectChangeEvent } from "@mui/material/Select";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+import { SubjectModal } from "@web-app/components/modals";
+import type { SuccessResult } from "@web-app/helpers/getUserInfo";
+import { engineeringDependencies } from "@web-app/models/subject-dependencies";
+import type { Courses } from "@web-app/models/subject-dependencies/types";
+import { SubjectStatuses } from "@web-app/server/router/subject/types";
 import { trpc } from "@web-app/utils/trpc";
-import { P, match } from "ts-pattern";
+import type { inferQueryOutput } from "@web-app/utils/trpc";
+import { useState } from "react";
+import type { FC } from "react";
+import { match } from "ts-pattern";
 
 type Props = {
   studentId: string;
   semesterType: "FIRST" | "SECOND" | "SUMMER";
+  enrollmentType: "Regular" | "Bridging";
+  course: Courses;
+  userInfo: SuccessResult;
 };
-export default function StudentProfileCard({ studentId }: Props) {
+
+type SelectionProps = {
+  version: string;
+  handleChange: (event: SelectChangeEvent) => void;
+};
+
+export const BasicSelect: FC<SelectionProps> = ({ version, handleChange }) => {
+  return (
+    <Box sx={{ minWidth: 120 }}>
+      <FormControl fullWidth>
+        <InputLabel>Version</InputLabel>
+        <Select value={version} label="Version" onChange={handleChange}>
+          <MenuItem value={"1"}>2018-2019</MenuItem>
+          <MenuItem value={"2"}>2022-2023</MenuItem>
+        </Select>
+      </FormControl>
+    </Box>
+  );
+};
+
+type Messages = (string | SubjectStatuses)[];
+type SubjectDetails =
+  | inferQueryOutput<"subject.getRecommendedSubjectsV2">[number]
+  | null;
+
+export default function StudentProfileCard({
+  studentId,
+  enrollmentType,
+  course,
+  userInfo,
+}: Props) {
+  const [messages, setMessages] = useState<Messages>([]);
+  const [subjectDetails, setSubjectDetails] = useState<SubjectDetails>(null);
+  const [isHoverModalOpen, setIsHoverModalOpen] = useState<boolean>(false);
+  const [version, setVersion] = useState<string>("1");
+
+  const courseDependencies =
+    engineeringDependencies[userInfo.course][Number.parseInt(version)]!;
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setVersion(event.target.value as string);
+  };
+
   const { data: recommendedV2 } = trpc.useQuery([
     "subject.getRecommendedSubjectsV2",
     {
       studentId,
-      enrollmentType: "Regular",
-      course: "SE",
+      enrollmentType,
+      course,
+      versionNumber: Number.parseInt(version),
     },
   ]);
 
@@ -28,7 +93,12 @@ export default function StudentProfileCard({ studentId }: Props) {
     return <></>;
   }
 
-  console.log(recommendedV2);
+  const clickSubjectDetail =
+    (messages: Messages, subject: SubjectDetails) => () => {
+      setMessages(messages);
+      setSubjectDetails(subject);
+      setIsHoverModalOpen(true);
+    };
 
   return (
     <>
@@ -38,6 +108,14 @@ export default function StudentProfileCard({ studentId }: Props) {
             fontWeight: "bold",
           }}
           title={"All Subjects"}
+          action={
+            <div className="flex flex-row gap-5">
+              <BasicSelect version={version} handleChange={handleChange} />
+              <Tooltip title="Sort">
+                <FilterListIcon className="my-auto" />
+              </Tooltip>
+            </div>
+          }
         />
         <CardContent>
           {recommendedV2 ? (
@@ -50,7 +128,7 @@ export default function StudentProfileCard({ studentId }: Props) {
                   <TableCell className="text-bold">Status</TableCell>
                   <TableCell className="text-bold">Year Level</TableCell>
                   <TableCell className="text-bold">Semester Type</TableCell>
-                  <TableCell className="text-bold">Message</TableCell>
+                  {/* <TableCell className="text-bold">Message</TableCell> */}
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -75,15 +153,43 @@ export default function StudentProfileCard({ studentId }: Props) {
                       key={`${subj.id}-${subj.name}-${idx}`}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
-                      <TableCell>{subj.name}</TableCell>
+                      <TableCell>
+                        <Tooltip title="Subject Info">
+                          <InfoTwoToneIcon
+                            onClick={clickSubjectDetail(subj.messages, subj)}
+                            color="secondary"
+                            className="mr-2"
+                          />
+                        </Tooltip>
+                        {subj.name}
+                      </TableCell>
                       <TableCell>{subj.stubCode}</TableCell>
                       <TableCell>{subj.units}</TableCell>
-                      <TableCell>{subj.status}</TableCell>
+                      <TableCell
+                        sx={{
+                          cursor: "pointer",
+                        }}
+                      >
+                        <Tooltip
+                          title={match(subj.status)
+                            .with("Valid", () => "🟢 Subject can be taken")
+                            .with("Invalid", () => "🔴 Subject cannot be taken")
+                            .exhaustive()}
+                        >
+                          <Button
+                            sx={{
+                              color: subj.status === "Valid" ? "green" : "red",
+                            }}
+                          >
+                            {subj.status}
+                          </Button>
+                        </Tooltip>
+                      </TableCell>
                       <TableCell>{subj.yearLevel}</TableCell>
                       <TableCell className="capitalize">
                         {subj.semesterType.toLowerCase()}
                       </TableCell>
-                      <TableCell>
+                      {/* <TableCell>
                         {subj.messages
                           .map((message) =>
                             match(message)
@@ -109,7 +215,7 @@ export default function StudentProfileCard({ studentId }: Props) {
                               .exhaustive(),
                           )
                           .join(", ")}
-                      </TableCell>
+                      </TableCell> */}
                     </TableRow>
                   ))}
               </TableBody>
@@ -121,6 +227,13 @@ export default function StudentProfileCard({ studentId }: Props) {
           )}
         </CardContent>
       </Card>
+      <SubjectModal
+        messages={messages}
+        isOpen={isHoverModalOpen}
+        setIsOpen={setIsHoverModalOpen}
+        courseDependencies={courseDependencies}
+        subjectDetails={subjectDetails}
+      />
     </>
   );
 }
