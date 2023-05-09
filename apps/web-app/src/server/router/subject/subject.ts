@@ -304,7 +304,7 @@ export const subjectRouter = createAdminRouter()
         return {
           ...subj,
           status: (isValid ? "Valid" : "Invalid") as Status,
-          messages,
+          messages: messages.includes("Passed") ? ["Passed"] : messages,
         };
       });
 

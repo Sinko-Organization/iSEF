@@ -80,6 +80,7 @@ const StudentPage: NextPage = () => {
             semesterType={semesterType}
             enrollmentType={userInfo.enrollmentType}
             course={userInfo.course}
+            userInfo={userInfo}
           />
         </div>
       )}

@@ -1,4 +1,8 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import FilterListIcon from "@mui/icons-material/FilterList";
+import InfoTwoToneIcon from "@mui/icons-material/InfoTwoTone";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
@@ -12,18 +16,25 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+import { SubjectModal } from "@web-app/components/modals";
+import type { SuccessResult } from "@web-app/helpers/getUserInfo";
+import { engineeringDependencies } from "@web-app/models/subject-dependencies";
 import type { Courses } from "@web-app/models/subject-dependencies/types";
+import { SubjectStatuses } from "@web-app/server/router/subject/types";
 import { trpc } from "@web-app/utils/trpc";
+import type { inferQueryOutput } from "@web-app/utils/trpc";
 import { useState } from "react";
 import type { FC } from "react";
-import { P, match } from "ts-pattern";
+import { match } from "ts-pattern";
 
 type Props = {
   studentId: string;
   semesterType: "FIRST" | "SECOND" | "SUMMER";
   enrollmentType: "Regular" | "Bridging";
   course: Courses;
+  userInfo: SuccessResult;
 };
 
 type SelectionProps = {
@@ -45,12 +56,24 @@ export const BasicSelect: FC<SelectionProps> = ({ version, handleChange }) => {
   );
 };
 
+type Messages = (string | SubjectStatuses)[];
+type SubjectDetails =
+  | inferQueryOutput<"subject.getRecommendedSubjectsV2">[number]
+  | null;
+
 export default function StudentProfileCard({
   studentId,
   enrollmentType,
   course,
+  userInfo,
 }: Props) {
+  const [messages, setMessages] = useState<Messages>([]);
+  const [subjectDetails, setSubjectDetails] = useState<SubjectDetails>(null);
+  const [isHoverModalOpen, setIsHoverModalOpen] = useState<boolean>(false);
   const [version, setVersion] = useState<string>("1");
+
+  const courseDependencies =
+    engineeringDependencies[userInfo.course][Number.parseInt(version)]!;
 
   const handleChange = (event: SelectChangeEvent) => {
     setVersion(event.target.value as string);
@@ -70,6 +93,13 @@ export default function StudentProfileCard({
     return <></>;
   }
 
+  const clickSubjectDetail =
+    (messages: Messages, subject: SubjectDetails) => () => {
+      setMessages(messages);
+      setSubjectDetails(subject);
+      setIsHoverModalOpen(true);
+    };
+
   return (
     <>
       <Card>
@@ -78,7 +108,14 @@ export default function StudentProfileCard({
             fontWeight: "bold",
           }}
           title={"All Subjects"}
-          action={<BasicSelect version={version} handleChange={handleChange} />}
+          action={
+            <div className="flex flex-row gap-5">
+              <BasicSelect version={version} handleChange={handleChange} />
+              <Tooltip title="Sort">
+                <FilterListIcon className="my-auto" />
+              </Tooltip>
+            </div>
+          }
         />
         <CardContent>
           {recommendedV2 ? (
@@ -91,7 +128,7 @@ export default function StudentProfileCard({
                   <TableCell className="text-bold">Status</TableCell>
                   <TableCell className="text-bold">Year Level</TableCell>
                   <TableCell className="text-bold">Semester Type</TableCell>
-                  <TableCell className="text-bold">Message</TableCell>
+                  {/* <TableCell className="text-bold">Message</TableCell> */}
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -116,15 +153,43 @@ export default function StudentProfileCard({
                       key={`${subj.id}-${subj.name}-${idx}`}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
-                      <TableCell>{subj.name}</TableCell>
+                      <TableCell>
+                        <Tooltip title="Subject Info">
+                          <InfoTwoToneIcon
+                            onClick={clickSubjectDetail(subj.messages, subj)}
+                            color="secondary"
+                            className="mr-2"
+                          />
+                        </Tooltip>
+                        {subj.name}
+                      </TableCell>
                       <TableCell>{subj.stubCode}</TableCell>
                       <TableCell>{subj.units}</TableCell>
-                      <TableCell>{subj.status}</TableCell>
+                      <TableCell
+                        sx={{
+                          cursor: "pointer",
+                        }}
+                      >
+                        <Tooltip
+                          title={match(subj.status)
+                            .with("Valid", () => "🟢 Subject can be taken")
+                            .with("Invalid", () => "🔴 Subject cannot be taken")
+                            .exhaustive()}
+                        >
+                          <Button
+                            sx={{
+                              color: subj.status === "Valid" ? "green" : "red",
+                            }}
+                          >
+                            {subj.status}
+                          </Button>
+                        </Tooltip>
+                      </TableCell>
                       <TableCell>{subj.yearLevel}</TableCell>
                       <TableCell className="capitalize">
                         {subj.semesterType.toLowerCase()}
                       </TableCell>
-                      <TableCell>
+                      {/* <TableCell>
                         {subj.messages
                           .map((message) =>
                             match(message)
@@ -150,7 +215,7 @@ export default function StudentProfileCard({
                               .exhaustive(),
                           )
                           .join(", ")}
-                      </TableCell>
+                      </TableCell> */}
                     </TableRow>
                   ))}
               </TableBody>
@@ -162,6 +227,13 @@ export default function StudentProfileCard({
           )}
         </CardContent>
       </Card>
+      <SubjectModal
+        messages={messages}
+        isOpen={isHoverModalOpen}
+        setIsOpen={setIsHoverModalOpen}
+        courseDependencies={courseDependencies}
+        subjectDetails={subjectDetails}
+      />
     </>
   );
 }
