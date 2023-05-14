@@ -18,6 +18,10 @@ export type SuccessResult = {
   semesterType: SemesterType;
 };
 
+export type UnitsInput = SuccessResult & {
+  version: number;
+};
+
 type SemesterDetails = [SemesterType, number];
 
 const semesterArray: SemesterType[] = ["FIRST", "SECOND", "SUMMER"];
@@ -129,4 +133,27 @@ export const getUserInfo = (
     yearLevel: nextYearLevel,
     semesterType: nextSemesterType,
   };
+};
+
+export const getTotalCreditUnits = ({
+  course,
+  enrollmentType,
+  yearLevel,
+  semesterType,
+  version,
+}: UnitsInput) => {
+  const courseDependency = engineeringDependencies[course][version];
+
+  if (!courseDependency) return null;
+
+  const dependency = courseDependency
+    .filter((detail) => detail.enrollmentType === enrollmentType)
+    .find(
+      (detail) =>
+        detail.yearLevel === yearLevel && detail.semesterType === semesterType,
+    );
+
+  if (!dependency) return null;
+
+  return dependency.creditUnits;
 };

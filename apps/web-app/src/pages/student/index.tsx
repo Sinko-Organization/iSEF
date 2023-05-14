@@ -1,7 +1,8 @@
 import {
   StudentProfileCard,
   StudentRecordsCard,
-  SubjectRecomendationsCard,
+  SubjectListCard,
+  SubjectRecommendationsCard,
 } from "@web-app/components/cards";
 import { EducationLoader } from "@web-app/components/loaders";
 import StudentProfileSelector from "@web-app/containers/student-profile-selector/StudentProfileSelector";
@@ -75,7 +76,14 @@ const StudentPage: NextPage = () => {
           )}
           <StudentRecordsCard records={studentData.studentRecords} />
           <div className="mt-20" />
-          <SubjectRecomendationsCard
+          <SubjectRecommendationsCard
+            studentId={id}
+            enrollmentType={userInfo.enrollmentType}
+            course={userInfo.course}
+            userInfo={userInfo}
+          />
+          <div className="mt-20" />
+          <SubjectListCard
             studentId={id}
             semesterType={semesterType}
             enrollmentType={userInfo.enrollmentType}
