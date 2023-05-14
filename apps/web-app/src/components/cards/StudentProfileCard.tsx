@@ -12,6 +12,7 @@ import { trpc } from "@web-app/utils/trpc";
 import type { inferMutationInput } from "@web-app/utils/trpc";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
+import { P, match } from "ts-pattern";
 
 type UpdateStudentInput = inferMutationInput<"student.update">;
 
@@ -127,8 +128,18 @@ export default function StudentProfileCard({
               <Table className="table table-sm">
                 <tbody>
                   <td>
-                    <b>Name : </b> {formik.values.lastName},{" "}
-                    {formik.values.firstName}
+                    <b>Name : </b>
+                    {/* {formik.values.lastName},{" "}
+                    {formik.values.firstName} */}
+                    {match([firstName, lastName])
+                      .with([null, null], () => "N/A")
+                      .with([null, P.string], ([, last]) => last)
+                      .with([P.string, null], ([first]) => first)
+                      .with(
+                        [P.string, P.string],
+                        ([first, last]) => `${first} ${last}`,
+                      )
+                      .run()}
                   </td>
                   <td>
                     <b>Student ID: </b>
@@ -141,9 +152,9 @@ export default function StudentProfileCard({
                   <td>
                     <b>Enrollment Type : </b> {userInfo.enrollmentType}
                   </td>
-                  <td className="capitalize">
+                  <td>
                     <b>Current Course: </b>
-                    {userInfo.course.toLowerCase()}
+                    {userInfo.course}
                   </td>
                   <td>
                     <b>Current Year Level: </b>
