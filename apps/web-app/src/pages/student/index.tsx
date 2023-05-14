@@ -7,13 +7,14 @@ import {
 import { EducationLoader } from "@web-app/components/loaders";
 import StudentProfileSelector from "@web-app/containers/student-profile-selector/StudentProfileSelector";
 import { getUserInfo } from "@web-app/helpers";
-import { useCurriculumStore } from "@web-app/stores";
+import { useCourseNameStore, useCurriculumStore } from "@web-app/stores";
 import { trpc } from "@web-app/utils/trpc";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 const StudentPage: NextPage = () => {
+  const courseName = useCourseNameStore((state) => state.courseName);
   const { schoolYear, setSchoolYear, semesterType } = useCurriculumStore();
   const router = useRouter();
   const { id } = router.query as { id: string };
@@ -66,7 +67,12 @@ const StudentPage: NextPage = () => {
             email={studentData.email}
             phoneNumber={studentData.phoneNumber}
             address={studentData.address}
-            userInfo={userInfo}
+            userInfo={{
+              course: courseName ?? "--",
+              yearLevel: userInfo.yearLevel,
+              enrollmentType: userInfo.enrollmentType,
+              semesterType: userInfo.semesterType,
+            }}
           />
           {schoolYearsData && (
             <StudentProfileSelector

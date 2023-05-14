@@ -2,6 +2,7 @@ import { EducationLoader } from "@web-app/components/loaders";
 import { CourseTable } from "@web-app/components/tables";
 import { CourseOptionSelector } from "@web-app/containers/course-option-selector";
 import { useCourseOptions } from "@web-app/hooks/course";
+import { useCourseNameStore } from "@web-app/stores";
 import { trpc } from "@web-app/utils/trpc";
 import type { inferQueryOutput } from "@web-app/utils/trpc";
 import type { NextPage } from "next";
@@ -26,6 +27,7 @@ const CoursePage: NextPage = () => {
   const [searchText, setSearchText] = useState<string>("");
   const [filteredStudents, setFilteredStudents] = useState<StudentData>([]);
   const router = useRouter();
+  const setCourseName = useCourseNameStore((state) => state.setCourseName);
   const { id } = router.query as { id: string };
 
   const students = trpc.useQuery([
@@ -58,6 +60,13 @@ const CoursePage: NextPage = () => {
     }
   }, [data, searchText]);
 
+  useEffect(() => {
+    const { name } = courseDetail ?? {};
+    if (name) {
+      setCourseName(name);
+    }
+  }, [courseDetail, setCourseName]);
+
   if (isLoading || schoolYearStatus === "loading" || !courseDetail) {
     return <EducationLoader />;
   }
@@ -82,14 +91,7 @@ const CoursePage: NextPage = () => {
           />
         )}
 
-        {data && (
-          <CourseTable
-            students={filteredStudents}
-            courseName={courseDetail.name}
-            semesterType={semesterType}
-            schoolYear={schoolYear}
-          />
-        )}
+        {data && <CourseTable students={filteredStudents} />}
       </div>
     </>
   );
