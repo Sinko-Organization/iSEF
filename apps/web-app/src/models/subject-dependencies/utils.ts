@@ -32,7 +32,10 @@ export const findSubjectCorequisites = (
 
   for (const corequisite of directCorequisite) {
     const details = findSubjectDetails(corequisite, dependency);
-    if (details) {
+    const isAlreadyAdded = coRequisites.some(
+      (subject) => subject.subjectCode === corequisite,
+    );
+    if (details && !isAlreadyAdded) {
       coRequisites.push(details);
     }
   }
@@ -42,8 +45,22 @@ export const findSubjectCorequisites = (
     .filter((subject) => subject.coRequisites.includes(subjectCode));
 
   for (const corequisite of indirectCorequisites) {
-    coRequisites.push(corequisite);
+    const isAlreadyAdded = coRequisites.some(
+      (subject) => subject.subjectCode === corequisite.subjectCode,
+    );
+    if (!isAlreadyAdded) {
+      coRequisites.push(corequisite);
+    }
   }
 
   return coRequisites;
+};
+
+export const getSubjectYearStanding = (
+  subjectCode: string,
+  dependency: DependencyListV2,
+) => {
+  const subjectDetails = findSubjectDetails(subjectCode, dependency);
+  if (!subjectDetails) return null;
+  return subjectDetails.yearStanding;
 };

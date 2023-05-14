@@ -2,6 +2,7 @@
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
+import type { SxProps } from "@mui/material";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Table from "@mui/material/Table";
@@ -11,7 +12,10 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import type { DependencyListV2 } from "@web-app/models/subject-dependencies/types";
-import { findSubjectDetails } from "@web-app/models/subject-dependencies/utils";
+import {
+  findSubjectCorequisites,
+  findSubjectDetails,
+} from "@web-app/models/subject-dependencies/utils";
 import { SubjectStatuses } from "@web-app/server/router/subject/types";
 import type { inferQueryOutput } from "@web-app/utils/trpc";
 import type { FC } from "react";
@@ -19,7 +23,7 @@ import { match } from "ts-pattern";
 
 import { getOrdinalSuffix } from "./utils";
 
-const style = {
+const style: SxProps = {
   position: "absolute" as const,
   top: "50%",
   left: "50%",
@@ -30,6 +34,7 @@ const style = {
   boxShadow: 24,
   p: 4,
   borderRadius: "8px",
+  overflowY: "auto",
 };
 
 const iconStyle = {
@@ -42,12 +47,25 @@ const SubjectModal: FC<{
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   messages: (string | SubjectStatuses)[];
+  currentYearLevel: number;
   courseDependencies: DependencyListV2;
   subjectDetails:
     | inferQueryOutput<"subject.getRecommendedSubjectsV2">[number]
     | null;
-}> = ({ isOpen, setIsOpen, messages, courseDependencies, subjectDetails }) => {
+}> = ({
+  isOpen,
+  setIsOpen,
+  messages,
+  courseDependencies,
+  subjectDetails,
+  currentYearLevel,
+}) => {
   const details = findSubjectDetails(
+    subjectDetails?.stubCode ?? "",
+    courseDependencies,
+  );
+
+  const coreqDetails = findSubjectCorequisites(
     subjectDetails?.stubCode ?? "",
     courseDependencies,
   );
@@ -160,7 +178,7 @@ const SubjectModal: FC<{
           )}
         </Typography>
 
-        <Typography
+        {/* <Typography
           id="modal-modal-description"
           variant="body1"
           sx={{ marginTop: "16px", my: "40px" }}
@@ -248,6 +266,109 @@ const SubjectModal: FC<{
             }
             return false;
           }).length === 0 && <div className="mt-2">No Year Standing</div>}
+        </Typography> */}
+
+        <Typography
+          id="modal-modal-description"
+          variant="body1"
+          sx={{ marginTop: "16px", my: "40px" }}
+        >
+          <strong>Year Standing:</strong>
+          {details?.yearStanding !== undefined ? (
+            <Table sx={{ marginTop: "8px" }}>
+              <TableHead>
+                <TableRow>
+                  <TableCell sx={{ fontWeight: "bold" }}>
+                    Subject Standing
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }}>
+                    Current Year Level
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }}>Status</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <TableRow>
+                  <TableCell>
+                    {details.yearStanding === "ALL"
+                      ? "ALL"
+                      : getOrdinalSuffix(details.yearStanding) + " year"}
+                  </TableCell>
+                  <TableCell>
+                    {getOrdinalSuffix(currentYearLevel) + " year"}
+                  </TableCell>
+                  <TableCell>
+                    {match(details.yearStanding)
+                      .with("ALL", () => (
+                        <div className="flex flex-row gap-1 font-bold text-green-600">
+                          <CheckCircleIcon sx={{ color: "green" }} />
+                          Can Be Taken
+                        </div>
+                      ))
+                      .otherwise(() => {
+                        if (typeof details.yearStanding === "string") {
+                          return "Can't be taken";
+                        }
+                        const { yearStanding } = details;
+
+                        const canBeTaken =
+                          yearStanding !== undefined
+                            ? currentYearLevel >= yearStanding
+                            : false;
+
+                        return canBeTaken ? (
+                          <div className="flex flex-row gap-1 font-bold text-green-600">
+                            <CheckCircleIcon sx={{ color: "green" }} />
+                            Can Be Taken
+                          </div>
+                        ) : (
+                          <div className="flex flex-row gap-1 font-bold text-red-600">
+                            <CancelIcon sx={{ color: "red" }} />
+                            Can&apos;t be taken
+                          </div>
+                        );
+                      })}
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          ) : (
+            <div className="mt-2">No Year Standing</div>
+          )}
+        </Typography>
+
+        <Typography
+          id="modal-modal-description"
+          variant="body1"
+          sx={{ marginTop: "40px" }}
+        >
+          <strong>Corequisites:</strong>
+          {coreqDetails.length > 0 ? (
+            <Table sx={{ marginTop: "8px", alignItems: "center" }}>
+              <TableHead>
+                <TableRow>
+                  <TableCell sx={{ fontWeight: "bold" }}>Name</TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }}>Stub Code</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {coreqDetails.map((coreq) => {
+                  return (
+                    <>
+                      <TableRow>
+                        <TableCell>{coreq.name ?? "---"}</TableCell>
+                        <TableCell>{coreq.subjectCode}</TableCell>
+                      </TableRow>
+                    </>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          ) : (
+            <Box sx={{ marginTop: "8px", fontWeight: "semibold" }}>
+              No corequisites for this subject.
+            </Box>
+          )}
         </Typography>
       </Box>
     </Modal>

@@ -1,3 +1,7 @@
+/* eslint-disable prefer-const */
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
@@ -20,6 +24,7 @@ import type { SuccessResult } from "@web-app/helpers/getUserInfo";
 import { getTotalCreditUnits } from "@web-app/helpers/getUserInfo";
 import { engineeringDependencies } from "@web-app/models/subject-dependencies";
 import type { Courses } from "@web-app/models/subject-dependencies/types";
+import { findSubjectDetails } from "@web-app/models/subject-dependencies/utils";
 import { SubjectStatuses } from "@web-app/server/router/subject/types";
 import type { inferQueryOutput } from "@web-app/utils/trpc";
 import { trpc } from "@web-app/utils/trpc";
@@ -56,6 +61,8 @@ type Messages = (string | SubjectStatuses)[];
 type SubjectDetails =
   | inferQueryOutput<"subject.getRecommendedSubjectsV2">[number]
   | null;
+
+type SubjectDetailsV2 = inferQueryOutput<"subject.getRecommendedSubjectsV2">;
 
 export default function StudentProfileCard({
   studentId,
@@ -97,6 +104,51 @@ export default function StudentProfileCard({
     return <></>;
   }
 
+  const validRecommendends = recommendedV2.filter(
+    (subj) => subj.status === "Valid",
+  );
+
+  const formattedSubjects = getRecommendedSubs(
+    recommendedV2
+      .sort((a, b) => {
+        if (a.yearLevel !== b.yearLevel) {
+          return a.yearLevel - b.yearLevel;
+        }
+
+        if (a.semesterType !== b.semesterType) {
+          const semesterTypeOrder = ["FIRST", "SECOND", "SUMMER"];
+          return (
+            semesterTypeOrder.indexOf(a.semesterType) -
+            semesterTypeOrder.indexOf(b.semesterType)
+          );
+        }
+
+        return a.name.localeCompare(b.name);
+      })
+      .filter((subj) => subj.status === "Valid")
+      .filter((subj) => {
+        const subDetail = findSubjectDetails(subj.stubCode, courseDependencies);
+        if (!subDetail) {
+          return false;
+        }
+        const coreqs = subDetail.coRequisites;
+        let isValid = true;
+
+        for (const coreq of coreqs) {
+          if (!validRecommendends.some((subj) => subj.stubCode === coreq)) {
+            isValid = false;
+          }
+        }
+
+        return isValid;
+      }),
+    creditUnits ?? 0,
+  );
+
+  const totalCurrentUnits = formattedSubjects.reduce((acc, curr) => {
+    return acc + curr.units;
+  }, 0);
+
   const clickSubjectDetail =
     (messages: Messages, subject: SubjectDetails) => () => {
       setMessages(messages);
@@ -134,30 +186,35 @@ export default function StudentProfileCard({
                 </TableRow>
               </TableHead>
               <TableBody>
-                {recommendedV2
-                  .filter((subj) => subj.status === "Valid")
-                  .map((subj, idx) => (
-                    <TableRow
-                      key={`${subj.id}-${subj.name}-${idx}`}
-                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                    >
-                      <TableCell>
-                        <Tooltip className="cursor-pointer" title={subj.name}>
-                          <div
-                            onClick={clickSubjectDetail(subj.messages, subj)}
-                          >
-                            {subj.name}
-                          </div>
-                        </Tooltip>
-                      </TableCell>
-                      <TableCell>{subj.stubCode}</TableCell>
-                      <TableCell>{subj.units}</TableCell>
-                      <TableCell>{subj.yearLevel}</TableCell>
-                      <TableCell className="capitalize">
-                        {subj.semesterType.toLowerCase()}
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                {formattedSubjects.map((subj, idx) => (
+                  <TableRow
+                    key={`${subj.id}-${subj.name}-${idx}`}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell>
+                      <Tooltip className="cursor-pointer" title={subj.name}>
+                        <div onClick={clickSubjectDetail(subj.messages, subj)}>
+                          {subj.name}
+                        </div>
+                      </Tooltip>
+                    </TableCell>
+                    <TableCell>{subj.stubCode}</TableCell>
+                    <TableCell>{subj.units}</TableCell>
+                    <TableCell>{subj.yearLevel}</TableCell>
+                    <TableCell className="capitalize">
+                      {subj.semesterType.toLowerCase()}
+                    </TableCell>
+                  </TableRow>
+                ))}
+                <TableRow>
+                  <TableCell></TableCell>
+                  <TableCell></TableCell>
+                  <TableCell sx={{ fontWeight: "bold" }}>
+                    Total: {totalCurrentUnits} / {creditUnits ?? "--"}
+                  </TableCell>
+                  <TableCell></TableCell>
+                  <TableCell></TableCell>
+                </TableRow>
               </TableBody>
             </Table>
           ) : (
@@ -178,3 +235,17 @@ export default function StudentProfileCard({
     </>
   );
 }
+
+const getRecommendedSubs = (subs: SubjectDetailsV2, creditUnits: number) => {
+  let result: SubjectDetailsV2 = [];
+  let totalUnits = 0;
+
+  for (const sub of subs) {
+    if (totalUnits + sub.units <= creditUnits) {
+      result.push(sub);
+      totalUnits += sub.units;
+    }
+  }
+
+  return result;
+};

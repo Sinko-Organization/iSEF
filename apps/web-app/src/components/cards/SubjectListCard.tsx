@@ -233,6 +233,7 @@ export default function StudentProfileCard({
         setIsOpen={setIsHoverModalOpen}
         courseDependencies={courseDependencies}
         subjectDetails={subjectDetails}
+        currentYearLevel={userInfo.yearLevel}
       />
     </>
   );
