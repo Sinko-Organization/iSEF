@@ -9,7 +9,11 @@ type StudentRecords = NonNullable<
   inferQueryOutput<"studentData.details">["studentRecords"]
 >;
 
-export type ErrorResult = "Empty student records" | "No student records found";
+export type ErrorResult =
+  | "Empty student records"
+  | "No student records found"
+  | "No current course found"
+  | "No enrollment type found";
 
 export type SuccessResult = {
   course: Courses;
@@ -74,7 +78,7 @@ export const getUserInfo = (
 
   const subjectCodes = studentRecords.map((record) => record.subject.stubCode);
 
-  let enrollmentType: "Bridging" | "Regular" | null = null;
+  let currentEnrollment: "Bridging" | "Regular" | null = null;
   let currentCourse: string | null = null;
 
   for (const [course, dependencyRecord] of Object.entries(
@@ -104,8 +108,9 @@ export const getUserInfo = (
       );
 
       if (isBridging) {
-        enrollmentType = "Bridging";
+        currentEnrollment = "Bridging";
         currentCourse = course;
+        break;
       }
 
       const isRegular = subjectCodes.every((subjectCode) =>
@@ -113,23 +118,27 @@ export const getUserInfo = (
       );
 
       if (isRegular) {
-        enrollmentType = "Regular";
+        currentEnrollment = "Regular";
         currentCourse = course;
+        break;
       }
+
+      currentEnrollment = "Regular";
+      currentCourse = course;
     }
   }
 
-  if (!enrollmentType) {
-    return "No student records found";
+  if (!currentEnrollment) {
+    return "No enrollment type found";
   }
 
   if (!currentCourse) {
-    return "No student records found";
+    return "No current course found";
   }
 
   return {
     course: currentCourse as Courses,
-    enrollmentType,
+    enrollmentType: currentEnrollment,
     yearLevel: nextYearLevel,
     semesterType: nextSemesterType,
   };
