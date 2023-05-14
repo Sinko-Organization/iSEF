@@ -5,6 +5,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import type { SemesterType } from "@prisma/client";
 import Link from "next/link";
 import type { FC } from "react";
 
@@ -15,6 +16,9 @@ interface CourseTableProps {
     firstName: string | null;
     lastName: string | null;
   }[];
+  courseName: string;
+  schoolYear: number;
+  semesterType: SemesterType;
 }
 
 const CourseTable: FC<CourseTableProps> = ({ students }) => {

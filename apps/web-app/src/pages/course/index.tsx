@@ -38,6 +38,8 @@ const CoursePage: NextPage = () => {
     },
   ]);
 
+  const { data: courseDetail } = trpc.useQuery(["course.getById", id]);
+
   const { data, isLoading, isError } = students;
 
   useEffect(() => {
@@ -56,7 +58,7 @@ const CoursePage: NextPage = () => {
     }
   }, [data, searchText]);
 
-  if (isLoading || schoolYearStatus === "loading") {
+  if (isLoading || schoolYearStatus === "loading" || !courseDetail) {
     return <EducationLoader />;
   }
 
@@ -80,7 +82,14 @@ const CoursePage: NextPage = () => {
           />
         )}
 
-        {data && <CourseTable students={filteredStudents} />}
+        {data && (
+          <CourseTable
+            students={filteredStudents}
+            courseName={courseDetail.name}
+            semesterType={semesterType}
+            schoolYear={schoolYear}
+          />
+        )}
       </div>
     </>
   );
