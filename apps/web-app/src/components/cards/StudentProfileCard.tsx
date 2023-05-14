@@ -129,9 +129,7 @@ export default function StudentProfileCard({
                 <tbody>
                   <td>
                     <b>Name : </b>
-                    {/* {formik.values.lastName},{" "}
-                    {formik.values.firstName} */}
-                    {match([firstName, lastName])
+                    {match([formik.values.firstName, formik.values.lastName])
                       .with([null, null], () => "N/A")
                       .with([null, P.string], ([, last]) => last)
                       .with([P.string, null], ([first]) => first)
@@ -139,7 +137,7 @@ export default function StudentProfileCard({
                         [P.string, P.string],
                         ([first, last]) => `${first} ${last}`,
                       )
-                      .run()}
+                      .otherwise(() => "N/A")}
                   </td>
                   <td>
                     <b>Student ID: </b>
