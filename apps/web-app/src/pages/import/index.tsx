@@ -1,4 +1,4 @@
-import Button from "@mui/material/Button";
+import ExcelFileUploadButton from "@web-app/components/buttons";
 import type { Semester } from "@web-app/types/semester";
 import { dataOutputSchema, fields } from "@web-app/types/spreadsheet/second";
 import { trpc } from "@web-app/utils/trpc";
@@ -46,16 +46,14 @@ const Import: NextPage = () => {
   }
 
   return (
-    <div className="mx-20 mt-10">
-      {isLoading && <div>Uploading...</div>}
-
-      <Button
+    <div className="mx-20 font-sans mt-10 flex flex-col align-middle justify-center">
+      <h1 className="text-4xl font-semibold text-start mb-10">
+        Import Student Records
+      </h1>
+      <ExcelFileUploadButton
         onClick={toggleButton(true)}
         disabled={isLoading}
-        variant="contained"
-      >
-        Import File
-      </Button>
+      />
       <ReactSpreadsheetImport
         isOpen={open}
         onClose={toggleButton(false)}

@@ -1,8 +1,7 @@
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
-import MailIcon from "@mui/icons-material/Mail";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import FactCheckIcon from "@mui/icons-material/FactCheck";
 import MenuIcon from "@mui/icons-material/Menu";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
+import SchoolIcon from "@mui/icons-material/School";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -27,29 +26,30 @@ interface Props {
   children: React.ReactNode;
 }
 
-const paths = [
+type Path = {
+  name: string;
+  link: string;
+  icon: React.ReactNode;
+};
+
+const paths: Path[] = [
   {
     name: "Dashboard",
     link: "/dashboard",
+    icon: <SchoolIcon />,
   },
   {
     name: "Honor's List",
     link: "/honors-list",
-  },
-  {
-    name: "Courses",
-    link: "/courses",
-  },
-  {
-    name: "Grades",
-    link: "/grades",
+    icon: <FactCheckIcon />,
   },
 ];
 
-const systemPaths = [
+const systemPaths: Path[] = [
   {
     name: "Import",
     link: "/import",
+    icon: <CloudUploadIcon />,
   },
 ];
 
@@ -72,19 +72,13 @@ export default function ResponsiveDrawer({ window, children }: Props) {
           />
         </div>
       </Toolbar>
-      <Divider>ISEF</Divider>
+      <Divider className="font-bold">ISEF</Divider>
 
       <List>
         {paths.map((path, index) => (
           <Link href={path.link} className="sidebar-link" key={index}>
             <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? (
-                  <DashboardIcon />
-                ) : (
-                  <FormatListBulletedIcon />
-                )}
-              </ListItemIcon>
+              <ListItemIcon>{path.icon}</ListItemIcon>
 
               <ListItemText primary={path.name} />
             </ListItemButton>
@@ -96,9 +90,7 @@ export default function ResponsiveDrawer({ window, children }: Props) {
       <List>
         {systemPaths.map((systemPath, index) => (
           <ListItemButton key={index}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
+            <ListItemIcon>{systemPath.icon}</ListItemIcon>
             <Link href={systemPath.link} className="sidebar-link">
               <ListItemText primary={systemPath.name} />
             </Link>
@@ -125,8 +117,6 @@ export default function ResponsiveDrawer({ window, children }: Props) {
           variant="h6"
           noWrap
           component="div"
-          fontFamily="Lucida Bright"
-          // fontFamily="Times New Roman"
           style={{ backgroundColor: "#9078b6" }}
         >
           <Toolbar className="toolbar">
@@ -143,7 +133,7 @@ export default function ResponsiveDrawer({ window, children }: Props) {
             INTELLIGENT STUDENTS E-FOLDERS
             {/*LOG OUT BUTTON*/}
             <Box sx={{ display: "flex", marginLeft: 90 }}>
-              <Typography fontFamily="monospace">
+              <Typography>
                 <button onClick={() => signOut()}>Log Out</button>
               </Typography>
             </Box>

@@ -46,7 +46,7 @@ const DashboardPage: NextPage = () => {
   }
 
   return (
-    <div className="mx-32 mt-10">
+    <div className="mx-32 font-sans mt-10">
       {schoolYearsData && (
         <CurriculumSelector
           schoolYearsData={schoolYearsData}
