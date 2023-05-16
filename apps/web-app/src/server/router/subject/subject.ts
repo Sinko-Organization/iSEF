@@ -29,7 +29,14 @@ export const subjectRouter = createAdminRouter()
     input: z.object({
       studentId: z.string(),
       enrollmentType: z.enum(["Regular", "Bridging"]),
-      course: z.enum(["Software", "Civil", "Electronics", "Mechanical"]),
+      course: z.enum([
+        "Software",
+        "Civil",
+        "Electronics",
+        "Mechanical",
+        "Chemical",
+        "Packaging",
+      ]),
       versionNumber: z.number().int().nonnegative(),
     }),
     async resolve({ ctx, input }) {

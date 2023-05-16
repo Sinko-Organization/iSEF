@@ -13,9 +13,13 @@ export type DependencyList = {
 
 export type DependencyListV2 = z.infer<typeof dependencyListV2Schema>;
 
-export type Courses = "Civil" | "Electronics" | "Mechanical" | "Software";
-// | "Packaging"
-// | "Chemical"
+export type Courses =
+  | "Civil"
+  | "Electronics"
+  | "Mechanical"
+  | "Software"
+  | "Packaging"
+  | "Chemical";
 // | "Electrical"
 
 export type Dependencies = Record<Courses, Record<number, DependencyListV2>>;
