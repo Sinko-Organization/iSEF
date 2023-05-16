@@ -16,7 +16,7 @@ const AccountError: FC = () => {
         severity="warning"
         sx={{ maxWidth: 800, width: "100%", p: 4, borderRadius: 4 }}
       >
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center mb-3">
           <AlertTitle>
             <Warning fontSize="large" />
             Account not approved
@@ -26,7 +26,7 @@ const AccountError: FC = () => {
               <Tooltip title="Logout">
                 <Logout
                   sx={{ cursor: "pointer" }}
-                  fontSize="large"
+                  fontSize="medium"
                   onClick={handleLogout}
                 />
               </Tooltip>

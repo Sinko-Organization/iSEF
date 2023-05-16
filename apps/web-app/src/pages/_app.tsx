@@ -7,6 +7,7 @@ import { AdminRoute } from "@web-app/containers/protected-route";
 import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import type { AppType } from "next/app";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import superjson from "superjson";
 
@@ -21,17 +22,24 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   const router = useRouter();
   return (
-    <SessionProvider session={session}>
-      {NON_PROTECTED_ROUTES.has(router.pathname) ? (
-        <Component {...pageProps} />
-      ) : (
-        <AdminRoute>
-          <SideDrawer>
-            <Component {...pageProps} />
-          </SideDrawer>
-        </AdminRoute>
-      )}
-    </SessionProvider>
+    <>
+      <Head>
+        <title>iSEF</title>
+        <link rel="icon" href="/images/isef-logo-no-bg.png" />
+      </Head>
+
+      <SessionProvider session={session}>
+        {NON_PROTECTED_ROUTES.has(router.pathname) ? (
+          <Component {...pageProps} />
+        ) : (
+          <AdminRoute>
+            <SideDrawer>
+              <Component {...pageProps} />
+            </SideDrawer>
+          </AdminRoute>
+        )}
+      </SessionProvider>
+    </>
   );
 };
 

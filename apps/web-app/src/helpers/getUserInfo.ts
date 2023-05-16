@@ -123,8 +123,8 @@ export const getUserInfo = (
         break;
       }
 
-      currentEnrollment = "Regular";
-      currentCourse = course;
+      // currentEnrollment = "Regular";
+      // currentCourse = course;
     }
   }
 
