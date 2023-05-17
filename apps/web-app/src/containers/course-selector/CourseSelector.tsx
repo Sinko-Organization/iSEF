@@ -6,10 +6,11 @@ import { trpc } from "@web-app/utils/trpc";
 import type { FC } from "react";
 
 interface Props {
+  course: string | null;
   setCourse: (course: string | null) => void;
 }
 
-const CourseSelector: FC<Props> = ({ setCourse }) => {
+const CourseSelector: FC<Props> = ({ course, setCourse }) => {
   const { data: courses } = trpc.useQuery(["course.getAll"]);
   return (
     <div className="flex flex-row gap-5">
@@ -22,7 +23,7 @@ const CourseSelector: FC<Props> = ({ setCourse }) => {
             }}
             variant="outlined"
             label="Course"
-            defaultValue={"all"}
+            defaultValue={course}
             onChange={(e) => {
               const value = e.target.value;
               if (e.target.value === "all") {

@@ -66,8 +66,8 @@ const Index: NextPage = () => {
             setSemesterType={setSemesterType}
           />
         )}
-        <YearLevelSelector setYearLevel={setYearLevel} />
-        <CourseSelector setCourse={setCourse} />
+        <YearLevelSelector yearLevel={yearLevel} setYearLevel={setYearLevel} />
+        <CourseSelector course={courseId} setCourse={setCourse} />
       </div>
       <div className="mx-20 mt-10">
         {data && (

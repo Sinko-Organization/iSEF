@@ -6,10 +6,11 @@ import { trpc } from "@web-app/utils/trpc";
 import type { FC } from "react";
 
 interface Props {
+  yearLevel: number | null;
   setYearLevel: (yearLevel: number | null) => void;
 }
 
-const YearLevelSelector: FC<Props> = ({ setYearLevel }) => {
+const YearLevelSelector: FC<Props> = ({ yearLevel, setYearLevel }) => {
   const { data: yearLevels } = trpc.useQuery(["yearLevel.getAll"]);
   return (
     <div className="flex flex-row gap-5">
@@ -22,7 +23,7 @@ const YearLevelSelector: FC<Props> = ({ setYearLevel }) => {
             }}
             variant="outlined"
             label="Year Level"
-            defaultValue={0}
+            defaultValue={yearLevel}
             onChange={(e) => {
               const value = Number(e.target.value);
               if (value > 0 && value <= 5) {
