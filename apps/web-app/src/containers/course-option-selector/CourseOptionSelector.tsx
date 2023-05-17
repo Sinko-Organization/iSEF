@@ -1,3 +1,4 @@
+import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
@@ -45,61 +46,70 @@ const CourseOptionSelector: FC<Props> = ({
     <div {...props}>
       <div className="flex flex-row gap-5">
         <div className="flex flex-row gap-5">
-          <InputLabel className="mt-auto">School Year:</InputLabel>
-          <Select
-            sx={{
-              maxWidth: 200,
-            }}
-            variant="standard"
-            defaultValue={courseOptions.schoolYear}
-            onChange={(e) => setSchoolYear(Number(e.target.value))}
-          >
-            {schoolYearsData.map((year) => (
-              <MenuItem key={year.id} value={year.startYear}>
-                S.Y. {year.startYear} - {year.endYear}
-              </MenuItem>
-            ))}
-          </Select>
+          <FormControl fullWidth>
+            <InputLabel className="mt-auto">School Year:</InputLabel>
+            <Select
+              sx={{
+                maxWidth: 200,
+              }}
+              variant="outlined"
+              label="School Year"
+              defaultValue={courseOptions.schoolYear}
+              onChange={(e) => setSchoolYear(Number(e.target.value))}
+            >
+              {schoolYearsData.map((year) => (
+                <MenuItem key={year.id} value={year.startYear}>
+                  S.Y. {year.startYear} - {year.endYear}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </div>
 
         <div className="flex flex-row gap-5">
-          <InputLabel className="mt-auto">Semester Type:</InputLabel>
-          <Select
-            sx={{
-              maxWidth: 100,
-            }}
-            variant="standard"
-            defaultValue={courseOptions.semesterType}
-            onChange={(e) => setSemesterType(e.target.value as SemesterType)}
-          >
-            {Object.values(SemesterType).map((semesterType) => (
-              <MenuItem key={semesterType} value={semesterType}>
-                {capitalize(semesterType.toLowerCase())}
-              </MenuItem>
-            ))}
-          </Select>
+          <FormControl fullWidth sx={{ width: 150 }}>
+            <InputLabel className="mt-auto">Semester Type:</InputLabel>
+            <Select
+              sx={{
+                maxWidth: 200,
+              }}
+              variant="outlined"
+              label="Semester Type"
+              defaultValue={courseOptions.semesterType}
+              onChange={(e) => setSemesterType(e.target.value as SemesterType)}
+            >
+              {Object.values(SemesterType).map((semesterType) => (
+                <MenuItem key={semesterType} value={semesterType}>
+                  {capitalize(semesterType.toLowerCase())}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </div>
 
         <div className="flex flex-row gap-5">
-          <InputLabel className="mt-auto">Year Level:</InputLabel>
-          <Select
-            sx={{
-              maxWidth: 100,
-            }}
-            variant="standard"
-            defaultValue={courseOptions.yearLevel}
-            onChange={(e) => setYearLevel(Number(e.target.value))}
-          >
-            {yearLevelsData.map((data) => (
-              <MenuItem
-                key={data.id}
-                value={data.yearLevel}
-                className="capitalize"
-              >
-                {data.yearLevel}
-              </MenuItem>
-            ))}
-          </Select>
+          <FormControl fullWidth>
+            <InputLabel className="mt-auto">Year Level:</InputLabel>
+            <Select
+              sx={{
+                maxWidth: 200,
+              }}
+              variant="outlined"
+              label="Year Level"
+              defaultValue={courseOptions.yearLevel}
+              onChange={(e) => setYearLevel(Number(e.target.value))}
+            >
+              {yearLevelsData.map((data) => (
+                <MenuItem
+                  key={data.id}
+                  value={data.yearLevel}
+                  className="capitalize"
+                >
+                  {data.yearLevel}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
           <Search text={searchText} onChangeText={setSearchText} />
         </div>
       </div>
