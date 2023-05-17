@@ -92,7 +92,7 @@ const CourseOptionSelector: FC<Props> = ({
             <InputLabel className="mt-auto">Year Level:</InputLabel>
             <Select
               sx={{
-                maxWidth: 200,
+                maxWidth: 100,
               }}
               variant="outlined"
               label="Year Level"

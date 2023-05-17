@@ -10,7 +10,7 @@ interface Props {
 const SearchBar: FC<Props> = ({ text, onChangeText }) => {
   return (
     <TextField
-      sx={{ width: 350 }}
+      sx={{ width: 450 }}
       id="outlined-search"
       label="Search"
       type="search"
