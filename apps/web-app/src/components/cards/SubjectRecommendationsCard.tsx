@@ -59,10 +59,10 @@ export const BasicSelect: FC<SelectionProps> = ({ version, handleChange }) => {
 
 type Messages = (string | SubjectStatuses)[];
 type SubjectDetails =
-  | inferQueryOutput<"subject.getRecommendedSubjectsV2">[number]
+  | inferQueryOutput<"subject.getRecommendedSubjects">[number]
   | null;
 
-type SubjectDetailsV2 = inferQueryOutput<"subject.getRecommendedSubjectsV2">;
+type SubjectDetailsV2 = inferQueryOutput<"subject.getRecommendedSubjects">;
 
 export default function StudentProfileCard({
   studentId,
@@ -91,7 +91,7 @@ export default function StudentProfileCard({
   };
 
   const { data: recommendedV2 } = trpc.useQuery([
-    "subject.getRecommendedSubjectsV2",
+    "subject.getRecommendedSubjects",
     {
       studentId,
       enrollmentType,
@@ -188,7 +188,7 @@ export default function StudentProfileCard({
               <TableBody>
                 {formattedSubjects.map((subj, idx) => (
                   <TableRow
-                    key={`${subj.id}-${subj.name}-${idx}`}
+                    key={`${subj.name}-${idx}`}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell>

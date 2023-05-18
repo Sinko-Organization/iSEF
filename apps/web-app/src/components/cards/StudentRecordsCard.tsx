@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { pipe } from "@mobily/ts-belt";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -86,7 +87,9 @@ export default function StudentProfileCard({ records }: Props) {
                             className="text-bold"
                           >
                             <Tooltip title={getStatus(record.grade)}>
-                              <span>{record.grade}</span>
+                              <span>
+                                {record.grade === 0 ? "INC" : record.grade}
+                              </span>
                             </Tooltip>
                           </TableCell>
                           <TableCell className="text-bold">

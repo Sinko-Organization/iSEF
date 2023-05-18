@@ -57,7 +57,7 @@ export const BasicSelect: FC<SelectionProps> = ({ version, handleChange }) => {
 
 type Messages = (string | SubjectStatuses)[];
 type SubjectDetails =
-  | inferQueryOutput<"subject.getRecommendedSubjectsV2">[number]
+  | inferQueryOutput<"subject.getRecommendedSubjects">[number]
   | null;
 
 export default function StudentProfileCard({
@@ -71,15 +71,16 @@ export default function StudentProfileCard({
   const [isHoverModalOpen, setIsHoverModalOpen] = useState<boolean>(false);
   const [version, setVersion] = useState<string>("1");
 
-  const courseDependencies =
-    engineeringDependencies[userInfo.course][Number.parseInt(version)]!;
+  const courseDependencies = engineeringDependencies[userInfo.course][
+    Number.parseInt(version)
+  ]!.filter((dep) => dep.enrollmentType === enrollmentType);
 
   const handleChange = (event: SelectChangeEvent) => {
     setVersion(event.target.value as string);
   };
 
   const { data: recommendedV2 } = trpc.useQuery([
-    "subject.getRecommendedSubjectsV2",
+    "subject.getRecommendedSubjects",
     {
       studentId,
       enrollmentType,
@@ -146,7 +147,7 @@ export default function StudentProfileCard({
                   })
                   .map((subj, idx) => (
                     <TableRow
-                      key={`${subj.id}-${subj.name}-${idx}`}
+                      key={`${subj.name}-${idx}`}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
                       <TableCell>
