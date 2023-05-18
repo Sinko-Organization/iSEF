@@ -54,11 +54,6 @@ export const honorsRouter = createAdminRouter()
                 AND: [
                   {
                     grade: {
-                      lte: 2.6,
-                    },
-                  },
-                  {
-                    grade: {
                       gte: 1,
                     },
                   },
@@ -94,7 +89,6 @@ export const honorsRouter = createAdminRouter()
                 AND: [
                   {
                     grade: {
-                      lte: 2.6,
                       gte: 1,
                     },
                   },

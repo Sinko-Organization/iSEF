@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import FilterListIcon from "@mui/icons-material/FilterList";
 import InfoTwoToneIcon from "@mui/icons-material/InfoTwoTone";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -111,9 +110,6 @@ export default function StudentProfileCard({
           action={
             <div className="flex flex-row gap-5">
               <BasicSelect version={version} handleChange={handleChange} />
-              <Tooltip title="Sort">
-                <FilterListIcon className="my-auto" />
-              </Tooltip>
             </div>
           }
         />
