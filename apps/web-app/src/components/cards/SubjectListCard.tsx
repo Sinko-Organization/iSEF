@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import FilterListIcon from "@mui/icons-material/FilterList";
 import InfoTwoToneIcon from "@mui/icons-material/InfoTwoTone";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -58,7 +57,7 @@ export const BasicSelect: FC<SelectionProps> = ({ version, handleChange }) => {
 
 type Messages = (string | SubjectStatuses)[];
 type SubjectDetails =
-  | inferQueryOutput<"subject.getRecommendedSubjectsV2">[number]
+  | inferQueryOutput<"subject.getRecommendedSubjects">[number]
   | null;
 
 export default function StudentProfileCard({
@@ -72,15 +71,16 @@ export default function StudentProfileCard({
   const [isHoverModalOpen, setIsHoverModalOpen] = useState<boolean>(false);
   const [version, setVersion] = useState<string>("1");
 
-  const courseDependencies =
-    engineeringDependencies[userInfo.course][Number.parseInt(version)]!;
+  const courseDependencies = engineeringDependencies[userInfo.course][
+    Number.parseInt(version)
+  ]!.filter((dep) => dep.enrollmentType === enrollmentType);
 
   const handleChange = (event: SelectChangeEvent) => {
     setVersion(event.target.value as string);
   };
 
   const { data: recommendedV2 } = trpc.useQuery([
-    "subject.getRecommendedSubjectsV2",
+    "subject.getRecommendedSubjects",
     {
       studentId,
       enrollmentType,
@@ -111,9 +111,6 @@ export default function StudentProfileCard({
           action={
             <div className="flex flex-row gap-5">
               <BasicSelect version={version} handleChange={handleChange} />
-              <Tooltip title="Sort">
-                <FilterListIcon className="my-auto" />
-              </Tooltip>
             </div>
           }
         />
@@ -150,7 +147,7 @@ export default function StudentProfileCard({
                   })
                   .map((subj, idx) => (
                     <TableRow
-                      key={`${subj.id}-${subj.name}-${idx}`}
+                      key={`${subj.name}-${idx}`}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
                       <TableCell>

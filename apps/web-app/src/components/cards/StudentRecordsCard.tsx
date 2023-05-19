@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { pipe } from "@mobily/ts-belt";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -78,8 +79,18 @@ export default function StudentProfileCard({ records }: Props) {
                     <TableBody>
                       {sortedRecords[key].map((record: Record) => (
                         <TableRow key={record.id}>
-                          <TableCell className="text-bold">
-                            {record.grade}
+                          <TableCell
+                            sx={{
+                              color: getColor(record.grade),
+                              cursor: "pointer",
+                            }}
+                            className="text-bold"
+                          >
+                            <Tooltip title={getStatus(record.grade)}>
+                              <span>
+                                {record.grade === 0 ? "INC" : record.grade}
+                              </span>
+                            </Tooltip>
                           </TableCell>
                           <TableCell className="text-bold">
                             {record.subject.name}
@@ -148,6 +159,30 @@ const displayGrade = (result: Result) => {
       </Typography>
     </Tooltip>
   );
+};
+
+const getColor = (grade: number) => {
+  if (grade === 0) {
+    return "red";
+  } else if (grade <= 5 && grade > 3) {
+    return "red";
+  } else if (grade <= 3 && grade >= 1) {
+    return "green";
+  } else {
+    return "red";
+  }
+};
+
+const getStatus = (grade: number) => {
+  if (grade === 0) {
+    return "Failed";
+  } else if (grade <= 5 && grade > 3) {
+    return "Failed";
+  } else if (grade <= 3 && grade >= 1) {
+    return "Passed";
+  } else {
+    return "Failed";
+  }
 };
 
 const evaluateGrade = (grade: number): Result => {

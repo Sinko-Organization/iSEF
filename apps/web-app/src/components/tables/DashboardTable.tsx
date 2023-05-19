@@ -102,6 +102,28 @@ const DashboardTable: FC<DashboardTableProps> = ({ rows }) => {
                 </Link>
               );
             })}
+            {/* Added since last row has no vertical line */}
+            <TableRow
+              sx={{
+                "&:last-child td, &:last-child th": { border: 0 },
+                cursor: "pointer",
+                display: "none",
+              }}
+              hover
+            >
+              <TableCell
+                component="th"
+                scope="row"
+                sx={{
+                  textAlign: "center",
+                  borderRight: "1px solid #ddd",
+                }}
+              ></TableCell>
+              <TableCell
+                align="right"
+                sx={{ textAlign: "center", borderLeft: "1px solid #ddd" }}
+              ></TableCell>
+            </TableRow>
           </TableBody>
         </Table>
       </TableContainer>

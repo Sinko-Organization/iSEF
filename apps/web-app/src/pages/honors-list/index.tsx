@@ -57,7 +57,7 @@ const Index: NextPage = () => {
 
   return (
     <>
-      <div className="mx-20 flex flex-row gap-5">
+      <div className="mx-20 my-10 flex flex-row gap-5">
         {schoolYearsData && (
           <CurriculumSelector
             schoolYearsData={schoolYearsData}
@@ -66,22 +66,30 @@ const Index: NextPage = () => {
             setSemesterType={setSemesterType}
           />
         )}
-        <YearLevelSelector setYearLevel={setYearLevel} />
-        <CourseSelector setCourse={setCourse} />
+        <YearLevelSelector yearLevel={yearLevel} setYearLevel={setYearLevel} />
+        <CourseSelector course={courseId} setCourse={setCourse} />
       </div>
       <div className="mx-20 mt-10">
         {data && (
           <HonorsListTable
             honorsList={data.map((student) => ({
               ...student,
-              firstName: student.firstName ?? "---",
-              lastName: student.lastName ?? "---",
+              firstName: isNotNullAndEmpty(student.firstName)
+                ? (student.firstName as string)
+                : "---",
+              lastName: isNotNullAndEmpty(student.lastName)
+                ? (student.lastName as string)
+                : "---",
             }))}
           />
         )}
       </div>
     </>
   );
+};
+
+const isNotNullAndEmpty = (value: string | null) => {
+  return value !== null && value !== "";
 };
 
 export default Index;

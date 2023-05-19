@@ -1,5 +1,5 @@
 /* eslint-disable unicorn/no-array-reduce */
-import type { SemesterType } from "@prisma/client";
+import type { Course, SemesterType } from "@prisma/client";
 import { engineeringDependencies } from "@web-app/models/subject-dependencies";
 import type { Courses } from "@web-app/models/subject-dependencies/types";
 import type { inferQueryOutput } from "@web-app/utils/trpc";
@@ -128,17 +128,17 @@ export const getUserInfo = (
     }
   }
 
-  if (!currentEnrollment) {
-    return "No enrollment type found";
-  }
+  // if (!currentEnrollment) {
+  //   return "No enrollment type found";
+  // }
 
-  if (!currentCourse) {
-    return "No current course found";
-  }
+  // if (!currentCourse) {
+  //   return "No current course found";
+  // }
 
   return {
-    course: currentCourse as Courses,
-    enrollmentType: currentEnrollment,
+    course: (currentCourse as Courses) ?? ("Civil" as Courses),
+    enrollmentType: currentEnrollment ?? "Regular",
     yearLevel: nextYearLevel,
     semesterType: nextSemesterType,
   };

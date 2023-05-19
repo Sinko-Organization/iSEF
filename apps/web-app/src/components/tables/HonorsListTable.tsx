@@ -66,7 +66,7 @@ const headCells: readonly HeadCell[] = [
     id: "studentIdNumber",
     numeric: false,
     disablePadding: true,
-    label: "Student ID Number",
+    label: "ID",
   },
   {
     id: "lastName",
@@ -90,7 +90,7 @@ const headCells: readonly HeadCell[] = [
     id: "gwa",
     numeric: true,
     disablePadding: false,
-    label: "General Weighted Average",
+    label: "GWA",
   },
 ];
 
@@ -110,14 +110,17 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     };
 
   return (
-    <TableHead>
+    <TableHead sx={{ backgroundColor: "#F5F5F5" }}>
       <TableRow>
-        <TableCell padding="checkbox" />
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? "right" : "left"}
-            padding={headCell.disablePadding ? "none" : "normal"}
+            sx={{
+              fontSize: "1rem",
+              fontWeight: "bold",
+              textAlign: "center",
+              borderRight: "1px solid #ddd",
+            }}
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
@@ -140,7 +143,7 @@ const HonorsListTable: FC<HonorsList> = ({ honorsList }) => {
 
   const [order, setOrder] = useState<Order>("asc");
   const [orderBy, setOrderBy] = useState<string>("firstName");
-  const [selected, setSelected] = useState<readonly string[]>([]);
+  const [selected] = useState<readonly string[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -181,17 +184,22 @@ const HonorsListTable: FC<HonorsList> = ({ honorsList }) => {
 
   const isSelected = (name: string) => selected.includes(name);
 
-  // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - honorsList.length) : 0;
-
   return (
-    <Box sx={{ width: "100%" }}>
-      <Paper sx={{ width: "100%", mb: 2 }}>
+    <>
+      <Paper
+        className="mt-10"
+        sx={{
+          boxShadow: "0px 4px 16px rgba(0, 0, 0, 0.25)",
+          borderRadius: 2,
+          overflow: "hidden",
+        }}
+      >
         <Toolbar
           sx={{
+            backgroundColor: "#F5F5F5",
             pl: { sm: 2 },
             pr: { xs: 1, sm: 1 },
+            borderBottom: "1px solid #ddd",
           }}
         >
           <Typography
@@ -200,7 +208,7 @@ const HonorsListTable: FC<HonorsList> = ({ honorsList }) => {
             id="tableTitle"
             component="div"
           >
-            Honor&apos;s List
+            <div className="font-bold text-xl">Honor&apos;s List</div>
           </Typography>
 
           <Tooltip title="Print to PDF" onClick={printToPDF}>
@@ -210,11 +218,7 @@ const HonorsListTable: FC<HonorsList> = ({ honorsList }) => {
           </Tooltip>
         </Toolbar>
         <TableContainer>
-          <Table
-            sx={{ minWidth: 700 }}
-            aria-labelledby="tableTitle"
-            size={"medium"}
-          >
+          <Table sx={{ minWidth: 1000 }} aria-label="simple table">
             <EnhancedTableHead
               numSelected={selected.length}
               order={order}
@@ -224,13 +228,12 @@ const HonorsListTable: FC<HonorsList> = ({ honorsList }) => {
             />
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-              rows.sort(getComparator(order, orderBy)).slice() */}
+                rows.sort(getComparator(order, orderBy)).slice() */}
               {honorsList
                 .sort(getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
+                .map((row) => {
                   const isItemSelected = isSelected(row.firstName);
-                  const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <>
@@ -241,37 +244,93 @@ const HonorsListTable: FC<HonorsList> = ({ honorsList }) => {
                         tabIndex={-1}
                         key={row.id}
                         selected={isItemSelected}
+                        sx={{
+                          cursor: "pointer",
+                        }}
                       >
-                        <TableCell padding="checkbox" />
                         <TableCell
                           component="th"
-                          id={labelId}
                           scope="row"
-                          padding="none"
+                          sx={{
+                            textAlign: "center",
+                            borderRight: "1px solid #ddd",
+                          }}
                         >
                           {row.studentIdNumber}
                         </TableCell>
-                        <TableCell align="right">{row.lastName}</TableCell>
-                        <TableCell align="right">{row.firstName}</TableCell>
-                        <TableCell align="right">
+                        <TableCell
+                          component="th"
+                          scope="row"
+                          sx={{
+                            textAlign: "center",
+                            borderRight: "1px solid #ddd",
+                          }}
+                        >
+                          {row.lastName}
+                        </TableCell>
+                        <TableCell
+                          component="th"
+                          scope="row"
+                          sx={{
+                            textAlign: "center",
+                            borderRight: "1px solid #ddd",
+                          }}
+                        >
+                          {row.firstName}
+                        </TableCell>
+                        <TableCell
+                          component="th"
+                          scope="row"
+                          sx={{
+                            textAlign: "center",
+                            borderRight: "1px solid #ddd",
+                          }}
+                        >
                           {row.studentRecords[0]?.course.name ?? "No Course"}
                         </TableCell>
-                        <TableCell align="right">
+                        <TableCell
+                          component="th"
+                          scope="row"
+                          sx={{
+                            textAlign: "center",
+                            borderRight: "1px solid #ddd",
+                          }}
+                        >
                           {row.gwa.toFixed(2)}
                         </TableCell>
                       </TableRow>
                     </>
                   );
                 })}
-              {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: 53 * emptyRows,
-                  }}
-                >
-                  <TableCell colSpan={3} />
-                </TableRow>
-              )}
+              {/* Added since last row has no vertical line */}
+              <TableRow
+                sx={{
+                  cursor: "pointer",
+                  display: "none",
+                }}
+                hover
+              >
+                <TableCell
+                  align="right"
+                  sx={{ textAlign: "center" }}
+                ></TableCell>
+                <TableCell
+                  align="right"
+                  sx={{ textAlign: "center" }}
+                ></TableCell>
+                <TableCell
+                  align="right"
+                  sx={{ textAlign: "center" }}
+                ></TableCell>
+                <TableCell
+                  align="right"
+                  sx={{ textAlign: "center" }}
+                ></TableCell>
+                <TableCell
+                  align="right"
+                  sx={{ textAlign: "center" }}
+                ></TableCell>
+              </TableRow>
             </TableBody>
           </Table>
         </TableContainer>
@@ -285,7 +344,7 @@ const HonorsListTable: FC<HonorsList> = ({ honorsList }) => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-    </Box>
+    </>
   );
 };
 

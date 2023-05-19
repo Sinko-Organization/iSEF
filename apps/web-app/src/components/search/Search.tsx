@@ -1,5 +1,6 @@
-import TextField from "@mui/material/TextField";
-import type { FC } from "react";
+import SearchIcon from "@mui/icons-material/Search";
+import { TextField } from "@mui/material";
+import React, { FC } from "react";
 
 interface Props {
   text: string;
@@ -9,12 +10,21 @@ interface Props {
 const SearchBar: FC<Props> = ({ text, onChangeText }) => {
   return (
     <TextField
+      sx={{ width: 450 }}
       id="outlined-search"
-      label="Search field"
+      label="Search"
       type="search"
-      variant="standard"
+      variant="outlined"
       value={text}
       onChange={(event) => onChangeText(event.target.value)}
+      InputProps={{
+        startAdornment: <SearchIcon />,
+        sx: {
+          "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: "rgba(0, 0, 0, 0.23)", // Adjust the border color
+          },
+        },
+      }}
     />
   );
 };

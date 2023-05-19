@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { O, pipe } from "@mobily/ts-belt";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -26,6 +27,7 @@ import { engineeringDependencies } from "@web-app/models/subject-dependencies";
 import type { Courses } from "@web-app/models/subject-dependencies/types";
 import { findSubjectDetails } from "@web-app/models/subject-dependencies/utils";
 import { SubjectStatuses } from "@web-app/server/router/subject/types";
+import { useCourseNameStore } from "@web-app/stores/course";
 import type { inferQueryOutput } from "@web-app/utils/trpc";
 import { trpc } from "@web-app/utils/trpc";
 import { useState } from "react";
@@ -59,10 +61,10 @@ export const BasicSelect: FC<SelectionProps> = ({ version, handleChange }) => {
 
 type Messages = (string | SubjectStatuses)[];
 type SubjectDetails =
-  | inferQueryOutput<"subject.getRecommendedSubjectsV2">[number]
+  | inferQueryOutput<"subject.getRecommendedSubjects">[number]
   | null;
 
-type SubjectDetailsV2 = inferQueryOutput<"subject.getRecommendedSubjectsV2">;
+type SubjectDetailsV2 = inferQueryOutput<"subject.getRecommendedSubjects">;
 
 export default function StudentProfileCard({
   studentId,
@@ -75,8 +77,21 @@ export default function StudentProfileCard({
   const [isHoverModalOpen, setIsHoverModalOpen] = useState<boolean>(false);
   const [version, setVersion] = useState<string>("1");
 
+  const courseName = pipe(
+    useCourseNameStore((state) => state.courseName),
+    O.fromNullable,
+    O.map((coures) => {
+      return mapToCourses(coures);
+    }),
+    O.toNullable,
+  );
+
+  if (!courseName) {
+    return <>Invalid Course</>;
+  }
+
   const courseDependencies =
-    engineeringDependencies[userInfo.course][Number.parseInt(version)]!;
+    engineeringDependencies[courseName][Number.parseInt(version)]!;
 
   const creditUnits = getTotalCreditUnits({
     course,
@@ -91,7 +106,7 @@ export default function StudentProfileCard({
   };
 
   const { data: recommendedV2 } = trpc.useQuery([
-    "subject.getRecommendedSubjectsV2",
+    "subject.getRecommendedSubjects",
     {
       studentId,
       enrollmentType,
@@ -188,7 +203,7 @@ export default function StudentProfileCard({
               <TableBody>
                 {formattedSubjects.map((subj, idx) => (
                   <TableRow
-                    key={`${subj.id}-${subj.name}-${idx}`}
+                    key={`${subj.name}-${idx}`}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell>
@@ -248,4 +263,43 @@ const getRecommendedSubs = (subs: SubjectDetailsV2, creditUnits: number) => {
   }
 
   return result;
+};
+
+const mapToCourses = (course: string): Courses => {
+  const courseName = course.toLowerCase().replace(/\s/g, "");
+  switch (courseName) {
+    case "dpkgt": {
+      return "Packaging";
+    }
+    case "bsce": {
+      return "Civil";
+    }
+    case "bsme": {
+      return "Mechanical";
+    }
+    case "bsse": {
+      return "Software";
+    }
+    case "bspkge": {
+      return "Packaging";
+    }
+    case "mengr1": {
+      return "Mechanical";
+    }
+    case "bsche": {
+      return "Chemical";
+    }
+    case "bsece": {
+      return "Electronics";
+    }
+    case "mengr2": {
+      return "Mechanical";
+    }
+    case "mengr3": {
+      return "Mechanical";
+    }
+    default: {
+      return "Civil";
+    }
+  }
 };

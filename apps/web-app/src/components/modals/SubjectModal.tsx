@@ -50,7 +50,7 @@ const SubjectModal: FC<{
   currentYearLevel: number;
   courseDependencies: DependencyListV2;
   subjectDetails:
-    | inferQueryOutput<"subject.getRecommendedSubjectsV2">[number]
+    | inferQueryOutput<"subject.getRecommendedSubjects">[number]
     | null;
 }> = ({
   isOpen,
@@ -116,7 +116,7 @@ const SubjectModal: FC<{
           variant="body1"
           sx={{ marginTop: "40px" }}
         >
-          <strong>Dependencies:</strong>
+          <strong>Prerequisites:</strong>
           {details?.prerequisites.length &&
           details?.prerequisites.length > 0 ? (
             <Table sx={{ marginTop: "8px", alignItems: "center" }}>
@@ -177,96 +177,6 @@ const SubjectModal: FC<{
             </Box>
           )}
         </Typography>
-
-        {/* <Typography
-          id="modal-modal-description"
-          variant="body1"
-          sx={{ marginTop: "16px", my: "40px" }}
-        >
-          <strong>Year Standing:</strong>
-          {messages
-            .filter((message) => {
-              if (
-                typeof message !== "string" &&
-                message.type === "Low Year Standing"
-              ) {
-                return true;
-              }
-              return false;
-            })
-            .map((message) =>
-              match(message)
-                .with({ type: "Low Year Standing" }, (subject) => (
-                  <Table sx={{ marginTop: "8px" }}>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell sx={{ fontWeight: "bold" }}>
-                          Subject Standing
-                        </TableCell>
-                        <TableCell sx={{ fontWeight: "bold" }}>
-                          Current Year Level
-                        </TableCell>
-                        <TableCell sx={{ fontWeight: "bold" }}>
-                          Status
-                        </TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      <TableRow>
-                        <TableCell>
-                          {subject.yearStanding === "ALL"
-                            ? "ALL"
-                            : getOrdinalSuffix(subject.yearStanding) + " year"}
-                        </TableCell>
-                        <TableCell>
-                          {getOrdinalSuffix(subject.currentYearLevel) + " year"}
-                        </TableCell>
-                        <TableCell>
-                          {match(subject.yearStanding)
-                            .with("ALL", () => (
-                              <div className="flex flex-row gap-1 font-bold text-green-600">
-                                <CheckCircleIcon sx={{ color: "green" }} />
-                                Can Be Taken
-                              </div>
-                            ))
-                            .otherwise(() => {
-                              if (typeof subject.yearStanding === "string") {
-                                return "Can't be taken";
-                              }
-                              const { yearStanding, currentYearLevel } =
-                                subject;
-                              const canBeTaken =
-                                currentYearLevel >= yearStanding;
-
-                              return canBeTaken ? (
-                                <div className="flex flex-row gap-1 font-bold text-green-600">
-                                  <CheckCircleIcon sx={{ color: "green" }} />
-                                  Can Be Taken
-                                </div>
-                              ) : (
-                                <div className="flex flex-row gap-1 font-bold text-red-600">
-                                  <CancelIcon sx={{ color: "red" }} />
-                                  Can&apos;t be taken
-                                </div>
-                              );
-                            })}
-                        </TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                ))
-                .otherwise(() => <div>No Year Standing</div>),
-            )}
-          {messages.filter((message) => {
-            if (
-              typeof message !== "string" &&
-              message.type === "Low Year Standing"
-            ) {
-              return true;
-            }
-            return false;
-          }).length === 0 && <div className="mt-2">No Year Standing</div>}
-        </Typography> */}
 
         <Typography
           id="modal-modal-description"

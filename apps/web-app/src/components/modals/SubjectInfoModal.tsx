@@ -37,7 +37,7 @@ const SubjectInfoModal: FC<{
   setIsOpen: (isOpen: boolean) => void;
   courseDependencies: DependencyListV2;
   subjectDetails:
-    | inferQueryOutput<"subject.getRecommendedSubjectsV2">[number]
+    | inferQueryOutput<"subject.getRecommendedSubjects">[number]
     | null;
 }> = ({ isOpen, setIsOpen, courseDependencies, subjectDetails }) => {
   const coreqDetails = findSubjectCorequisites(
