@@ -12,6 +12,7 @@ import type { ErrorResult, SuccessResult } from "@web-app/helpers/getUserInfo";
 import type { inferQueryOutput } from "@web-app/utils/trpc";
 import Link from "next/link";
 import type { FC } from "react";
+import { match } from "ts-pattern";
 
 interface CourseTableProps {
   students: inferQueryOutput<"course.getStudentsV2">;
@@ -137,8 +138,18 @@ const CourseTable: FC<CourseTableProps> = ({ students }) => {
                       O.flatMap(handleUserInfo),
                       O.map((info) => info.enrollmentType),
                       O.match(
-                        (info) => info as string,
-                        () => "Unknown",
+                        (info) => (
+                          <div
+                            className={`font-bold ${match(info)
+                              .with("Regular", () => "text-blue-600")
+                              .with("Bridging", () => "text-green-600")
+                              .exhaustive()}
+                          `}
+                          >
+                            {info}
+                          </div>
+                        ),
+                        () => <div className="text-red-600">Unknown</div>,
                       ),
                     )}
                   </TableCell>
