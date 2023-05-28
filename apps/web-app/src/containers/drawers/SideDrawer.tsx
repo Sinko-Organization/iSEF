@@ -67,12 +67,17 @@ export default function ResponsiveDrawer({ window, children }: Props) {
           <Image
             src="/images/isef-logo.png"
             alt="LOGO"
-            width={270}
-            height={275}
+            width={200}
+            height={200}
           />
         </div>
       </Toolbar>
-      <Divider className="font-bold">ISEF</Divider>
+      <Divider
+        className="font-bold"
+        style={{ fontFamily: "Times New Roman", letterSpacing: "1px" }}
+      >
+        ISEF
+      </Divider>
 
       <List>
         {paths.map((path, index) => (
@@ -92,7 +97,10 @@ export default function ResponsiveDrawer({ window, children }: Props) {
           <ListItemButton key={index}>
             <ListItemIcon>{systemPath.icon}</ListItemIcon>
             <Link href={systemPath.link} className="sidebar-link">
-              <ListItemText primary={systemPath.name} />
+              <ListItemText
+                primary={systemPath.name}
+                style={{ fontFamily: "Times New Roman" }}
+              />
             </Link>
           </ListItemButton>
         ))}
@@ -104,10 +112,11 @@ export default function ResponsiveDrawer({ window, children }: Props) {
     window !== undefined ? () => window().document.body : undefined;
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box className="flex">
       <CssBaseline />
       <AppBar
         position="fixed"
+        className="w-full"
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
@@ -120,72 +129,31 @@ export default function ResponsiveDrawer({ window, children }: Props) {
           style={{ backgroundColor: "#9078b6" }}
         >
           <Toolbar className="toolbar">
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { sm: "none" } }}
+            <Typography
+              variant="h6"
+              noWrap
+              className="flex-grow"
+              style={{ fontFamily: "Times New Roman", letterSpacing: "2px" }}
             >
-              <MenuIcon />
-            </IconButton>
-            {/* Intelligent Students E - Folders */}
-            INTELLIGENT STUDENTS E-FOLDERS
-            {/*LOG OUT BUTTON*/}
-            <Box sx={{ display: "flex", marginLeft: 90 }}>
-              <Typography>
-                <button onClick={() => signOut()}>Log Out</button>
-              </Typography>
-            </Box>
+              INTELLIGENT STUDENTS E-FOLDERS
+            </Typography>
+            <Typography style={{ fontFamily: "Times New Roman" }}>
+              <button onClick={() => signOut()}>Log Out</button>
+            </Typography>
           </Toolbar>
         </Typography>
       </AppBar>
       <Box
         component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+        className="w-full sm:w-auto sm:flex-shrink-0"
         aria-label="mailbox folders"
+        
       >
-        <Drawer
-          container={container}
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true,
-          }}
-          sx={{
-            display: { xs: "block", sm: "none" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-            },
-          }}
-        >
-          {drawer}
-        </Drawer>
-
-        <Drawer
-          variant="permanent"
-          sx={{
-            display: { xs: "none", sm: "block" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-            },
-          }}
-          open
-        >
+        <Drawer variant="permanent" className="hidden sm:block" open >
           {drawer}
         </Drawer>
       </Box>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          p: 3,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-        }}
-      >
+      <Box component="main" className="flex-grow p-1 ml-64">
         <Toolbar />
         {children}
       </Box>

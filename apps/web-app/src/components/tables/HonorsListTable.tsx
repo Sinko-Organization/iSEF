@@ -72,19 +72,19 @@ const headCells: readonly HeadCell[] = [
     id: "lastName",
     numeric: true,
     disablePadding: false,
-    label: "Last Name",
+    label: "LAST NAME",
   },
   {
     id: "firstName",
     numeric: true,
     disablePadding: false,
-    label: "First Name",
+    label: "FIRST NAME",
   },
   {
     id: "course",
     numeric: true,
     disablePadding: false,
-    label: "Course",
+    label: "COURSE",
   },
   {
     id: "gwa",
@@ -110,16 +110,17 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     };
 
   return (
-    <TableHead sx={{ backgroundColor: "#F5F5F5" }}>
+    <TableHead sx={{ backgroundColor: "#A9CCE3" }}>
       <TableRow>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
             sx={{
-              fontSize: "1rem",
+              fontSize: "15 px",
               fontWeight: "bold",
               textAlign: "center",
               borderRight: "1px solid #ddd",
+              fontFamily: "Times New Roman",
             }}
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -196,21 +197,26 @@ const HonorsListTable: FC<HonorsList> = ({ honorsList }) => {
       >
         <Toolbar
           sx={{
-            backgroundColor: "#F5F5F5",
+            backgroundColor: "#5499C7",
             pl: { sm: 2 },
             pr: { xs: 1, sm: 1 },
             borderBottom: "1px solid #ddd",
+            color: "white",
+            textAlign: "center",
           }}
         >
           <Typography
-            sx={{ flex: "1 1 100%" }}
-            variant="h6"
+            sx={{
+              flex: "1 1 100%",
+              fontFamily: "Times New Roman",
+              fontSize: "20px",
+            }}
+            // variant="h6"
             id="tableTitle"
             component="div"
           >
-            <div className="font-bold text-xl">Honor&apos;s List</div>
+            <div className="font-bold">HONOR&apos;S LIST</div>
           </Typography>
-
           <Tooltip title="Print to PDF" onClick={printToPDF}>
             <IconButton aria-label="print to pdf">
               <PictureAsPdfIcon />
