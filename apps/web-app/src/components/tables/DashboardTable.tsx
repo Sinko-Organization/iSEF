@@ -24,7 +24,10 @@ const DashboardTable: FC<DashboardTableProps> = ({ rows }) => {
       <Link href={`/course?id=${row.id}`}>
         <div className="border border-gray-300 rounded-lg p-4 h-full flex flex-col justify-center items-center hover:bg-gray-100 cursor-pointer shadow-lg">
           <div className="text-center">{row.name}</div>
-          <div className="text-sm mt-2 text-center"> Population: {row.population}</div>
+          <div className="text-sm mt-2 text-center">
+            {" "}
+            Population: {row.population}
+          </div>
         </div>
       </Link>
     </div>
@@ -43,7 +46,7 @@ const DashboardTable: FC<DashboardTableProps> = ({ rows }) => {
         courseRows.push(
           <div key={index} className="flex">
             {currentRow.map((card) => card)}
-          </div>
+          </div>,
         );
         currentRow = [];
       }
@@ -53,7 +56,7 @@ const DashboardTable: FC<DashboardTableProps> = ({ rows }) => {
       courseRows.push(
         <div key="last-row" className="flex">
           {currentRow.map((card) => card)}
-        </div>
+        </div>,
       );
     }
 
@@ -81,12 +84,9 @@ const DashboardTable: FC<DashboardTableProps> = ({ rows }) => {
               </TableCell> */}
             </TableRow>
             <TableRow>
-              <TableCell
-                colSpan={3}
-                align="center"
-                className="text-sm"
-              >
-               Courses <br></br> Total Population: <b>{totalPopulation} students</b>
+              <TableCell colSpan={3} align="center" className="text-sm">
+                Courses <br></br> Total Population:{" "}
+                <b>{totalPopulation} students</b>
               </TableCell>
             </TableRow>
           </TableHead>
