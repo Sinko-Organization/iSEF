@@ -9,7 +9,7 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-type StudentData = inferQueryOutput<"course.getStudents">;
+type StudentData = inferQueryOutput<"course.getStudentsV2">;
 
 const CoursePage: NextPage = () => {
   const {
@@ -31,7 +31,7 @@ const CoursePage: NextPage = () => {
   const { id } = router.query as { id: string };
 
   const students = trpc.useQuery([
-    "course.getStudents",
+    "course.getStudentsV2",
     {
       courseId: id,
       schoolYear,

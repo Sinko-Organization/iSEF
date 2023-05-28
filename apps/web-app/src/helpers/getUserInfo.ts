@@ -1,12 +1,12 @@
 /* eslint-disable unicorn/no-array-reduce */
-import type { Course, SemesterType } from "@prisma/client";
+import type { SemesterType } from "@prisma/client";
 import { engineeringDependencies } from "@web-app/models/subject-dependencies";
 import type { Courses } from "@web-app/models/subject-dependencies/types";
 import type { inferQueryOutput } from "@web-app/utils/trpc";
 import { match } from "ts-pattern";
 
 type StudentRecords = NonNullable<
-  inferQueryOutput<"studentData.details">["studentRecords"]
+  inferQueryOutput<"course.getStudentsV2">[number]["studentRecords"]
 >;
 
 export type ErrorResult =

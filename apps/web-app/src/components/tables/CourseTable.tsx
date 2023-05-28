@@ -1,3 +1,5 @@
+/* eslint-disable unicorn/no-array-callback-reference */
+import { O, pipe } from "@mobily/ts-belt";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -5,16 +7,15 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { getUserInfo } from "@web-app/helpers";
+import type { ErrorResult, SuccessResult } from "@web-app/helpers/getUserInfo";
+import type { inferQueryOutput } from "@web-app/utils/trpc";
 import Link from "next/link";
 import type { FC } from "react";
+import { match } from "ts-pattern";
 
 interface CourseTableProps {
-  students: {
-    id: string;
-    studentIdNumber: string;
-    firstName: string | null;
-    lastName: string | null;
-  }[];
+  students: inferQueryOutput<"course.getStudentsV2">;
 }
 
 const CourseTable: FC<CourseTableProps> = ({ students }) => {
@@ -62,6 +63,17 @@ const CourseTable: FC<CourseTableProps> = ({ students }) => {
                 }}
               >
                 Last Name
+              </TableCell>
+              <TableCell
+                align="right"
+                sx={{
+                  fontSize: "1rem",
+                  fontWeight: "bold",
+                  textAlign: "center",
+                  borderLeft: "1px solid #ddd",
+                }}
+              >
+                Enrollment Type
               </TableCell>
             </TableRow>
           </TableHead>
@@ -115,6 +127,32 @@ const CourseTable: FC<CourseTableProps> = ({ students }) => {
                       ? student.lastName
                       : "---"}
                   </TableCell>
+                  <TableCell
+                    align="right"
+                    sx={{ textAlign: "center", borderLeft: "1px solid #ddd" }}
+                  >
+                    {pipe(
+                      student.studentRecords,
+                      O.fromNullable,
+                      O.map(getUserInfo),
+                      O.flatMap(handleUserInfo),
+                      O.map((info) => info.enrollmentType),
+                      O.match(
+                        (info) => (
+                          <div
+                            className={`font-bold ${match(info)
+                              .with("Regular", () => "text-blue-600")
+                              .with("Bridging", () => "text-green-600")
+                              .exhaustive()}
+                          `}
+                          >
+                            {info}
+                          </div>
+                        ),
+                        () => <div className="text-red-600">Unknown</div>,
+                      ),
+                    )}
+                  </TableCell>
                 </TableRow>
               </Link>
             ))}
@@ -149,6 +187,11 @@ const CourseTable: FC<CourseTableProps> = ({ students }) => {
       </TableContainer>
     </Paper>
   );
+};
+
+const handleUserInfo = (userInfo: ErrorResult | SuccessResult) => {
+  const isSuccess = typeof userInfo !== "string";
+  return isSuccess ? userInfo : O.None;
 };
 
 const isNotNullAndEmpty = (value: string | null) => {
