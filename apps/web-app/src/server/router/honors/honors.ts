@@ -1,5 +1,6 @@
 import { A, pipe } from "@mobily/ts-belt";
 import _ from "lodash";
+import { P, match } from "ts-pattern";
 import { z } from "zod";
 
 import { createAdminRouter } from "../context";
@@ -12,7 +13,7 @@ export const honorsRouter = createAdminRouter()
     input: z.object({
       schoolYear: z.number(),
       semesterType: z.enum(["FIRST", "SECOND", "SUMMER"]),
-      yearLevel: z.number().int().min(1).max(5).nullable(),
+      yearLevel: z.union([z.enum(["ALL"]), z.number().min(1)]).nullable(),
       courseId: z.string().nullable(),
       sortBy: z.object({
         field: z.enum(["lastName", "gwa"]).default("lastName"),
@@ -70,7 +71,10 @@ export const honorsRouter = createAdminRouter()
                     },
                   },
                   {
-                    yearLevel: input.yearLevel ?? undefined,
+                    yearLevel: match(input.yearLevel)
+                      .with(P.number, (yearLevel) => yearLevel)
+                      // eslint-disable-next-line unicorn/no-useless-undefined
+                      .otherwise(() => undefined),
                   },
                   {
                     courseId: input.courseId ?? undefined,
