@@ -18,6 +18,51 @@ interface DashboardTableProps {
 
 const DashboardTable: FC<DashboardTableProps> = ({ rows }) => {
   const totalPopulation = rows.reduce((acc, curr) => acc + curr.population, 0);
+
+  const renderCourseCard = (row: any) => (
+    <div className="w-1/3 p-4">
+      <Link href={`/course?id=${row.id}`}>
+        <div className="border border-gray-300 rounded-lg p-4 h-full flex flex-col justify-center items-center hover:bg-gray-100 cursor-pointer shadow-lg">
+          <div className="text-center">{row.name}</div>
+          <div className="text-sm mt-2 text-center">
+            {" "}
+            Population: {row.population}
+          </div>
+        </div>
+      </Link>
+    </div>
+  );
+
+  const renderCourseRows = () => {
+    const courseRows: JSX.Element[] = [];
+    let currentRow: JSX.Element[] = [];
+
+    rows.forEach((row, index) => {
+      if (row.population === 0) return;
+
+      currentRow.push(renderCourseCard(row));
+
+      if ((index + 1) % 3 === 0) {
+        courseRows.push(
+          <div key={index} className="flex">
+            {currentRow.map((card) => card)}
+          </div>,
+        );
+        currentRow = [];
+      }
+    });
+
+    if (currentRow.length > 0) {
+      courseRows.push(
+        <div key="last-row" className="flex">
+          {currentRow.map((card) => card)}
+        </div>,
+      );
+    }
+
+    return courseRows;
+  };
+
   return (
     <Paper
       className="mt-10"
@@ -29,100 +74,27 @@ const DashboardTable: FC<DashboardTableProps> = ({ rows }) => {
     >
       <TableContainer>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead sx={{ backgroundColor: "#F5F5F5" }}>
+          <TableHead sx={{ backgroundColor: "#EBDEF0" }}>
             <TableRow>
-              <TableCell
-                sx={{
-                  fontSize: "1rem",
-                  fontWeight: "bold",
-                  textAlign: "center",
-                  width: "50%",
-                  borderRight: "1px solid #ddd",
-                }}
+              {/* <TableCell
+                colSpan={3}
+                className="text-center font-bold border-b"
               >
-                Courses
-              </TableCell>
-              <TableCell
-                align="right"
-                sx={{
-                  fontSize: "1rem",
-                  fontWeight: "bold",
-                  textAlign: "center",
-                  width: "50%",
-                  borderLeft: "1px solid #ddd",
-                }}
-              >
-                Total Population: <b>{totalPopulation} students</b>
+                <div className="flex justify-center">Courses</div>
+              </TableCell> */}
+            </TableRow>
+            <TableRow>
+              <TableCell colSpan={3} align="center" className="text-sm">
+                Courses <br></br> Total Population:{" "}
+                <b>{totalPopulation} students</b>
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {totalPopulation === 0 && (
-              <TableRow>
-                <TableCell
-                  colSpan={2}
-                  sx={{
-                    textAlign: "center",
-                    fontSize: "1.25rem",
-                    fontWeight: "bold",
-                  }}
-                >
-                  No records found
-                </TableCell>
-              </TableRow>
-            )}
-            {rows.map((row) => {
-              if (row.population === 0) return;
-              return (
-                <Link href={`/course?id=${row.id}`} key={row.id}>
-                  <TableRow
-                    sx={{
-                      "&:last-child td, &:last-child th": { border: 0 },
-                      cursor: "pointer",
-                    }}
-                    hover
-                  >
-                    <TableCell
-                      component="th"
-                      scope="row"
-                      sx={{
-                        textAlign: "center",
-                        borderRight: "1px solid #ddd",
-                      }}
-                    >
-                      {row.name}
-                    </TableCell>
-                    <TableCell
-                      align="right"
-                      sx={{ textAlign: "center", borderLeft: "1px solid #ddd" }}
-                    >
-                      {row.population}
-                    </TableCell>
-                  </TableRow>
-                </Link>
-              );
-            })}
-            {/* Added since last row has no vertical line */}
-            <TableRow
-              sx={{
-                "&:last-child td, &:last-child th": { border: 0 },
-                cursor: "pointer",
-                display: "none",
-              }}
-              hover
-            >
-              <TableCell
-                component="th"
-                scope="row"
-                sx={{
-                  textAlign: "center",
-                  borderRight: "1px solid #ddd",
-                }}
-              ></TableCell>
-              <TableCell
-                align="right"
-                sx={{ textAlign: "center", borderLeft: "1px solid #ddd" }}
-              ></TableCell>
+            <TableRow>
+              <TableCell colSpan={3}>
+                {renderCourseRows().map((row) => row)}
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
