@@ -8,6 +8,7 @@ import type { inferQueryOutput } from "@web-app/utils/trpc";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { P, match } from "ts-pattern";
 
 type StudentData = inferQueryOutput<"course.getStudentsV2">;
 
@@ -36,7 +37,11 @@ const CoursePage: NextPage = () => {
       courseId: id,
       schoolYear,
       semesterType,
-      yearLevel,
+      yearLevel: match(yearLevel)
+        .with(P.number, (yearLevel) => yearLevel)
+        // eslint-disable-next-line unicorn/no-useless-undefined
+        .with("ALL", () => undefined)
+        .exhaustive(),
     },
   ]);
 
