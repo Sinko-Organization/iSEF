@@ -147,9 +147,8 @@ export default function ResponsiveDrawer({ window, children }: Props) {
         component="nav"
         className="w-full sm:w-auto sm:flex-shrink-0"
         aria-label="mailbox folders"
-        
       >
-        <Drawer variant="permanent" className="hidden sm:block" open >
+        <Drawer variant="permanent" className="hidden sm:block" open>
           {drawer}
         </Drawer>
       </Box>
