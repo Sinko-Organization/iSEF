@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { Paper, Table, styled } from "@mui/material";
+import { Paper, Table, Typography, styled } from "@mui/material";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -110,11 +110,16 @@ export default function StudentProfileCard({
 
   return (
     <>
-      <Card>
-        <CardHeader title={"Student Profile"} />
-
-        <Grid container spacing={2}>
-          <Grid item xs={2}>
+      <Typography
+        sx={{ marginLeft: "0.5in", marginTop: "0.3in" }}
+        className="text-center text-lg"
+        style={{ fontFamily: "Times New Roman", fontSize: "25px" }}
+      >
+        STUDENT PROFILE
+      </Typography>
+      <Grid container spacing={0.1}>
+        <Grid item xs={2}>
+          <Typography sx={{ margin: "0.2in" }}>
             <Item>
               <img
                 src="https://res.cloudinary.com/dmro06tbx/image/upload/v1655572255/images_hlpjxg.png"
@@ -122,132 +127,65 @@ export default function StudentProfileCard({
                 alt="..."
               />
             </Item>
-          </Grid>
-          <Grid item xs={8}>
-            <Item className="flex flex-col gap-5">
-              <Table className="table table-sm">
-                <tbody>
-                  <td>
-                    <b>Name : </b>
-                    {match([formik.values.firstName, formik.values.lastName])
-                      .with([null, null], () => "N/A")
-                      .with([null, P.string], ([, last]) => last)
-                      .with([P.string, null], ([first]) => first)
-                      .with(
-                        [P.string, P.string],
-                        ([first, last]) => `${first} ${last}`,
-                      )
-                      .otherwise(() => "N/A")}
-                  </td>
-                  <td>
-                    <b>Student ID: </b>
-                    {formik.values.studentIdNumber}
-                  </td>
-                </tbody>
-              </Table>
-              <Table className="table table-sm">
-                <tbody>
-                  <td>
-                    <b>Enrollment Type : </b> {userInfo.enrollmentType}
-                  </td>
-                  <td>
-                    <b>Current Course: </b>
-                    {userInfo.course}
-                  </td>
-                  <td>
-                    <b>Current Year Level: </b>
-                    {userInfo.yearLevel}
-                  </td>
-                  <td className="capitalize">
-                    <b>Current Semester: </b>
-                    {userInfo.semesterType.toLowerCase()}
-                  </td>
-                </tbody>
-              </Table>
-            </Item>
-          </Grid>
+          </Typography>
         </Grid>
-        <CardContent>
-          <form onSubmit={formik.handleSubmit}>
-            <Grid container direction="row" spacing={3}>
-              <Grid item xs={6}>
-                <TextField
-                  name="studentIdNumber"
-                  label="Student ID"
-                  fullWidth
-                  variant="standard"
-                  value={formik.values.studentIdNumber}
-                  onChange={formik.handleChange}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  name="firstName"
-                  label="First Name"
-                  fullWidth
-                  variant="standard"
-                  value={formik.values.firstName}
-                  onChange={formik.handleChange}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  name="lastName"
-                  label="Last Name"
-                  fullWidth
-                  variant="standard"
-                  value={formik.values.lastName}
-                  onChange={formik.handleChange}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  name="email"
-                  type="email"
-                  id="outlined-required"
-                  label="Email"
-                  fullWidth
-                  variant="standard"
-                  value={formik.values.email}
-                  onChange={formik.handleChange}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  name="phoneNumber"
-                  type="tel"
-                  id="outlined-required"
-                  label="Phone"
-                  fullWidth
-                  variant="standard"
-                  value={formik.values.phoneNumber}
-                  onChange={formik.handleChange}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <TextField
-                  name="address"
-                  id="outlined-required"
-                  label="Address"
-                  fullWidth
-                  variant="standard"
-                  value={formik.values.address}
-                  onChange={formik.handleChange}
-                />
-              </Grid>
-            </Grid>
-            <Button
-              sx={{ mt: 3, mb: 2 }}
-              color="secondary"
-              variant="contained"
-              fullWidth
-              type="submit"
-            >
-              Edit
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
+
+        <Grid item xs={9}>
+          <Typography sx={{ marginTop: "0.5in" }}>
+            <Item className="justify-center font-times-new-roman">
+              <Typography
+                sx={{ marginLeft: "0.5in" }}
+                style={{ fontFamily: "Times New Roman" }}
+              >
+                <Table className="table table-sm">
+                  <tbody>
+                    <tr>
+                      <td className="text-left mb-2">
+                        <b>Name:</b>{" "}
+                        {match([
+                          formik.values.lastName,
+                          formik.values.firstName,
+                        ])
+                          .with([null, null], () => "N/A")
+                          .with([null, P.string], ([, last]) => last)
+                          .with([P.string, null], ([first]) => first)
+                          .with(
+                            [P.string, P.string],
+                            ([first, last]) => `${last}, ${first}`,
+                          )
+                          .otherwise(() => "N/A")
+                          .toUpperCase()}
+                      </td>
+                      <td className="text-left mb-2">
+                        <b>Student ID:</b> {formik.values.studentIdNumber}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="text-left mb-2">
+                        <b>Current Course:</b> {userInfo.course}
+                      </td>
+                      <td className="text-left mb-2">
+                        <b>Current Year Level:</b> {userInfo.yearLevel}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="text-left mb-2">
+                        <b>Enrollment Type:</b> {userInfo.enrollmentType}
+                      </td>
+                      <td className="text-left mb-2">
+                        <b>Current Semester:</b>{" "}
+                        {userInfo.semesterType.toLowerCase()}
+                      </td>
+                    </tr>
+                  </tbody>
+                </Table>
+              </Typography>
+            </Item>
+          </Typography>
+        </Grid>
+      </Grid>
+      {/* </Card> */}
+
       <ErrorAlert
         message={errorState.message}
         handleClose={() => setErrorState({ open: false, message: "" })}
