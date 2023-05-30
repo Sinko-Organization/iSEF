@@ -22,13 +22,13 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   setSearchText: (text: string) => void;
   setSchoolYear: (schoolYear: number) => void;
   setSemesterType: (semesterType: SemesterType) => void;
-  setYearLevel: (yearLevel: number) => void;
+  setYearLevel: (yearLevel: number | "ALL") => void;
 }
 
 export type CourseOptionsType = {
   schoolYear: number;
   semesterType: SemesterType;
-  yearLevel: number;
+  yearLevel: number | "ALL";
 };
 
 const CourseOptionSelector: FC<Props> = ({
@@ -42,6 +42,7 @@ const CourseOptionSelector: FC<Props> = ({
   setSearchText,
   ...props
 }) => {
+  console.log(courseOptions.yearLevel);
   return (
     <div {...props}>
       <div className="flex flex-row gap-5">
@@ -97,8 +98,15 @@ const CourseOptionSelector: FC<Props> = ({
               variant="outlined"
               label="Year Level"
               defaultValue={courseOptions.yearLevel}
-              onChange={(e) => setYearLevel(Number(e.target.value))}
+              onChange={(e) => {
+                if (e.target.value === "ALL") {
+                  setYearLevel("ALL");
+                } else {
+                  setYearLevel(Number(e.target.value));
+                }
+              }}
             >
+              <MenuItem value="ALL">All</MenuItem>
               {yearLevelsData.map((data) => (
                 <MenuItem
                   key={data.id}
