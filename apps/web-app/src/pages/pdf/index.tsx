@@ -116,7 +116,7 @@ const AcademicList: FC<Props> = ({
                     {studentIdNumber}
                   </Text>
                   <Text style={[header.courseTitle, header.col1]}>
-                    {hasNames ? fullName : "No Name"}
+                    {hasNames ? fullName : "---"}
                   </Text>
                   <Text style={[header.courseTitle, header.col1]}>
                     {gwa.toFixed(2)}
@@ -175,7 +175,7 @@ const AcademicList: FC<Props> = ({
                     {studentIdNumber}
                   </Text>
                   <Text style={[header.courseTitle, header.col1]}>
-                    {hasNames ? fullName : "No Name"}
+                    {hasNames ? fullName : "---"}
                   </Text>
                   <Text style={[header.courseTitle, header.col1]}>
                     {gwa.toFixed(2)}
@@ -246,7 +246,7 @@ const header = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-evenly",
-    alignItems: "stretch",
+    alignItems: "center",
     flexBasis: 35,
   },
   border: {
@@ -256,14 +256,14 @@ const header = StyleSheet.create({
     paddingBottom: 5,
   },
   col1: {
-    width: "10%",
+    flex: 3,
   },
   col2: {
-    width: "1%",
-    flexDirection: "column",
+    width: "15%",
+    justifyContent: "center",
   },
   col3: {
-    width: 1,
+    width: 30,
   },
 });
 
