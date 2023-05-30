@@ -74,7 +74,7 @@ export default function StudentProfileCard({ records }: Props) {
               {({ open }) => (
                 <>
                   <Card className="mb-5">
-                    <Accordion>
+                    <Accordion style={{ background: "#EDE7F6" }}>
                       <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls={`${key}-content`}
@@ -101,7 +101,7 @@ export default function StudentProfileCard({ records }: Props) {
                           {key}
                         </Typography>
                       </AccordionSummary>
-                      <AccordionDetails>
+                      <AccordionDetails style={{ background: "white" }}>
                         <CardContent>
                           <Table
                             sx={{ minWidth: 650 }}
