@@ -94,7 +94,7 @@ const AcademicList: FC<Props> = ({
 
         <View style={header.header}>
           <View style={[header.row, header.border]}>
-            <Text style={[header.courseTitle, header.col2]}>NO.</Text>
+            <Text style={[header.courseTitle, header.col3]}>NO.</Text>
             <Text style={[header.courseTitle, header.col2]}>ID</Text>
             <Text style={[header.courseTitle, header.col1]}>Student Name</Text>
             <Text style={[header.courseTitle, header.col1]}>G.W.A</Text>
@@ -109,7 +109,7 @@ const AcademicList: FC<Props> = ({
             return (
               <View key={id}>
                 <View style={[header.row, header.border]}>
-                  <Text style={[header.courseTitle, header.col2]}>
+                  <Text style={[header.courseTitle, header.col3]}>
                     {index + 1}
                   </Text>
                   <Text style={[header.courseTitle, header.col2]}>
@@ -153,7 +153,7 @@ const AcademicList: FC<Props> = ({
 
         <View style={header.header}>
           <View style={[header.row, header.border]}>
-            <Text style={[header.courseTitle, header.col2]}>NO.</Text>
+            <Text style={[header.courseTitle, header.col3]}>NO.</Text>
             <Text style={[header.courseTitle, header.col2]}>ID</Text>
             <Text style={[header.courseTitle, header.col1]}>Student Name</Text>
             <Text style={[header.courseTitle, header.col1]}>G.W.A</Text>
@@ -168,7 +168,7 @@ const AcademicList: FC<Props> = ({
             return (
               <View key={id}>
                 <View style={[header.row, header.border]}>
-                  <Text style={[header.courseTitle, header.col2]}>
+                  <Text style={[header.courseTitle, header.col3]}>
                     {index + 1}
                   </Text>
                   <Text style={[header.courseTitle, header.col2]}>
@@ -227,7 +227,7 @@ const header = StyleSheet.create({
     color: "blue",
   },
   courseTable: {
-    width: 300,
+    width: 315,
     display: "flex",
     flexDirection: "column",
     justifyContent: "flex-start",
@@ -245,12 +245,8 @@ const header = StyleSheet.create({
   row: {
     display: "flex",
     flexDirection: "row",
-    justifyContent: "space-around",
-    alignContent: "stretch",
-    flexWrap: "nowrap",
+    justifyContent: "space-evenly",
     alignItems: "stretch",
-    flexGrow: 0,
-    flexShrink: 0,
     flexBasis: 35,
   },
   border: {
@@ -264,7 +260,10 @@ const header = StyleSheet.create({
   },
   col2: {
     width: "1%",
-    flexDirection: "row",
+    flexDirection: "column",
+  },
+  col3: {
+    width: 1,
   },
 });
 
