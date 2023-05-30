@@ -109,14 +109,6 @@ export default function StudentProfileCard({
 
   return (
     <>
-      <Typography
-        sx={{ marginLeft: "0.5in", marginTop: "0.3in" }}
-        className="text-center text-lg"
-        style={{ fontFamily: "Times New Roman", fontSize: "25px" }}
-      >
-        ALL SUBJECTS
-      </Typography>
-
       <CardContent>
         {recommendedV2 ? (
           <Accordion style={{ background: "#EDE7F6" }}>
@@ -125,8 +117,17 @@ export default function StudentProfileCard({
               aria-controls="all-subjects-content"
               id="all-subjects-header"
             >
-              <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
-                All Subjects
+              <Typography
+                sx={{
+                  marginLeft: "0.5in",
+                  textAlign: "left",
+                }}
+                style={{
+                  fontFamily: "Times New Roman",
+                  fontSize: "18px",
+                }}
+              >
+                <b>ALL SUBJECTS</b>
               </Typography>
             </AccordionSummary>
             <AccordionDetails style={{ background: "white" }}>
@@ -206,33 +207,6 @@ export default function StudentProfileCard({
                         <TableCell className="capitalize">
                           {subj.semesterType.toLowerCase()}
                         </TableCell>
-                        {/* <TableCell>
-                        {subj.messages
-                          .map((message) =>
-                            match(message)
-                              .with(P.string, (str) => str)
-                              .with(
-                                { type: "Failed Prerequisite" },
-                                (res) =>
-                                  "(Failed Prerequisities: " +
-                                  res.failedPrerequisites
-                                    .map((prereq) => prereq)
-                                    .join(", ") +
-                                  ")",
-                              )
-                              .with(
-                                { type: "Low Year Standing" },
-                                (res) =>
-                                  `(Year Standing: ${res.yearStanding}, Current Year Level: ${res.currentYearLevel})`,
-                              )
-                              .with(
-                                { type: "Failed" },
-                                (res) => `(Failed: ${res.grade})`,
-                              )
-                              .exhaustive(),
-                          )
-                          .join(", ")}
-                      </TableCell> */}
                       </TableRow>
                     ))}
                 </TableBody>

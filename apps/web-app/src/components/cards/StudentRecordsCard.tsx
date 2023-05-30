@@ -59,11 +59,10 @@ export default function StudentProfileCard({ records }: Props) {
 
   return (
     <>
-      {/* <Card> */}
       <Typography
         sx={{ marginLeft: "0.5in", marginTop: "0.3in" }}
         className="text-center text-lg"
-        style={{ fontFamily: "Times New Roman", fontSize: "25px" }}
+        style={{ fontFamily: "Times New Roman", fontSize: "20px" }}
       >
         STUDENT RECORD
       </Typography>
@@ -83,7 +82,6 @@ export default function StudentProfileCard({ records }: Props) {
                         <Typography
                           sx={{
                             marginLeft: "0.5in",
-                            marginBottom: "0.3in",
                             textAlign: "left",
                           }}
                           style={{
