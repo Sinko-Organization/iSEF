@@ -21,5 +21,4 @@ export type Courses =
   | "Packaging"
   | "Chemical"
   | "Electrical";
-
 export type Dependencies = Record<Courses, Record<number, DependencyListV2>>;
