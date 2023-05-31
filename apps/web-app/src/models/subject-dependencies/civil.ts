@@ -1026,7 +1026,7 @@ export const ceDeptNew: DependencyListV2 = [
       },
     ],
     enrollmentType: "Regular",
-    semesterType: "FIRST",
+    semesterType: "SECOND",
     yearLevel: 1,
     creditUnits: 26,
   },
@@ -1054,7 +1054,7 @@ export const ceDeptNew: DependencyListV2 = [
     ],
     enrollmentType: "Regular",
     semesterType: "SUMMER",
-    yearLevel: 2,
+    yearLevel: 1,
     creditUnits: 9,
   },
 
@@ -1337,7 +1337,7 @@ export const ceDeptNew: DependencyListV2 = [
     ],
     enrollmentType: "Regular",
     semesterType: "SUMMER",
-    yearLevel: 2,
+    yearLevel: 3,
     creditUnits: 3,
   },
 
@@ -1514,7 +1514,7 @@ export const ceDeptNew: DependencyListV2 = [
     ],
     enrollmentType: "Regular",
     semesterType: "SUMMER",
-    yearLevel: 2,
+    yearLevel: 4,
     creditUnits: 3,
   },
 ];
@@ -2395,7 +2395,7 @@ export const ceDeptOld: DependencyListV2 = [
     ],
     enrollmentType: "Regular",
     semesterType: "SUMMER",
-    yearLevel: 2,
+    yearLevel: 1,
     creditUnits: 9,
   },
 
@@ -2672,7 +2672,7 @@ export const ceDeptOld: DependencyListV2 = [
     ],
     enrollmentType: "Regular",
     semesterType: "SUMMER",
-    yearLevel: 2,
+    yearLevel: 3,
     creditUnits: 3,
   },
 
