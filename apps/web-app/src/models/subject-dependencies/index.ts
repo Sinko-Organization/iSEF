@@ -1,5 +1,6 @@
 import { cheDepNew, cheDepOld } from "./chemical";
 import { ceDeptNew, ceDeptOld } from "./civil";
+import { eeDeptNew, eeDeptOld } from "./electrical";
 import { eceDepNew, eceDepOld } from "./electronics";
 import { meDepNew, meDepOld } from "./mechanical";
 import { pkgeDepNew, pkgeDepOld } from "./packaging";
@@ -30,5 +31,9 @@ export const engineeringDependencies: Dependencies = {
   Packaging: {
     1: pkgeDepOld,
     2: pkgeDepNew,
+  },
+  Electrical: {
+    1: eeDeptOld,
+    2: eeDeptNew,
   },
 };
