@@ -61,11 +61,16 @@ export default function ResponsiveDrawer({ window, children }: Props) {
   };
 
   const drawer = (
-    <div>
+    <div
+      style={{
+        background: "linear-gradient(to bottom, #FAFAFA, #9078b6)",
+        height: "800px",
+      }}
+    >
       <Toolbar>
         <div>
           <Image
-            src="/images/isef-logo.png"
+            src="/images/isef-png.png"
             alt="LOGO"
             width={200}
             height={200}
@@ -92,15 +97,13 @@ export default function ResponsiveDrawer({ window, children }: Props) {
       </List>
 
       <Divider />
+
       <List>
         {systemPaths.map((systemPath, index) => (
           <ListItemButton key={index}>
             <ListItemIcon>{systemPath.icon}</ListItemIcon>
             <Link href={systemPath.link} className="sidebar-link">
-              <ListItemText
-                primary={systemPath.name}
-                style={{ fontFamily: "Times New Roman" }}
-              />
+              <ListItemText primary={systemPath.name} />
             </Link>
           </ListItemButton>
         ))}
@@ -148,9 +151,7 @@ export default function ResponsiveDrawer({ window, children }: Props) {
         className="w-full sm:w-auto sm:flex-shrink-0"
         aria-label="mailbox folders"
       >
-        <Drawer variant="permanent" className="hidden sm:block" open>
-          {drawer}
-        </Drawer>
+        <Drawer variant="permanent">{drawer}</Drawer>
       </Box>
       <Box component="main" className="flex-grow p-1 ml-64">
         <Toolbar />

@@ -1,5 +1,12 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import InfoTwoToneIcon from "@mui/icons-material/InfoTwoTone";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  TableFooter,
+} from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -102,128 +109,116 @@ export default function StudentProfileCard({
 
   return (
     <>
-      <Card>
-        <CardHeader
-          sx={{
-            fontWeight: "bold",
-          }}
-          title={"All Subjects"}
-          action={
-            <div className="flex flex-row gap-5">
-              <BasicSelect version={version} handleChange={handleChange} />
-            </div>
-          }
-        />
-        <CardContent>
-          {recommendedV2 ? (
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell className="text-bold">Subject</TableCell>
-                  <TableCell className="text-bold">Subject Code</TableCell>
-                  <TableCell className="text-bold">Units</TableCell>
-                  <TableCell className="text-bold">Status</TableCell>
-                  <TableCell className="text-bold">Year Level</TableCell>
-                  <TableCell className="text-bold">Semester Type</TableCell>
-                  {/* <TableCell className="text-bold">Message</TableCell> */}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {recommendedV2
-                  .sort((a, b) => {
-                    if (a.yearLevel !== b.yearLevel) {
-                      return a.yearLevel - b.yearLevel;
-                    }
+      <CardContent>
+        {recommendedV2 ? (
+          <Accordion style={{ background: "#EDE7F6" }}>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="all-subjects-content"
+              id="all-subjects-header"
+            >
+              <Typography
+                sx={{
+                  marginLeft: "0.5in",
+                  textAlign: "left",
+                }}
+                style={{
+                  fontFamily: "Times New Roman",
+                  fontSize: "18px",
+                }}
+              >
+                <b>ALL SUBJECTS</b>
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails style={{ background: "white" }}>
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell className="text-bold">Subject</TableCell>
+                    <TableCell className="text-bold">Subject Code</TableCell>
+                    <TableCell className="text-bold">Units</TableCell>
+                    <TableCell className="text-bold">Status</TableCell>
+                    <TableCell className="text-bold">Year Level</TableCell>
+                    <TableCell className="text-bold">Semester Type</TableCell>
+                    {/* <TableCell className="text-bold">Message</TableCell> */}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {recommendedV2
+                    .sort((a, b) => {
+                      if (a.yearLevel !== b.yearLevel) {
+                        return a.yearLevel - b.yearLevel;
+                      }
 
-                    if (a.semesterType !== b.semesterType) {
-                      const semesterTypeOrder = ["FIRST", "SECOND", "SUMMER"];
-                      return (
-                        semesterTypeOrder.indexOf(a.semesterType) -
-                        semesterTypeOrder.indexOf(b.semesterType)
-                      );
-                    }
+                      if (a.semesterType !== b.semesterType) {
+                        const semesterTypeOrder = ["FIRST", "SECOND", "SUMMER"];
+                        return (
+                          semesterTypeOrder.indexOf(a.semesterType) -
+                          semesterTypeOrder.indexOf(b.semesterType)
+                        );
+                      }
 
-                    return a.name.localeCompare(b.name);
-                  })
-                  .map((subj, idx) => (
-                    <TableRow
-                      key={`${subj.name}-${idx}`}
-                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                    >
-                      <TableCell>
-                        <Tooltip title="Subject Info">
-                          <InfoTwoToneIcon
-                            onClick={clickSubjectDetail(subj.messages, subj)}
-                            color="secondary"
-                            className="mr-2"
-                          />
-                        </Tooltip>
-                        {subj.name}
-                      </TableCell>
-                      <TableCell>{subj.stubCode}</TableCell>
-                      <TableCell>{subj.units}</TableCell>
-                      <TableCell
+                      return a.name.localeCompare(b.name);
+                    })
+                    .map((subj, idx) => (
+                      <TableRow
+                        key={`${subj.name}-${idx}`}
                         sx={{
-                          cursor: "pointer",
+                          "&:last-child td, &:last-child th": { border: 0 },
                         }}
                       >
-                        <Tooltip
-                          title={match(subj.status)
-                            .with("Valid", () => "🟢 Subject can be taken")
-                            .with("Invalid", () => "🔴 Subject cannot be taken")
-                            .exhaustive()}
+                        <TableCell>
+                          <Tooltip title="Subject Info">
+                            <InfoTwoToneIcon
+                              onClick={clickSubjectDetail(subj.messages, subj)}
+                              color="secondary"
+                              className="mr-2"
+                            />
+                          </Tooltip>
+                          {subj.name}
+                        </TableCell>
+                        <TableCell>{subj.stubCode}</TableCell>
+                        <TableCell>{subj.units}</TableCell>
+                        <TableCell
+                          sx={{
+                            cursor: "pointer",
+                          }}
                         >
-                          <Button
-                            sx={{
-                              color: subj.status === "Valid" ? "green" : "red",
-                            }}
+                          <Tooltip
+                            title={match(subj.status)
+                              .with("Valid", () => "🟢 Subject can be taken")
+                              .with(
+                                "Invalid",
+                                () => "🔴 Subject cannot be taken",
+                              )
+                              .exhaustive()}
                           >
-                            {subj.status}
-                          </Button>
-                        </Tooltip>
-                      </TableCell>
-                      <TableCell>{subj.yearLevel}</TableCell>
-                      <TableCell className="capitalize">
-                        {subj.semesterType.toLowerCase()}
-                      </TableCell>
-                      {/* <TableCell>
-                        {subj.messages
-                          .map((message) =>
-                            match(message)
-                              .with(P.string, (str) => str)
-                              .with(
-                                { type: "Failed Prerequisite" },
-                                (res) =>
-                                  "(Failed Prerequisities: " +
-                                  res.failedPrerequisites
-                                    .map((prereq) => prereq)
-                                    .join(", ") +
-                                  ")",
-                              )
-                              .with(
-                                { type: "Low Year Standing" },
-                                (res) =>
-                                  `(Year Standing: ${res.yearStanding}, Current Year Level: ${res.currentYearLevel})`,
-                              )
-                              .with(
-                                { type: "Failed" },
-                                (res) => `(Failed: ${res.grade})`,
-                              )
-                              .exhaustive(),
-                          )
-                          .join(", ")}
-                      </TableCell> */}
-                    </TableRow>
-                  ))}
-              </TableBody>
-            </Table>
-          ) : (
-            <Typography variant="body2" color="text.secondary">
-              No records found
-            </Typography>
-          )}
-        </CardContent>
-      </Card>
+                            <Button
+                              sx={{
+                                color:
+                                  subj.status === "Valid" ? "green" : "red",
+                              }}
+                            >
+                              {subj.status}
+                            </Button>
+                          </Tooltip>
+                        </TableCell>
+                        <TableCell>{subj.yearLevel}</TableCell>
+                        <TableCell className="capitalize">
+                          {subj.semesterType.toLowerCase()}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                </TableBody>
+              </Table>
+            </AccordionDetails>
+          </Accordion>
+        ) : (
+          <Typography variant="body2" color="text.secondary">
+            No records found
+          </Typography>
+        )}
+      </CardContent>
       <SubjectModal
         messages={messages}
         isOpen={isHoverModalOpen}

@@ -121,6 +121,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
               textAlign: "center",
               borderRight: "1px solid #ddd",
               fontFamily: "Times New Roman",
+              // flex: 'fixed'
             }}
             sortDirection={orderBy === headCell.id ? order : false}
           >

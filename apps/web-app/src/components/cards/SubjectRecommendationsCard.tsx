@@ -4,6 +4,8 @@
 
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { O, pipe } from "@mobily/ts-belt";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -76,6 +78,7 @@ export default function StudentProfileCard({
   const [subjectDetails, setSubjectDetails] = useState<SubjectDetails>(null);
   const [isHoverModalOpen, setIsHoverModalOpen] = useState<boolean>(false);
   const [version, setVersion] = useState<string>("1");
+  const [isDisclosureOpen, setIsDisclosureOpen] = useState(false);
 
   const courseName = pipe(
     useCourseNameStore((state) => state.courseName),
@@ -173,72 +176,103 @@ export default function StudentProfileCard({
 
   return (
     <>
-      <Card>
-        <CardHeader
-          sx={{
-            fontWeight: "bold",
-          }}
-          title="Recommended Subjects"
-          action={
-            <div className="flex align-middle flex-row gap-5">
-              <div className="my-auto font-normal">
-                Total Allowed Units: {creditUnits ?? "--"}
-              </div>
-              <BasicSelect version={version} handleChange={handleChange} />
-            </div>
-          }
-        />
-        <CardContent>
-          {recommendedV2 ? (
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell className="text-bold">Subject</TableCell>
-                  <TableCell className="text-bold">Subject Code</TableCell>
-                  <TableCell className="text-bold">Units</TableCell>
-                  <TableCell className="text-bold">Year Level</TableCell>
-                  <TableCell className="text-bold">Semester Type</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {formattedSubjects.map((subj, idx) => (
-                  <TableRow
-                    key={`${subj.name}-${idx}`}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell>
-                      <Tooltip className="cursor-pointer" title={subj.name}>
-                        <div onClick={clickSubjectDetail(subj.messages, subj)}>
-                          {subj.name}
-                        </div>
-                      </Tooltip>
-                    </TableCell>
-                    <TableCell>{subj.stubCode}</TableCell>
-                    <TableCell>{subj.units}</TableCell>
-                    <TableCell>{subj.yearLevel}</TableCell>
-                    <TableCell className="capitalize">
-                      {subj.semesterType.toLowerCase()}
-                    </TableCell>
-                  </TableRow>
-                ))}
-                <TableRow>
-                  <TableCell></TableCell>
-                  <TableCell></TableCell>
-                  <TableCell sx={{ fontWeight: "bold" }}>
-                    Total: {totalCurrentUnits} / {creditUnits ?? "--"}
-                  </TableCell>
-                  <TableCell></TableCell>
-                  <TableCell></TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          ) : (
-            <Typography variant="body2" color="text.secondary">
-              No records found
+      <CardContent>
+        <Accordion
+          expanded={isDisclosureOpen}
+          onChange={() => setIsDisclosureOpen(!isDisclosureOpen)}
+          style={{ background: "#EDE7F6" }}
+        >
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography
+              sx={{ marginLeft: "0.5in" }}
+              className="text-center text-lg"
+              style={{ fontFamily: "Times New Roman", fontSize: "18px" }}
+            >
+              <b>RECOMMENDED SUBJECTS</b>
             </Typography>
-          )}
-        </CardContent>
-      </Card>
+          </AccordionSummary>
+
+          <CardHeader
+            action={
+              <div className="flex align-middle flex-row gap-5">
+                <div className="my-auto font-normal">
+                  Total Allowed Units: {creditUnits ?? "--"}
+                </div>
+
+                <BasicSelect version={version} handleChange={handleChange} />
+              </div>
+            }
+          />
+          <CardContent>
+            {isDisclosureOpen && (
+              <AccordionDetails style={{ background: "white" }}>
+                {recommendedV2 ? (
+                  <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell className="text-bold">Subject</TableCell>
+                        <TableCell className="text-bold">
+                          Subject Code
+                        </TableCell>
+                        <TableCell className="text-bold">Units</TableCell>
+                        <TableCell className="text-bold">Year Level</TableCell>
+                        <TableCell className="text-bold">
+                          Semester Type
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {formattedSubjects.map((subj, idx) => (
+                        <TableRow
+                          key={`${subj.name}-${idx}`}
+                          sx={{
+                            "&:last-child td, &:last-child th": { border: 0 },
+                          }}
+                        >
+                          <TableCell>
+                            <Tooltip
+                              className="cursor-pointer"
+                              title={subj.name}
+                            >
+                              <div
+                                onClick={clickSubjectDetail(
+                                  subj.messages,
+                                  subj,
+                                )}
+                              >
+                                {subj.name}
+                              </div>
+                            </Tooltip>
+                          </TableCell>
+                          <TableCell>{subj.stubCode}</TableCell>
+                          <TableCell>{subj.units}</TableCell>
+                          <TableCell>{subj.yearLevel}</TableCell>
+                          <TableCell className="capitalize">
+                            {subj.semesterType.toLowerCase()}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                      <TableRow>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell sx={{ fontWeight: "bold" }}>
+                          Total: {totalCurrentUnits} / {creditUnits ?? "--"}
+                        </TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                ) : (
+                  <Typography variant="body2" color="text.secondary">
+                    No records found
+                  </Typography>
+                )}
+              </AccordionDetails>
+            )}
+          </CardContent>
+        </Accordion>
+      </CardContent>
       <SubjectInfoModal
         isOpen={isHoverModalOpen}
         setIsOpen={setIsHoverModalOpen}
