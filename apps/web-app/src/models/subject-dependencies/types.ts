@@ -19,7 +19,7 @@ export type Courses =
   | "Mechanical"
   | "Software"
   | "Packaging"
-  | "Chemical";
-// | "Electrical"
+  | "Chemical"
+  | "Electrical";
 
 export type Dependencies = Record<Courses, Record<number, DependencyListV2>>;
