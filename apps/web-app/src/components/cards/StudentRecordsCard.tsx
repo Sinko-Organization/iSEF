@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Disclosure } from "@headlessui/react";
 import { pipe } from "@mobily/ts-belt";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -23,6 +22,7 @@ type Record = Records[number];
 type Props = {
   records: Records;
 };
+
 type Result = {
   title: string;
   grade: string | number;
@@ -30,7 +30,6 @@ type Result = {
 };
 
 export const groupBy = (arr: Records, key: any) => {
-  // eslint-disable-next-line unicorn/no-array-reduce
   return arr.reduce((acc: any, obj: any) => {
     const groupKey = obj[key];
     acc[groupKey] = acc[groupKey] || [];
@@ -55,7 +54,6 @@ export default function StudentProfileCard({ records }: Props) {
   const hasRecords = records.length > 0;
 
   const sortedRecords = groupBy(records, "semesterType");
-  // returns {FIRST:{...}, SECOND:{...}, SUMMER:{...}}
 
   return (
     <>
@@ -191,7 +189,6 @@ export default function StudentProfileCard({ records }: Props) {
           </Typography>
         )}
       </CardContent>
-      {/* </Card> */}
     </>
   );
 }
