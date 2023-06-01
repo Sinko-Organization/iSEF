@@ -24,14 +24,13 @@ const StudentProfileSelector: FC<StudentProfileSelectorProps> = ({
             maxWidth: 200,
           }}
           variant="standard"
-          defaultValue="All"
+          defaultValue={schoolYearsData[0]?.startYear}
           onChange={(e) => {
             const val = e.target.value;
-            const yearOption = val === "All" ? 0 : Number(val);
+            const yearOption = Number(val);
             setSchoolYear(yearOption);
           }}
         >
-          <MenuItem value="All">All</MenuItem>
           {schoolYearsData.map((year) => (
             <MenuItem key={year.id} value={year.startYear}>
               S.Y. {year.startYear} - {year.endYear}
