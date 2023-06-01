@@ -1,3 +1,4 @@
+import { O, pipe } from "@mobily/ts-belt";
 import {
   StudentProfileCard,
   StudentRecordsCard,
@@ -27,12 +28,12 @@ const StudentPage: NextPage = () => {
   ]);
 
   useEffect(() => {
-    if (schoolYearsData) {
-      const startYear = schoolYearsData[0]?.startYear;
-      if (startYear) {
-        setSchoolYear(startYear);
-      }
-    }
+    pipe(
+      schoolYearsData,
+      O.fromNullable,
+      O.flatMap((schoolYear) => O.fromNullable(schoolYear[0]?.startYear)),
+      O.tap(setSchoolYear),
+    );
   }, [schoolYearsData, setSchoolYear]);
 
   const { data: studentData, status: studentDataStatus } = trpc.useQuery([

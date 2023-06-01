@@ -36,6 +36,24 @@ export const fields: Field<string>[] = [
     ],
   },
   {
+    label: "First Name",
+    key: "firstName",
+    alternateMatches: ["first name", "First name", "First Name"],
+    fieldType: {
+      type: "input",
+    },
+    example: "John",
+  },
+  {
+    label: "Last Name",
+    key: "lastName",
+    alternateMatches: ["last name", "Last name", "Last Name"],
+    fieldType: {
+      type: "input",
+    },
+    example: "Doe",
+  },
+  {
     label: "Course",
     key: "course",
     alternateMatches: ["course"],
@@ -226,6 +244,8 @@ const trimmedStringSchema = z.string().transform((str) => str.trim());
 
 export const validStudentSchema = z.object({
   id: trimmedStringSchema,
+  firstName: trimmedStringSchema,
+  lastName: trimmedStringSchema,
   course: trimmedStringSchema,
   yearLevel: trimmedStringSchema,
   stubCode: trimmedStringSchema,
