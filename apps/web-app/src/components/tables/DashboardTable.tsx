@@ -44,6 +44,9 @@ const DashboardTable: FC<DashboardTableProps> = ({ rows }) => {
             flex: "1 1 100%",
             fontFamily: "Times New Roman",
             fontSize: "20px",
+            
+          
+            
           }}
         >
           COURSES
@@ -58,6 +61,7 @@ const DashboardTable: FC<DashboardTableProps> = ({ rows }) => {
               textAlign: "center",
               borderRight: "1px solid #ddd",
               fontFamily: "Times New Roman",
+              letterSpacing: "0.5px"
               // flex: 'fixed'
             }}
           >

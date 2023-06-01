@@ -1,4 +1,3 @@
-import Box from "@mui/material/Box";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -28,24 +27,22 @@ const SchoolYearSelector: FC<SchoolYearSelectorProps> = ({
   };
 
   return (
-    <Box sx={{ maxWidth: 200 }}>
-      <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">School Year</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={schoolYear}
-          label="Age"
-          onChange={handleChange}
-        >
-          {schoolYears.map((year) => (
-            <MenuItem key={year} value={year}>
-              S.Y. {year} - {year + 1}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    </Box>
+    <FormControl fullWidth>
+      <InputLabel className="mt-auto">School Year:</InputLabel>
+      <Select
+        style={{ height: "40px" }}
+        variant="outlined"
+        value={schoolYear}
+        label="School Year:"
+        onChange={handleChange}
+      >
+        {schoolYears.map((year) => (
+          <MenuItem key={year} value={year}>
+            S.Y. {year} - {year + 1}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
   );
 };
 

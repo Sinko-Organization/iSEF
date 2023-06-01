@@ -30,50 +30,62 @@ const CourseTable: FC<CourseTableProps> = ({ students }) => {
     >
       <TableContainer>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead sx={{ backgroundColor: "#F5F5F5" }}>
-            <TableRow>
+          <TableHead sx={{  background: "#5499C7" }}>
+            <TableRow >
               <TableCell
                 sx={{
-                  fontSize: "1rem",
-                  fontWeight: "bold",
+                  // fontWeight: "bold",
                   textAlign: "center",
                   borderRight: "1px solid #ddd",
+                  flex: "1 1 100%",
+                  fontFamily: "Times New Roman",
+                  fontSize: "17px",
+                  color: "White"
                 }}
               >
-                Student ID
+                STUDENT ID
               </TableCell>
               <TableCell
                 align="right"
                 sx={{
-                  fontSize: "1rem",
-                  fontWeight: "bold",
+                  // fontWeight: "bold",
                   textAlign: "center",
-                  borderLeft: "1px solid #ddd",
+                  borderRight: "1px solid #ddd",
+                  flex: "1 1 100%",
+                  fontFamily: "Times New Roman",
+                  fontSize: "17px",
+                  color: "White"
                 }}
               >
-                First Name
+                FIRST NAME
               </TableCell>
               <TableCell
                 align="right"
                 sx={{
-                  fontSize: "1rem",
-                  fontWeight: "bold",
+                  // fontWeight: "bold",
                   textAlign: "center",
-                  borderLeft: "1px solid #ddd",
+                  borderRight: "1px solid #ddd",
+                  flex: "1 1 100%",
+                  fontFamily: "Times New Roman",
+                  fontSize: "17px",
+                  color: "White"
                 }}
               >
-                Last Name
+                LAST NAME
               </TableCell>
               <TableCell
                 align="right"
                 sx={{
-                  fontSize: "1rem",
-                  fontWeight: "bold",
+                  // fontWeight: "bold",
                   textAlign: "center",
-                  borderLeft: "1px solid #ddd",
+                  borderRight: "1px solid #ddd",
+                  flex: "1 1 100%",
+                  fontFamily: "Times New Roman",
+                  fontSize: "17px",
+                  color: "White"
                 }}
               >
-                Enrollment Type
+                ENROLLMENT TYPE
               </TableCell>
             </TableRow>
           </TableHead>
@@ -98,6 +110,7 @@ const CourseTable: FC<CourseTableProps> = ({ students }) => {
                   sx={{
                     "&:last-child td, &:last-child th": { border: 0 },
                     cursor: "pointer",
+                    
                   }}
                   hover
                 >
@@ -113,7 +126,7 @@ const CourseTable: FC<CourseTableProps> = ({ students }) => {
                   </TableCell>
                   <TableCell
                     align="right"
-                    sx={{ textAlign: "center", borderLeft: "1px solid #ddd" }}
+                    sx={{ textAlign: "center", borderLeft: "1px solid #ddd",  }}
                   >
                     {isNotNullAndEmpty(student.firstName)
                       ? student.firstName
