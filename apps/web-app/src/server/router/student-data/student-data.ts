@@ -279,6 +279,8 @@ export const studentDataRouter = createAdminRouter()
                   },
                   create: {
                     studentIdNumber: record.id,
+                    firstName: record.firstName,
+                    lastName: record.lastName,
                   },
                 },
               },
@@ -300,6 +302,12 @@ export const studentDataRouter = createAdminRouter()
             },
             update: {
               grade: toNumericGrade(record.grade),
+              student: {
+                update: {
+                  firstName: record.firstName,
+                  lastName: record.lastName,
+                },
+              },
             },
           });
         }),
