@@ -332,6 +332,9 @@ const mapToCourses = (course: string): Courses => {
     case "mengr3": {
       return "Mechanical";
     }
+    case "bsee": {
+      return "Electrical";
+    }
     default: {
       return "Civil";
     }
