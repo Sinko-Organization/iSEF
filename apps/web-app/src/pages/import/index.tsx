@@ -29,6 +29,8 @@ const Import: NextPage = () => {
     } else {
       const mappedResults = result.data.validData.map((student) => ({
         ...student,
+        firstName: student.firstName ?? "",
+        lastName: student.lastName ?? "",
         semesterType: match(student.semesterType)
           .with("1", () => "FIRST")
           .with("2", () => "SECOND")
