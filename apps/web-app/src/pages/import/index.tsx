@@ -5,6 +5,7 @@ import { trpc } from "@web-app/utils/trpc";
 import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 import { ReactSpreadsheetImport } from "react-spreadsheet-import";
 import { Result } from "react-spreadsheet-import/types/types";
 import { match } from "ts-pattern";
@@ -37,9 +38,16 @@ const Import: NextPage = () => {
           .with("3", () => "SUMMER")
           .otherwise(() => "FIRST") as Semester,
       }));
-      uploadData({
-        studentRecords: mappedResults,
-      });
+      uploadData(
+        {
+          studentRecords: mappedResults,
+        },
+        {
+          onSuccess: () => {
+            toast.success("Successfully uploaded student records!");
+          },
+        },
+      );
     }
   };
 
@@ -48,21 +56,24 @@ const Import: NextPage = () => {
   }
 
   return (
-    <div className="mx-20 font-sans mt-10 flex flex-col align-middle justify-center">
-      <h1 className="text-4xl font-semibold text-start mb-10">
-        Import Student Records
-      </h1>
-      <ExcelFileUploadButton
-        onClick={toggleButton(true)}
-        disabled={isLoading}
-      />
-      <ReactSpreadsheetImport
-        isOpen={open}
-        onClose={toggleButton(false)}
-        onSubmit={onSubmit}
-        fields={fields}
-      />
-    </div>
+    <>
+      <div className="mx-20 font-sans mt-10 flex flex-col align-middle justify-center">
+        <h1 className="text-4xl font-semibold text-start mb-10">
+          Import Student Records
+        </h1>
+        <ExcelFileUploadButton
+          onClick={toggleButton(true)}
+          disabled={isLoading}
+        />
+        <ReactSpreadsheetImport
+          isOpen={open}
+          onClose={toggleButton(false)}
+          onSubmit={onSubmit}
+          fields={fields}
+        />
+      </div>
+      <Toaster />
+    </>
   );
 };
 
