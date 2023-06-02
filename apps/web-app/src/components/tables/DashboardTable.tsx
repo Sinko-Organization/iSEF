@@ -1,9 +1,7 @@
-import { Divider, Toolbar, Typography } from "@mui/material";
+import {Toolbar, Typography } from "@mui/material";
 import Paper from "@mui/material/Paper";
-import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Link from "next/link";
@@ -44,9 +42,6 @@ const DashboardTable: FC<DashboardTableProps> = ({ rows }) => {
             flex: "1 1 100%",
             fontFamily: "Times New Roman",
             fontSize: "20px",
-            
-          
-            
           }}
         >
           COURSES
@@ -61,7 +56,7 @@ const DashboardTable: FC<DashboardTableProps> = ({ rows }) => {
               textAlign: "center",
               borderRight: "1px solid #ddd",
               fontFamily: "Times New Roman",
-              letterSpacing: "0.5px"
+              letterSpacing: "0.5px",
               // flex: 'fixed'
             }}
           >

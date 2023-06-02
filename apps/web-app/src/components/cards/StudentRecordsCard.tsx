@@ -85,7 +85,7 @@ export default function StudentProfileCard({ records }: Props) {
                           style={{
                             fontFamily: "Times New Roman",
                             fontSize: "15px",
-                            letterSpacing: "0.5px"
+                            letterSpacing: "0.5px",
                           }}
                         >
                           <b> SCHOOL YEAR:</b>
