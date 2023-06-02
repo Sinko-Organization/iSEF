@@ -54,11 +54,6 @@ export const honorsRouter = createAdminRouter()
               some: {
                 AND: [
                   {
-                    grade: {
-                      gte: 1,
-                    },
-                  },
-                  {
                     schoolYear: {
                       startYear: {
                         equals: input.schoolYear,
@@ -91,11 +86,6 @@ export const honorsRouter = createAdminRouter()
             studentRecords: {
               where: {
                 AND: [
-                  {
-                    grade: {
-                      gte: 1,
-                    },
-                  },
                   {
                     schoolYear: {
                       startYear: {
@@ -130,6 +120,17 @@ export const honorsRouter = createAdminRouter()
               },
             },
           },
+        })
+        .then((records) => {
+          // if there are records with 0 or > 2.5 grade, remove then from the list
+          return pipe(
+            records,
+            A.filter((record) => {
+              return record.studentRecords.every((record) => {
+                return record.grade >= 1 && record.grade <= 2.5;
+              });
+            }),
+          );
         })
         .then((records) => {
           return pipe(

@@ -40,7 +40,7 @@ const StudentPage: NextPage = () => {
     "studentData.details",
     {
       studentId: id,
-      schoolYear: schoolYear === 0 ? undefined : schoolYear,
+      schoolYear: schoolYear,
     },
   ]);
 

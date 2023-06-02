@@ -43,6 +43,13 @@ export const fields: Field<string>[] = [
       type: "input",
     },
     example: "John",
+    validations: [
+      {
+        rule: "unique",
+        allowEmpty: true,
+        level: "error",
+      },
+    ],
   },
   {
     label: "Last Name",
@@ -52,6 +59,13 @@ export const fields: Field<string>[] = [
       type: "input",
     },
     example: "Doe",
+    validations: [
+      {
+        rule: "unique",
+        allowEmpty: true,
+        level: "error",
+      },
+    ],
   },
   {
     label: "Course",
@@ -241,11 +255,12 @@ const indexSchema = z.object({
 });
 
 const trimmedStringSchema = z.string().transform((str) => str.trim());
+// string or undefined
 
 export const validStudentSchema = z.object({
   id: trimmedStringSchema,
-  firstName: trimmedStringSchema,
-  lastName: trimmedStringSchema,
+  firstName: trimmedStringSchema.optional(),
+  lastName: trimmedStringSchema.optional(),
   course: trimmedStringSchema,
   yearLevel: trimmedStringSchema,
   stubCode: trimmedStringSchema,
