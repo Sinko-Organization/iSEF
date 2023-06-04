@@ -24,8 +24,8 @@ const SemesterSelector: FC<SemesterSelectorProps> = ({
   };
 
   return (
-    <Box sx={{ maxWidth: 200 }}>
-      <FormControl fullWidth>
+    // <Box sx={{ maxWidth: 200 }}>
+      <FormControl fullWidth >
         <InputLabel id="demo-simple-select-label">Semester Type</InputLabel>
         <Select
           labelId="demo-simple-select-label"
@@ -43,7 +43,7 @@ const SemesterSelector: FC<SemesterSelectorProps> = ({
           ))}
         </Select>
       </FormControl>
-    </Box>
+    // </Box>
   );
 };
 

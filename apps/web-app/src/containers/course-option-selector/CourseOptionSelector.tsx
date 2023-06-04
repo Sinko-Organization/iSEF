@@ -50,9 +50,7 @@ const CourseOptionSelector: FC<Props> = ({
           <FormControl fullWidth>
             <InputLabel className="mt-auto">School Year:</InputLabel>
             <Select
-              sx={{
-                maxWidth: 200,
-              }}
+              sx={{ maxWidth: "250px", height: "40px" }}
               variant="outlined"
               label="School Year"
               defaultValue={courseOptions.schoolYear}
@@ -67,13 +65,11 @@ const CourseOptionSelector: FC<Props> = ({
           </FormControl>
         </div>
 
-        <div className="flex flex-row gap-5">
+        <div className="flex flex-row gap-3">
           <FormControl fullWidth sx={{ width: 150 }}>
             <InputLabel className="mt-auto">Semester Type:</InputLabel>
             <Select
-              sx={{
-                maxWidth: 200,
-              }}
+              sx={{ maxWidth: "120px", height: "40px" }}
               variant="outlined"
               label="Semester Type"
               defaultValue={courseOptions.semesterType}
@@ -92,9 +88,7 @@ const CourseOptionSelector: FC<Props> = ({
           <FormControl fullWidth>
             <InputLabel className="mt-auto">Year Level:</InputLabel>
             <Select
-              sx={{
-                maxWidth: 100,
-              }}
+              sx={{ maxWidth: "120px", height: "40px" }}
               variant="outlined"
               label="Year Level"
               defaultValue={courseOptions.yearLevel}
@@ -118,7 +112,8 @@ const CourseOptionSelector: FC<Props> = ({
               ))}
             </Select>
           </FormControl>
-          <Search text={searchText} onChangeText={setSearchText} />
+
+          <Search text={searchText} onChangeText={setSearchText}></Search>
         </div>
       </div>
     </div>

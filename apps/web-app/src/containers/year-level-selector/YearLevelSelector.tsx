@@ -20,6 +20,7 @@ const YearLevelSelector: FC<Props> = ({ yearLevel, setYearLevel }) => {
           <Select
             sx={{
               maxWidth: 100,
+              height: 40
             }}
             variant="outlined"
             label="Year Level"

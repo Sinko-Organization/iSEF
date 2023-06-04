@@ -43,6 +43,7 @@ type AlertState = {
   open: boolean;
   message: string;
 };
+
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   padding: theme.spacing(1),
@@ -68,11 +69,13 @@ export default function StudentProfileCard({
     open: false,
     message: "",
   });
+
   const {
     mutate: updateStudent,
     isError,
     error,
   } = trpc.useMutation(["student.update"]);
+
   const formik = useFormik<Omit<Props, "id" | "userInfo">>({
     initialValues: {
       studentIdNumber,
@@ -130,62 +133,66 @@ export default function StudentProfileCard({
               </Item>
             </Typography>
           </Grid>
-
-          <Grid item xs={9}>
-            <Typography sx={{ marginTop: "0.5in" }}>
-              <Item className="justify-center font-times-new-roman">
-                <Typography
-                  sx={{ marginLeft: "0.5in" }}
-                  style={{ fontFamily: "Times New Roman" }}
-                >
-                  <Table className="table table-sm">
-                    <tbody>
-                      <tr>
-                        <td className="text-left mb-2">
-                          <b>Name:</b>{" "}
-                          {match([
-                            formik.values.lastName,
-                            formik.values.firstName,
-                          ])
-                            .with([null, null], () => "N/A")
-                            .with([null, P.string], ([, last]) => last)
-                            .with([P.string, null], ([first]) => first)
-                            .with(
-                              [P.string, P.string],
-                              ([first, last]) => `${last}, ${first}`,
-                            )
-                            .otherwise(() => "N/A")
-                            .toUpperCase()}
-                        </td>
-                        <td className="text-left mb-2">
-                          <b>Student ID:</b> {formik.values.studentIdNumber}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="text-left mb-2">
-                          <b>Current Course:</b> {userInfo.course}
-                        </td>
-                        <td className="text-left mb-2">
-                          <b>Current Year Level:</b> {userInfo.yearLevel}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="text-left mb-2">
-                          <b>Enrollment Type:</b> {userInfo.enrollmentType}
-                        </td>
-                        <td className="text-left mb-2">
-                          <b>Current Semester:</b>{" "}
-                          {userInfo.semesterType.toLowerCase()}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </Table>
-                </Typography>
-              </Item>
-            </Typography>
+          <Grid item xs={9} sx={{ margin: "0.5in" }}>
+            <Item className="justify-center font-times-new-roman">
+              <Table className="table table-sm" sx={{ margin: "0.2in" }}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={6}>
+                    <Typography
+                      className="text-left mb-2"
+                      style={{
+                        fontFamily: "Times New Roman",
+                        fontSize: "16px",
+                        color: "black",
+                      }}
+                    >
+                      NAME : {"\u00A0".repeat(15)}
+                      <b>
+                        {match([
+                          formik.values.lastName,
+                          formik.values.firstName,
+                        ])
+                          .with([null, null], () => "N/A")
+                          .with([null, P.string], ([, last]) => last)
+                          .with([P.string, null], ([first]) => first)
+                          .with(
+                            [P.string, P.string],
+                            ([first, last]) => `${last}, ${first}`,
+                          )
+                          .otherwise(() => "N/A")
+                          .toUpperCase()}
+                      </b>{" "}
+                      <br />
+                      STUDENT ID :{"\u00A0".repeat(4)}{" "}
+                      <b>{formik.values.studentIdNumber}</b>
+                      <br /> COURSE :{"\u00A0".repeat(12)}{" "}
+                      <b>{userInfo.course}</b>
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Typography
+                      className="text-left mb-2"
+                      style={{
+                        fontFamily: "Times New Roman",
+                        fontSize: "16px",
+                        color: "black",
+                      }}
+                    >
+                      YEAR LEVEL :{"\u00A0".repeat(7)}
+                      {/* Current Semester :{"\u00A0".repeat(5)} */}
+                      <b>{userInfo.yearLevel}</b>
+                      <br /> Enrollment Type :{"\u00A0".repeat(5)}
+                      <b>{userInfo.enrollmentType}</b>
+                      <br />
+                      Current Semester :{"\u00A0".repeat(3)}{" "}
+                      <b>{userInfo.semesterType}</b>
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </Table>
+            </Item>
           </Grid>
         </Grid>
-        {/* </Card> */}
       </Card>
 
       <ErrorAlert
