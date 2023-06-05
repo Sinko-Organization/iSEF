@@ -138,7 +138,7 @@ export default function ResponsiveDrawer({ window, children }: Props) {
               className="flex-grow"
               style={{ fontFamily: "Times New Roman", letterSpacing: "2px" }}
             >
-              INTELLIGENT STUDENT&apos;S E-FOLDERS
+              INTELLIGENT STUDENTS&apos; E-FOLDERS
             </Typography>
             <Typography style={{ fontFamily: "Times New Roman" }}>
               <button onClick={() => signOut()}>Log Out</button>

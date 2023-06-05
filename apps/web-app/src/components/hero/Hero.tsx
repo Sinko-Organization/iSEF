@@ -15,12 +15,12 @@ const Hero: FC<Props> = ({ signIn }) => {
         <div className="flex items-center w-full lg:w-1/2">
           <div className="max-w-2xl mb-8">
             <h1 className="text-5xl font-bold leading-snug tracking-tight text-gray-800 lg:leading-tight xl:leading-tight ">
-              Intelligent Student&apos;s E-Folder
+              Intelligent Students&apos; E-Folder
             </h1>
             <p className="py-5 text-xl leading-normal text-gray-500 lg:text-xl xl:text-2xl">
-              The Intelligent Student&apos;s E-folder is a web app that helps
+              The Intelligent Students&apos; E-folder is a web app that helps
               students manage their academic performance by calculating grades,
-              generating honor&apos;s list PDFs, and recommending courses based
+              generating honors&apos; list PDFs, and recommending courses based
               on academic performance.
             </p>
 

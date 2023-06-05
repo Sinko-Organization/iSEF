@@ -184,24 +184,16 @@ export default function StudentProfileCard({
                             cursor: "pointer",
                           }}
                         >
-                          <Tooltip
-                            title={match(subj.status)
-                              .with("Valid", () => "🟢 Subject can be taken")
-                              .with(
-                                "Invalid",
-                                () => "🔴 Subject cannot be taken",
-                              )
-                              .exhaustive()}
+                          <Button
+                            sx={{
+                              color: subj.status === "Valid" ? "green" : "red",
+                            }}
+                            onClick={clickSubjectDetail(subj.messages, subj)}
                           >
-                            <Button
-                              sx={{
-                                color:
-                                  subj.status === "Valid" ? "green" : "red",
-                              }}
-                            >
-                              {subj.status}
-                            </Button>
-                          </Tooltip>
+                            {subj.status === "Valid"
+                              ? "Available"
+                              : "Not Available"}
+                          </Button>
                         </TableCell>
                         <TableCell>{subj.yearLevel}</TableCell>
                         <TableCell className="capitalize">
