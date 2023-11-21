@@ -19,7 +19,7 @@ const AdminRoute: FC<Props> = ({ children }) => {
     return <EducationLoader />;
   }
 
-  if (user.role !== "admin") {
+  if (user.role !== "admin" && user.role !=="superadmin") {
     router.push("/");
   }
 
