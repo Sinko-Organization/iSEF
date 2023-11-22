@@ -86,6 +86,28 @@ export function createAdminRouter() {
   });
 }
 
+export function createSuperAdminRouter() {
+  return createProtectedRouter().middleware(async ({ ctx, next }) => {
+    const role = await ctx.prisma.user
+      .findUnique({
+        where: {
+          id: ctx.session?.user?.id,
+        },
+        select: {
+          role: true,
+        },
+      })
+      .then((res) => res?.role);
+
+      /*Create superadmin role*/ 
+    if (role !== "superadmin") {
+      throw new trpc.TRPCError({ code: "FORBIDDEN" });
+    }
+
+    return next();
+  });
+}
+
 /**
  * Create a function that returns the user session
  */
