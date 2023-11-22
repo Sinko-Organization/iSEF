@@ -77,8 +77,7 @@ export function createAdminRouter() {
       })
       .then((res) => res?.role);
 
-      /*Create superadmin role*/ 
-    if (role !== "admin" && role !== "superadmin") {
+    if (role !== "admin") {
       throw new trpc.TRPCError({ code: "FORBIDDEN" });
     }
 
