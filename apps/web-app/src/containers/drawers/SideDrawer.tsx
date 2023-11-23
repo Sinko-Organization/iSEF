@@ -1,3 +1,14 @@
+import {
+  Grade,
+  LockPerson,
+  LockPersonTwoTone,
+  People,
+  Schedule,
+  ScheduleOutlined,
+  ScheduleRounded,
+  ScheduleSend,
+  ScheduleSharp,
+} from "@mui/icons-material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import FactCheckIcon from "@mui/icons-material/FactCheck";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -14,6 +25,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+import CoursePage from "@web-app/pages/course";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -43,6 +55,27 @@ const paths: Path[] = [
     link: "/honors-list",
     icon: <FactCheckIcon />,
   },
+  // links to do
+  {
+    name: "Courses",
+    link: "",
+    icon: <MenuIcon />,
+  },
+  {
+    name: "Scheduling",
+    link: "",
+    icon: <ScheduleSharp />,
+  },
+  {
+    name: "Manage Teachers",
+    link: "",
+    icon: <People />,
+  },
+  {
+    name: "Access Control",
+    link: "",
+    icon: <LockPerson />,
+  },
 ];
 
 const systemPaths: Path[] = [
@@ -64,7 +97,7 @@ export default function ResponsiveDrawer({ window, children }: Props) {
     <div
       style={{
         background: "linear-gradient(to bottom, #FAFAFA, #9078b6)",
-        height: "800px",
+        height: "1000px",
       }}
     >
       <Toolbar>

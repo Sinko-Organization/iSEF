@@ -52,7 +52,7 @@ model User {
     email         String?   @unique
     emailVerified DateTime?
     image         String?
-    role          String?
+    role          Role?
     accounts      Account[]
     sessions      Session[]
 }
@@ -153,6 +153,12 @@ model SubjectDependency {
 
 enum SemesterType {
     FIRST
-    SECOND
+    SECOND  
     SUMMER
+}
+
+enum Role{
+    admin
+    superadmin
+
 }
