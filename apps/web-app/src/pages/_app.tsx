@@ -38,7 +38,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
             </SideDrawer>
           </AdminRoute>
         )}
-      </SessionProvider>
+      </SessionProvider>  
     </>
   );
 };

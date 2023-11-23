@@ -9,7 +9,10 @@ const SignIn = () => {
   const router = useRouter();
   const { data: session } = useSession();
   const { data: userRole } = trpc.useQuery(["user.role"]);
-  if (userRole?.role === "admin" && session) {
+  if (
+    (userRole?.role === "admin" || userRole?.role === "superadmin") &&
+    session
+  ) {
     router.push("/dashboard");
   }
   return (
