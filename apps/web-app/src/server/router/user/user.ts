@@ -43,4 +43,19 @@ export const userRouter = createRouter()
         }
       });
     },
+  })
+  .query("setAdmin", {
+    input: z.object({
+      email: z.string(),
+    }),
+    resolve({ ctx, input }) {
+      return ctx.prisma.user.update({
+        where: {
+          email: input.email
+        },
+        data: {
+          role: "admin"
+        }
+      });
+    },
   });
