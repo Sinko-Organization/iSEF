@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 import { createRouter } from "../context";
 
 export const userRouter = createRouter()
@@ -13,6 +15,32 @@ export const userRouter = createRouter()
         select: {
           role: true,
         },
+      });
+    },
+  })
+  .query("getAll", {
+    resolve({ ctx }) {
+      return ctx.prisma.user.findMany({
+        where: {
+          role: "admin"
+        },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      });
+    },
+  })
+  .query("deleteUser", {
+    input: z.object({
+      email: z.string(),
+    }),
+    resolve({ ctx, input }) {
+      return ctx.prisma.user.delete({
+        where: {
+          email: input.email
+        }
       });
     },
   });
