@@ -77,13 +77,17 @@ export function createAdminRouter() {
       })
       .then((res) => res?.role);
 
-    if (role !== "admin") {
+    if (role !== "admin" && role != "superadmin") {
       throw new trpc.TRPCError({ code: "FORBIDDEN" });
     }
 
     return next();
   });
 }
+
+/**
+ * Creates a tprc router that is protected and asserts that the user is a superadmin
+ */
 
 /**
  * Create a function that returns the user session
