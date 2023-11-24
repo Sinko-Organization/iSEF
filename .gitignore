@@ -1,9 +1,5 @@
 node_modules
-<<<<<<< Updated upstream
 .turbo
 **/csv/
-=======
-.turbo
->>>>>>> Stashed changes
 
 pnpm-lock.yaml
