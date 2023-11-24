@@ -30,7 +30,8 @@ const MyApp: AppType<{ session: Session | null }> = ({
 
       <SessionProvider session={session}>
         {NON_PROTECTED_ROUTES.has(router.pathname) ? (
-          <Component {...pageProps} />
+          <Component {...
+            pageProps} />
         ) : (
           <AdminRoute>
             <SideDrawer>

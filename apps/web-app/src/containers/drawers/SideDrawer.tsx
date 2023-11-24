@@ -73,7 +73,7 @@ const paths: Path[] = [
   },
   {
     name: "Access Control",
-    link: "",
+    link: "/access-control",
     icon: <LockPerson />,
   },
 ];
