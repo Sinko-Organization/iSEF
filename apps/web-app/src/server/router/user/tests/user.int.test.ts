@@ -12,7 +12,7 @@ import { afterEach, beforeEach, describe, expect, test } from "vitest";
  * Create a test context for the user router
  */
 
-describe("the user route", () => {
+describe("testing the userRoute", () => {
   let ctx: Awaited<ReturnType<typeof createContextInner>>;
 
   /**
@@ -50,8 +50,10 @@ describe("the user route", () => {
   /**
    * test getAll admin accounts
    */
-  test("query admin account", async () => {
+  test("test query 'getAll' to retrieve all admin accounts", async () => {
     ctx = await createUserSession();
+
+    const caller = appRouter.createCaller(ctx);
 
     await ctx.prisma.user.createMany({
       data: [
@@ -74,37 +76,26 @@ describe("the user route", () => {
       ]
     });
 
-    // get the user records
-    const users = await ctx.prisma.user.findMany({
-        where: {
-            role: "admin"
-          }
-    });
-    console.log(users)
-    expect(users).toMatchObject([{
-        id: users[0].id,
-        name: users[0].name,
-        email: users[0].email,
-        emailVerified: users[0].emailVerified,
-        image: users[0].image,
-        role: "admin"
+    // retrieve the user records
+    const users = await caller.query("user.getAll");
+    expect(users).toEqual([{
+      email: "user@website.com",
+      role: "admin"
     },
     {
-        id: "1",
-        name: null,
-        email: "johndoe@email.com",
-        emailVerified: null,
-        image: null,
-        role: "admin"
+      email: "johndoe@email.com",
+      role: "admin"
     }
     ]);
   });
 
-      /**
+  /**
    * test deleteUser admin account
    */
-      test("delete user account", async () => {
+      test("test query 'delete' to delete a user account", async () => {
         ctx = await createUserSession();
+
+        const caller = appRouter.createCaller(ctx);
     
         await ctx.prisma.user.createMany({
           data: [
@@ -127,34 +118,25 @@ describe("the user route", () => {
           ]
         });
         // delete the user record
-        const input = { email: "johndoe@email.com"}
-        await ctx.prisma.user.delete({
-            where: {
-              email: input.email
-            }
+        await caller.mutation("user.delete", {
+          email: "johndoe@email.com" 
         });
          // get the user records
-         const users = await ctx.prisma.user.findMany({
-            where: {
-                role: "admin"
-              }
-        });
-        console.log(users)
-        expect(users).toMatchObject([{
-            id: users[0].id,
-            name: users[0].name,
-            email: users[0].email,
-            emailVerified: users[0].emailVerified,
-            image: users[0].image,
-            role: "admin"
-        }]);
+         const users = await caller.query("user.getAll");
+          expect(users).toEqual([{
+          email: "user@website.com",
+          role: "admin"
+          }
+        ]);
     })
 
     /**
    * test setAdmin user account
    */
-    test("give admin previleges to the user account", async () => {
+    test("test 'setAdmin' to give admin previleges to the user account", async () => {
         ctx = await createUserSession();
+
+        const caller = appRouter.createCaller(ctx);
     
         await ctx.prisma.user.createMany({
           data: [
@@ -169,14 +151,8 @@ describe("the user route", () => {
           ]
         });
         // update the user record
-        const input = { email: "johndoe2@email.com"}
-        await ctx.prisma.user.update({
-            where: {
-              email: input.email
-            },
-            data: {
-              role: "admin"
-            }
+        await caller.mutation("user.setAdmin", {
+          email: "johndoe2@email.com" 
         });
          // get the user record
          const user = await ctx.prisma.user.findUnique({
@@ -184,7 +160,6 @@ describe("the user route", () => {
                 email: "johndoe2@email.com"
               }
         });
-        console.log(user)
         expect(user).toMatchObject({
             id: "2",
             name: null,

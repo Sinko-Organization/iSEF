@@ -19,39 +19,45 @@ export const userRouter = createRouter()
     },
   })
   .query("getAll", {
-    resolve({ ctx }) {
+    async resolve({ ctx }) {
       return ctx.prisma.user.findMany({
         where: {
           role: "admin"
         },
         select: {
-          id: true,
-          name: true,
           email: true,
+          role: true
         },
       });
     },
   })
-  .query("deleteUser", {
+  /**
+   * Mutations
+   */
+  .mutation("delete", {
     input: z.object({
       email: z.string(),
     }),
-    resolve({ ctx, input }) {
+    async resolve({ ctx, input }) {
+      const { email } = input;
+
       return ctx.prisma.user.delete({
         where: {
-          email: input.email
+          email: email
         }
       });
     },
   })
-  .query("setAdmin", {
+  
+  .mutation("setAdmin", {
     input: z.object({
       email: z.string(),
     }),
-    resolve({ ctx, input }) {
+    async resolve({ ctx, input }) {
+      const { email } = input;
       return ctx.prisma.user.update({
         where: {
-          email: input.email
+          email: email
         },
         data: {
           role: "admin"
