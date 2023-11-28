@@ -89,6 +89,27 @@ export function createAdminRouter() {
  * Creates a tprc router that is protected and asserts that the user is a superadmin
  */
 
+export function createSuperAdminRouter() {
+  return createProtectedRouter().middleware(async ({ ctx, next }) => {
+    const role = await ctx.prisma.user
+      .findUnique({
+        where: {
+          id: ctx.session?.user?.id,
+        },
+        select: {
+          role: true,
+        },
+      })
+      .then((res) => res?.role);
+
+    if (role != "superadmin") {
+      throw new trpc.TRPCError({ code: "FORBIDDEN" });
+    }
+
+    return next();
+  });
+}
+
 /**
  * Create a function that returns the user session
  */
