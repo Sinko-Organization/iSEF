@@ -71,7 +71,7 @@ describe("testing the userRoute", () => {
           email: "johndoe2@email.com",
           emailVerified: null,
           image: null,
-          role: "user"
+          role: null
         },
       ]
     });
@@ -113,7 +113,7 @@ describe("testing the userRoute", () => {
               email: "johndoe2@email.com",
               emailVerified: null,
               image: null,
-              role: "user"
+              role: null
             },
           ]
         });
@@ -146,7 +146,7 @@ describe("testing the userRoute", () => {
               email: "johndoe2@email.com",
               emailVerified: null,
               image: null,
-              role: "user"
+              role: null
             },
           ]
         });

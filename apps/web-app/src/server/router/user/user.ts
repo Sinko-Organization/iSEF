@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { Role } from "@prisma/client"
 
 import { createRouter } from "../context";
 
@@ -22,7 +23,7 @@ export const userRouter = createRouter()
     async resolve({ ctx }) {
       return ctx.prisma.user.findMany({
         where: {
-          role: "admin"
+          role: Role.admin
         },
         select: {
           email: true,
@@ -60,7 +61,7 @@ export const userRouter = createRouter()
           email: email
         },
         data: {
-          role: "admin"
+          role: Role.admin
         }
       });
     },
