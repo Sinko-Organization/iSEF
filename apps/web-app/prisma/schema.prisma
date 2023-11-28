@@ -116,7 +116,7 @@ model Course {
 
 model Teacher {
     id         String   @id @default(cuid())
-    teacherId  String   @map("teacher_id")
+    teacherId  String   @unique @map("teacher_id")
     firstName  String   @map("first_name")
     middleName String?  @map("middle_name")
     lastName   String   @map("last_name")
