@@ -35,7 +35,7 @@ const AccessControlTable: FC<AccessControlTableProps> = ({ users }) => {
                 <TableCell>{user.email}</TableCell>
                 <TableCell>{user.role === 'admin' || user.role === 'superadmin' ? 'Access' : 'No Access'}</TableCell>
                 <TableCell>
-                  <AddAdminAlert/><RemoveAdminAlert/>
+                  <AddAdminAlert email={user.email}/><RemoveAdminAlert email={user.email}/>
                 </TableCell>
               </TableRow>
             ))} 

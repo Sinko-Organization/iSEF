@@ -2,6 +2,7 @@ import { z } from "zod";
 import { Role } from "@prisma/client"
 
 import { createRouter } from "../context";
+import { NonNullableValues } from "@web-app/types/generics";
 
 
 export const userRouter = createRouter()
@@ -95,7 +96,7 @@ export const userRouter = createRouter()
           email: email
         },
         data: {
-          role: Role.regular
+          role: null
         }
       });
     },
