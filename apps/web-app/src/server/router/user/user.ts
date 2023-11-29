@@ -3,6 +3,7 @@ import { Role } from "@prisma/client"
 
 import { createRouter } from "../context";
 
+
 export const userRouter = createRouter()
   /**
    * Queries
@@ -23,6 +24,21 @@ export const userRouter = createRouter()
     async resolve({ ctx }) {
       return ctx.prisma.user.findMany({
         where: {
+          NOT: {
+            role: Role.superadmin
+          }
+        },
+        select: {
+          email: true,
+          role: true
+        },
+      });
+    },
+  })
+  .query("getAllAdmin", {
+    async resolve({ ctx }) {
+      return ctx.prisma.user.findMany({
+        where: {
           role: Role.admin
         },
         select: {
@@ -32,6 +48,7 @@ export const userRouter = createRouter()
       });
     },
   })
+  
   /**
    * Mutations
    */
@@ -78,7 +95,7 @@ export const userRouter = createRouter()
           email: email
         },
         data: {
-          role: null
+          role: Role.regular
         }
       });
     },

@@ -7,7 +7,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Link from "@mui/material/Link";
 import * as React from "react";
 
-export default function AddAdminAlert() {
+export default function AddAdminAlert(email) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -37,7 +37,7 @@ export default function AddAdminAlert() {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Submit</Button>
+          <Button onClick={handleClose}>Grant Access</Button>
           <Button onClick={handleClose} autoFocus style={{ color: "red" }}>
             Cancel
           </Button>

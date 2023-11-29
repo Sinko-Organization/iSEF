@@ -18,17 +18,17 @@ const AccessControlPage: NextPage = () => {
     ];
 
     const { data: user, error } = trpc.useQuery(["user.role"]);
-    const { data: admins, error: adminsError } = trpc.useQuery(["user.getAll"]);
+    const { data: accounts, error: accountsError } = trpc.useQuery(["user.getAll"]);
 
 
-    if (!admins) {
+    if (!accounts) {
         return <EducationLoader />
     }
 
     if (user?.role == "superadmin") {
         return (
             <div className="mx-32 fontsans mt-10">
-                <AccessControlTable users={admins}/>
+                <AccessControlTable users={accounts}/>
             </div>
         );
     } else {

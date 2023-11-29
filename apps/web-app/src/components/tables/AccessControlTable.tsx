@@ -8,8 +8,11 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
+import AddAdminAlert from '../alerts/AddAdminList';
+import RemoveAdminAlert from '../alerts/RemoveAdminList';
+
 interface AccessControlTableProps {
-  users: inferQueryOutput<'user.getAll'>;
+  users: inferQueryOutput<'user.getAllAdmin'>;
 }
 
 const AccessControlTable: FC<AccessControlTableProps> = ({ users }) => {
@@ -23,13 +26,17 @@ const AccessControlTable: FC<AccessControlTableProps> = ({ users }) => {
             <TableRow>
               <TableCell>Email</TableCell>
               <TableCell>Status</TableCell>
+              <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {users.map((user) => (
               <TableRow key={user.email}>
                 <TableCell>{user.email}</TableCell>
-                <TableCell>{user.role === 'admin' ? 'Access' : 'No Access'}</TableCell>
+                <TableCell>{user.role === 'admin' || user.role === 'superadmin' ? 'Access' : 'No Access'}</TableCell>
+                <TableCell>
+                  <AddAdminAlert/><RemoveAdminAlert/>
+                </TableCell>
               </TableRow>
             ))} 
           </TableBody>

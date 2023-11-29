@@ -163,7 +163,7 @@ enum SemesterType {
 enum Role{
     admin
     superadmin
-
+    regular
 }
 
 enum employmentType {

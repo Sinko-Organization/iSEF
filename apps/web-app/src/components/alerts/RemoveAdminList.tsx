@@ -7,7 +7,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Link from "@mui/material/Link";
 import * as React from "react";
 
-export default function RemoveAdminAlert() {
+export default function RemoveAdminAlert(email) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
