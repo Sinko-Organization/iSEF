@@ -11,6 +11,8 @@ import type { FC } from "react";
 import AddAdminAlert from "../alerts/AddAdminList";
 import RemoveAdminAlert from "../alerts/RemoveAdminList";
 
+// The mutations being passed as props
+
 interface AccessControlTableProps {
   users: inferQueryOutput<"user.getAll">;
   setUserAsAdmin: (email: string) => void;
@@ -55,22 +57,26 @@ const AccessControlTable: FC<AccessControlTableProps> = ({
                   <TableCell>{user.email}</TableCell>
                   <TableCell>{user.name}</TableCell>
                   <TableCell>
+                    {/* refactor to have repeated comparison as a boolean variable */}
                     {user.role === "admin" || user.role === "superadmin"
                       ? "Access"
                       : "No Access"}
                   </TableCell>
                   <TableCell>{user.createdAt.toLocaleString()}</TableCell>
                   <TableCell>
-                    <AddAdminAlert
-                      email={user.email}
-                      isSettingAsAdmin={isSettingAsAdmin}
-                      setUserAsAdmin={setUserAsAdmin}
-                    />
-                    <RemoveAdminAlert
-                      email={user.email}
-                      isSettingNotAdmin={isSettingNotAdmin}
-                      setUserNotAdmin={setUserNotAdmin}
-                    />
+                    {user.role === "admin" || user.role === "superadmin" ? (
+                      <RemoveAdminAlert
+                        email={user.email}
+                        isSettingNotAdmin={isSettingNotAdmin}
+                        setUserNotAdmin={setUserNotAdmin}
+                      />
+                    ) : (
+                      <AddAdminAlert
+                        email={user.email}
+                        isSettingAsAdmin={isSettingAsAdmin}
+                        setUserAsAdmin={setUserAsAdmin}
+                      />
+                    )}
                   </TableCell>
                 </TableRow>
               );

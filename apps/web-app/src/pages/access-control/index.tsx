@@ -7,22 +7,14 @@ import toast, { Toaster } from "react-hot-toast";
 
 const AccessControlPage: NextPage = () => {
   const utils = trpc.useContext();
-  const testUsers = [
-    {
-      email: "user1@example.com",
-      role: "admin",
-    },
-    {
-      email: "user2@example.com",
-      role: null,
-    },
-  ];
 
   const { data: user, error } = trpc.useQuery(["user.role"]);
-  const { data: accounts, error: accountsError } = trpc.useQuery([
-    "user.getAll",
-  ]);
+  const { data: accounts, error: accountsError } = trpc.useQuery(
+    ["user.getAll"],
+    {},
+  );
 
+  //   Set Admin Mutation
   const { mutate: setAdmin, isLoading: isSettingAdmin } = trpc.useMutation(
     ["user.setAdmin"],
     {
@@ -36,6 +28,7 @@ const AccessControlPage: NextPage = () => {
     },
   );
 
+  //   Set Not Admin Mutation
   const { mutate: setNotAdmin, isLoading: isSettingNotAdmin } =
     trpc.useMutation(["user.setNotAdmin"], {
       onSuccess: (user) => {
@@ -51,6 +44,7 @@ const AccessControlPage: NextPage = () => {
     return <EducationLoader />;
   }
 
+  //   Functions for props
   const setUserAsAdmin = (email: string) => {
     setAdmin({
       email,
