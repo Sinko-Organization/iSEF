@@ -5,9 +5,20 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Link from "@mui/material/Link";
+import { trpc } from "@web-app/utils/trpc";
 import * as React from "react";
 
-export default function AddAdminAlert(email: String) {
+interface Props {
+  email: string | null;
+  setUserAsAdmin: (email: string) => void;
+  isSettingAsAdmin: boolean;
+}
+
+export default function AddAdminAlert({
+  email,
+  isSettingAsAdmin,
+  setUserAsAdmin,
+}: Props) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -16,6 +27,12 @@ export default function AddAdminAlert(email: String) {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const setAdmin = () => {
+    if (!email) return;
+    setUserAsAdmin(email);
+    handleClose();
   };
 
   return (
@@ -37,7 +54,9 @@ export default function AddAdminAlert(email: String) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Grant Access</Button>
+          <Button onClick={setAdmin} disabled={isSettingAsAdmin}>
+            Grant Access
+          </Button>
           <Button onClick={handleClose} autoFocus style={{ color: "red" }}>
             Cancel
           </Button>

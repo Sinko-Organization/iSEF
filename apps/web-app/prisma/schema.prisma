@@ -53,6 +53,7 @@ model User {
     emailVerified DateTime?
     image         String?
     role          Role?
+    createdAt     DateTime  @default(now()) @map("created_at")
     accounts      Account[]
     sessions      Session[]
 }

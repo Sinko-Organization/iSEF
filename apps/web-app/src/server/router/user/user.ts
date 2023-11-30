@@ -1,9 +1,8 @@
+import { Role } from "@prisma/client";
+import { NonNullableValues } from "@web-app/types/generics";
 import { z } from "zod";
-import { Role } from "@prisma/client"
 
 import { createRouter } from "../context";
-import { NonNullableValues } from "@web-app/types/generics";
-
 
 export const userRouter = createRouter()
   /**
@@ -26,12 +25,14 @@ export const userRouter = createRouter()
       return ctx.prisma.user.findMany({
         where: {
           NOT: {
-            role: Role.superadmin
-          }
+            role: Role.superadmin,
+          },
         },
         select: {
+          name: true,
           email: true,
-          role: true
+          role: true,
+          createdAt: true,
         },
       });
     },
@@ -40,16 +41,17 @@ export const userRouter = createRouter()
     async resolve({ ctx }) {
       return ctx.prisma.user.findMany({
         where: {
-          role: Role.admin
+          role: Role.admin,
         },
         select: {
+          name: true,
           email: true,
-          role: true
+          role: true,
         },
       });
     },
   })
-  
+
   /**
    * Mutations
    */
@@ -62,12 +64,12 @@ export const userRouter = createRouter()
 
       return ctx.prisma.user.delete({
         where: {
-          email: email
-        }
+          email: email,
+        },
       });
     },
   })
-  
+
   .mutation("setAdmin", {
     input: z.object({
       email: z.string(),
@@ -76,11 +78,11 @@ export const userRouter = createRouter()
       const { email } = input;
       return ctx.prisma.user.update({
         where: {
-          email: email
+          email: email,
         },
         data: {
-          role: Role.admin
-        }
+          role: Role.admin,
+        },
       });
     },
   })
@@ -93,11 +95,11 @@ export const userRouter = createRouter()
       const { email } = input;
       return ctx.prisma.user.update({
         where: {
-          email: email
+          email: email,
         },
         data: {
-          role: null
-        }
+          role: Role.regular,
+        },
       });
     },
   });
