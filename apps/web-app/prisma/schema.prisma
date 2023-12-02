@@ -54,6 +54,7 @@ model User {
     image         String?
     role          Role?
     createdAt     DateTime  @default(now()) @map("created_at")
+    updatedAt     DateTime  @updatedAt @map("updated_at")
     accounts      Account[]
     sessions      Session[]
 }
@@ -170,5 +171,4 @@ enum Role{
 enum employmentType {
     fulltime
     parttime
-
 }
