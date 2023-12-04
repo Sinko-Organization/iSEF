@@ -5,6 +5,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { inferQueryOutput } from "@web-app/utils/trpc";
+import Link from "next/link";
 import * as React from "react";
 import type { FC } from "react";
 
@@ -46,6 +47,11 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
                   </TableCell>
                   <TableCell>{/* put department here */} nyaa uwu :3</TableCell>
                   <TableCell>{teacher.employment}</TableCell>
+                  <TableCell>
+                    <Link href={`/teachers/${teacher.teacherId}`}>
+                      View Details
+                    </Link>
+                  </TableCell>
                 </TableRow>
               );
             })}
