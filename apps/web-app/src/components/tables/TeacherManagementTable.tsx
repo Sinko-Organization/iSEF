@@ -41,8 +41,8 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
                   <TableCell>{teacher.teacherId}</TableCell>
                   <TableCell>
                     {isNotNullAndEmpty(teacher.middleName)
-                      ? `{teacher.firstName} {teacher.middleName}. {teacher.lastName}`
-                      : `{teacher.firstName} {teacher.lastName}`}
+                      ? `${teacher.firstName} ${teacher.middleName}. ${teacher.lastName}`
+                      : `${teacher.firstName} ${teacher.lastName}`}
                   </TableCell>
                   <TableCell>{/* put department here */} nyaa uwu :3</TableCell>
                   <TableCell>{teacher.employment}</TableCell>
