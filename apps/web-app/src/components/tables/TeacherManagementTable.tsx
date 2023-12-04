@@ -45,7 +45,7 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
                       ? `${teacher.firstName} ${teacher.middleName}. ${teacher.lastName}`
                       : `${teacher.firstName} ${teacher.lastName}`}
                   </TableCell>
-                  <TableCell>{/* put department here */} nyaa uwu :3</TableCell>
+                  <TableCell>{teacher.department} </TableCell>
                   <TableCell>{teacher.employment}</TableCell>
                   <TableCell>
                     <Link href={`/teachers/${teacher.teacherId}`}>
