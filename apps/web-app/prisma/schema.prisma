@@ -122,6 +122,7 @@ model Teacher {
     firstName  String   @map("first_name")
     middleName String?  @map("middle_name")
     lastName   String   @map("last_name")
+    department Department?
     employment employmentType?
     birthday   DateTime
     createdAt  DateTime @default(now()) @map("created_at")
@@ -171,4 +172,13 @@ enum Role{
 enum employmentType {
     fulltime
     parttime
+}
+
+enum Department {
+    Packaging
+    Civil
+    Mechanical
+    Electrical
+    Electronics
+    Software
 }
