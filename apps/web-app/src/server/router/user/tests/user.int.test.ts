@@ -48,9 +48,9 @@ describe("testing the userRoute", () => {
   });
 
   /**
-   * test getAll admin accounts
+   * test getAll user accounts
    */
-  test("test query 'getAll' to retrieve all admin accounts", async () => {
+  test("test query 'getAll' to retrieve all user accounts", async () => {
     ctx = await createUserSession();
 
     const caller = appRouter.createCaller(ctx);
@@ -63,7 +63,7 @@ describe("testing the userRoute", () => {
           email: "johndoe@email.com",
           emailVerified: null,
           image: null,
-          role: "admin"
+          role: "superadmin"
         },
         {
         id: "2",
@@ -71,7 +71,7 @@ describe("testing the userRoute", () => {
           email: "johndoe2@email.com",
           emailVerified: null,
           image: null,
-          role: null
+          role: "regular"
         },
       ]
     });
@@ -79,14 +79,56 @@ describe("testing the userRoute", () => {
     // retrieve the user records
     const users = await caller.query("user.getAll");
     expect(users).toEqual([{
+      name: "User",
       email: "user@website.com",
-      role: "admin"
+      role: "admin",
+      createdAt: users[0]?.createdAt
     },
     {
-      email: "johndoe@email.com",
-      role: "admin"
+      name: null,
+      email: "johndoe2@email.com",
+      role: "regular",
+      createdAt: users[1]?.createdAt
     }
     ]);
+  });
+
+  /**
+   * test getAllAdmin accounts
+   */
+  test("test query 'getAllAdmin' to retrieve all admin accounts", async () => {
+    ctx = await createUserSession();
+
+    const caller = appRouter.createCaller(ctx);
+
+    await ctx.prisma.user.createMany({
+      data: [
+        {
+          id: "1",
+          name: null,
+          email: "johndoe@email.com",
+          emailVerified: null,
+          image: null,
+          role: "superadmin"
+        },
+        {
+        id: "2",
+          name: null,
+          email: "johndoe2@email.com",
+          emailVerified: null,
+          image: null,
+          role: "regular"
+        },
+      ]
+    });
+
+    // retrieve the user records
+    const users = await caller.query("user.getAllAdmin");
+    expect(users).toEqual([{
+      name: "User",
+      email: "user@website.com",
+      role: "admin"
+    }]);
   });
 
   /**
@@ -124,8 +166,10 @@ describe("testing the userRoute", () => {
          // get the user records
          const users = await caller.query("user.getAll");
           expect(users).toEqual([{
+          name: "User",
           email: "user@website.com",
-          role: "admin"
+          role: "admin",
+          createdAt: users[0]?.createdAt
           }
         ]);
     })
@@ -169,4 +213,44 @@ describe("testing the userRoute", () => {
             role: "admin"
         });
     })
+
+     /**
+   * test setNotAdmin user account
+   */
+     test("test 'setnotAdmin' to remove admin previleges to the user account", async () => {
+      ctx = await createUserSession();
+
+      const caller = appRouter.createCaller(ctx);
+  
+      await ctx.prisma.user.createMany({
+        data: [
+          {
+          id: "2",
+            name: null,
+            email: "johndoe2@email.com",
+            emailVerified: null,
+            image: null,
+            role: "admin"
+          },
+        ]
+      });
+      // update the user record
+      await caller.mutation("user.setNotAdmin", {
+        email: "johndoe2@email.com" 
+      });
+       // get the user record
+       const user = await ctx.prisma.user.findUnique({
+          where: {
+              email: "johndoe2@email.com"
+            }
+      });
+      expect(user).toMatchObject({
+          id: "2",
+          name: null,
+          email: "johndoe2@email.com",
+          emailVerified: null,
+          image: null,
+          role: "regular"
+      });
+  })
 });
