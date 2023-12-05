@@ -20,9 +20,9 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
     <Paper
       className="mt-10"
       sx={{
-        boxShadow: "0px 4px 16px rgba(0, 0, 0, 0.25)",
+        boxShadow: '0px 4px 16px rgba(0, 0, 0, 0.25)',
         borderRadius: 2,
-        overflow: "hidden",
+        overflow: 'hidden'
       }}
     >
       <TableContainer>

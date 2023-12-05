@@ -1,13 +1,17 @@
 import { NextPage } from 'next';
-import TeacherTable from '@web-app/components/tables/TeacherTable';
+import TeacherManagementTable from '@web-app/components/tables/TeacherManagementTable';
 
 const ManageTeachersPage: NextPage = () => {
 
     return (
         <div>
-           <TeacherTable/>
+            <TeacherManagementTable teachers={[]} />
         </div>
     );
+
+
+
+
 }
 
 export default ManageTeachersPage;
