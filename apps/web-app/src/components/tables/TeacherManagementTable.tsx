@@ -11,10 +11,12 @@ import type { FC } from "react";
 
 interface TeacherManagementTableProps {
   teachers: inferQueryOutput<"teacher.getAll">;
+  onTeacherSelect: (teacher: inferQueryOutput<"teacher.getAll">) => void;
 }
 
 const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
   teachers,
+  onTeacherSelect,
 }) => {
   return (
     <Paper
@@ -31,31 +33,35 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
             <TableRow>
               <TableCell>ID Number</TableCell>
               <TableCell>Name</TableCell>
+              <TableCell>Age</TableCell>
               <TableCell>Department</TableCell>
               <TableCell>Employment</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {teachers.map((teacher) => {
-              return (
+            {teachers.map((teacher) => (
+              <TableRow key={teacher.teacherId}>
                 <TableRow key={teacher.teacherId}>
-                  <TableCell>{teacher.teacherId}</TableCell>
-                  <TableCell>
-                    {isNotNullAndEmpty(teacher.middleName)
-                      ? `${teacher.firstName} ${teacher.middleName}. ${teacher.lastName}`
-                      : `${teacher.firstName} ${teacher.lastName}`}
-                  </TableCell>
-                  <TableCell>{teacher.department} </TableCell>
-                  <TableCell>{teacher.employment}</TableCell>
-                  <TableCell>
-                    <Link href={`/teachers/${teacher.teacherId}`}>
-                      View Details
-                    </Link>
-                  </TableCell>
+                  <TableRow key={teacher.teacherId}>
+                    <TableCell>{teacher.teacherId}</TableCell>
+                    <TableCell>
+                      {isNotNullAndEmpty(teacher.middleName)
+                        ? `${teacher.firstName} ${teacher.middleName}. ${teacher.lastName}`
+                        : `${teacher.firstName} ${teacher.lastName}`}
+                    </TableCell>
+                    <TableCell>{teacher.department} </TableCell>
+                    <TableCell>{teacher.employment}</TableCell>
+                    <TableCell>
+                      <Link href={`/teachers/${teacher.teacherId}`} passHref>
+                        <a onClick={() => onTeacherSelect([teacher])}>View Details</a>
+                      </Link>
+                    </TableCell>
+                  </TableRow>
                 </TableRow>
-              );
-            })}
+              </TableRow>
+            ))}
           </TableBody>
+
         </Table>
       </TableContainer>
     </Paper>
