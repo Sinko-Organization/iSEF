@@ -62,15 +62,11 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
                     <TableCell>{teacher.department}</TableCell>
                     <TableCell>{teacher.employment}</TableCell>
                     <TableCell>
-                    <div
-                      onClick={() =>
-                        handleTeacherSelect(teacher.teacherId.toString())
-                      }
-                    >
-                      <Link href="#">
-                        <a>View Details</a>
-                      </Link>
-                    </div>
+                      <div>
+                        <a onClick={() =>
+                          handleTeacherSelect(teacher.teacherId.toString())
+                        }>View Details</a>
+                      </div>
                     </TableCell>
                   </TableRow>
                 );
