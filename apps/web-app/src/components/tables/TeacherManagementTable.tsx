@@ -42,6 +42,7 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
 
   return (
     <div>
+      {/* Add Teacher's Button here */}
       <Paper
         className="mt-10"
         sx={{
