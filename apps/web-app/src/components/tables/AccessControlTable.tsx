@@ -8,8 +8,8 @@ import { inferQueryOutput } from "@web-app/utils/trpc";
 import * as React from "react";
 import type { FC } from "react";
 
-import AddAdminAlert from "../alerts/AddAdminList";
-import RemoveAdminAlert from "../alerts/RemoveAdminList";
+import AddAdminAlert from "../buttons/AddAdminList";
+import RemoveAdminAlert from "../buttons/RemoveAdminList";
 
 // The mutations being passed as props
 

@@ -4,27 +4,29 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import TeacherDetails from "@web-app/components/tables/TeacherDetails";
+import { inferQueryOutput } from "@web-app/utils/trpc";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import * as React from "react";
 import type { FC } from "react";
-import { inferQueryOutput } from "@web-app/utils/trpc";
-import TeacherDetails from "@web-app/components/tables/TeacherDetails";
 import { useState } from "react";
-import { useRouter } from "next/router";
+
+import { EducationLoader } from "../loaders";
 
 interface TeacherManagementTableProps {
   teachers: inferQueryOutput<"teacher.getAll">;
 }
 
 const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
-  teachers
+  teachers,
 }) => {
-  const [selectedTeacher, setSelectedTeacher] = useState<inferQueryOutput<"teacher.getAll"> | null
-  >(null);
-  const router = useRouter()
+  const [selectedTeacher, setSelectedTeacher] =
+    useState<inferQueryOutput<"teacher.getAll"> | null>(null);
+  const router = useRouter();
 
   const handleTeacherSelect = (teacherId: string) => {
-    router.push(`/teacher?id=${teacherId}`)
+    router.push(`/teacher?id=${teacherId}`);
     /*
      const selectedTeacher = teachers.find(
        (teacher) => teacher.teacherId === teacherId
@@ -34,6 +36,10 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
     */
   };
 
+  if (!teachers) {
+    return <EducationLoader />;
+  }
+
   return (
     <div>
       <Paper
@@ -41,7 +47,7 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
         sx={{
           boxShadow: "0px 4px 16px rgba(0, 0, 0, 0.25)",
           borderRadius: 2,
-          overflow: "hidden"
+          overflow: "hidden",
         }}
       >
         <TableContainer>
@@ -57,9 +63,13 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
             <TableBody>
               {teachers.map((teacher) => {
                 return (
-                  <TableRow key={teacher.teacherId} onClick={() =>
-                    handleTeacherSelect(teacher.teacherId.toString())
-                  } hover>
+                  <TableRow
+                    key={teacher.teacherId}
+                    onClick={() =>
+                      handleTeacherSelect(teacher.teacherId.toString())
+                    }
+                    hover
+                  >
                     <TableCell>{teacher.teacherId}</TableCell>
                     <TableCell>
                       {isNotNullAndEmpty(teacher.middleName)
@@ -68,9 +78,7 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
                     </TableCell>
                     <TableCell>{teacher.department}</TableCell>
                     <TableCell>{teacher.employment}</TableCell>
-                    <TableCell>
-                      {/* Trash button here */}
-                    </TableCell>
+                    <TableCell>{/* Trash button here */}</TableCell>
                   </TableRow>
                 );
               })}
