@@ -57,7 +57,9 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
             <TableBody>
               {teachers.map((teacher) => {
                 return (
-                  <TableRow key={teacher.teacherId}>
+                  <TableRow key={teacher.teacherId} onClick={() =>
+                    handleTeacherSelect(teacher.teacherId.toString())
+                  } hover>
                     <TableCell>{teacher.teacherId}</TableCell>
                     <TableCell>
                       {isNotNullAndEmpty(teacher.middleName)
@@ -67,11 +69,7 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
                     <TableCell>{teacher.department}</TableCell>
                     <TableCell>{teacher.employment}</TableCell>
                     <TableCell>
-                      <div>
-                        <a onClick={() =>
-                          handleTeacherSelect(teacher.teacherId.toString())
-                        }>View Details</a>
-                      </div>
+                      {/* Trash button here */}
                     </TableCell>
                   </TableRow>
                 );
