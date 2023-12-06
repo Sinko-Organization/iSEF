@@ -4,44 +4,54 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { inferQueryOutput } from "@web-app/utils/trpc";
 import Link from "next/link";
 import * as React from "react";
 import type { FC } from "react";
+import { inferQueryOutput } from "@web-app/utils/trpc";
+import TeacherDetails from "@web-app/components/tables/TeacherDetails";
+import { useState } from "react";
 
 interface TeacherManagementTableProps {
   teachers: inferQueryOutput<"teacher.getAll">;
-  onTeacherSelect: (teacher: inferQueryOutput<"teacher.getAll">) => void;
 }
 
 const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
-  teachers,
-  onTeacherSelect,
+  teachers
 }) => {
+  const [selectedTeacher, setSelectedTeacher] = useState<inferQueryOutput<"teacher.getAll"> | null
+  >(null);
+
+  const handleTeacherSelect = (teacherId: string) => {
+    const selectedTeacher = teachers.find(
+      (teacher) => teacher.teacherId === teacherId
+    );
+
+    setSelectedTeacher(selectedTeacher ? [selectedTeacher] : null);
+  };
+
   return (
-    <Paper
-      className="mt-10"
-      sx={{
-        boxShadow: '0px 4px 16px rgba(0, 0, 0, 0.25)',
-        borderRadius: 2,
-        overflow: 'hidden'
-      }}
-    >
-      <TableContainer>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>ID Number</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Age</TableCell>
-              <TableCell>Department</TableCell>
-              <TableCell>Employment</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {teachers.map((teacher) => (
-              <TableRow key={teacher.teacherId}>
-                <TableRow key={teacher.teacherId}>
+    <div>
+      <Paper
+        className="mt-10"
+        sx={{
+          boxShadow: "0px 4px 16px rgba(0, 0, 0, 0.25)",
+          borderRadius: 2,
+          overflow: "hidden"
+        }}
+      >
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>ID Number</TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>Department</TableCell>
+                <TableCell>Employment</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {teachers.map((teacher) => {
+                return (
                   <TableRow key={teacher.teacherId}>
                     <TableCell>{teacher.teacherId}</TableCell>
                     <TableCell>
@@ -49,22 +59,29 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
                         ? `${teacher.firstName} ${teacher.middleName}. ${teacher.lastName}`
                         : `${teacher.firstName} ${teacher.lastName}`}
                     </TableCell>
-                    <TableCell>{teacher.department} </TableCell>
+                    <TableCell>{teacher.department}</TableCell>
                     <TableCell>{teacher.employment}</TableCell>
                     <TableCell>
-                      <Link href={`/teachers/${teacher.teacherId}`} passHref>
-                        <a onClick={() => onTeacherSelect([teacher])}>View Details</a>
+                    <div
+                      onClick={() =>
+                        handleTeacherSelect(teacher.teacherId.toString())
+                      }
+                    >
+                      <Link href="#">
+                        <a>View Details</a>
                       </Link>
+                    </div>
                     </TableCell>
                   </TableRow>
-                </TableRow>
-              </TableRow>
-            ))}
-          </TableBody>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
 
-        </Table>
-      </TableContainer>
-    </Paper>
+      {selectedTeacher && <TeacherDetails teacher={selectedTeacher} />}
+    </div>
   );
 };
 
