@@ -1,15 +1,15 @@
-import React from "react";
-import { FC } from "react";
+import { TableContainer, TableRow } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
-import { TableContainer, TableRow } from "@mui/material";
 import TableHead from "@mui/material/TableHead";
 import { inferQueryOutput } from "@web-app/utils/trpc";
+import React from "react";
+import { FC } from "react";
 
 interface TeacherDetailsProps {
-    teacher: inferQueryOutput<"teacher.getAll">;
+  teacher: inferQueryOutput<"teacher.getAll">;
 }
 
 const TeacherDetails: FC<TeacherDetailsProps> = ({ teacher }) => {
