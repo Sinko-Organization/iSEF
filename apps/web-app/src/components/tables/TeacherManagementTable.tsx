@@ -10,6 +10,7 @@ import type { FC } from "react";
 import { inferQueryOutput } from "@web-app/utils/trpc";
 import TeacherDetails from "@web-app/components/tables/TeacherDetails";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 interface TeacherManagementTableProps {
   teachers: inferQueryOutput<"teacher.getAll">;
@@ -20,13 +21,17 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
 }) => {
   const [selectedTeacher, setSelectedTeacher] = useState<inferQueryOutput<"teacher.getAll"> | null
   >(null);
+  const router = useRouter()
 
   const handleTeacherSelect = (teacherId: string) => {
-    const selectedTeacher = teachers.find(
-      (teacher) => teacher.teacherId === teacherId
-    );
-
-    setSelectedTeacher(selectedTeacher ? [selectedTeacher] : null);
+    router.push(`/teacher?id=${teacherId}`)
+    /*
+     const selectedTeacher = teachers.find(
+       (teacher) => teacher.teacherId === teacherId
+     );
+ 
+     setSelectedTeacher(selectedTeacher ? [selectedTeacher] : null);
+    */
   };
 
   return (
