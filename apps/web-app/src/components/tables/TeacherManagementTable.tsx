@@ -47,7 +47,7 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
                                         ? `${teacher.firstName} ${teacher.middleName}. ${teacher.lastName}`
                                         : `${teacher.firstName} ${teacher.lastName}`}
                                 </TableCell>
-                                <TableCell>永遠17歳！</TableCell>
+                                <TableCell>age placeholder</TableCell>
                                 <TableCell>{teacher.department} </TableCell>
                                 <TableCell>{teacher.employment}</TableCell>
                                 <TableCell>
