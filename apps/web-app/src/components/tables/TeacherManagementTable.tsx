@@ -12,6 +12,7 @@ import * as React from "react";
 import type { FC } from "react";
 import { useState } from "react";
 
+import { AddTeachersButton } from "../buttons";
 import RemoveButton from "../buttons/RemoveTeachersButton";
 import { EducationLoader } from "../loaders";
 
@@ -22,7 +23,7 @@ interface TeacherManagementTableProps {
 
 const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
   teachers,
-  removeTeacherRecord
+  removeTeacherRecord,
 }) => {
   const [selectedTeacher, setSelectedTeacher] =
     useState<inferQueryOutput<"teacher.getAll"> | null>(null);
@@ -45,7 +46,7 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
 
   return (
     <div>
-      {/* Add Teacher's Button here */}
+      {<AddTeachersButton />}
       <Paper
         className="mt-10"
         sx={{
@@ -77,16 +78,21 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
                     <TableCell>{teacher.teacherId}</TableCell>
                     <TableCell>
                       {isNotNullAndEmpty(teacher.middleName)
-                        ? `${teacher.firstName} ${teacher.middleName}. ${teacher.lastName}`
+                        ? `${teacher.firstName} ${teacher.middleName![0]}. ${
+                            teacher.lastName
+                          }`
                         : `${teacher.firstName} ${teacher.lastName}`}
                     </TableCell>
                     <TableCell>{teacher.department}</TableCell>
                     <TableCell>{teacher.employment}</TableCell>
-                    <TableCell>{
-                      <RemoveButton 
-                      teacherId={teacher.teacherId}
-                      removeTeacherRecord={removeTeacherRecord}
-                    />}</TableCell>
+                    <TableCell>
+                      {
+                        <RemoveButton
+                          teacherId={teacher.teacherId}
+                          removeTeacherRecord={removeTeacherRecord}
+                        />
+                      }
+                    </TableCell>
                   </TableRow>
                 );
               })}
