@@ -14,8 +14,12 @@ import {
   Typography,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+import { DateField } from "@mui/x-date-pickers";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { employmentType } from "@prisma/client";
 import { Department } from "@prisma/client";
+import dayjs from "dayjs";
 import React, { ChangeEvent, useState } from "react";
 
 const useStyles = makeStyles({
@@ -59,7 +63,9 @@ const AddTeachersButton = () => {
   const [dept, setDept] = useState("");
   const [emp, setEmp] = useState("");
 
-  const handleTextChange = (e) => {
+  const [birthdate, setBirthdate] = useState<Date>(new Date());
+
+  const handleTextChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setInputs({
       ...inputs,
@@ -70,12 +76,10 @@ const AddTeachersButton = () => {
 
   const handleDeptChange = (e: SelectChangeEvent) => {
     setDept(e.target.value as string);
-    console.log(dept);
   };
 
   const handleEmpChange = (e: SelectChangeEvent) => {
     setEmp(e.target.value as string);
-    console.log(emp);
   };
 
   const handleClickOpen = () => {
@@ -161,13 +165,23 @@ const AddTeachersButton = () => {
               defaultValue=""
               id="employment"
               value={emp}
-              label="Employment Status"
+              label="Employment"
               onChange={handleEmpChange}
             >
               <MenuItem value={"fulltime"}>Full-Time</MenuItem>
               <MenuItem value={"parttime"}>Part-Time</MenuItem>
             </Select>
           </div>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DateField
+              label="Birthdate"
+              value={dayjs(birthdate)}
+              onChange={(newDate) => {
+                setBirthdate(newDate!);
+                console.log(birthdate);
+              }}
+            />
+          </LocalizationProvider>
         </DialogContent>
         <DialogActions>
           <Button color="error" onClick={handleClose}>
