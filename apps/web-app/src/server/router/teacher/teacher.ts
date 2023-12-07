@@ -77,7 +77,6 @@ export const teacherRouter = createRouter()
   })
   .mutation("update", {
     input: z.object({
-      id: z.string(),
       teacherId: z.string(),
       firstName: z.string(),
       middleName: z.string(),
@@ -88,7 +87,6 @@ export const teacherRouter = createRouter()
     }),
     async resolve({ ctx, input }) {
       const {
-        id,
         teacherId,
         firstName,
         middleName,
@@ -99,10 +97,9 @@ export const teacherRouter = createRouter()
       } = input;
       return ctx.prisma.teacher.update({
         where: {
-          id: id,
+          teacherId: teacherId,
         },
         data: {
-          teacherId: teacherId,
           firstName: firstName,
           middleName: middleName,
           lastName: lastName,
