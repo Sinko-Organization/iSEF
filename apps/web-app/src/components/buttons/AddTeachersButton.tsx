@@ -237,10 +237,7 @@ const AddTeachersButton = () => {
             <DateField
               label="Birthdate"
               value={dayjs(birthdate)}
-              onChange={(newDate) => {
-                setBirthdate(newDate!);
-                console.log(birthdate);
-              }}
+              onChange={(newDate) => setBirthdate(dayjs(newDate!).toDate())}
             />
           </LocalizationProvider>
         </DialogContent>
