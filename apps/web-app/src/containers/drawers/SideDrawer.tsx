@@ -68,7 +68,7 @@ const paths: Path[] = [
   },
   {
     name: "Manage Teachers",
-    link: "teacher-management",
+    link: "/teacher-management",
     icon: <People />,
   },
   {
