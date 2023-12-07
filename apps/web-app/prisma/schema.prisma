@@ -53,6 +53,8 @@ model User {
     emailVerified DateTime?
     image         String?
     role          Role?
+    createdAt     DateTime  @default(now()) @map("created_at")
+    updatedAt     DateTime  @updatedAt @map("updated_at")
     accounts      Account[]
     sessions      Session[]
 }
@@ -114,11 +116,30 @@ model Course {
     studentRecords StudentRecord[]
 }
 
+model ClassesTaught {
+    id           String       @id @default(cuid())
+    teacherId    String       @map("teacher_id")
+    subjectId    String       @map("subject_id")
+    schoolYearId String
+    semesterType SemesterType
+    grade        Float
+    createdAt    DateTime     @default(now()) @map("created_at")
+    updatedAt    DateTime     @updatedAt @map("updated_at")
+    teacher      Teacher      @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+    subject      Subject      @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+}
+    
+
 model Teacher {
     id         String   @id @default(cuid())
+    teacherId  String   @unique @map("teacher_id")
     firstName  String   @map("first_name")
     middleName String?  @map("middle_name")
     lastName   String   @map("last_name")
+    department Department?
+    employment employmentType?
+    classesTaught ClassesTaught[] 
+    birthday   DateTime
     createdAt  DateTime @default(now()) @map("created_at")
     updatedAt  DateTime @updatedAt @map("updated_at")
 }
@@ -131,6 +152,7 @@ model Subject {
     createdAt      DateTime        @default(now()) @map("created_at")
     updatedAt      DateTime        @updatedAt @map("updated_at")
     studentRecords StudentRecord[]
+    classesTaught ClassesTaught[]
 }
 
 model SubjectHierarchy {
@@ -160,5 +182,19 @@ enum SemesterType {
 enum Role{
     admin
     superadmin
+    regular
+}
 
+enum employmentType {
+    fulltime
+    parttime
+}
+
+enum Department {
+    Packaging
+    Civil
+    Mechanical
+    Electrical
+    Electronics
+    Software
 }

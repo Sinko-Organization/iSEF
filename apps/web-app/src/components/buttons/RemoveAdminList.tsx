@@ -5,9 +5,20 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Link from "@mui/material/Link";
+import { trpc } from "@web-app/utils/trpc";
 import * as React from "react";
 
-export default function RemoveAdminAlert() {
+interface Props {
+  email: string | null;
+  setUserNotAdmin: (email: string) => void;
+  isSettingNotAdmin: boolean;
+}
+
+export default function RemoveAdminAlert({
+  email,
+  setUserNotAdmin,
+  isSettingNotAdmin,
+}: Props) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -18,10 +29,16 @@ export default function RemoveAdminAlert() {
     setOpen(false);
   };
 
+  const setNotAdmin = () => {
+    if (!email) return;
+    setUserNotAdmin(email);
+    handleClose();
+  };
+
   return (
     <React.Fragment>
       <Link onClick={handleClickOpen} style={{ color: "red" }}>
-        Remove
+        Remove Access
       </Link>
       <Dialog
         open={open}
@@ -36,7 +53,9 @@ export default function RemoveAdminAlert() {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} style={{ color: 'red' }}>Remove</Button>
+          <Button onClick={setNotAdmin} style={{ color: "red" }}>
+            Remove
+          </Button>
           <Button onClick={handleClose} autoFocus>
             Cancel
           </Button>

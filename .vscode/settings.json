@@ -9,5 +9,8 @@
   "prettier.documentSelectors": [
     "**/*.{cjs,mjs,ts,tsx,astro,md,mdx,json,yaml,yml}"
   ],
-  "testing.automaticallyOpenPeekView": "never"
+  "testing.automaticallyOpenPeekView": "never",
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }

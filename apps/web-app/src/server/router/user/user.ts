@@ -1,3 +1,5 @@
+import { Role } from "@prisma/client";
+import { NonNullableValues } from "@web-app/types/generics";
 import { z } from "zod";
 
 import { createRouter } from "../context";
@@ -19,43 +21,85 @@ export const userRouter = createRouter()
     },
   })
   .query("getAll", {
-    resolve({ ctx }) {
+    async resolve({ ctx }) {
       return ctx.prisma.user.findMany({
         where: {
-          role: "admin"
+          NOT: {
+            role: Role.superadmin,
+          },
         },
         select: {
-          id: true,
           name: true,
           email: true,
+          role: true,
+          createdAt: true,
         },
       });
     },
   })
-  .query("deleteUser", {
+  .query("getAllAdmin", {
+    async resolve({ ctx }) {
+      return ctx.prisma.user.findMany({
+        where: {
+          role: Role.admin,
+        },
+        select: {
+          name: true,
+          email: true,
+          role: true,
+        },
+      });
+    },
+  })
+
+  /**
+   * Mutations
+   */
+  .mutation("delete", {
     input: z.object({
       email: z.string(),
     }),
-    resolve({ ctx, input }) {
+    async resolve({ ctx, input }) {
+      const { email } = input;
+
       return ctx.prisma.user.delete({
         where: {
-          email: input.email
-        }
+          email: email,
+        },
       });
     },
   })
-  .query("setAdmin", {
+
+  .mutation("setAdmin", {
     input: z.object({
       email: z.string(),
     }),
-    resolve({ ctx, input }) {
+    async resolve({ ctx, input }) {
+      const { email } = input;
       return ctx.prisma.user.update({
         where: {
-          email: input.email
+          email: email,
         },
         data: {
-          role: "admin"
-        }
+          role: Role.admin,
+        },
+      });
+    },
+  })
+
+  .mutation("setNotAdmin", {
+    input: z.object({
+      email: z.string(),
+    }),
+    async resolve({ ctx, input }) {
+      const { email } = input;
+      return ctx.prisma.user.update({
+        where: {
+          email: email,
+        },
+        data: {
+          role: Role.regular,
+        },
       });
     },
   });
