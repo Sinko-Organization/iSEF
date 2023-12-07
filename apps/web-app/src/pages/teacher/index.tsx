@@ -1,3 +1,16 @@
-export default function TeacherProfile() {
-  return <div>This is teacher's profile</div>;
-}
+import { NextPage } from "next";
+import { useRouter } from "next/router";
+import TeacherProfileCard from "@web-app/components/cards/TeacherProfileCard";
+
+const TeacherPage: NextPage = () => {
+  const router = useRouter();
+  const { id } = router.query as { id: string };
+
+  return (
+    <>
+      <TeacherProfileCard />
+    </>
+  );
+};
+
+export default TeacherPage;

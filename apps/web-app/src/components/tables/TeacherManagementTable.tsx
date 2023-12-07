@@ -4,7 +4,6 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import TeacherDetails from "@web-app/components/tables/TeacherDetails";
 import { inferQueryOutput } from "@web-app/utils/trpc";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -24,19 +23,12 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
   teachers,
   removeTeacherRecord
 }) => {
-  const [selectedTeacher, setSelectedTeacher] =
-    useState<inferQueryOutput<"teacher.getAll"> | null>(null);
+  
   const router = useRouter();
 
   const handleTeacherSelect = (teacherId: string) => {
     router.push(`/teacher?id=${teacherId}`);
-    /*
-     const selectedTeacher = teachers.find(
-       (teacher) => teacher.teacherId === teacherId
-     );
  
-     setSelectedTeacher(selectedTeacher ? [selectedTeacher] : null);
-    */
   };
 
   if (!teachers) {
@@ -95,7 +87,6 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
         </TableContainer>
       </Paper>
 
-      {selectedTeacher && <TeacherDetails teacher={selectedTeacher} />}
     </div>
   );
 };
