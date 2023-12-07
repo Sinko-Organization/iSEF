@@ -22,12 +22,15 @@ const useStyles = makeStyles({
   },
 });
 
-interface Props extends React.HTMLAttributes<HTMLButtonElement> {
-  onClick: () => void;
-  disabled?: boolean;
+interface Props {
+  teacherId: string;
+  removeTeacherRecord: (teacherId: string) => void;
 }
 
-const RemoveButton = () => {
+const RemoveButton = ({
+  teacherId,
+  removeTeacherRecord,
+}: Props) => {
   const classes = useStyles();
 
   const [open, setOpen] = React.useState(false);
@@ -40,6 +43,10 @@ const RemoveButton = () => {
     setOpen(false);
   };
 
+  const removeTeacher = () => {
+    removeTeacherRecord(teacherId);
+    handleClose();
+  };
   return (
     <React.Fragment>
       <div className={classes.container}>
@@ -63,7 +70,7 @@ const RemoveButton = () => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} style={{ color: "red" }}>
+          <Button onClick={removeTeacher} style={{ color: "red" }}>
             Delete
           </Button>
           <Button onClick={handleClose} autoFocus>
