@@ -169,36 +169,6 @@ const TeacherDetails: FC<TeacherDetailsProps> = ({ teacher }) => {
               </TableRow>
             </TableHead>
 
-            <TableBody>
-              <TableRow>
-                <TableCell style={{ textAlign: "center" }}>SE 101</TableCell>
-                <TableCell style={{ textAlign: "center" }}>
-                  Software Engineering 1
-                </TableCell>
-                <TableCell style={{ textAlign: "center" }}>3</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell style={{ textAlign: "center" }}>SE 102</TableCell>
-                <TableCell style={{ textAlign: "center" }}>
-                  Software Engineering 2
-                </TableCell>
-                <TableCell style={{ textAlign: "center" }}>3</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell style={{ textAlign: "center" }}>SE 103</TableCell>
-                <TableCell style={{ textAlign: "center" }}>
-                  Software Engineeringg 3
-                </TableCell>
-                <TableCell style={{ textAlign: "center" }}>3</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell style={{ textAlign: "center" }}>SE 104</TableCell>
-                <TableCell style={{ textAlign: "center" }}>
-                  Software Engineering 4
-                </TableCell>
-                <TableCell style={{ textAlign: "center" }}>3</TableCell>
-              </TableRow>
-            </TableBody>
           </Table>
         </TableContainer>
       </Paper>
