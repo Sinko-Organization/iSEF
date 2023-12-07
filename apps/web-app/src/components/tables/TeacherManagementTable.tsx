@@ -17,19 +17,18 @@ import { EducationLoader } from "../loaders";
 
 interface TeacherManagementTableProps {
   teachers: inferQueryOutput<"teacher.getAll">;
-  removeTeacherRecord: (teacherId: string) => void;
+
 }
 
 const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
   teachers,
-  removeTeacherRecord,
 }) => {
-  
+
   const router = useRouter();
 
   const handleTeacherSelect = (teacherId: string) => {
-    router.push(`/teacher?id=${teacherId}`);
- 
+    router.push(`/teachers/${teacherId}`);
+
   };
 
   if (!teachers) {
@@ -70,21 +69,12 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
                     <TableCell>{teacher.teacherId}</TableCell>
                     <TableCell>
                       {isNotNullAndEmpty(teacher.middleName)
-                        ? `${teacher.firstName} ${teacher.middleName![0]}. ${
-                            teacher.lastName
-                          }`
+                        ? `${teacher.firstName} ${teacher.middleName![0]}. ${teacher.lastName
+                        }`
                         : `${teacher.firstName} ${teacher.lastName}`}
                     </TableCell>
                     <TableCell>{teacher.department}</TableCell>
-                    <TableCell>{teacher.employment}</TableCell>
-                    <TableCell>
-                      {
-                        <RemoveButton
-                          teacherId={teacher.teacherId}
-                          removeTeacherRecord={removeTeacherRecord}
-                        />
-                      }
-                    </TableCell>
+                    <TableCell>{teacher!.employment === "fulltime" ? "Full-Time" : "Part-Time"}</TableCell>
                   </TableRow>
                 );
               })}

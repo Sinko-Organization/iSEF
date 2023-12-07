@@ -3,14 +3,13 @@ import { useRouter } from "next/router";
 import TeacherProfileCard from "@web-app/components/cards/TeacherProfileCard";
 
 const TeacherPage: NextPage = () => {
-  const router = useRouter();
-  const { id } = router.query as { id: string };
+    const router = useRouter();
 
-  return (
-    <>
-      <TeacherProfileCard />
-    </>
-  );
+    return (
+        <>
+            <TeacherProfileCard teacherID={router.query.id} />
+        </>
+    );
 };
 
 export default TeacherPage;

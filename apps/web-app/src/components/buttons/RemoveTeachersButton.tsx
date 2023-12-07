@@ -10,7 +10,10 @@ import {
   Typography,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+import { trpc } from "@web-app/utils/trpc";
+import { useRouter } from "next/router";
 import React from "react";
+import toast from "react-hot-toast";
 
 const useStyles = makeStyles({
   container: {
@@ -24,13 +27,40 @@ const useStyles = makeStyles({
 
 interface Props {
   teacherId: string;
-  removeTeacherRecord: (teacherId: string) => void;
+
 }
 
-const RemoveButton = ({
+
+
+const RemoveTeacherButton = ({
   teacherId,
-  removeTeacherRecord,
 }: Props) => {
+  const utils = trpc.useContext();
+
+  const router = useRouter();
+
+  // remove teacher from database
+  const { mutate: deleteTeacher } = trpc.useMutation(
+    ["teacher.delete"],
+    {
+      onSuccess: (teacher: { teacherId: string }) => {
+        utils.invalidateQueries(["teacher.get"]);
+        utils.invalidateQueries(["teacher.getAll"]);
+        toast.success(`Teacher ID: ${teacher.teacherId} has been deleted`);
+      },
+      onError: () => {
+        toast.error("Error deleting teacher record");
+      },
+    },
+  );
+
+  //   Functions for props
+  const removeTeacherRecord = (teacherId: string) => {
+    deleteTeacher({
+      teacherId,
+    });
+  };
+
   const classes = useStyles();
 
   const [open, setOpen] = React.useState(false);
@@ -46,6 +76,7 @@ const RemoveButton = ({
   const removeTeacher = () => {
     removeTeacherRecord(teacherId);
     handleClose();
+    router.push("/teacher-management")
   };
   return (
     <React.Fragment>
@@ -82,4 +113,4 @@ const RemoveButton = ({
   );
 };
 
-export default RemoveButton;
+export default RemoveTeacherButton;

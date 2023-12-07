@@ -4,14 +4,13 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   IconButton,
   MenuItem,
   Select,
   SelectChangeEvent,
   TextField,
-  Typography,
+  CircularProgress
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { DateField } from "@mui/x-date-pickers";
@@ -49,19 +48,22 @@ interface Props extends React.HTMLAttributes<HTMLButtonElement> {
 }
 
 const EditTeacherButton = ({ teacherId }: Props) => {
+  const utils = trpc.useContext();
+  const { data: teacher, error } = trpc.useQuery(["teacher.get", { teacherId: teacherId }]);
+
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [inputs, setInputs] = React.useState({
-    firstName: "",
-    middleName: "",
-    lastName: "",
+    firstName: teacher!.firstName,
+    middleName: teacher!.middleName,
+    lastName: teacher!.lastName,
   });
-  const [dept, setDept] = useState("");
-  const [emp, setEmp] = useState("");
+  const [dept, setDept] = useState(teacher!.department);
+  const [emp, setEmp] = useState(teacher!.employment);
 
-  const [birthdate, setBirthdate] = useState<Date>(new Date());
+  const [birthdate, setBirthdate] = useState<Date>(teacher!.birthday);
 
-  const utils = trpc.useContext();
+
 
   //Add teacher mutation
   const { mutate: updateTeacher, isLoading: isUpdatingTeacher } =
@@ -143,12 +145,13 @@ const EditTeacherButton = ({ teacherId }: Props) => {
     handleClose();
   };
 
+  if (!teacher) {
+    return <CircularProgress />
+  }
+
   return (
     <React.Fragment>
       <div className={classes.container}>
-        <Typography variant="body1" className={classes.text}>
-          Edit Profile
-        </Typography>
         <IconButton
           onClick={handleClickOpen}
           className={`${classes.button} px-4 py-3 text-lg font-medium`}
@@ -162,6 +165,7 @@ const EditTeacherButton = ({ teacherId }: Props) => {
         <DialogContent>
           <TextField
             onChange={handleTextChange}
+            value={inputs["firstName"]}
             margin="dense"
             name="firstName"
             label="First Name"
@@ -171,6 +175,7 @@ const EditTeacherButton = ({ teacherId }: Props) => {
           />
           <TextField
             onChange={handleTextChange}
+            value={inputs["middleName"]}
             margin="dense"
             name="middleName"
             label="Middle Name"
@@ -180,6 +185,7 @@ const EditTeacherButton = ({ teacherId }: Props) => {
           />
           <TextField
             onChange={handleTextChange}
+            value={inputs["lastName"]}
             margin="dense"
             name="lastName"
             label="Last Name"

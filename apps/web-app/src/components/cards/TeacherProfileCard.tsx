@@ -1,22 +1,37 @@
 import { Card, Grid, Typography } from "@mui/material";
-import { Paper, Table, styled } from "@mui/material";   
+import { Paper, Table, styled } from "@mui/material";
+import { trpc } from "@web-app/utils/trpc";
 import { useFormik } from "formik";
 import { P, match } from "ts-pattern";
+import EducationLoader from "../loaders/EducationLoader";
+import EditTeacherButton from "../buttons/EditTeacherButton";
+import RemoveTeacherButton from "../buttons/RemoveTeachersButton";
+
 
 
 const Item = styled(Paper)(({ theme }) => ({
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-  }));
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: "center",
+  color: theme.palette.text.secondary,
+}));
 
-export default function TeacherProfileCard({
-}) 
-{
-    return (
-        <>
-        <Card variant="outlined" sx={{ borderRadius: "16px" }}>
+interface Props {
+  teacherID: string;
+}
+
+export default function TeacherProfileCard({ teacherID
+}: Props) {
+
+  const { data: teacher, error } = trpc.useQuery(["teacher.get", { teacherId: teacherID }]);
+
+  if (!teacher) {
+    return <EducationLoader />
+  }
+
+  return (
+    <>
+      <Card variant="outlined" sx={{ borderRadius: "16px" }}>
         <Typography
           sx={{ marginLeft: "0.5in", marginTop: "0.3in" }}
           className="text-center text-lg"
@@ -30,7 +45,7 @@ export default function TeacherProfileCard({
               <Item>
                 <img
                   src="https://res.cloudinary.com/dmro06tbx/image/upload/v1655572255/images_hlpjxg.png"
-                  className="StudentIcon"
+                  className="TeacherIcon"
                   alt="..."
                 />
               </Item>
@@ -47,28 +62,36 @@ export default function TeacherProfileCard({
                   <Table className="table table-sm">
                     <tbody>
                       <tr>
-                        <td className="text-left mb-2">
-                          <b>Name:</b>{" "}
-                         
-                        </td>
-                        <td className="text-left mb-2">
-                          <b>Student ID:</b> 
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="text-left mb-2">
-                          <b>Current Course:</b>
-                        </td>
-                        <td className="text-left mb-2">
-                          <b>Current Year Level:</b> 
+                        <td></td>
+                        <td></td>
+                        <td>
+                          <EditTeacherButton teacherId={teacherID} />
+                          <RemoveTeacherButton teacherId={teacherID} />
                         </td>
                       </tr>
                       <tr>
                         <td className="text-left mb-2">
-                          <b>Enrollment Type:</b> 
+                          <b>Name:</b>{
+                            isNotNullAndEmpty(teacher!.middleName)
+                              ? `${teacher!.firstName} ${teacher!.middleName![0]}. ${teacher!.lastName
+                              }` : `${teacher!.firstName} ${teacher!.lastName}`}
+
                         </td>
                         <td className="text-left mb-2">
-                          <b>Current Semester:</b>{" "}
+                          <b>Teacher ID:</b> {teacherID}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="text-left mb-2">
+                          <b>Department:</b> {teacher!.department}
+                        </td>
+                        <td className="text-left mb-2">
+                          <b>Employment:</b> {teacher!.employment === "fulltime" ? "Full-Time" : "Part-Time"}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="text-left mb-2">
+                          <b>Date of Birth:</b> {teacher!.birthday.toLocaleDateString()}
                         </td>
                       </tr>
                     </tbody>
@@ -79,6 +102,10 @@ export default function TeacherProfileCard({
           </Grid>
         </Grid>
       </Card>
-        </>
-    )
+    </>
+  )
 }
+
+const isNotNullAndEmpty = (value: string | null) => {
+  return value !== null && value !== "";
+};
