@@ -1,4 +1,4 @@
-import { Add } from "@mui/icons-material";
+import EditIcon from "@mui/icons-material/Edit";
 import {
   Button,
   Dialog,
@@ -45,15 +45,13 @@ const useStyles = makeStyles({
 });
 
 interface Props extends React.HTMLAttributes<HTMLButtonElement> {
-  onClick: () => void;
-  disabled?: boolean;
+  teacherId: string;
 }
 
-const AddTeachersButton = () => {
+const EditTeacherButton = ({ teacherId }: Props) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [inputs, setInputs] = React.useState({
-    teacherId: "",
     firstName: "",
     middleName: "",
     lastName: "",
@@ -66,20 +64,19 @@ const AddTeachersButton = () => {
   const utils = trpc.useContext();
 
   //Add teacher mutation
-  const { mutate: addTeacher, isLoading: isAddingTeacher } = trpc.useMutation(
-    ["teacher.add"],
-    {
+  const { mutate: updateTeacher, isLoading: isUpdatingTeacher } =
+    trpc.useMutation(["teacher.update"], {
       onSuccess: (teacher: { teacherId: string }) => {
+        utils.invalidateQueries(["teacher.get"]);
         utils.invalidateQueries(["teacher.getAll"]);
-        toast.success(`Teacher ID: ${teacher.teacherId} has been added`);
+        toast.success(`Teacher ID: ${teacher.teacherId} has been updated`);
       },
       onError: () => {
-        toast.error("Error adding teacher record");
+        toast.error("Error updating teacher record");
       },
-    },
-  );
+    });
 
-  const addTeacherRecord = (
+  const editTeacherRecord = (
     teacherId: string,
     firstName: string,
     middleName: string,
@@ -88,7 +85,7 @@ const AddTeachersButton = () => {
     employment: employmentType,
     birthday: Date,
   ) => {
-    addTeacher({
+    updateTeacher({
       teacherId,
       firstName,
       middleName,
@@ -124,9 +121,8 @@ const AddTeachersButton = () => {
     setOpen(false);
   };
 
-  const addNewTeacher = () => {
+  const updateTeacherRecord = () => {
     if (
-      !inputs["teacherId"] &&
       !inputs["firstName"] &&
       !inputs["middleName"] &&
       !inputs["lastName"] &&
@@ -135,8 +131,8 @@ const AddTeachersButton = () => {
       !birthdate
     )
       return;
-    addTeacherRecord(
-      inputs["teacherId"],
+    editTeacherRecord(
+      teacherId,
       inputs["firstName"],
       inputs["middleName"],
       inputs["lastName"],
@@ -151,29 +147,19 @@ const AddTeachersButton = () => {
     <React.Fragment>
       <div className={classes.container}>
         <Typography variant="body1" className={classes.text}>
-          Add Teachers
+          Edit Profile
         </Typography>
         <IconButton
           onClick={handleClickOpen}
           className={`${classes.button} px-4 py-3 text-lg font-medium`}
         >
-          <Add />
+          <EditIcon />
         </IconButton>
       </div>
 
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Add Teacher</DialogTitle>
+        <DialogTitle>Edit Teacher</DialogTitle>
         <DialogContent>
-          <TextField
-            onChange={handleTextChange}
-            autoFocus
-            margin="dense"
-            name="teacherId"
-            label="Teacher ID"
-            type="text"
-            fullWidth
-            variant="standard"
-          />
           <TextField
             onChange={handleTextChange}
             margin="dense"
@@ -243,10 +229,10 @@ const AddTeachersButton = () => {
           </Button>
           <Button
             color="success"
-            disabled={isAddingTeacher}
-            onClick={addNewTeacher}
+            disabled={isUpdatingTeacher}
+            onClick={updateTeacherRecord}
           >
-            Add
+            Submit
           </Button>
         </DialogActions>
       </Dialog>
@@ -254,4 +240,4 @@ const AddTeachersButton = () => {
   );
 };
 
-export default AddTeachersButton;
+export default EditTeacherButton;
