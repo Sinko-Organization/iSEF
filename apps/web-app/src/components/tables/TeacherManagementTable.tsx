@@ -17,10 +17,12 @@ import { EducationLoader } from "../loaders";
 
 interface TeacherManagementTableProps {
   teachers: inferQueryOutput<"teacher.getAll">;
+  removeTeacherRecord: (teacherId: string) => void;
 }
 
 const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
   teachers,
+  removeTeacherRecord
 }) => {
   const [selectedTeacher, setSelectedTeacher] =
     useState<inferQueryOutput<"teacher.getAll"> | null>(null);
@@ -80,7 +82,11 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
                     </TableCell>
                     <TableCell>{teacher.department}</TableCell>
                     <TableCell>{teacher.employment}</TableCell>
-                    <TableCell>{<RemoveButton />}</TableCell>
+                    <TableCell>{
+                      <RemoveButton 
+                      teacherId={teacher.teacherId}
+                      removeTeacherRecord={removeTeacherRecord}
+                    />}</TableCell>
                   </TableRow>
                 );
               })}

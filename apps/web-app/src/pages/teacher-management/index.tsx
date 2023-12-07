@@ -14,6 +14,27 @@ const TeacherManagementPage: NextPage = () => {
     {},
   );
 
+  // remove teacher from database
+  const { mutate: deleteTeacher} = trpc.useMutation(
+    ["teacher.delete"],
+    {
+      onSuccess: (teacher: {teacherId: string}) => {
+        utils.invalidateQueries(["teacher.getAll"]);
+        toast.success(`Teacher ID: ${teacher.teacherId} has been deleted`);
+      },
+      onError: () => {
+        toast.error("Error deleting teacher record");
+      },
+    },
+  );
+
+  //   Functions for props
+  const removeTeacherRecord = (teacherId: string) => {
+    deleteTeacher({
+      teacherId,
+    });
+  };
+
   if (!teachers) {
     return <EducationLoader />;
   }
@@ -21,7 +42,10 @@ const TeacherManagementPage: NextPage = () => {
     <>
       {user?.role === "admin" || user?.role === "superadmin" ? (
         <div className="mx-32 fontsans mt-10">
-          <TeacherManagementTable teachers={teachers!} />
+          <TeacherManagementTable 
+          teachers={teachers!} 
+          removeTeacherRecord={removeTeacherRecord}
+          />
         </div>
       ) : (
         <AdminError />
