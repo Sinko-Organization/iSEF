@@ -236,7 +236,7 @@ const AddTeachersButton = () => {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DateField
               label="Birthdate"
-              value={birthdate}
+              value={dayjs(birthdate)}
               onChange={(newDate) => {
                 setBirthdate(newDate!);
                 console.log(birthdate);
