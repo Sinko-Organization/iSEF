@@ -19,8 +19,10 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { employmentType } from "@prisma/client";
 import { Department } from "@prisma/client";
+import { trpc } from "@web-app/utils/trpc";
 import dayjs from "dayjs";
 import React, { ChangeEvent, useState } from "react";
+import toast from "react-hot-toast";
 
 const useStyles = makeStyles({
   container: {
@@ -65,6 +67,42 @@ const AddTeachersButton = () => {
 
   const [birthdate, setBirthdate] = useState<Date>(new Date());
 
+  const utils = trpc.useContext();
+
+  //Add teacher mutation
+  const { mutate: addTeacher, isLoading: isAddingTeacher } = trpc.useMutation(
+    ["teacher.add"],
+    {
+      onSuccess: (teacher: { teacherId: string }) => {
+        utils.invalidateQueries(["teacher.getAll"]);
+        toast.success(`Teacher ID: ${teacher.teacherId} has been added`);
+      },
+      onError: () => {
+        toast.error("Error adding teacher record");
+      },
+    },
+  );
+
+  const addTeacherRecord = (
+    teacherId: string,
+    firstName: string,
+    middleName: string,
+    lastName: string,
+    department: Department,
+    employment: employmentType,
+    birthday: Date,
+  ) => {
+    addTeacher({
+      teacherId,
+      firstName,
+      middleName,
+      lastName,
+      department,
+      employment,
+      birthday,
+    });
+  };
+
   const handleTextChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setInputs({
@@ -88,6 +126,29 @@ const AddTeachersButton = () => {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const addNewTeacher = () => {
+    if (
+      !inputs["teacherId"] &&
+      !inputs["firstName"] &&
+      !inputs["middleName"] &&
+      !inputs["lastName"] &&
+      !dept &&
+      !emp &&
+      !birthdate
+    )
+      return;
+    addTeacherRecord(
+      inputs["teacherId"],
+      inputs["firstName"],
+      inputs["middleName"],
+      inputs["lastName"],
+      dept,
+      emp,
+      birthdate,
+    );
+    handleClose();
   };
 
   return (
@@ -175,7 +236,7 @@ const AddTeachersButton = () => {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DateField
               label="Birthdate"
-              value={dayjs(birthdate)}
+              value={birthdate}
               onChange={(newDate) => {
                 setBirthdate(newDate!);
                 console.log(birthdate);
@@ -187,7 +248,11 @@ const AddTeachersButton = () => {
           <Button color="error" onClick={handleClose}>
             Cancel
           </Button>
-          <Button color="success" onClick={handleClose}>
+          <Button
+            color="success"
+            disabled={isAddingTeacher}
+            onClick={addNewTeacher}
+          >
             Add
           </Button>
         </DialogActions>
