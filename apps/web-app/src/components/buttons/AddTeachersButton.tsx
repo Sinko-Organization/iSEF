@@ -1,3 +1,4 @@
+import { Toast } from "@chakra-ui/react";
 import { Add } from "@mui/icons-material";
 import {
   Box,
@@ -134,6 +135,7 @@ const AddTeachersButton = () => {
       !dept &&
       !emp &&
       !birthdate
+
     )
       return;
     addTeacherRecord(
@@ -249,6 +251,7 @@ const AddTeachersButton = () => {
             <Box>
               <TextField
                 defaultValue=""
+                onChange={handleDeptChange}
                 id="department"
                 select
                 value={dept}
@@ -263,6 +266,7 @@ const AddTeachersButton = () => {
               </TextField>
             </Box>
           </Box>
+
           <Box
             component="form"
             sx={{
@@ -277,6 +281,7 @@ const AddTeachersButton = () => {
             <Box>
               <TextField
                 defaultValue=""
+                onChange={handleEmpChange}
                 id="employment"
                 select
                 value={emp}
@@ -287,6 +292,7 @@ const AddTeachersButton = () => {
               </TextField>
             </Box>
           </Box>
+
           <Box
             component="form"
             sx={{
@@ -316,7 +322,7 @@ const AddTeachersButton = () => {
             color="secondary"
             disabled={isAddingTeacher}
             onClick={addNewTeacher}
-            
+
           >
             Add
           </Button>

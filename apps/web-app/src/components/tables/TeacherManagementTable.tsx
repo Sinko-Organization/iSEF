@@ -88,12 +88,8 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
         </TableContainer>
       </Paper>
 
-<<<<<<< HEAD
-    </div>
-=======
-      {selectedTeacher && <TeacherDetails teacher={selectedTeacher} />}
+      {/* {selectedTeacher && <TeacherDetails teacher={selectedTeacher} />} */}
     </Grid>
->>>>>>> 939a6334510df4bd0c99d16d434050e9c61e0940
   );
 };
 
