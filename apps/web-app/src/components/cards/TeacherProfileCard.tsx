@@ -4,7 +4,8 @@ import { trpc } from "@web-app/utils/trpc";
 import { useFormik } from "formik";
 import { P, match } from "ts-pattern";
 import EducationLoader from "../loaders/EducationLoader";
-
+import EditTeacherButton from "../buttons/EditTeacherButton";
+import RemoveTeacherButton from "../buttons/RemoveTeachersButton";
 
 
 
@@ -25,7 +26,7 @@ export default function TeacherProfileCard({ teacherID
   const { data: teacher, error } = trpc.useQuery(["teacher.get", { teacherId: teacherID }]);
 
   if (!teacher) {
-    <EducationLoader />
+    return <EducationLoader />
   }
 
   return (
@@ -44,7 +45,7 @@ export default function TeacherProfileCard({ teacherID
               <Item>
                 <img
                   src="https://res.cloudinary.com/dmro06tbx/image/upload/v1655572255/images_hlpjxg.png"
-                  className="StudentIcon"
+                  className="TeacherIcon"
                   alt="..."
                 />
               </Item>
@@ -61,11 +62,19 @@ export default function TeacherProfileCard({ teacherID
                   <Table className="table table-sm">
                     <tbody>
                       <tr>
+                        <td></td>
+                        <td></td>
+                        <td>
+                          <EditTeacherButton teacherId={teacherID} />
+                          <RemoveTeacherButton teacherId={teacherID} />
+                        </td>
+                      </tr>
+                      <tr>
                         <td className="text-left mb-2">
-                          <b>Name:</b>{isNotNullAndEmpty(teacher!.middleName)
-                            ? `${teacher!.firstName} ${teacher!.middleName![0]}. ${teacher!.lastName
-                            }`
-                            : `${teacher!.firstName} ${teacher!.lastName}`}
+                          <b>Name:</b>{
+                            isNotNullAndEmpty(teacher!.middleName)
+                              ? `${teacher!.firstName} ${teacher!.middleName![0]}. ${teacher!.lastName
+                              }` : `${teacher!.firstName} ${teacher!.lastName}`}
 
                         </td>
                         <td className="text-left mb-2">

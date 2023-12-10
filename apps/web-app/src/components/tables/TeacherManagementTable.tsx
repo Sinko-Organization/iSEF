@@ -1,4 +1,4 @@
-import { Paper, Table } from "@mui/material";
+import { Box, Grid, Paper, Table } from "@mui/material";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
@@ -17,12 +17,11 @@ import { EducationLoader } from "../loaders";
 
 interface TeacherManagementTableProps {
   teachers: inferQueryOutput<"teacher.getAll">;
-  removeTeacherRecord: (teacherId: string) => void;
+
 }
 
 const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
   teachers,
-  removeTeacherRecord,
 }) => {
 
   const router = useRouter();
@@ -37,8 +36,13 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
   }
 
   return (
-    <div>
-      {<AddTeachersButton />}
+    <Grid >
+      <Grid container justifyContent="flex-end">
+        <Box>
+          <AddTeachersButton />
+        </Box>
+      </Grid>
+
       <Paper
         className="mt-10"
         sx={{
@@ -75,15 +79,7 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
                         : `${teacher.firstName} ${teacher.lastName}`}
                     </TableCell>
                     <TableCell>{teacher.department}</TableCell>
-                    <TableCell>{teacher.employment}</TableCell>
-                    <TableCell>
-                      {
-                        <RemoveButton
-                          teacherId={teacher.teacherId}
-                          removeTeacherRecord={removeTeacherRecord}
-                        />
-                      }
-                    </TableCell>
+                    <TableCell>{teacher!.employment === "fulltime" ? "Full-Time" : "Part-Time"}</TableCell>
                   </TableRow>
                 );
               })}
@@ -92,7 +88,8 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
         </TableContainer>
       </Paper>
 
-    </div>
+      {/* {selectedTeacher && <TeacherDetails teacher={selectedTeacher} />} */}
+    </Grid>
   );
 };
 

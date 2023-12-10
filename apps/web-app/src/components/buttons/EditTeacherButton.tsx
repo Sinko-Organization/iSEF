@@ -1,10 +1,10 @@
 import EditIcon from "@mui/icons-material/Edit";
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   IconButton,
   MenuItem,
@@ -12,6 +12,7 @@ import {
   SelectChangeEvent,
   TextField,
   Typography,
+  CircularProgress
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { DateField } from "@mui/x-date-pickers";
@@ -30,17 +31,7 @@ const useStyles = makeStyles({
     alignItems: "center",
   },
   button: {
-    backgroundColor: "#9078B6",
-    color: "white",
-    borderRadius: "full",
-    padding: "10px",
-    "&:hover": {
-      backgroundColor: "#694f92",
-    },
-  },
-
-  text: {
-    marginLeft: "10px",
+    color: "green",
   },
 });
 
@@ -49,19 +40,22 @@ interface Props extends React.HTMLAttributes<HTMLButtonElement> {
 }
 
 const EditTeacherButton = ({ teacherId }: Props) => {
+  const utils = trpc.useContext();
+  const { data: teacher, error } = trpc.useQuery(["teacher.get", { teacherId: teacherId }]);
+
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [inputs, setInputs] = React.useState({
-    firstName: "",
-    middleName: "",
-    lastName: "",
+    firstName: teacher!.firstName,
+    middleName: teacher!.middleName,
+    lastName: teacher!.lastName,
   });
-  const [dept, setDept] = useState("");
-  const [emp, setEmp] = useState("");
+  const [dept, setDept] = useState(teacher!.department);
+  const [emp, setEmp] = useState(teacher!.employment);
 
-  const [birthdate, setBirthdate] = useState<Date>(new Date());
+  const [birthdate, setBirthdate] = useState<Date>(teacher!.birthday);
 
-  const utils = trpc.useContext();
+
 
   //Add teacher mutation
   const { mutate: updateTeacher, isLoading: isUpdatingTeacher } =
@@ -143,12 +137,13 @@ const EditTeacherButton = ({ teacherId }: Props) => {
     handleClose();
   };
 
+  if (!teacher) {
+    return <CircularProgress />
+  }
+
   return (
     <React.Fragment>
       <div className={classes.container}>
-        <Typography variant="body1" className={classes.text}>
-          Edit Profile
-        </Typography>
         <IconButton
           onClick={handleClickOpen}
           className={`${classes.button} px-4 py-3 text-lg font-medium`}
@@ -158,70 +153,136 @@ const EditTeacherButton = ({ teacherId }: Props) => {
       </div>
 
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Edit Teacher</DialogTitle>
+        <DialogTitle
+          style={{
+            textAlign: "center",
+            backgroundColor: "lavender",
+          }}
+        >Edit Teacher</DialogTitle>
         <DialogContent>
-          <TextField
-            onChange={handleTextChange}
-            margin="dense"
-            name="firstName"
-            label="First Name"
-            type="text"
-            fullWidth
-            variant="standard"
-          />
-          <TextField
-            onChange={handleTextChange}
-            margin="dense"
-            name="middleName"
-            label="Middle Name"
-            type="text"
-            fullWidth
-            variant="standard"
-          />
-          <TextField
-            onChange={handleTextChange}
-            margin="dense"
-            name="lastName"
-            label="Last Name"
-            type="text"
-            fullWidth
-            variant="standard"
-          />
-          <div style={{ width: "300px" }}>
-            <Select
-              defaultValue=""
-              id="department"
-              value={dept}
-              label="Department"
-              onChange={handleDeptChange}
-            >
-              <MenuItem value={"Packaging"}>Packaging</MenuItem>
-              <MenuItem value={"Civil"}>Civil</MenuItem>
-              <MenuItem value={"Mechanical"}>Mechanical</MenuItem>
-              <MenuItem value={"Electrical"}>Electrical</MenuItem>
-              <MenuItem value={"Electronics"}>Electronics</MenuItem>
-              <MenuItem value={"Software"}>Software</MenuItem>
-            </Select>
-          </div>
-          <div style={{ width: "300px" }}>
-            <Select
-              defaultValue=""
-              id="employment"
-              value={emp}
-              label="Employment"
-              onChange={handleEmpChange}
-            >
-              <MenuItem value={"fulltime"}>Full-Time</MenuItem>
-              <MenuItem value={"parttime"}>Part-Time</MenuItem>
-            </Select>
-          </div>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DateField
-              label="Birthdate"
-              value={dayjs(birthdate)}
-              onChange={(newDate) => setBirthdate(dayjs(newDate!).toDate())}
+          <Box sx={{ display: "flex", alignItems: "flex-end", marginTop: 3 }}>
+            <Box sx={{ width: 160 }}>
+              <Typography sx={{ marginRight: 2 }}> First Name</Typography>
+            </Box>
+            <TextField
+              onChange={handleTextChange}
+              value={inputs["firstName"]}
+              margin="dense"
+              name="firstName"
+              label="First Name"
+              type="text"
+              fullWidth
+              variant="standard"
             />
-          </LocalizationProvider>
+          </Box>
+
+          <Box sx={{ display: "flex", alignItems: "flex-end" }}>
+            <Box sx={{ width: 160 }}>
+              <Typography sx={{ marginRight: 2 }}> Middle Name</Typography>
+            </Box>
+
+            <TextField
+              onChange={handleTextChange}
+              value={inputs["middleName"]}
+              margin="dense"
+              name="middleName"
+              label="Middle Name"
+              type="text"
+              fullWidth
+              variant="standard"
+            />
+          </Box>
+
+          <Box sx={{ display: "flex", alignItems: "flex-end" }}>
+            <Box sx={{ width: 160 }}>
+              <Typography sx={{ marginRight: 2 }}> Last Name</Typography>
+            </Box>
+            <TextField
+              onChange={handleTextChange}
+              value={inputs["lastName"]}
+              margin="dense"
+              name="lastName"
+              label="Last Name"
+              type="text"
+              fullWidth
+              variant="standard"
+            />
+          </Box>
+
+          <Box
+            component="form"
+            noValidate
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              "& .MuiTextField-root": { m: 1, width: "40ch" },
+            }}
+          >
+            <Box sx={{ width: 160 }}>
+              <Typography sx={{ marginRight: 2 }}> Department</Typography>
+            </Box>
+            <Box>
+              <Select
+                defaultValue=""
+                id="department"
+                value={dept}
+                label="Department"
+                onChange={handleDeptChange}
+              >
+                <MenuItem value={"Packaging"}>Packaging</MenuItem>
+                <MenuItem value={"Civil"}>Civil</MenuItem>
+                <MenuItem value={"Mechanical"}>Mechanical</MenuItem>
+                <MenuItem value={"Electrical"}>Electrical</MenuItem>
+                <MenuItem value={"Electronics"}>Electronics</MenuItem>
+                <MenuItem value={"Software"}>Software</MenuItem>
+              </Select>
+            </Box>
+          </Box>
+
+          <Box
+            component="form"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              "& .MuiTextField-root": { m: 1, width: "40ch" },
+            }}
+          >
+            <Box sx={{ width: 160 }}>
+              <Typography sx={{ marginRight: 2 }}>Employment</Typography>
+            </Box>
+            <Box>
+              <Select
+                defaultValue=""
+                id="employment"
+                value={emp}
+                label="Employment"
+                onChange={handleEmpChange}
+              >
+                <MenuItem value={"fulltime"}>Full-Time</MenuItem>
+                <MenuItem value={"parttime"}>Part-Time</MenuItem>
+              </Select>
+            </Box>
+          </Box>
+
+          <Box
+            component="form"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              "& .MuiTextField-root": { m: 1, width: "40ch" },
+            }}
+          >
+            <Box>
+              <Typography sx={{ marginRight: 11.7 }}>Birthdate</Typography>
+            </Box>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateField
+                label="Birthdate"
+                value={dayjs(birthdate)}
+                onChange={(newDate) => setBirthdate(dayjs(newDate!).toDate())}
+              />
+            </LocalizationProvider>
+          </Box>
         </DialogContent>
         <DialogActions>
           <Button color="error" onClick={handleClose}>
