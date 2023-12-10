@@ -49,16 +49,7 @@ const TeacherManagementPage: NextPage = () => {
     ["teacher.getAll"],
     {},
   );
-  //modals
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
+  
 
   // remove teacher from database
   const { mutate: deleteTeacher } = trpc.useMutation(["teacher.delete"], {
@@ -85,94 +76,7 @@ const TeacherManagementPage: NextPage = () => {
     <>
       {user?.role === "admin" || user?.role === "superadmin" ? (
         <div className="mx-32 fontsans mt-10">
-          <Grid>
-          <Button onClick={handleClickOpen}>Edit</Button>
-          <Dialog open={open} onClose={handleClose}>
-            <DialogTitle sx={{}}>Edit Teacher</DialogTitle>
-            <DialogContent>
-              <Grid
-                sx={{
-                  display: "flex",
-                  alignItems: "flex-end",
-                  justifyContent: "space-between",
-                  marginBottom: 3,
-                }}
-              >
-                <Typography sx={{ marginRight: 3 }}>ID Number</Typography>
-                <TextField id="input-with-sx" label="" variant="filled" />
-              </Grid>
-              <Grid
-                sx={{
-                  display: "flex",
-                  alignItems: "flex-end",
-                  justifyContent: "space-between",
-                  marginBottom: 3,
-                }}
-              >
-                <Typography sx={{ marginRight: 3 }}>Name</Typography>
-                <TextField id="input-with-sx" label="" variant="filled" />
-              </Grid>
-              <Grid
-                sx={{
-                  display: "flex",
-                  alignItems: "flex-end",
-                  justifyContent: "space-between",
-                  marginBottom: 3,
-                }}
-              >
-                <Typography sx={{ marginRight: 3 }}>Employment</Typography>
-                <TextField
-                  id="input-with-sx"
-                  sx={{ width: 220 }}
-                  select
-                  label=""
-                  variant="filled"
-                  SelectProps={{
-                    native: true,
-                  }}
-                >
-                  {" "}
-                  {employment.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </TextField>
-              </Grid>
-              <Grid
-                sx={{
-                  display: "flex",
-                  alignItems: "flex-end",
-                  justifyContent: "space-between",
-                  marginBottom: 3,
-                }}
-              >
-                <Typography sx={{ marginRight: 3 }}>Department</Typography>
-                <TextField
-                  id="input-with-sx"
-                  sx={{ width: 220 }}
-                  select
-                  label=""
-                  variant="filled"
-                  SelectProps={{
-                    native: true,
-                  }}
-                >
-                  {" "}
-                  {department.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </TextField>
-              </Grid>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleClose}>Cancel</Button>
-              <Button variant="contained"  onClick={handleClose}>Submit</Button>
-            </DialogActions>
-          </Dialog>
-          </Grid>
+
 
           <TeacherManagementTable
             teachers={teachers!}

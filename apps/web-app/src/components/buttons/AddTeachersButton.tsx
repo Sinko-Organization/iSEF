@@ -1,5 +1,6 @@
 import { Add } from "@mui/icons-material";
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
@@ -109,7 +110,7 @@ const AddTeachersButton = () => {
   };
 
   const handleDeptChange = (e: SelectChangeEvent) => {
-    setDept(e.target.value as string);
+    setDept(e.target.value);
   };
 
   const handleEmpChange = (e: SelectChangeEvent) => {
@@ -150,101 +151,172 @@ const AddTeachersButton = () => {
   return (
     <React.Fragment>
       <div className={classes.container}>
-        <Typography variant="body1" className={classes.text}>
-          Add Teachers
-        </Typography>
-        <IconButton
+        <Button
+          color="secondary"
+          variant="contained"
           onClick={handleClickOpen}
-          className={`${classes.button} px-4 py-3 text-lg font-medium`}
+          className={`${classes.button} px-1 py-3 text-lg font-medium`}
         >
-          <Add />
-        </IconButton>
+          Add Teachers
+        </Button>
       </div>
 
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Add Teacher</DialogTitle>
+        <DialogTitle
+          style={{
+            textAlign: "center",
+            backgroundColor: "lavender",
+          }}
+        >
+          Add Teacher
+        </DialogTitle>
         <DialogContent>
-          <TextField
-            onChange={handleTextChange}
-            autoFocus
-            margin="dense"
-            name="teacherId"
-            label="Teacher ID"
-            type="text"
-            fullWidth
-            variant="standard"
-          />
-          <TextField
-            onChange={handleTextChange}
-            margin="dense"
-            name="firstName"
-            label="First Name"
-            type="text"
-            fullWidth
-            variant="standard"
-          />
-          <TextField
-            onChange={handleTextChange}
-            margin="dense"
-            name="middleName"
-            label="Middle Name"
-            type="text"
-            fullWidth
-            variant="standard"
-          />
-          <TextField
-            onChange={handleTextChange}
-            margin="dense"
-            name="lastName"
-            label="Last Name"
-            type="text"
-            fullWidth
-            variant="standard"
-          />
-          <div style={{ width: "300px" }}>
-            <Select
-              defaultValue=""
-              id="department"
-              value={dept}
-              label="Department"
-              onChange={handleDeptChange}
-            >
-              <MenuItem value={"Packaging"}>Packaging</MenuItem>
-              <MenuItem value={"Civil"}>Civil</MenuItem>
-              <MenuItem value={"Mechanical"}>Mechanical</MenuItem>
-              <MenuItem value={"Electrical"}>Electrical</MenuItem>
-              <MenuItem value={"Electronics"}>Electronics</MenuItem>
-              <MenuItem value={"Software"}>Software</MenuItem>
-            </Select>
-          </div>
-          <div style={{ width: "300px" }}>
-            <Select
-              defaultValue=""
-              id="employment"
-              value={emp}
-              label="Employment"
-              onChange={handleEmpChange}
-            >
-              <MenuItem value={"fulltime"}>Full-Time</MenuItem>
-              <MenuItem value={"parttime"}>Part-Time</MenuItem>
-            </Select>
-          </div>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DateField
-              label="Birthdate"
-              value={dayjs(birthdate)}
-              onChange={(newDate) => setBirthdate(dayjs(newDate!).toDate())}
+          <Box sx={{ display: "flex", alignItems: "flex-end", marginTop: 3 }}>
+            <Box sx={{ width: 160 }}>
+              <Typography sx={{ marginRight: 2 }}> Teacher ID</Typography>
+            </Box>
+            <TextField
+              color="secondary"
+              onChange={handleTextChange}
+              autoFocus
+              margin="dense"
+              name="teacherId"
+              type="text"
+              variant="filled"
+              fullWidth
             />
-          </LocalizationProvider>
+          </Box>
+
+          <Box sx={{ display: "flex", alignItems: "flex-end" }}>
+            <Box sx={{ width: 160 }}>
+              <Typography sx={{ marginRight: 2 }}> First Name</Typography>
+            </Box>
+
+            <TextField
+              color="secondary"
+              onChange={handleTextChange}
+              margin="dense"
+              name="firstName"
+              type="text"
+              fullWidth
+              variant="filled"
+            />
+          </Box>
+
+          <Box sx={{ display: "flex", alignItems: "flex-end" }}>
+            <Box sx={{ width: 160 }}>
+              <Typography sx={{ marginRight: 2 }}> Middle Name</Typography>
+            </Box>
+
+            <TextField
+              color="secondary"
+              onChange={handleTextChange}
+              margin="dense"
+              name="middleName"
+              type="text"
+              fullWidth
+              variant="filled"
+            />
+          </Box>
+
+          <Box sx={{ display: "flex", alignItems: "flex-end" }}>
+            <Box sx={{ width: 160 }}>
+              <Typography sx={{ marginRight: 2 }}> Last Name</Typography>
+            </Box>
+            <TextField
+              color="secondary"
+              onChange={handleTextChange}
+              margin="dense"
+              name="lastName"
+              type="text"
+              fullWidth
+              variant="filled"
+            />
+          </Box>
+
+          <Box
+            component="form"
+            noValidate
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              "& .MuiTextField-root": { m: 1, width: "40ch" },
+            }}
+          >
+            <Box sx={{ width: 160 }}>
+              <Typography sx={{ marginRight: 2 }}> Department</Typography>
+            </Box>
+            <Box>
+              <TextField
+                defaultValue=""
+                id="department"
+                select
+                value={dept}
+                color="secondary"
+              >
+                <MenuItem value={"Packaging"}>Packaging</MenuItem>
+                <MenuItem value={"Civil"}>Civil</MenuItem>
+                <MenuItem value={"Mechanical"}>Mechanical</MenuItem>
+                <MenuItem value={"Electrical"}>Electrical</MenuItem>
+                <MenuItem value={"Electronics"}>Electronics</MenuItem>
+                <MenuItem value={"Software"}>Software</MenuItem>
+              </TextField>
+            </Box>
+          </Box>
+          <Box
+            component="form"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              "& .MuiTextField-root": { m: 1, width: "40ch" },
+            }}
+          >
+            <Box sx={{ width: 160 }}>
+              <Typography sx={{ marginRight: 2 }}>Employment</Typography>
+            </Box>
+            <Box>
+              <TextField
+                defaultValue=""
+                id="employment"
+                select
+                value={emp}
+                color="secondary"
+              >
+                <MenuItem value={"fulltime"}>Full-Time</MenuItem>
+                <MenuItem value={"parttime"}>Part-Time</MenuItem>
+              </TextField>
+            </Box>
+          </Box>
+          <Box
+            component="form"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              "& .MuiTextField-root": { m: 1, width: "40ch" },
+            }}
+          >
+            <Box>
+              <Typography sx={{ marginRight: 11.7 }}>Birthdate</Typography>
+            </Box>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateField
+                color="secondary"
+                label="Birthdate"
+                value={dayjs(birthdate)}
+                onChange={(newDate) => setBirthdate(dayjs(newDate!).toDate())}
+              />
+            </LocalizationProvider>
+          </Box>
         </DialogContent>
         <DialogActions>
           <Button color="error" onClick={handleClose}>
             Cancel
           </Button>
           <Button
-            color="success"
+            color="secondary"
             disabled={isAddingTeacher}
             onClick={addNewTeacher}
+            
           >
             Add
           </Button>
