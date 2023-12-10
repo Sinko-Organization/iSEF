@@ -1,4 +1,4 @@
-import { Paper, Table } from "@mui/material";
+import { Box, Grid, Paper, Table } from "@mui/material";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
@@ -36,8 +36,13 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
   }
 
   return (
-    <div>
-      {<AddTeachersButton />}
+    <Grid >
+      <Grid container justifyContent="flex-end">
+        <Box>
+          <AddTeachersButton />
+        </Box>
+      </Grid>
+
       <Paper
         className="mt-10"
         sx={{
@@ -83,7 +88,12 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
         </TableContainer>
       </Paper>
 
+<<<<<<< HEAD
     </div>
+=======
+      {selectedTeacher && <TeacherDetails teacher={selectedTeacher} />}
+    </Grid>
+>>>>>>> 939a6334510df4bd0c99d16d434050e9c61e0940
   );
 };
 
