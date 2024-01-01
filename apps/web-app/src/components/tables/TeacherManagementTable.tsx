@@ -12,7 +12,6 @@ import type { FC } from "react";
 import { useState } from "react";
 
 import { AddTeachersButton } from "../buttons";
-import RemoveButton from "../buttons/RemoveTeachersButton";
 import { EducationLoader } from "../loaders";
 
 interface TeacherManagementTableProps {

@@ -61,9 +61,9 @@ const EditTeacherButton = ({ teacherId }: Props) => {
   const { mutate: updateTeacher, isLoading: isUpdatingTeacher } =
     trpc.useMutation(["teacher.update"], {
       onSuccess: (teacher: { teacherId: string }) => {
+        toast.success(`Teacher ID: ${teacher.teacherId} has been updated`);
         utils.invalidateQueries(["teacher.get"]);
         utils.invalidateQueries(["teacher.getAll"]);
-        toast.success(`Teacher ID: ${teacher.teacherId} has been updated`);
       },
       onError: () => {
         toast.error("Error updating teacher record");
@@ -115,7 +115,7 @@ const EditTeacherButton = ({ teacherId }: Props) => {
     setOpen(false);
   };
 
-  const updateTeacherRecord = () => {
+  const handleFormSubmit = () => {
     if (
       !inputs["firstName"] &&
       !inputs["middleName"] &&
@@ -127,9 +127,9 @@ const EditTeacherButton = ({ teacherId }: Props) => {
       return;
     editTeacherRecord(
       teacherId,
-      inputs["firstName"],
-      inputs["middleName"],
-      inputs["lastName"],
+      capitalizeNames(inputs["firstName"]),
+      capitalizeNames(inputs["middleName"]),
+      capitalizeNames(inputs["lastName"]),
       dept,
       emp,
       birthdate,
@@ -291,7 +291,7 @@ const EditTeacherButton = ({ teacherId }: Props) => {
           <Button
             color="success"
             disabled={isUpdatingTeacher}
-            onClick={updateTeacherRecord}
+            onClick={handleFormSubmit}
           >
             Submit
           </Button>
@@ -302,3 +302,5 @@ const EditTeacherButton = ({ teacherId }: Props) => {
 };
 
 export default EditTeacherButton;
+
+const capitalizeNames = (name: string): string => name.replace(/\b\w/g, (match) => match.toUpperCase());
