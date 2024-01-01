@@ -91,7 +91,7 @@ export default function TeacherProfileCard({ teacherID
                       </tr>
                       <tr>
                         <td className="text-left mb-2">
-                          <b>Date of Birth:</b> {teacher!.birthday.toLocaleDateString()}
+                          <b>Date of Birth:</b> {teacher!.birthday.toLocaleString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                         </td>
                       </tr>
                     </tbody>

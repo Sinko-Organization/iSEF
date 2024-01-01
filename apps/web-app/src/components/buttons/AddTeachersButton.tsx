@@ -159,7 +159,7 @@ const AddTeachersButton = () => {
           onClick={handleClickOpen}
           className={`${classes.button} px-1 py-3 text-lg font-medium`}
         >
-          Add Teachers
+          Add Teacher
         </Button>
       </div>
 
