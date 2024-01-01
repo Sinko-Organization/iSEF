@@ -51,6 +51,8 @@ interface Props extends React.HTMLAttributes<HTMLButtonElement> {
   disabled?: boolean;
 }
 
+const capitalizeNames = (name: string): string => name.replace(/\b\w/g, (match) => match.toUpperCase());
+
 const AddTeachersButton = () => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
@@ -140,9 +142,9 @@ const AddTeachersButton = () => {
       return;
     addTeacherRecord(
       inputs["teacherId"],
-      inputs["firstName"],
-      inputs["middleName"],
-      inputs["lastName"],
+      capitalizeNames(inputs["firstName"]),
+      capitalizeNames(inputs["middleName"]),
+      capitalizeNames(inputs["lastName"]),
       dept,
       emp,
       birthdate,
