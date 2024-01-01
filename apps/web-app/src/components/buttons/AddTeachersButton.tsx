@@ -133,7 +133,6 @@ const AddTeachersButton = () => {
   }
 
   const handleOpen = () => {
-    clearValues();
     setOpen(true);
   };
 
@@ -153,9 +152,7 @@ const AddTeachersButton = () => {
     if (
       inputs["firstName"].length === 0 &&
       inputs["middleName"].length === 0 &&
-      inputs["lastName"].length === 0 &&
-      dept.length === 0 &&
-      emp.length === 0) {
+      inputs["lastName"].length === 0) {
       newErrors.push("Name fields cannot be empty")
     }
 
@@ -191,6 +188,7 @@ const AddTeachersButton = () => {
         emp,
         birthdate,
       );
+      clearValues();
       handleClose();
     }
     else {
