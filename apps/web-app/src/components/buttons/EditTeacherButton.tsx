@@ -25,6 +25,7 @@ import { trpc } from "@web-app/utils/trpc";
 import dayjs from "dayjs";
 import React, { ChangeEvent, useState } from "react";
 import toast from "react-hot-toast";
+import { middlewareMarker } from "@trpc/server/dist/declarations/src/internals/middlewares";
 
 const useStyles = makeStyles({
   container: {
@@ -47,9 +48,9 @@ const EditTeacherButton = ({ teacherId }: Props) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [inputs, setInputs] = React.useState({
-    firstName: teacher!.firstName,
-    middleName: teacher!.middleName,
-    lastName: teacher!.lastName,
+    firstName: teacher!.firstName || '',
+    middleName: teacher!.middleName || '',
+    lastName: teacher!.lastName || '',
   });
   const [dept, setDept] = useState(teacher!.department);
   const [emp, setEmp] = useState(teacher!.employment);
@@ -98,7 +99,6 @@ const EditTeacherButton = ({ teacherId }: Props) => {
       ...inputs,
       [e.target.name]: value,
     });
-    console.log(inputs);
   };
 
   const handleDeptChange = (e: SelectChangeEvent) => {
@@ -114,7 +114,6 @@ const EditTeacherButton = ({ teacherId }: Props) => {
   };
 
   const handleClose = () => {
-    setErrors([]);
     setOpen(false);
   };
 
@@ -122,9 +121,9 @@ const EditTeacherButton = ({ teacherId }: Props) => {
     const newErrors: string[] = []
 
     if (
-      inputs["firstName"].length === 0 &&
-      inputs["middleName"].length === 0 &&
-      inputs["lastName"].length === 0) {
+      !inputs.firstName.trim() ||
+      !inputs.middleName.trim() ||
+      !inputs.lastName.trim()) {
       newErrors.push("Name fields cannot be empty")
     }
 
@@ -182,16 +181,6 @@ const EditTeacherButton = ({ teacherId }: Props) => {
 
         <FormError messages={errors} />
 
-        <div>
-          fn: {inputs["firstName"].length}
-        </div>
-        <div>
-          mn: {inputs["middleName"].length}
-        </div>
-        <div>
-          ln: {inputs["lastName"].length}
-        </div>
-
         <DialogContent>
           <Box sx={{ display: "flex", alignItems: "flex-end", marginTop: 3 }}>
             <Box sx={{ width: 160 }}>
@@ -199,7 +188,7 @@ const EditTeacherButton = ({ teacherId }: Props) => {
             </Box>
             <TextField
               onChange={handleTextChange}
-              value={inputs["firstName"]}
+              value={inputs.firstName}
               margin="dense"
               name="firstName"
               label="First Name"
@@ -216,7 +205,7 @@ const EditTeacherButton = ({ teacherId }: Props) => {
 
             <TextField
               onChange={handleTextChange}
-              value={inputs["middleName"]}
+              value={inputs.middleName}
               margin="dense"
               name="middleName"
               label="Middle Name"
@@ -232,7 +221,7 @@ const EditTeacherButton = ({ teacherId }: Props) => {
             </Box>
             <TextField
               onChange={handleTextChange}
-              value={inputs["lastName"]}
+              value={inputs.lastName}
               margin="dense"
               name="lastName"
               label="Last Name"

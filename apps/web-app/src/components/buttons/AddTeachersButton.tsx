@@ -110,7 +110,6 @@ const AddTeachersButton = () => {
       ...inputs,
       [e.target.name]: value,
     });
-    console.log(inputs);
   };
 
   const handleDeptChange = (e: SelectChangeEvent) => {
