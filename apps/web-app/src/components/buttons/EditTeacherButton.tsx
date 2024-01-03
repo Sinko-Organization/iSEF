@@ -121,9 +121,9 @@ const EditTeacherButton = ({ teacherId }: Props) => {
     const newErrors: string[] = []
 
     if (
-      !inputs.firstName.trim() ||
-      !inputs.middleName.trim() ||
-      !inputs.lastName.trim()) {
+      inputs.firstName.length === 0 ||
+      inputs.middleName.length === 0 ||
+      inputs.lastName.length === 0) {
       newErrors.push("Name fields cannot be empty")
     }
 

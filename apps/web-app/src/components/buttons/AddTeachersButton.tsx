@@ -149,8 +149,8 @@ const AddTeachersButton = () => {
     }
 
     if (
-      inputs["firstName"].length === 0 &&
-      inputs["middleName"].length === 0 &&
+      inputs["firstName"].length === 0 ||
+      inputs["middleName"].length === 0 ||
       inputs["lastName"].length === 0) {
       newErrors.push("Name fields cannot be empty")
     }
