@@ -19,7 +19,7 @@ const TeacherPage: NextPage = () => {
   return (
     <>
       <TeacherProfileCard teacherID={id} />
-      <TeacherSubjectListCard teacherID={id} />
+      <TeacherSubjectListCard/>
     </>
   );
 };
