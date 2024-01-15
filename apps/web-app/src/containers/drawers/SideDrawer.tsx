@@ -26,6 +26,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import CoursePage from "@web-app/pages/course";
+import { trpc } from "@web-app/utils/trpc";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -70,12 +71,7 @@ const paths: Path[] = [
     name: "Manage Teachers",
     link: "/teacher-management",
     icon: <People />,
-  },
-  {
-    name: "Access Control",
-    link: "/access-control",
-    icon: <LockPerson />,
-  },
+  }
 ];
 
 const systemPaths: Path[] = [
@@ -92,6 +88,8 @@ export default function ResponsiveDrawer({ window, children }: Props) {
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+
+  const { data: user, error } = trpc.useQuery(["user.role"]);
 
   const drawer = (
     <div
@@ -126,7 +124,17 @@ export default function ResponsiveDrawer({ window, children }: Props) {
               <ListItemText primary={path.name} />
             </ListItemButton>
           </Link>
+
         ))}
+        {user?.role === "superadmin" ?
+          <Link href={"/access-control"} className="sidebar-link" key={paths.length}>
+            <ListItemButton>
+              <ListItemIcon>{<LockPerson />}</ListItemIcon>
+
+              <ListItemText primary={"Access Control"} />
+            </ListItemButton>
+          </Link> : <></>
+        }
       </List>
 
       <Divider />

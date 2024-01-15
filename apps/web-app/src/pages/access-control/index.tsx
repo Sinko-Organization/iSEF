@@ -59,7 +59,7 @@ const AccessControlPage: NextPage = () => {
 
   return (
     <>
-      {user?.role === "superadmin" ? (
+      {
         <div className="mx-32 fontsans mt-10">
           <AccessControlTable
             users={accounts}
@@ -69,9 +69,8 @@ const AccessControlPage: NextPage = () => {
             setUserNotAdmin={setUserNotAdmin}
           />
         </div>
-      ) : (
-        <AdminError />
-      )}
+
+      }
       <Toaster />
     </>
   );
