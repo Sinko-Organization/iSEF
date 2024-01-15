@@ -5,6 +5,7 @@ import { trpc } from "@web-app/utils/trpc";
 import { NextPage } from "next";
 import toast, { Toaster } from "react-hot-toast";
 
+
 const TeacherManagementPage: NextPage = () => {
 
   const { data: user, error } = trpc.useQuery(["user.role"]);
