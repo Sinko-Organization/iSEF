@@ -24,7 +24,7 @@ import FormError from "../errors/FormError";
 import { trpc } from "@web-app/utils/trpc";
 import dayjs from "dayjs";
 import React, { ChangeEvent, useState } from "react";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { middlewareMarker } from "@trpc/server/dist/declarations/src/internals/middlewares";
 
 const useStyles = makeStyles({
@@ -108,6 +108,12 @@ const EditTeacherButton = ({ teacherId }: Props) => {
   const handleEmpChange = (e: SelectChangeEvent) => {
     setEmp(e.target.value as string);
   };
+
+  const deptItems = Object.keys(Department).map((key) => (
+    <MenuItem key={key} value={key}>
+      {Department[key]}
+    </MenuItem>
+  ));
 
   const handleOpen = () => {
     setOpen(true);
@@ -251,12 +257,7 @@ const EditTeacherButton = ({ teacherId }: Props) => {
                 label="Department"
                 onChange={handleDeptChange}
               >
-                <MenuItem value={"Packaging"}>Packaging</MenuItem>
-                <MenuItem value={"Civil"}>Civil</MenuItem>
-                <MenuItem value={"Mechanical"}>Mechanical</MenuItem>
-                <MenuItem value={"Electrical"}>Electrical</MenuItem>
-                <MenuItem value={"Electronics"}>Electronics</MenuItem>
-                <MenuItem value={"Software"}>Software</MenuItem>
+                {deptItems}
               </Select>
             </Box>
           </Box>
@@ -319,6 +320,9 @@ const EditTeacherButton = ({ teacherId }: Props) => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <Toaster />
+
     </React.Fragment>
   );
 };
