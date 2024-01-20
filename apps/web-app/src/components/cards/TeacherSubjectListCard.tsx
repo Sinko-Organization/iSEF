@@ -15,6 +15,7 @@ import TableRow from "@mui/material/TableRow";
 import Tooltip from "@mui/material/Tooltip";
 import { CardContent } from "@mui/material";
 import Typography from "@mui/material/Typography";
+import { AddTeacherSubjects } from "../buttons";
 
 export default function TeacherSubjectListCard() {
 
@@ -27,13 +28,7 @@ export default function TeacherSubjectListCard() {
             <CardContent>
   
                         <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "10px" }}>
-                            <Button
-                                variant="contained"
-                                onClick={handleAddSubjectClick}
-                                style={{ marginLeft: "auto", backgroundColor: "#B2A1E1", color: "white" }}
-                            >
-                                Add Subjects
-                            </Button>
+                            <AddTeacherSubjects />
                         </div>
                      
                 <Accordion style={{ background: "#EDE7F6", marginBottom: "10px" }}>
@@ -46,7 +41,7 @@ export default function TeacherSubjectListCard() {
                                 marginLeft: "0.5in",
                                 textAlign: "left",
                             }}
-                            style={{
+                            style={{ 
                                 fontFamily: "Times New Roman",
                                 fontSize: "18px",
                             }}
@@ -60,6 +55,7 @@ export default function TeacherSubjectListCard() {
                             <TableHead>
                                 <TableRow>
                                     <TableCell className="text-bold">Subject</TableCell>
+                                    <TableCell className="text-bold">Subject Name</TableCell>
                                     <TableCell className="text-bold">Subject Code</TableCell>
                                     <TableCell className="text-bold">Units</TableCell>
                                     <TableCell className="text-bold">Room</TableCell>
@@ -93,6 +89,7 @@ export default function TeacherSubjectListCard() {
                             <TableHead>
                                 <TableRow>
                                     <TableCell className="text-bold">Subject</TableCell>
+                                    <TableCell className="text-bold">Subject Name</TableCell>
                                     <TableCell className="text-bold">Subject Code</TableCell>
                                     <TableCell className="text-bold">Units</TableCell>
                                     <TableCell className="text-bold">Room</TableCell>
@@ -127,6 +124,7 @@ export default function TeacherSubjectListCard() {
                             <TableHead>
                                 <TableRow>
                                     <TableCell className="text-bold">Subject</TableCell>
+                                    <TableCell className="text-bold">Subject Name</TableCell>
                                     <TableCell className="text-bold">Subject Code</TableCell>
                                     <TableCell className="text-bold">Units</TableCell>
                                     <TableCell className="text-bold">Room</TableCell>
