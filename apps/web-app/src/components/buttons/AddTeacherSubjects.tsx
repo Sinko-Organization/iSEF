@@ -16,6 +16,7 @@ import { trpc } from "@web-app/utils/trpc";
 import React, { ChangeEvent, useState } from "react";
 import toast from "react-hot-toast";
 import { SelectChangeEvent } from "@mui/material/Select";
+import FormError from "../errors/FormError";
 
 
 
@@ -56,6 +57,8 @@ const AddSubjectsButton = () => {
   const [subjectUnits, setSubjectUnits] = useState("");
   const [curriculum, setCurriculum] = useState("");
 
+  const [errors, setErrors] = useState<string[]>([])
+
 
   const handleUnitChange = (e: SelectChangeEvent) => {
     setSubjectUnits(e.target.value);
@@ -64,6 +67,18 @@ const AddSubjectsButton = () => {
   const handleCurriculumChange = (e: SelectChangeEvent) => {
     setCurriculum(e.target.value);
   };
+
+  const validateFields = () => {
+    const newErrors: string[] = []
+
+    const VALID_CURRICULUM = /^\d{4}-\d{4}$/;
+    if (!VALID_CURRICULUM.test(curriculum)) {
+      newErrors.push('Invalid curriculum input. Must be in the form XXXX-XXXX.');
+    }
+
+    setErrors(newErrors)
+    return newErrors.length === 0;
+  }
 
   return (
     <React.Fragment>
@@ -86,8 +101,11 @@ const AddSubjectsButton = () => {
           }}>
           Add Subject
         </DialogTitle>
-        
+
+
         <DialogContent>
+
+          <FormError messages={errors} />
 
           <Box sx={{ display: "flex", alignItems: "flex-end", marginTop: 3 }}>
             <Box sx={{ width: 160 }}>
