@@ -18,9 +18,12 @@ export const subjectRouter = createAdminRouter()
       return ctx.prisma.subject.findMany({
         select: {
           id: true,
+          courseId: true,
           name: true,
           stubCode: true,
+          curriculum: true,
           units: true,
+          credits: true,
         },
       });
     },
@@ -622,3 +625,80 @@ export const subjectRouter = createAdminRouter()
 /**
  * Mutations
  */
+.mutation("add", {
+  input: z.object({
+    courseId: z.string(),
+    name: z.string(),
+    stubCode: z.string(),
+    curriculum: z.string(),
+    units: z.number().int().nonnegative(),
+    credits: z.number().int().nonnegative(),
+  }),
+  async resolve({ ctx, input }) {
+    const {
+      courseId,
+      name,
+      stubCode,
+      curriculum,
+      units,
+      credits
+    } = input;
+    return ctx.prisma.subject.create({
+      data: {
+        courseId: courseId,
+        name: name,
+        stubCode: stubCode,
+        curriculum: curriculum,
+        units: units,
+        credits: credits,
+      },
+    });
+  },
+  })
+  .mutation("delete", {
+    input: z.object({
+      stubCode: z.string(),
+    }),
+    async resolve({ ctx, input }) {
+      const { stubCode } = input;
+      return ctx.prisma.subject.delete({
+        where: {
+          stubCode: stubCode,
+        },
+      });
+    },
+  })
+  .mutation("update", {
+    input: z.object({
+      courseId: z.string(),
+      name: z.string(),
+      stubCode: z.string(),
+      curriculum: z.string(),
+      units: z.number().int().nonnegative(),
+      credits: z.number().int().nonnegative(),
+    }),
+    async resolve({ ctx, input }) {
+      const {
+        courseId,
+        name,
+        stubCode,
+        curriculum,
+        units,
+        credits
+      } = input;
+      return ctx.prisma.teacher.update({
+        where: {
+          stubCode: stubCode,
+        },
+        data: {
+          courseId: courseId,
+          name: name,
+          stubCode: stubCode,
+          curriculum: curriculum,
+          units: units,
+          credits: credits,
+        },
+      });
+    },
+  });
+
