@@ -686,7 +686,7 @@ export const subjectRouter = createAdminRouter()
         units,
         credits
       } = input;
-      return ctx.prisma.teacher.update({
+      return ctx.prisma.subject.update({
         where: {
           stubCode: stubCode,
         },
