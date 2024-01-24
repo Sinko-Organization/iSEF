@@ -621,7 +621,7 @@ export const subjectRouter = createAdminRouter()
 
       return mappedResults;
     },
-  });
+  })
 /**
  * Mutations
  */
@@ -655,19 +655,7 @@ export const subjectRouter = createAdminRouter()
     });
   },
   })
-  .mutation("delete", {
-    input: z.object({
-      stubCode: z.string(),
-    }),
-    async resolve({ ctx, input }) {
-      const { stubCode } = input;
-      return ctx.prisma.subject.delete({
-        where: {
-          stubCode: stubCode,
-        },
-      });
-    },
-  })
+  
   .mutation("update", {
     input: z.object({
       courseId: z.string(),
@@ -700,5 +688,18 @@ export const subjectRouter = createAdminRouter()
         },
       });
     },
-  });
+  })
 
+  .mutation("delete", {
+    input: z.object({
+      stubCode: z.string(),
+    }),
+    async resolve({ ctx, input }) {
+      const { stubCode } = input;
+      return ctx.prisma.subject.delete({
+        where: {
+          stubCode: stubCode,
+        },
+      });
+    },
+  })
