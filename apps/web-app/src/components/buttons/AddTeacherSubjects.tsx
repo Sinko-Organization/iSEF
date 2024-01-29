@@ -71,6 +71,26 @@ const AddSubjectsButton = () => {
   const validateFields = () => {
     const newErrors: string[] = []
 
+    if (subject.length === 0) {
+      newErrors.push("Please provide a subject title")
+    }
+
+    if (subjectName.length === 0) {
+      newErrors.push("Please provide a subject name")
+    }
+
+    if (subjectCode.length === 0) {
+      newErrors.push("Please provide a subject code")
+    }
+
+    if (subjectUnits.length === 0) {
+      newErrors.push("Please select a number of units")
+    }
+
+    if (curriculum.length === 0) {
+      newErrors.push("Please select a curriculum")
+    }
+
     const VALID_CURRICULUM = /^\d{4}-\d{4}$/;
     if (!VALID_CURRICULUM.test(curriculum)) {
       newErrors.push('Invalid curriculum input. Must be in the form XXXX-XXXX.');
