@@ -20,10 +20,12 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { employmentType } from "@prisma/client";
 import { Department } from "@prisma/client";
+import FormError from "../errors/FormError";
 import { trpc } from "@web-app/utils/trpc";
 import dayjs from "dayjs";
 import React, { ChangeEvent, useState } from "react";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
+import { middlewareMarker } from "@trpc/server/dist/declarations/src/internals/middlewares";
 
 const useStyles = makeStyles({
   container: {
@@ -46,24 +48,25 @@ const EditTeacherButton = ({ teacherId }: Props) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [inputs, setInputs] = React.useState({
-    firstName: teacher!.firstName,
-    middleName: teacher!.middleName,
-    lastName: teacher!.lastName,
+    firstName: teacher!.firstName || '',
+    middleName: teacher!.middleName || '',
+    lastName: teacher!.lastName || '',
   });
   const [dept, setDept] = useState(teacher!.department);
   const [emp, setEmp] = useState(teacher!.employment);
-
   const [birthdate, setBirthdate] = useState<Date>(teacher!.birthday);
 
+  const [errors, setErrors] = useState<string[]>([])
 
 
-  //Add teacher mutation
+
+  //Edit teacher mutation
   const { mutate: updateTeacher, isLoading: isUpdatingTeacher } =
     trpc.useMutation(["teacher.update"], {
       onSuccess: (teacher: { teacherId: string }) => {
+        toast.success(`Teacher ID: ${teacher.teacherId} has been updated`);
         utils.invalidateQueries(["teacher.get"]);
         utils.invalidateQueries(["teacher.getAll"]);
-        toast.success(`Teacher ID: ${teacher.teacherId} has been updated`);
       },
       onError: () => {
         toast.error("Error updating teacher record");
@@ -96,7 +99,6 @@ const EditTeacherButton = ({ teacherId }: Props) => {
       ...inputs,
       [e.target.name]: value,
     });
-    console.log(inputs);
   };
 
   const handleDeptChange = (e: SelectChangeEvent) => {
@@ -107,7 +109,13 @@ const EditTeacherButton = ({ teacherId }: Props) => {
     setEmp(e.target.value as string);
   };
 
-  const handleClickOpen = () => {
+  const deptItems = Object.keys(Department).map((key) => (
+    <MenuItem key={key} value={key}>
+      {Department[key]}
+    </MenuItem>
+  ));
+
+  const handleOpen = () => {
     setOpen(true);
   };
 
@@ -115,26 +123,43 @@ const EditTeacherButton = ({ teacherId }: Props) => {
     setOpen(false);
   };
 
-  const updateTeacherRecord = () => {
+  const validateFields = () => {
+    const newErrors: string[] = []
+
     if (
-      !inputs["firstName"] &&
-      !inputs["middleName"] &&
-      !inputs["lastName"] &&
-      !dept &&
-      !emp &&
-      !birthdate
-    )
-      return;
-    editTeacherRecord(
-      teacherId,
-      inputs["firstName"],
-      inputs["middleName"],
-      inputs["lastName"],
-      dept,
-      emp,
-      birthdate,
-    );
-    handleClose();
+      inputs.firstName.length === 0 ||
+      inputs.middleName.length === 0 ||
+      inputs.lastName.length === 0) {
+      newErrors.push("Name fields cannot be empty")
+    }
+
+    const age = calculateAge(birthdate);
+    if (age < 20 || age > 65) {
+      newErrors.push('Age must be between 20 and 65.');
+    }
+
+    setErrors(newErrors)
+    return newErrors.length === 0;
+  }
+
+  const handleFormSubmit = () => {
+
+    const isValid = validateFields();
+
+    if (isValid) {
+      editTeacherRecord(
+        teacherId,
+        capitalizeNames(inputs["firstName"]),
+        capitalizeNames(inputs["middleName"]),
+        capitalizeNames(inputs["lastName"]),
+        dept,
+        emp,
+        birthdate,
+      );
+      handleClose();
+    } else {
+      handleOpen();
+    }
   };
 
   if (!teacher) {
@@ -145,7 +170,7 @@ const EditTeacherButton = ({ teacherId }: Props) => {
     <React.Fragment>
       <div className={classes.container}>
         <IconButton
-          onClick={handleClickOpen}
+          onClick={handleOpen}
           className={`${classes.button} px-4 py-3 text-lg font-medium`}
         >
           <EditIcon />
@@ -159,6 +184,9 @@ const EditTeacherButton = ({ teacherId }: Props) => {
             backgroundColor: "lavender",
           }}
         >Edit Teacher</DialogTitle>
+
+        <FormError messages={errors} />
+
         <DialogContent>
           <Box sx={{ display: "flex", alignItems: "flex-end", marginTop: 3 }}>
             <Box sx={{ width: 160 }}>
@@ -166,7 +194,7 @@ const EditTeacherButton = ({ teacherId }: Props) => {
             </Box>
             <TextField
               onChange={handleTextChange}
-              value={inputs["firstName"]}
+              value={inputs.firstName}
               margin="dense"
               name="firstName"
               label="First Name"
@@ -183,7 +211,7 @@ const EditTeacherButton = ({ teacherId }: Props) => {
 
             <TextField
               onChange={handleTextChange}
-              value={inputs["middleName"]}
+              value={inputs.middleName}
               margin="dense"
               name="middleName"
               label="Middle Name"
@@ -199,7 +227,7 @@ const EditTeacherButton = ({ teacherId }: Props) => {
             </Box>
             <TextField
               onChange={handleTextChange}
-              value={inputs["lastName"]}
+              value={inputs.lastName}
               margin="dense"
               name="lastName"
               label="Last Name"
@@ -229,12 +257,7 @@ const EditTeacherButton = ({ teacherId }: Props) => {
                 label="Department"
                 onChange={handleDeptChange}
               >
-                <MenuItem value={"Packaging"}>Packaging</MenuItem>
-                <MenuItem value={"Civil"}>Civil</MenuItem>
-                <MenuItem value={"Mechanical"}>Mechanical</MenuItem>
-                <MenuItem value={"Electrical"}>Electrical</MenuItem>
-                <MenuItem value={"Electronics"}>Electronics</MenuItem>
-                <MenuItem value={"Software"}>Software</MenuItem>
+                {deptItems}
               </Select>
             </Box>
           </Box>
@@ -291,14 +314,39 @@ const EditTeacherButton = ({ teacherId }: Props) => {
           <Button
             color="success"
             disabled={isUpdatingTeacher}
-            onClick={updateTeacherRecord}
+            onClick={handleFormSubmit}
           >
             Submit
           </Button>
         </DialogActions>
       </Dialog>
+
+      <Toaster />
+
     </React.Fragment>
   );
 };
 
 export default EditTeacherButton;
+
+const capitalizeNames = (name: string): string => name.replace(/\b\w/g, (match) => match.toUpperCase());
+
+const calculateAge = (birthdate: Date): number => {
+  const currentDate = new Date();
+  const birthYear = birthdate.getFullYear();
+  const currentYear = currentDate.getFullYear();
+
+  let age = currentYear - birthYear;
+
+  // Adjust age if the birthday hasn't occurred yet this year
+  const birthMonth = birthdate.getMonth();
+  const currentMonth = currentDate.getMonth();
+  const birthDay = birthdate.getDate();
+  const currentDay = currentDate.getDate();
+
+  if (currentMonth < birthMonth || (currentMonth === birthMonth && currentDay < birthDay)) {
+    age--;
+  }
+
+  return age;
+};
