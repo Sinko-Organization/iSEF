@@ -143,8 +143,6 @@ const AddSubjectsButton = () => {
       newErrors.push("Please select a number of credits")
     }
 
-
-
     // const VALID_CURRICULUM = /^\d{4}-\d{4}$/;
     // if (!VALID_CURRICULUM.test(curriculum)) {
     //   newErrors.push('Invalid curriculum input. Must be in the form XXXX-XXXX.');
