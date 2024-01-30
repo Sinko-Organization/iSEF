@@ -2,6 +2,7 @@ import { D } from "@mobily/ts-belt";
 import {
   Box,
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -14,7 +15,7 @@ import {
 import { makeStyles } from "@mui/styles";
 import { trpc } from "@web-app/utils/trpc";
 import React, { ChangeEvent, useState } from "react";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { SelectChangeEvent } from "@mui/material/Select";
 import FormError from "../errors/FormError";
 
@@ -42,48 +43,95 @@ const useStyles = makeStyles({
 
 
 const AddSubjectsButton = () => {
+
+  const { data: courses, error: coursesError } = trpc.useQuery(
+    ["course.getAll"],
+    {},
+  );
+
+  const courseMenuItems = courses!.map((course) => (
+    <MenuItem key={course.name} value={course.id}>
+      {course.name}
+    </MenuItem>
+  ));
+
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-  const [inputs, setInputs] = React.useState({
-    Subject: "",
-    SubjectCode: "",
-    SubjectName: "",
-    SubjectUnits: "",
-  });
 
-  const [subject, setSubject] = useState("");
+  const [courseID, setCourseID] = useState("");
   const [subjectName, setSubjectName] = useState("");
-  const [subjectCode, setSubjectCode] = useState("");
-  const [subjectUnits, setSubjectUnits] = useState("");
+  const [stubCode, setStubCode] = useState("");
+  const [subjectUnits, setSubjectUnits] = useState(0);
   const [curriculum, setCurriculum] = useState("");
+  const [subjectCredits, setSubjectCredits] = useState(0);
+
 
   const [errors, setErrors] = useState<string[]>([])
 
+  const clearValues = () => {
+    setCourseID("");
+    setSubjectName("");
+    setStubCode("");
+    setCurriculum("");
+    setSubjectUnits(0);
+    setSubjectCredits(0);
+  }
+
+  const utils = trpc.useContext();
+
+  //Add subject mutation
+  const { mutate: addSubject, isLoading: isAddingSubject } = trpc.useMutation(
+    ["subject.add"],
+    {
+      onSuccess: (subject) => {
+        utils.invalidateQueries(["subject.getAll"]);
+        toast.success(`Subject "${subject.name}" has been added`);
+      },
+      onError: () => {
+        toast.error("Error adding subject");
+      },
+    },
+  );
+
 
   const handleUnitChange = (e: SelectChangeEvent) => {
-    setSubjectUnits(e.target.value);
+    setSubjectUnits(Number(e.target.value));
   };
 
   const handleCurriculumChange = (e: SelectChangeEvent) => {
     setCurriculum(e.target.value);
   };
 
+  const handleCreditChange = (e: SelectChangeEvent) => {
+    setSubjectCredits(Number(e.target.value));
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setErrors([]);
+    setOpen(false);
+  };
+
+
   const validateFields = () => {
     const newErrors: string[] = []
 
-    if (subject.length === 0) {
-      newErrors.push("Please provide a subject title")
+    if (courseID.length === 0) {
+      newErrors.push("Please select a course")
     }
 
     if (subjectName.length === 0) {
       newErrors.push("Please provide a subject name")
     }
 
-    if (subjectCode.length === 0) {
-      newErrors.push("Please provide a subject code")
+    if (stubCode.length === 0) {
+      newErrors.push("Please provide a stub code")
     }
 
-    if (subjectUnits.length === 0) {
+    if (subjectUnits === 0) {
       newErrors.push("Please select a number of units")
     }
 
@@ -91,14 +139,44 @@ const AddSubjectsButton = () => {
       newErrors.push("Please select a curriculum")
     }
 
-    const VALID_CURRICULUM = /^\d{4}-\d{4}$/;
-    if (!VALID_CURRICULUM.test(curriculum)) {
-      newErrors.push('Invalid curriculum input. Must be in the form XXXX-XXXX.');
+    if (subjectCredits === 0) {
+      newErrors.push("Please select a number of credits")
     }
+
+
+
+    // const VALID_CURRICULUM = /^\d{4}-\d{4}$/;
+    // if (!VALID_CURRICULUM.test(curriculum)) {
+    //   newErrors.push('Invalid curriculum input. Must be in the form XXXX-XXXX.');
+    // }
 
     setErrors(newErrors)
     return newErrors.length === 0;
   }
+
+  // on clicking "add"
+  const handleFormSubmit = () => {
+    const isValid = validateFields();
+
+    if (isValid) {
+      addSubject(
+        {
+          name: subjectName,
+          courseId: courseID,
+          stubCode: stubCode,
+          units: subjectUnits,
+          curriculum: curriculum,
+          credits: subjectCredits
+        }
+      );
+      clearValues();
+      handleClose();
+    }
+    else {
+      handleOpen();
+    }
+
+  };
 
   return (
     <React.Fragment>
@@ -107,13 +185,13 @@ const AddSubjectsButton = () => {
           color="secondary"
           className={classes.button}
           variant="contained"
-          onClick={() => setOpen(true)}
+          onClick={handleOpen}
         >
           Add Subject
         </Button>
       </div>
 
-      <Dialog open={open} onClose={() => setOpen(false)} >
+      <Dialog open={open} onClose={handleClose} >
         <DialogTitle
           style={{
             textAlign: "center",
@@ -136,12 +214,14 @@ const AddSubjectsButton = () => {
               autoFocus
               margin="dense"
               fullWidth
-              id="subject"
-              label="Subject"
-              variant="filled"
-              value={subject}
-              onChange={(e) => setSubject(e.target.value)}
-            />
+              id="course"
+              label="Course"
+              // variant="filled"
+              value={courseID}
+              onChange={(e) => setCourseID(e.target.value)}
+            >
+              {!courses ? <CircularProgress /> : courseMenuItems}
+            </TextField>
           </Box>
 
           <Box sx={{ display: "flex", alignItems: "flex-end", marginTop: 3 }}>
@@ -170,41 +250,12 @@ const AddSubjectsButton = () => {
               autoFocus
               margin="dense"
               fullWidth
-              id="subjectCode"
-              label="Subject Code"
-              variant="filled"
-              value={subjectCode}
-              onChange={(e) => setSubjectCode(e.target.value)}
+              id="stubCode"
+              label="Stub Code"
+              // variant="filled"
+              value={stubCode}
+              onChange={(e) => setStubCode(e.target.value)}
             />
-          </Box>
-
-
-          <Box
-            component="form"
-            noValidate
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              "& .MuiTextField-root": { m: 1, width: "40ch" },
-            }}
-          >
-            <Box sx={{ width: 160 }}>
-              <Typography sx={{ marginRight: 2 }}> Subject Unit </Typography>
-            </Box>
-            <Box>
-              <TextField
-                defaultValue=""
-                onChange={handleUnitChange}
-                id="subjectUnits"
-                select
-                value={subjectUnits}
-                color="secondary"
-              >
-                <MenuItem value={"1"}>1</MenuItem>
-                <MenuItem value={"2"}>2</MenuItem>
-                <MenuItem value={"3"}>3</MenuItem>
-              </TextField>
-            </Box>
           </Box>
 
           <Box
@@ -229,13 +280,86 @@ const AddSubjectsButton = () => {
                 color="secondary"
               >
                 <MenuItem value={"2022-2023"}>2022-2023</MenuItem>
+                <MenuItem value={"2021-2022"}>2022-2023</MenuItem>
+              </TextField>
+            </Box>
+          </Box>
+
+          <Box
+            component="form"
+            noValidate
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              "& .MuiTextField-root": { m: 1, width: "40ch" },
+            }}
+          >
+            <Box sx={{ width: 160 }}>
+              <Typography sx={{ marginRight: 2 }}> Subject Unit </Typography>
+            </Box>
+            <Box>
+              <TextField
+                defaultValue=""
+                onChange={handleUnitChange}
+                id="subjectUnits"
+                select
+                value={subjectUnits}
+                color="secondary"
+              >
+                <MenuItem value={1}>1</MenuItem>
+                <MenuItem value={2}>2</MenuItem>
+                <MenuItem value={3}>3</MenuItem>
+              </TextField>
+            </Box>
+          </Box>
+
+          <Box
+            component="form"
+            noValidate
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              "& .MuiTextField-root": { m: 1, width: "40ch" },
+            }}
+          >
+            <Box sx={{ width: 160 }}>
+              <Typography sx={{ marginRight: 2 }}> Subject Credits </Typography>
+            </Box>
+            <Box>
+              <TextField
+                defaultValue=""
+                onChange={handleCreditChange}
+                id="subjectCredits"
+                select
+                value={subjectCredits}
+                color="secondary"
+              >
+                <MenuItem value={1}>1</MenuItem>
+                <MenuItem value={2}>2</MenuItem>
+                <MenuItem value={3}>3</MenuItem>
               </TextField>
             </Box>
           </Box>
 
 
         </DialogContent>
+        <DialogActions>
+          <Button color="error" onClick={handleClose}>
+            Cancel
+          </Button>
+          <Button
+            color="secondary"
+            disabled={isAddingSubject}
+            onClick={handleFormSubmit}
+
+          >
+            Add
+          </Button>
+        </DialogActions>
+
+
       </Dialog>
+      <Toaster />
     </React.Fragment>
   )
 }
