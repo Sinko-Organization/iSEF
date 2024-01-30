@@ -622,40 +622,33 @@ export const subjectRouter = createAdminRouter()
       return mappedResults;
     },
   })
-/**
- * Mutations
- */
-.mutation("add", {
-  input: z.object({
-    courseId: z.string(),
-    name: z.string(),
-    stubCode: z.string(),
-    curriculum: z.string(),
-    units: z.number().int().nonnegative(),
-    credits: z.number().int().nonnegative(),
-  }),
-  async resolve({ ctx, input }) {
-    const {
-      courseId,
-      name,
-      stubCode,
-      curriculum,
-      units,
-      credits
-    } = input;
-    return ctx.prisma.subject.create({
-      data: {
-        courseId: courseId,
-        name: name,
-        stubCode: stubCode,
-        curriculum: curriculum,
-        units: units,
-        credits: credits,
-      },
-    });
-  },
+  /**
+   * Mutations
+   */
+  .mutation("add", {
+    input: z.object({
+      courseId: z.string(),
+      name: z.string(),
+      stubCode: z.string(),
+      curriculum: z.string(),
+      units: z.number().int().nonnegative(),
+      credits: z.number().int().nonnegative(),
+    }),
+    async resolve({ ctx, input }) {
+      const { courseId, name, stubCode, curriculum, units, credits } = input;
+      return ctx.prisma.subject.create({
+        data: {
+          courseId: courseId,
+          name: name,
+          stubCode: stubCode,
+          curriculum: curriculum,
+          units: units,
+          credits: credits,
+        },
+      });
+    },
   })
-  
+
   .mutation("update", {
     input: z.object({
       courseId: z.string(),
@@ -666,14 +659,7 @@ export const subjectRouter = createAdminRouter()
       credits: z.number().int().nonnegative(),
     }),
     async resolve({ ctx, input }) {
-      const {
-        courseId,
-        name,
-        stubCode,
-        curriculum,
-        units,
-        credits
-      } = input;
+      const { courseId, name, stubCode, curriculum, units, credits } = input;
       return ctx.prisma.subject.update({
         where: {
           stubCode: stubCode,
@@ -702,4 +688,4 @@ export const subjectRouter = createAdminRouter()
         },
       });
     },
-  })
+  });
