@@ -13,10 +13,26 @@ import { useState } from "react";
 
 import { AddTeachersButton } from "../buttons";
 import { EducationLoader } from "../loaders";
+import SearchBar from "../search/Search";
+import { Search } from "@mui/icons-material";
+import { Department, employmentType } from "@prisma/client";
 
 interface TeacherManagementTableProps {
   teachers: inferQueryOutput<"teacher.getAll">;
 
+}
+
+type Teacher = {
+  id: string;
+  teacherId: string;
+  firstName: string;
+  middleName: string | null;
+  lastName: string;
+  department: Department | null;
+  employment: employmentType | null;
+  birthday: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
@@ -24,6 +40,8 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
 }) => {
 
   const router = useRouter();
+
+  const [searchText, setSearchText] = useState("");
 
   const handleTeacherSelect = (teacherId: string) => {
     router.push(`/teachers/${teacherId}`);
@@ -34,8 +52,26 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
     return <EducationLoader />;
   }
 
+  const getFIlteredTeachers = (searchText: string, teachersList: Teacher[]) => {
+
+    if (!searchText) {
+      return teachersList
+    }
+    return teachersList.filter(teacher => teacher.firstName.includes(searchText) || teacher.lastName.includes(searchText))
+  }
+
+
+  const filteredTeachers = getFIlteredTeachers(searchText, teachers)
+
+
+
   return (
     <Grid >
+      <Grid container justifyContent="flex-start">
+        <Box>
+          <Search /><input type="text" onChange={(e) => setSearchText(e.target.value)} />
+        </Box>
+      </Grid>
       <Grid container justifyContent="flex-end">
         <Box>
           <AddTeachersButton />
@@ -61,7 +97,7 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
               </TableRow>
             </TableHead>
             <TableBody>
-              {teachers.map((teacher) => {
+              {filteredTeachers.map((teacher) => {
                 return (
                   <TableRow
                     key={teacher.teacherId}
