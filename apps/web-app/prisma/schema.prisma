@@ -146,12 +146,12 @@ model Teacher {
 
 model Subject {
     id             String          @id @default(cuid())
-    courseId       String          @map("course_id")
+    courseId       String          @default("") @map("course_id")
     name           String
     stubCode       String          @unique @map("stub_code")
-    curriculum     String
-    units          Float
-    credits        Float
+    curriculum     String          @default("2022-2023")
+    units          Float           
+    credits        Float           @default(0)
     createdAt      DateTime        @default(now()) @map("created_at")
     updatedAt      DateTime        @updatedAt @map("updated_at")
     studentRecords StudentRecord[]

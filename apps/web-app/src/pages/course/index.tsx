@@ -1,3 +1,4 @@
+import { AddTeacherSubjects } from "@web-app/components/buttons";
 import { EducationLoader } from "@web-app/components/loaders";
 import { CourseTable } from "@web-app/components/tables";
 import { CourseOptionSelector } from "@web-app/containers/course-option-selector";
@@ -15,7 +16,7 @@ import { string } from "zod";
 
 
 const Index: NextPage = () => {
-  const {data: subjects} = trpc.useQuery(["subject.getAll"])
+  const { data: subjects } = trpc.useQuery(["subject.getAll"])
   const {
     schoolYearsData,
     schoolYear,
@@ -32,26 +33,29 @@ const Index: NextPage = () => {
   const setCourseName = useCourseNameStore((state) => state.setCourseName);
   const { id } = router.query as { id: string };
 
-  const { data: subjectDetail } = trpc.useQuery(
+  const { data: subjectList } = trpc.useQuery(
     [
       "subject.getAll",
     ]);
 
 
-
+  if (!subjectList) {
+    return <EducationLoader />
+  }
 
 
   return (
     <>
       <div className="mx-20 my-10 flex flex-row gap-5">
         {schoolYearsData && (
-                    <CurriculumSelector
-                    schoolYearsData={schoolYearsData}
-                    curriculum={{ schoolYear, semesterType }}
-                    setSchoolYear={setSchoolYear}
-                    setSemesterType={setSemesterType}
-                  />
+          <CurriculumSelector
+            schoolYearsData={schoolYearsData}
+            curriculum={{ schoolYear, semesterType }}
+            setSchoolYear={setSchoolYear}
+            setSemesterType={setSemesterType}
+          />
         )}
+        <AddTeacherSubjects />
 
         {/* { {schoolYearsData && yearLevelsData && (
           <CourseOptionSelector
@@ -65,12 +69,12 @@ const Index: NextPage = () => {
             setSearchText={setSearchText}
           />
         )} */}
-{/* 
-        {data && <CourseTable students={filteredStudents} />} */} 
-        
+        {/* 
+        {data && <CourseTable students={filteredStudents} />} */}
+
       </div>
       <div className="mx-20 mt-10">
-        <CourseTable subjectList={[]}      />
+        <CourseTable subjectList={subjectList} />
       </div>
     </>
   );
