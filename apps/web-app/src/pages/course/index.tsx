@@ -1,6 +1,7 @@
 import { EducationLoader } from "@web-app/components/loaders";
 import { CourseTable } from "@web-app/components/tables";
 import { CourseOptionSelector } from "@web-app/containers/course-option-selector";
+import { CurriculumSelector } from "@web-app/containers/curriculum-selector";
 import { useCourseOptions } from "@web-app/hooks/course";
 import { useCourseNameStore } from "@web-app/stores";
 import { trpc } from "@web-app/utils/trpc";
@@ -9,10 +10,12 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { P, match } from "ts-pattern";
+import { string } from "zod";
 
-type StudentData = inferQueryOutput<"course.getStudentsV2">;
 
-const CoursePage: NextPage = () => {
+
+const Index: NextPage = () => {
+  const {data: subjects} = trpc.useQuery(["subject.getAll"])
   const {
     schoolYearsData,
     schoolYear,
@@ -25,65 +28,32 @@ const CoursePage: NextPage = () => {
     yearLevelsData,
   } = useCourseOptions();
 
-  const [searchText, setSearchText] = useState<string>("");
-  const [filteredStudents, setFilteredStudents] = useState<StudentData>([]);
   const router = useRouter();
   const setCourseName = useCourseNameStore((state) => state.setCourseName);
   const { id } = router.query as { id: string };
 
-  const students = trpc.useQuery([
-    "course.getStudentsV2",
-    {
-      courseId: id,
-      schoolYear,
-      semesterType,
-      yearLevel: match(yearLevel)
-        .with(P.number, (yearLevel) => yearLevel)
-        // eslint-disable-next-line unicorn/no-useless-undefined
-        .with("ALL", () => undefined)
-        .exhaustive(),
-    },
-  ]);
+  const { data: subjectDetail } = trpc.useQuery(
+    [
+      "subject.getAll",
+    ]);
 
-  const { data: courseDetail } = trpc.useQuery(["course.getById", id]);
 
-  const { data, isLoading, isError } = students;
 
-  useEffect(() => {
-    if (data && searchText.length > 0) {
-      const filtered = data.filter(
-        (student) =>
-          // student.studentIdNumber.includes(searchText)
-          // filter also by first name and last name
-          student.studentIdNumber.includes(searchText) ||
-          student.firstName?.toLowerCase().includes(searchText.toLowerCase()) ||
-          student.lastName?.toLowerCase().includes(searchText.toLowerCase()),
-      );
-      setFilteredStudents(filtered);
-    } else if (data) {
-      setFilteredStudents(data);
-    }
-  }, [data, searchText]);
 
-  useEffect(() => {
-    const { name } = courseDetail ?? {};
-    if (name) {
-      setCourseName(name);
-    }
-  }, [courseDetail, setCourseName]);
-
-  if (isLoading || schoolYearStatus === "loading" || !courseDetail) {
-    return <EducationLoader />;
-  }
-
-  if (isError || schoolYearStatus === "error") {
-    return <div>Error</div>;
-  }
 
   return (
     <>
-      <div className="mx-32 mt-10">
-        {schoolYearsData && yearLevelsData && (
+      <div className="mx-20 my-10 flex flex-row gap-5">
+        {schoolYearsData && (
+                    <CurriculumSelector
+                    schoolYearsData={schoolYearsData}
+                    curriculum={{ schoolYear, semesterType }}
+                    setSchoolYear={setSchoolYear}
+                    setSemesterType={setSemesterType}
+                  />
+        )}
+
+        {/* { {schoolYearsData && yearLevelsData && (
           <CourseOptionSelector
             searchText={searchText}
             schoolYearsData={schoolYearsData}
@@ -94,12 +64,20 @@ const CoursePage: NextPage = () => {
             setYearLevel={setYearLevel}
             setSearchText={setSearchText}
           />
-        )}
-
-        {data && <CourseTable students={filteredStudents} />}
+        )} */}
+{/* 
+        {data && <CourseTable students={filteredStudents} />} */} 
+        
+      </div>
+      <div className="mx-20 mt-10">
+        <CourseTable subjectList={[]}      />
       </div>
     </>
   );
 };
 
-export default CoursePage;
+const isNotNullAndEmpty = (value: string | null) => {
+  return value !== null && value !== "";
+};
+
+export default Index;

@@ -59,7 +59,7 @@ const paths: Path[] = [
   // links to do
   {
     name: "Courses",
-    link: "",
+    link: "/course",
     icon: <MenuIcon />,
   },
   {

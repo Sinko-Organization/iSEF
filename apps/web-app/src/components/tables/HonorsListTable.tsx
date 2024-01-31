@@ -110,7 +110,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     };
 
   return (
-    <TableHead sx={{ backgroundColor: "#A9CCE3" }}>
+    <TableHead sx={{ backgroundColor: "#CABFE9" }}>
       <TableRow>
         {headCells.map((headCell) => (
           <TableCell
@@ -198,7 +198,7 @@ const HonorsListTable: FC<HonorsList> = ({ honorsList }) => {
       >
         <Toolbar
           sx={{
-            backgroundColor: "#5499C7",
+            backgroundColor: "#B2A1E1",
             pl: { sm: 2 },
             pr: { xs: 1, sm: 1 },
             borderBottom: "1px solid #ddd",
