@@ -11,13 +11,7 @@ export const courseRouter = createAdminRouter()
    */
   .query("getAll", {
     resolve({ ctx }) {
-      return ctx.prisma.course.findMany({
-        select: {
-          id: true,
-          name: true,
-          code: true,
-        },
-      });
+      return ctx.prisma.course.findMany();
     },
   })
   .query("getById", {

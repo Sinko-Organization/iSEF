@@ -45,11 +45,10 @@ const useStyles = makeStyles({
 const AddSubjectsButton = () => {
 
   const { data: courses, error: coursesError } = trpc.useQuery(
-    ["course.getAll"],
-    {},
+    ["course.getAll"]
   );
 
-  const courseMenuItems = courses!.map((course) => (
+  const courseMenuItems = !courses ? <CircularProgress /> : courses!.map((course) => (
     <MenuItem key={course.name} value={course.id}>
       {course.name}
     </MenuItem>
@@ -112,6 +111,7 @@ const AddSubjectsButton = () => {
 
   const handleClose = () => {
     setErrors([]);
+    clearValues();
     setOpen(false);
   };
 
@@ -218,7 +218,7 @@ const AddSubjectsButton = () => {
               value={courseID}
               onChange={(e) => setCourseID(e.target.value)}
             >
-              {!courses ? <CircularProgress /> : courseMenuItems}
+              {courseMenuItems}
             </TextField>
           </Box>
 
@@ -307,6 +307,9 @@ const AddSubjectsButton = () => {
                 <MenuItem value={1}>1</MenuItem>
                 <MenuItem value={2}>2</MenuItem>
                 <MenuItem value={3}>3</MenuItem>
+                <MenuItem value={4}>4</MenuItem>
+                <MenuItem value={5}>5</MenuItem>
+                <MenuItem value={6}>6</MenuItem>
               </TextField>
             </Box>
           </Box>

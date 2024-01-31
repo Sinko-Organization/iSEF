@@ -1,6 +1,6 @@
 /* eslint-disable unicorn/no-array-callback-reference */
 import { O, pipe } from "@mobily/ts-belt";
-import { Box, Tab, TableSortLabel, Toolbar, Typography } from "@mui/material";
+import { Box, CircularProgress, Tab, TableSortLabel, Toolbar, Typography } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -11,7 +11,7 @@ import TableRow from "@mui/material/TableRow";
 import { getUserInfo } from "@web-app/helpers";
 import type { ErrorResult, SuccessResult } from "@web-app/helpers/getUserInfo";
 import { NonNullableValues } from "@web-app/types/generics";
-import type { inferQueryOutput } from "@web-app/utils/trpc";
+import { trpc, type inferQueryOutput } from "@web-app/utils/trpc";
 import Link from "next/link";
 import router from "next/router";
 import { useState, type FC, MouseEvent } from "react";
@@ -73,10 +73,10 @@ const headCells: readonly HeadCell[] = [
     label: "SUBJECT TITLE"
   },
   {
-    id: "department",
+    id: "units",
     numeric: true,
     disablePadding: true,
-    label: "DEPARTMENT"
+    label: "UNITS"
   },
   {
     id: "curriculum",
@@ -95,7 +95,6 @@ interface EnhancedTableProps {
   orderBy: string;
   rowCount: number;
 }
-
 
 
 function EnhancedTableHead(props: EnhancedTableProps) {
@@ -200,7 +199,7 @@ const SubjectTable: FC<SubjectList> = ({ subjectList }) => {
           id="tableTitle"
           component="div"
         >
-          <div className="font-bold">Courses</div>
+          <div className="font-bold">SUBJECTS</div>
         </Typography>
       </Toolbar>
       <TableContainer>
@@ -214,20 +213,20 @@ const SubjectTable: FC<SubjectList> = ({ subjectList }) => {
           />
         </Table>
         <TableBody>
-        {subjectList.length === 0 && (
-              <TableRow>
-                <TableCell
-                  colSpan={3}
-                  sx={{
-                    textAlign: "center",
-                    fontSize: "1.25rem",
-                    fontWeight: "bold",
-                  }}
-                >
-                  No records found
-                </TableCell>
-              </TableRow>
-            )}
+          {subjectList.length === 0 && (
+            <TableRow>
+              <TableCell
+                colSpan={3}
+                sx={{
+                  textAlign: "center",
+                  fontSize: "1.25rem",
+                  fontWeight: "bold",
+                }}
+              >
+                No records found
+              </TableCell>
+            </TableRow>
+          )}
           {subjectList
             .sort(getComparator(order, orderBy))
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -255,20 +254,19 @@ const SubjectTable: FC<SubjectList> = ({ subjectList }) => {
                         borderRight: "1px solid #ddd",
                       }}
                     >
-                     {row.stubCode}
+                      {row.stubCode}
                     </TableCell>
                     <TableCell>
                       {row.name}
                     </TableCell>
                     <TableCell>
-                      ---
-                      //department
+                      {row.units}
                     </TableCell>
                     <TableCell>
-                      //curriculum
+                      {row.curriculum}
                     </TableCell>
                   </TableRow >
-                      
+
                 </>
               )
             })
