@@ -15,10 +15,24 @@ import { AddTeachersButton } from "../buttons";
 import { EducationLoader } from "../loaders";
 import SearchBar from "../search/Search";
 import { Search } from "@mui/icons-material";
+import { Department, employmentType } from "@prisma/client";
 
 interface TeacherManagementTableProps {
   teachers: inferQueryOutput<"teacher.getAll">;
 
+}
+
+type Teacher = {
+  id: string;
+  teacherId: string;
+  firstName: string;
+  middleName: string | null;
+  lastName: string;
+  department: Department | null;
+  employment: employmentType | null;
+  birthday: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
@@ -38,7 +52,8 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
     return <EducationLoader />;
   }
 
-  const getFIlteredTeachers = (searchText, teachersList) => {
+  const getFIlteredTeachers = (searchText: string, teachersList: Teacher[]) => {
+
     if (!searchText) {
       return teachersList
     }
