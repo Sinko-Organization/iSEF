@@ -25,7 +25,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import CoursePage from "@web-app/pages/course";
+import CoursePage from "@web-app/pages/subjects";
 import { trpc } from "@web-app/utils/trpc";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
@@ -58,8 +58,8 @@ const paths: Path[] = [
   },
   // links to do
   {
-    name: "Courses",
-    link: "/course",
+    name: "Subjects",
+    link: "/subjects",
     icon: <MenuIcon />,
   },
   {

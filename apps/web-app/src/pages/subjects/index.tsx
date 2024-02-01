@@ -1,6 +1,6 @@
 import { AddTeacherSubjects } from "@web-app/components/buttons";
 import { EducationLoader } from "@web-app/components/loaders";
-import { CourseTable } from "@web-app/components/tables";
+import { SubjectTable } from "@web-app/components/tables";
 import { CourseOptionSelector } from "@web-app/containers/course-option-selector";
 import { CurriculumSelector } from "@web-app/containers/curriculum-selector";
 import { useCourseOptions } from "@web-app/hooks/course";
@@ -74,7 +74,7 @@ const Index: NextPage = () => {
 
       </div>
       <div className="mx-20 mt-10">
-        <CourseTable subjectList={subjectList} />
+        <SubjectTable subjectList={subjectList} />
       </div>
     </>
   );
