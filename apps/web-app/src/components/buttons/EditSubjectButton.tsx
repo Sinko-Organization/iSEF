@@ -208,7 +208,7 @@ export default function EditSubjectButton({ subjectId }: Props) {
 
           <Box sx={{ display: "flex", alignItems: "flex-end", marginTop: 3 }}>
             <Box sx={{ width: 160 }}>
-              <Typography sx={{ marginRight: 2 }}>Subject</Typography>
+              <Typography sx={{ marginRight: 2 }}>Course</Typography>
             </Box>
             <TextField
               color="secondary"
@@ -244,7 +244,7 @@ export default function EditSubjectButton({ subjectId }: Props) {
 
           <Box sx={{ display: "flex", alignItems: "flex-end", marginTop: 3 }}>
             <Box sx={{ width: 160 }}>
-              <Typography sx={{ marginRight: 2 }}>Subject Code</Typography>
+              <Typography sx={{ marginRight: 2 }}>Stub Code</Typography>
             </Box>
             <TextField
               color="secondary"
@@ -280,8 +280,9 @@ export default function EditSubjectButton({ subjectId }: Props) {
                 value={curriculum}
                 color="secondary"
               >
-                <MenuItem value={"2022-2023"}>2022-2023</MenuItem>
+                <MenuItem value={"2022-2023"}>2023-2024</MenuItem>
                 <MenuItem value={"2021-2022"}>2022-2023</MenuItem>
+                <MenuItem value={"2021-2022"}>2021-2022</MenuItem>
               </TextField>
             </Box>
           </Box>
@@ -341,6 +342,9 @@ export default function EditSubjectButton({ subjectId }: Props) {
                 <MenuItem value={1}>1</MenuItem>
                 <MenuItem value={2}>2</MenuItem>
                 <MenuItem value={3}>3</MenuItem>
+                <MenuItem value={4}>4</MenuItem>
+                <MenuItem value={5}>5</MenuItem>
+                <MenuItem value={6}>6</MenuItem>
               </TextField>
             </Box>
           </Box>
