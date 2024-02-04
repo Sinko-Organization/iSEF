@@ -16,7 +16,7 @@ import { makeStyles } from "@mui/styles";
 import { trpc } from "@web-app/utils/trpc";
 import React, { ChangeEvent, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { SelectChangeEvent } from "@mui/material/Select";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 import FormError from "../errors/FormError";
 
 
@@ -207,7 +207,7 @@ const AddSubjectsButton = () => {
             <Box sx={{ width: 160 }}>
               <Typography sx={{ marginRight: 2 }}>Course</Typography>
             </Box>
-            <TextField
+            <Select
               color="secondary"
               autoFocus
               margin="dense"
@@ -219,7 +219,7 @@ const AddSubjectsButton = () => {
               onChange={(e) => setCourseID(e.target.value)}
             >
               {courseMenuItems}
-            </TextField>
+            </Select>
           </Box>
 
           <Box sx={{ display: "flex", alignItems: "flex-end", marginTop: 3 }}>
