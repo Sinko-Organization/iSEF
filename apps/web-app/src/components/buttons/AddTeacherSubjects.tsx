@@ -48,7 +48,7 @@ const AddSubjectsButton = () => {
     ["course.getAll"]
   );
 
-  const courseMenuItems = !courses ? <CircularProgress /> : courses!.map((course) => (
+  const courseMenuItems = !courses ? ["Courses not loaded"] : courses!.map((course) => (
     <MenuItem key={course.name} value={course.id}>
       {course.name}
     </MenuItem>
