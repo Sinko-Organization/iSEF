@@ -146,8 +146,8 @@ model Teacher {
 
 model Subject {
     id             String          @id @default(cuid())
-    courseId       String          @default("") @map("course_id")
     name           String
+    department     Department?
     stubCode       String          @unique @map("stub_code")
     curriculum     String          @default("2022-2023")
     units          Float           
