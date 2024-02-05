@@ -1,4 +1,4 @@
-import { Box, Grid, MenuItem, Paper, SelectChangeEvent, Table, TextField } from "@mui/material";
+import { Box, Grid, MenuItem, Paper, Select, SelectChangeEvent, Table, TextField } from "@mui/material";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
@@ -42,7 +42,7 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
   const router = useRouter();
 
   const [searchText, setSearchText] = useState("");
-  const [filteredList, setFilteredList] = useState<Teacher[]>([]);
+  const [filteredList, setFilteredList] = useState<Teacher[]>(teachers);
 
   const deptItems = Object.keys(Department).map((key) => (
     <MenuItem key={key} value={key}>
@@ -95,16 +95,15 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
       {/* filter */}
       <Grid container justifyContent="flex-start">
         <Box>
-          <TextField
+          <Select
             defaultValue="All"
             onChange={handleFilterChange}
             id="department"
-            select
             color="secondary"
           >
             <MenuItem value="All">All</MenuItem>
             {deptItems}
-          </TextField>
+          </Select>
         </Box>
       </Grid>
 
