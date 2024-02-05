@@ -18,7 +18,7 @@ export const subjectRouter = createAdminRouter()
       return ctx.prisma.subject.findMany({
         select: {
           id: true,
-          courseId: true,
+          department: true,
           name: true,
           stubCode: true,
           curriculum: true,
@@ -640,7 +640,7 @@ export const subjectRouter = createAdminRouter()
    */
   .mutation("add", {
     input: z.object({
-      courseId: z.string(),
+      department: z.string(),
       name: z.string(),
       stubCode: z.string(),
       curriculum: z.string(),
@@ -648,10 +648,10 @@ export const subjectRouter = createAdminRouter()
       credits: z.number().int().nonnegative(),
     }),
     async resolve({ ctx, input }) {
-      const { courseId, name, stubCode, curriculum, units, credits } = input;
+      const { department, name, stubCode, curriculum, units, credits } = input;
       return ctx.prisma.subject.create({
         data: {
-          courseId: courseId,
+          department: department,
           name: name,
           stubCode: stubCode,
           curriculum: curriculum,
@@ -664,7 +664,7 @@ export const subjectRouter = createAdminRouter()
 
   .mutation("update", {
     input: z.object({
-      courseId: z.string(),
+      department: z.string(),
       name: z.string(),
       stubCode: z.string(),
       curriculum: z.string(),
@@ -672,13 +672,13 @@ export const subjectRouter = createAdminRouter()
       credits: z.number().int().nonnegative(),
     }),
     async resolve({ ctx, input }) {
-      const { courseId, name, stubCode, curriculum, units, credits } = input;
+      const { department, name, stubCode, curriculum, units, credits } = input;
       return ctx.prisma.subject.update({
         where: {
           stubCode: stubCode,
         },
         data: {
-          courseId: courseId,
+          department: department,
           name: name,
           stubCode: stubCode,
           curriculum: curriculum,
