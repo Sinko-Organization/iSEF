@@ -155,7 +155,7 @@ const SubjectTable: FC<SubjectTableProps> = ({
   // };
 
   const [searchText, setSearchText] = useState("");
-  const [filteredList, setFilteredList] = useState<Subject[]>([]);
+  const [filteredList, setFilteredList] = useState<Subject[]>(subjects);
 
   const deptItems = Object.keys(Department).map((key) => (
     <MenuItem key={key} value={key}>
