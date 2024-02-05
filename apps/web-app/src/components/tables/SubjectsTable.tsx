@@ -1,6 +1,4 @@
-/* eslint-disable unicorn/no-array-callback-reference */
-import { O, pipe } from "@mobily/ts-belt";
-import { Box, Grid, SelectChangeEvent, TextField, CircularProgress, Tab, MenuItem, TableSortLabel, Toolbar, Typography } from "@mui/material";
+import { Box, Grid, SelectChangeEvent, TextField, MenuItem } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -8,21 +6,11 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import type { ErrorResult, SuccessResult } from "@web-app/helpers/getUserInfo";
-import { NonNullableValues } from "@web-app/types/generics";
-import { trpc, type inferQueryOutput } from "@web-app/utils/trpc";
-import Link from "next/link";
-import router from "next/router";
-import { useState, type FC, MouseEvent } from "react";
-import { match } from "ts-pattern";
+import { type inferQueryOutput } from "@web-app/utils/trpc";
+import { useState, type FC } from "react";
 import { Department } from "@prisma/client";
 import { Search } from "@mui/icons-material";
 import { useRouter } from "next/router";
-
-type SubjectListType = inferQueryOutput<"subject.getAll">;
-type Unpacked<T> = T extends (infer U)[] ? U : T;
-type SubjectTypeRaw = Unpacked<SubjectListType>;
-type SubjectType = NonNullableValues<SubjectTypeRaw>;
 
 interface SubjectTableProps {
   subjects: inferQueryOutput<"subject.getAll">;
