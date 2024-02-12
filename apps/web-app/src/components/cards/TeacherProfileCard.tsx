@@ -1,12 +1,9 @@
 import { Card, Grid, Typography } from "@mui/material";
 import { Paper, Table, styled } from "@mui/material";
 import { trpc } from "@web-app/utils/trpc";
-import { useFormik } from "formik";
-import { P, match } from "ts-pattern";
 import EducationLoader from "../loaders/EducationLoader";
 import EditTeacherButton from "../buttons/EditTeacherButton";
 import RemoveTeacherButton from "../buttons/RemoveTeachersButton";
-
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -91,7 +88,7 @@ export default function TeacherProfileCard({ teacherID
                       </tr>
                       <tr>
                         <td className="text-left mb-2">
-                          <b>Date of Birth:</b> {teacher!.birthday.toLocaleDateString()}
+                          <b>Date of Birth:</b> {teacher!.birthday.toLocaleString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                         </td>
                       </tr>
                     </tbody>

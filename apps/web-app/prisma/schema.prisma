@@ -52,7 +52,7 @@ model User {
     email         String?   @unique
     emailVerified DateTime?
     image         String?
-    role          Role?
+    role          Role?     @default(regular)
     createdAt     DateTime  @default(now()) @map("created_at")
     updatedAt     DateTime  @updatedAt @map("updated_at")
     accounts      Account[]
@@ -147,8 +147,11 @@ model Teacher {
 model Subject {
     id             String          @id @default(cuid())
     name           String
+    department     Department?
     stubCode       String          @unique @map("stub_code")
-    units          Float
+    curriculum     String          @default("2022-2023")
+    units          Float           
+    credits        Float           @default(0)
     createdAt      DateTime        @default(now()) @map("created_at")
     updatedAt      DateTime        @updatedAt @map("updated_at")
     studentRecords StudentRecord[]

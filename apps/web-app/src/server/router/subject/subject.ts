@@ -18,9 +18,25 @@ export const subjectRouter = createAdminRouter()
       return ctx.prisma.subject.findMany({
         select: {
           id: true,
+          department: true,
           name: true,
           stubCode: true,
+          curriculum: true,
           units: true,
+          credits: true,
+        },
+      });
+    },
+  })
+  .query("get", {
+    input: z.object({
+      id: z.string(),
+    }),
+    async resolve({ ctx, input }) {
+      const { id } = input;
+      return ctx.prisma.subject.findUnique({
+        where: {
+          id: id,
         },
       });
     },
@@ -618,7 +634,71 @@ export const subjectRouter = createAdminRouter()
 
       return mappedResults;
     },
+  })
+  /**
+   * Mutations
+   */
+  .mutation("add", {
+    input: z.object({
+      department: z.string(),
+      name: z.string(),
+      stubCode: z.string(),
+      curriculum: z.string(),
+      units: z.number().int().nonnegative(),
+      credits: z.number().int().nonnegative(),
+    }),
+    async resolve({ ctx, input }) {
+      const { department, name, stubCode, curriculum, units, credits } = input;
+      return ctx.prisma.subject.create({
+        data: {
+          department: department,
+          name: name,
+          stubCode: stubCode,
+          curriculum: curriculum,
+          units: units,
+          credits: credits,
+        },
+      });
+    },
+  })
+
+  .mutation("update", {
+    input: z.object({
+      department: z.string(),
+      name: z.string(),
+      stubCode: z.string(),
+      curriculum: z.string(),
+      units: z.number().int().nonnegative(),
+      credits: z.number().int().nonnegative(),
+    }),
+    async resolve({ ctx, input }) {
+      const { department, name, stubCode, curriculum, units, credits } = input;
+      return ctx.prisma.subject.update({
+        where: {
+          stubCode: stubCode,
+        },
+        data: {
+          department: department,
+          name: name,
+          stubCode: stubCode,
+          curriculum: curriculum,
+          units: units,
+          credits: credits,
+        },
+      });
+    },
+  })
+
+  .mutation("delete", {
+    input: z.object({
+      stubCode: z.string(),
+    }),
+    async resolve({ ctx, input }) {
+      const { stubCode } = input;
+      return ctx.prisma.subject.delete({
+        where: {
+          stubCode: stubCode,
+        },
+      });
+    },
   });
-/**
- * Mutations
- */

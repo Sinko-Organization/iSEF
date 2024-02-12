@@ -21,10 +21,12 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { employmentType } from "@prisma/client";
 import { Department } from "@prisma/client";
+import FormError from "../errors/FormError";
 import { trpc } from "@web-app/utils/trpc";
 import dayjs from "dayjs";
 import React, { ChangeEvent, useState } from "react";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
+import { e } from "vitest/dist/index-220c1d70";
 
 const useStyles = makeStyles({
   container: {
@@ -62,8 +64,9 @@ const AddTeachersButton = () => {
   });
   const [dept, setDept] = useState("");
   const [emp, setEmp] = useState("");
-
   const [birthdate, setBirthdate] = useState<Date>(new Date());
+
+  const [errors, setErrors] = useState<string[]>([])
 
   const utils = trpc.useContext();
 
@@ -107,7 +110,6 @@ const AddTeachersButton = () => {
       ...inputs,
       [e.target.name]: value,
     });
-    console.log(inputs);
   };
 
   const handleDeptChange = (e: SelectChangeEvent) => {
@@ -118,36 +120,86 @@ const AddTeachersButton = () => {
     setEmp(e.target.value as string);
   };
 
-  const handleClickOpen = () => {
+  const deptItems = Object.keys(Department).map((key) => (
+    <MenuItem key={key} value={key}>
+      {Department[key]}
+    </MenuItem>
+  ));
+
+  const clearValues = () => {
+    setInputs({
+      teacherId: "",
+      firstName: "",
+      middleName: "",
+      lastName: "",
+    });
+    setDept("");
+    setEmp("");
+  }
+
+  const handleOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
+    setErrors([]);
     setOpen(false);
   };
 
-  const addNewTeacher = () => {
-    if (
-      !inputs["teacherId"] &&
-      !inputs["firstName"] &&
-      !inputs["middleName"] &&
-      !inputs["lastName"] &&
-      !dept &&
-      !emp &&
-      !birthdate
+  const validateFields = () => {
+    const newErrors: string[] = []
 
-    )
-      return;
-    addTeacherRecord(
-      inputs["teacherId"],
-      inputs["firstName"],
-      inputs["middleName"],
-      inputs["lastName"],
-      dept,
-      emp,
-      birthdate,
-    );
-    handleClose();
+    const VALID_TEACHER_ID = /^\d{2}-\d{4}-\d{2}$/;
+    if (!VALID_TEACHER_ID.test(inputs["teacherId"])) {
+      newErrors.push('Invalid ID format. Must be in the form XX-XXXX-XX.');
+    }
+
+    if (
+      inputs["firstName"].length === 0 ||
+      inputs["middleName"].length === 0 ||
+      inputs["lastName"].length === 0) {
+      newErrors.push("Name fields cannot be empty")
+    }
+
+
+    if (dept.length === 0) {
+      newErrors.push("Please select a department")
+    }
+
+    if (emp.length === 0) {
+      newErrors.push("Please select an employment type")
+    }
+
+    const age = calculateAge(birthdate);
+    if (age < 20 || age > 65) {
+      newErrors.push('Age must be between 20 and 65.');
+    }
+
+    setErrors(newErrors)
+    return newErrors.length === 0;
+  }
+
+  // on clicking "add"
+  const handleFormSubmit = () => {
+    const isValid = validateFields();
+
+    if (isValid) {
+      addTeacherRecord(
+        inputs["teacherId"],
+        capitalizeNames(inputs["firstName"]),
+        capitalizeNames(inputs["middleName"]),
+        capitalizeNames(inputs["lastName"]),
+        dept,
+        emp,
+        birthdate,
+      );
+      clearValues();
+      handleClose();
+    }
+    else {
+      handleOpen();
+    }
+
   };
 
   return (
@@ -156,10 +208,10 @@ const AddTeachersButton = () => {
         <Button
           color="secondary"
           variant="contained"
-          onClick={handleClickOpen}
+          onClick={handleOpen}
           className={`${classes.button} px-1 py-3 text-lg font-medium`}
         >
-          Add Teachers
+          Add Teacher
         </Button>
       </div>
 
@@ -173,6 +225,9 @@ const AddTeachersButton = () => {
           Add Teacher
         </DialogTitle>
         <DialogContent>
+
+          <FormError messages={errors} />
+
           <Box sx={{ display: "flex", alignItems: "flex-end", marginTop: 3 }}>
             <Box sx={{ width: 160 }}>
               <Typography sx={{ marginRight: 2 }}> Teacher ID</Typography>
@@ -257,12 +312,7 @@ const AddTeachersButton = () => {
                 value={dept}
                 color="secondary"
               >
-                <MenuItem value={"Packaging"}>Packaging</MenuItem>
-                <MenuItem value={"Civil"}>Civil</MenuItem>
-                <MenuItem value={"Mechanical"}>Mechanical</MenuItem>
-                <MenuItem value={"Electrical"}>Electrical</MenuItem>
-                <MenuItem value={"Electronics"}>Electronics</MenuItem>
-                <MenuItem value={"Software"}>Software</MenuItem>
+                {deptItems}
               </TextField>
             </Box>
           </Box>
@@ -293,6 +343,7 @@ const AddTeachersButton = () => {
             </Box>
           </Box>
 
+
           <Box
             component="form"
             sx={{
@@ -313,6 +364,8 @@ const AddTeachersButton = () => {
               />
             </LocalizationProvider>
           </Box>
+
+
         </DialogContent>
         <DialogActions>
           <Button color="error" onClick={handleClose}>
@@ -321,15 +374,38 @@ const AddTeachersButton = () => {
           <Button
             color="secondary"
             disabled={isAddingTeacher}
-            onClick={addNewTeacher}
+            onClick={handleFormSubmit}
 
           >
             Add
           </Button>
         </DialogActions>
       </Dialog>
+      <Toaster />
     </React.Fragment>
   );
 };
 
 export default AddTeachersButton;
+
+const capitalizeNames = (name: string): string => name.replace(/\b\w/g, (match) => match.toUpperCase());
+
+const calculateAge = (birthdate: Date): number => {
+  const currentDate = new Date();
+  const birthYear = birthdate.getFullYear();
+  const currentYear = currentDate.getFullYear();
+
+  let age = currentYear - birthYear;
+
+  // Adjust age if the birthday hasn't occurred yet this year
+  const birthMonth = birthdate.getMonth();
+  const currentMonth = currentDate.getMonth();
+  const birthDay = birthdate.getDate();
+  const currentDay = currentDate.getDate();
+
+  if (currentMonth < birthMonth || (currentMonth === birthMonth && currentDay < birthDay)) {
+    age--;
+  }
+
+  return age;
+};
