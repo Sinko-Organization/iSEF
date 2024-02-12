@@ -8,20 +8,19 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { type inferQueryOutput } from "@web-app/utils/trpc";
 import { useState, type FC } from "react";
-import { Department } from "@prisma/client";
 import { Search } from "@mui/icons-material";
 import { useRouter } from "next/router";
 
 interface SubjectTableProps {
-  subjects: inferQueryOutput<"subject.getAll">;
+  subjects: inferQueryOutput<"subjectList.getAll">;
 }
 
 type Subject = {
   id: string;
-  name: string;
-  department: Department | null;
-  stubCode: string;
+  title: string;
+  subCode: string;
   units: number;
+  credits: number;
   curriculum: string;
 }
 
@@ -157,20 +156,21 @@ const SubjectTable: FC<SubjectTableProps> = ({
   const [searchText, setSearchText] = useState("");
   const [filteredList, setFilteredList] = useState<Subject[]>(subjects);
 
-  const deptItems = Object.keys(Department).map((key) => (
-    <MenuItem key={key} value={key}>
-      {Department[key]}
+  const curriculum = ["2022-2023", "2023-2024"]
+  const curriculumList = curriculum.map(() => (
+    <MenuItem >
+      {curriculum}
     </MenuItem>
   ));
 
   const handleFilterChange = (e: SelectChangeEvent) => {
-    let selectedDept = e.target.value;
+    let selectedCurriculum = e.target.value;
 
-    if (selectedDept === "All") {
+    if (selectedCurriculum === "All") {
       setFilteredList(subjects)
     }
     else {
-      setFilteredList(subjects.filter(subject => subject.department! === selectedDept))
+      setFilteredList(subjects.filter(subject => subject.curriculum! === selectedCurriculum))
     }
   }
 
@@ -179,7 +179,7 @@ const SubjectTable: FC<SubjectTableProps> = ({
     if (!searchText) {
       return subjectsList
     }
-    return subjectsList.filter(subject => subject.name.includes(searchText) || subject.stubCode.includes(searchText))
+    return subjectsList.filter(subject => subject.title.includes(searchText) || subject.subCode.includes(searchText))
   }
 
   const filteredSubjects = getSearchedSubjects(searchText, filteredList)
@@ -211,12 +211,12 @@ const SubjectTable: FC<SubjectTableProps> = ({
           <TextField
             defaultValue="All"
             onChange={handleFilterChange}
-            id="department"
+            id="curriculum"
             select
             color="secondary"
           >
             <MenuItem value="All">All</MenuItem>
-            {deptItems}
+            {curriculumList}
           </TextField>
         </Box>
       </Grid>
@@ -265,7 +265,7 @@ const SubjectTable: FC<SubjectTableProps> = ({
               <TableRow>
                 <TableCell>Subject Code</TableCell>
                 <TableCell>Subject Title</TableCell>
-                <TableCell>Department</TableCell>
+                <TableCell>Units</TableCell>
                 <TableCell>Curriculum</TableCell>
               </TableRow>
             </TableHead>
@@ -276,9 +276,9 @@ const SubjectTable: FC<SubjectTableProps> = ({
                     key={subject.id}
                     hover
                   >
-                    <TableCell>{subject.stubCode}</TableCell>
-                    <TableCell>{subject.name}</TableCell>
-                    <TableCell>{subject.department}</TableCell>
+                    <TableCell>{subject.subCode}</TableCell>
+                    <TableCell>{subject.title}</TableCell>
+                    <TableCell>{subject.units}</TableCell>
                     <TableCell>{subject.curriculum}</TableCell>
                   </TableRow>
                 );
