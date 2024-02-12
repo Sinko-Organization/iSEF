@@ -7,7 +7,7 @@ import type { NextPage } from "next";
 
 const SubjectPage: NextPage = () => {
   const { data: subjects, error: subjectsError } = trpc.useQuery(
-    ["subject.getAll"],
+    ["subjectList.getAll"],
     {},
   );
 
