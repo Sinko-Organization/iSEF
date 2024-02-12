@@ -16,7 +16,8 @@
     "format:check": "prettier --check --plugin-search-dir=. **/*.{cjs,mjs,ts,tsx,md,json} --ignore-path ./.prettierignore",
     "test:unit": "turbo test:unit",
     "test:integration": "turbo test:integration",
-    "commit": "git add . && cz"
+    "commit": "git add . && cz",
+    "postinstall": "prisma generate"
   },
   "keywords": [],
   "author": "",
