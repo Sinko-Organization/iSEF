@@ -117,17 +117,17 @@ model Course {
     studentRecords StudentRecord[]
 }
 
-model ClassesTaught {
+model SubjectSchedule {
     id           String       @id @default(cuid())
     teacherId    String       @map("teacher_id")
-    subjectId    String       @map("subject_id")
-    schoolYearId String
-    semesterType SemesterType
-    grade        Float
+    subCode      String       @map("sub_code")
+    days         String[]
+    classHours   String[]
+    room         String            
     createdAt    DateTime     @default(now()) @map("created_at")
     updatedAt    DateTime     @updatedAt @map("updated_at")
     teacher      Teacher      @relation(fields: [teacherId], references: [id], onDelete: Cascade)
-    subject      Subject      @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+    subject      SubjectList  @relation(fields: [subCode], references: [id], onDelete: Cascade)
 }
     
 
@@ -139,7 +139,7 @@ model Teacher {
     lastName   String   @map("last_name")
     department Department?
     employment employmentType?
-    classesTaught ClassesTaught[] 
+    subjectTaught SubjectSchedule[] 
     birthday   DateTime
     createdAt  DateTime @default(now()) @map("created_at")
     updatedAt  DateTime @updatedAt @map("updated_at")
@@ -148,15 +148,24 @@ model Teacher {
 model Subject {
     id             String          @id @default(cuid())
     name           String
-    department     Department?
     stubCode       String          @unique @map("stub_code")
-    curriculum     String          @default("2022-2023")
     units          Float           
     credits        Float           @default(0)
     createdAt      DateTime        @default(now()) @map("created_at")
     updatedAt      DateTime        @updatedAt @map("updated_at")
     studentRecords StudentRecord[]
-    classesTaught ClassesTaught[]
+}
+
+model SubjectList {
+    id             String          @id @default(cuid())
+    subCode        String          @unique @map("sub_code")
+    title          String
+    curriculum     String          @default("2022-2023")
+    units          Float  
+    credits        Float           @default(0)  
+    createdAt      DateTime        @default(now()) @map("created_at")
+    updatedAt      DateTime        @updatedAt @map("updated_at")       
+    subjectSchedules SubjectSchedule[]
 }
 
 model SubjectHierarchy {
