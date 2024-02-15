@@ -191,13 +191,13 @@ exports.Prisma.CourseScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.ClassesTaughtScalarFieldEnum = {
+exports.Prisma.SubjectScheduleScalarFieldEnum = {
   id: 'id',
   teacherId: 'teacherId',
-  subjectId: 'subjectId',
-  schoolYearId: 'schoolYearId',
-  semesterType: 'semesterType',
-  grade: 'grade',
+  subCode: 'subCode',
+  days: 'days',
+  classHours: 'classHours',
+  room: 'room',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -218,8 +218,17 @@ exports.Prisma.TeacherScalarFieldEnum = {
 exports.Prisma.SubjectScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  department: 'department',
   stubCode: 'stubCode',
+  units: 'units',
+  credits: 'credits',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SubjectListScalarFieldEnum = {
+  id: 'id',
+  subCode: 'subCode',
+  title: 'title',
   curriculum: 'curriculum',
   units: 'units',
   credits: 'credits',
@@ -295,9 +304,10 @@ exports.Prisma.ModelName = {
   SchoolYear: 'SchoolYear',
   StudentRecord: 'StudentRecord',
   Course: 'Course',
-  ClassesTaught: 'ClassesTaught',
+  SubjectSchedule: 'SubjectSchedule',
   Teacher: 'Teacher',
   Subject: 'Subject',
+  SubjectList: 'SubjectList',
   SubjectHierarchy: 'SubjectHierarchy',
   SubjectDependency: 'SubjectDependency'
 };

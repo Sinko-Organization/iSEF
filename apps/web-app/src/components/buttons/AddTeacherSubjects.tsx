@@ -44,20 +44,20 @@ const useStyles = makeStyles({
 
 const AddSubjectsButton = () => {
 
-  const { data: courses, error: coursesError } = trpc.useQuery(
-    ["course.getAll"]
-  );
+  // const { data: courses, error: coursesError } = trpc.useQuery(
+  //   ["course.getAll"]
+  // );
 
-  const courseMenuItems = !courses ? ["Courses not loaded"] : courses!.map((course) => (
-    <MenuItem key={course.name} value={course.id}>
-      {course.name}
-    </MenuItem>
-  ));
+  // const courseMenuItems = !courses ? ["Courses not loaded"] : courses!.map((course) => (
+  //   <MenuItem key={course.name} value={course.id}>
+  //     {course.name}
+  //   </MenuItem>
+  // ));
 
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
-  const [courseID, setCourseID] = useState("");
+  // const [courseID, setCourseID] = useState("");
   const [subjectName, setSubjectName] = useState("");
   const [stubCode, setStubCode] = useState("");
   const [subjectUnits, setSubjectUnits] = useState(0);
@@ -68,7 +68,6 @@ const AddSubjectsButton = () => {
   const [errors, setErrors] = useState<string[]>([])
 
   const clearValues = () => {
-    setCourseID("");
     setSubjectName("");
     setStubCode("");
     setCurriculum("");
@@ -80,10 +79,10 @@ const AddSubjectsButton = () => {
 
   //Add subject mutation
   const { mutate: addSubject, isLoading: isAddingSubject } = trpc.useMutation(
-    ["subject.add"],
+    ["subjectList.add"],
     {
       onSuccess: (subject) => {
-        utils.invalidateQueries(["subject.getAll"]);
+        utils.invalidateQueries(["subjectList.getAll"]);
         toast.success(`Subject "${subject.name}" has been added`);
       },
       onError: () => {
@@ -119,9 +118,9 @@ const AddSubjectsButton = () => {
   const validateFields = () => {
     const newErrors: string[] = []
 
-    if (courseID.length === 0) {
-      newErrors.push("Please select a course")
-    }
+    // if (courseID.length === 0) {
+    //   newErrors.push("Please select a course")
+    // }
 
     if (subjectName.length === 0) {
       newErrors.push("Please provide a subject name")
@@ -159,11 +158,10 @@ const AddSubjectsButton = () => {
     if (isValid) {
       addSubject(
         {
-          name: subjectName,
-          courseId: courseID,
-          stubCode: stubCode,
-          units: subjectUnits,
+          title: subjectName,
+          subCode: stubCode,
           curriculum: curriculum,
+          units: subjectUnits,
           credits: subjectCredits
         }
       );
@@ -203,7 +201,7 @@ const AddSubjectsButton = () => {
 
           <FormError messages={errors} />
 
-          <Box sx={{ display: "flex", alignItems: "flex-end", marginTop: 3 }}>
+          {/* <Box sx={{ display: "flex", alignItems: "flex-end", marginTop: 3 }}>
             <Box sx={{ width: 160 }}>
               <Typography sx={{ marginRight: 2 }}>Course</Typography>
             </Box>
@@ -220,7 +218,7 @@ const AddSubjectsButton = () => {
             >
               {courseMenuItems}
             </Select>
-          </Box>
+          </Box> */}
 
           <Box sx={{ display: "flex", alignItems: "flex-end", marginTop: 3 }}>
             <Box sx={{ width: 160 }}>
