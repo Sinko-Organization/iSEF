@@ -113,7 +113,7 @@ export const userRouter = createRouter()
           email: email,
         },
         data: {
-          lastAccessedAt: Date.now(),
+          lastAccessedAt: new Date(),
         },
       });
     },

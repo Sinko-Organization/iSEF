@@ -9,10 +9,12 @@ const SignIn = () => {
   const router = useRouter();
   const { data: session } = useSession();
   const { data: userRole } = trpc.useQuery(["user.role"]);
+  const { mutate: updateLatestAccess} = trpc.useMutation(["user.updateLatestAccess"]);
   if (
     (userRole?.role === "admin" || userRole?.role === "superadmin") &&
     session
   ) {
+    updateLatestAccess;
     router.push("/dashboard");
   }
   return (
