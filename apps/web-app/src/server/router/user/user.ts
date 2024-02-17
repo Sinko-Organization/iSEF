@@ -101,4 +101,22 @@ export const userRouter = createRouter()
         },
       });
     },
-  });
+  })
+  .mutation("updateLatestAccess", {
+    input: z.object({
+      email: z.string(),
+    }),
+    async resolve({ ctx, input }) {
+      const { email } = input;
+      return ctx.prisma.user.update({
+        where: {
+          email: email,
+        },
+        data: {
+          lastAccessedAt: Date.now(),
+        },
+      });
+    },
+  })
+  
+  ;
