@@ -47,6 +47,7 @@ const AccessControlTable: FC<AccessControlTableProps> = ({
               <TableCell>Name</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Date Joined</TableCell>
+              <TableCell>Last Accessed At</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
@@ -63,6 +64,7 @@ const AccessControlTable: FC<AccessControlTableProps> = ({
                       : "No Access"}
                   </TableCell>
                   <TableCell>{user.createdAt.toLocaleString()}</TableCell>
+                  <TableCell> {user.lastAccessedAt?.toLocaleString()}</TableCell>
                   <TableCell>
                     {user.role === "admin" || user.role === "superadmin" ? (
                       <RemoveAdminAlert

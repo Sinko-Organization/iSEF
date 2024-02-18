@@ -32,6 +32,7 @@ export const userRouter = createRouter()
           email: true,
           role: true,
           createdAt: true,
+          lastAccessedAt: true,
         },
       });
     },
@@ -46,10 +47,12 @@ export const userRouter = createRouter()
           name: true,
           email: true,
           role: true,
+          lastAccessedAt: true,
         },
       });
     },
   })
+  
 
   /**
    * Mutations
