@@ -305,7 +305,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\JOHN VICTOR\\Desktop\\School\\isef3\\iSEF\\apps\\web-app\\prisma\\generated\\client",
+      "value": "C:\\Users\\Lenovo\\Documents\\iSEF\\apps\\web-app\\prisma\\generated\\client",
       "fromEnvVar": null
     },
     "config": {
@@ -332,8 +332,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
-  "dataProxy": false,
-  "postinstall": false
+  "dataProxy": false
 }
 
 const fs = require('fs')
