@@ -83,7 +83,7 @@ const AddSubjectsButton = () => {
     {
       onSuccess: (subject) => {
         utils.invalidateQueries(["subjectList.getAll"]);
-        toast.success(`Subject "${subject.name}" has been added`);
+        toast.success(`Subject "${subject.subCode}" has been added`);
       },
       onError: () => {
         toast.error("Error adding subject");
@@ -127,7 +127,7 @@ const AddSubjectsButton = () => {
     }
 
     if (stubCode.length === 0) {
-      newErrors.push("Please provide a stub code")
+      newErrors.push("Please provide a subject code")
     }
 
     if (subjectUnits === 0) {
