@@ -50,14 +50,14 @@ const TeacherDetails: FC<TeacherDetailsProps> = ({ teacher }) => {
         }}
       >
         <TableContainer>
-          <Table>
+          <Table>a
             <TableBody>
               <TableRow key={teacherId}>
                 {/* ID Number */}
                 <TableRow style={{ backgroundColor: "#F5F5F5" }}>
                   <TableCell
                     style={{
-                      backgroundColor: "#F5F5F5",
+                      backgroundColor: "##B2A1E1",
                       padding: "10px",
                       textAlign: "center",
                       fontWeight: "bold",
