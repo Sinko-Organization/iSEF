@@ -6,14 +6,15 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-//import { type inferQueryOutput } from "@web-app/utils/trpc";
+import { type inferQueryOutput } from "@web-app/utils/trpc";
 import { useState, type FC } from "react";
 import { Search } from "@mui/icons-material";
 import { useRouter } from "next/router";
+import { AddTeacherSubjects } from "../buttons";
 
 
 interface SubjectTableProps {
-  // subjects: inferQueryOutput<"subjectList.getAll">;
+  subjects: inferQueryOutput<"subjectList.getAll">;
 }
 
 type Subject = {
@@ -25,17 +26,16 @@ type Subject = {
   curriculum: string;
 }
 
- const SubjectTable: FC<SubjectTableProps> = ({
+const SubjectTable: FC<SubjectTableProps> = ({
 
- })=>
-  {
+}) => {
 
-//   const router = useRouter();
+    const router = useRouter();
 
-  
 
-//   const [searchText, setSearchText] = useState("");
-//   const [filteredList, setFilteredList] = useState<Subject[]>(subjects);
+
+    const [searchText, setSearchText] = useState("");
+    const [filteredList, setFilteredList] = useState<Subject[]>(subjects);
 
   const curriculum = ["2022-2023", "2023-2024"]
   const curriculumList = curriculum.map(() => (
@@ -44,16 +44,16 @@ type Subject = {
     </MenuItem>
   ));
 
-  // const handleFilterChange = (e: SelectChangeEvent) => {
-  //   let selectedCurriculum = e.target.value;
+  const handleFilterChange = (e: SelectChangeEvent) => {
+    let selectedCurriculum = e.target.value;
 
-  //   if (selectedCurriculum === "All") {
-  //     setFilteredList(subjects)
-  //   }
-  //   else {
-  //     setFilteredList(subjects.filter(subject => subject.curriculum! === selectedCurriculum))
-  //   }
-  // }
+    if (selectedCurriculum === "All") {
+      setFilteredList(subjects)
+    }
+    else {
+      setFilteredList(subjects.filter(subject => subject.curriculum! === selectedCurriculum))
+    }
+  }
 
   const getSearchedSubjects = (searchText: string, subjectsList: Subject[]) => {
 
@@ -63,16 +63,16 @@ type Subject = {
     return subjectsList.filter(subject => subject.title.includes(searchText) || subject.subCode.includes(searchText))
   }
 
-  // const filteredSubjects = getSearchedSubjects(searchText, filteredList)
+  const filteredSubjects = getSearchedSubjects(searchText, filteredList)
 
- 
+
 
   return (
     <Grid >
       {/*searchbar */}
       <Grid container justifyContent="flex-start">
         <Box>
-          <Search /><input type="text" onChange={(e) =>(e.target.value)} />
+          <Search /><input type="text" onChange={(e) => (e.target.value)} />
         </Box>
       </Grid>
       {/* filter */}
@@ -80,7 +80,7 @@ type Subject = {
         <Box>
           <TextField
             defaultValue="All"
-            //onChange={handleFilterChange}
+            onChange={handleFilterChange}
             id="curriculum"
             select
             color="secondary"
@@ -93,8 +93,7 @@ type Subject = {
 
       <Grid container justifyContent="flex-end">
         <Box>
-          Add Subject Button
-          {/* <AddSubjectButton /> */}
+          <AddTeacherSubjects />
         </Box>
       </Grid>
       <Paper
@@ -105,29 +104,7 @@ type Subject = {
           overflow: "hidden",
         }}
       >
-        {/* <Toolbar
-          sx={{
-            backgroundColor: "#B2A1E1",
-            pl: { sm: 2 },
-            pr: { xs: 1, sm: 1 },
-            borderBottom: "1px solid #ddd",
-            color: "white",
-            textAlign: "center",
-          }}
-        >
-          <Typography
-            sx={{
-              flex: "1 1 100%",
-              fontFamily: "Times New Roman",
-              fontSize: "20px",
-            }}
-            // variant="h6"
-            id="tableTitle"
-            component="div"
-          >
-            <div className="font-bold">SUBJECTS</div>
-          </Typography>
-        </Toolbar> */}
+        { }
 
         <TableContainer>
           <Table>
@@ -139,7 +116,7 @@ type Subject = {
                 <TableCell>Curriculum</TableCell>
               </TableRow>
             </TableHead>
-            {/* <TableBody>
+            <TableBody>
               {filteredSubjects.map((subject) => {
                 return (
                   <TableRow
@@ -153,7 +130,7 @@ type Subject = {
                   </TableRow>
                 );
               })}
-            </TableBody> */}
+            </TableBody>
           </Table>
         </TableContainer>
       </Paper >
