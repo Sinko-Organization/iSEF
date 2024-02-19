@@ -27,15 +27,14 @@ type Subject = {
 }
 
 const SubjectTable: FC<SubjectTableProps> = ({
-
+  subjects,
 }) => {
 
-    const router = useRouter();
+  const router = useRouter();
 
 
-
-    const [searchText, setSearchText] = useState("");
-    const [filteredList, setFilteredList] = useState<Subject[]>(subjects);
+  const [searchText, setSearchText] = useState("");
+  const [filteredList, setFilteredList] = useState<Subject[]>(subjects);
 
   const curriculum = ["2022-2023", "2023-2024"]
   const curriculumList = curriculum.map(() => (
