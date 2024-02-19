@@ -220,9 +220,9 @@ const AddSubjectsButton = () => {
             </Select>
           </Box> */}
 
-          <Box sx={{ display: "flex", alignItems: "flex-end", marginTop: 3 }}>
-            <Box sx={{ width: 160 }}>
-              <Typography sx={{ marginRight: 2 }}>Subject Name</Typography>
+          <Box sx={{ display: "flex", alignItems: "baseline", marginTop: 2 }}>
+            <Box sx={{ width: 245 }}>
+              <Typography sx={{ marginRight: 1, marginBottom: 0 }}>Subject Title</Typography>
             </Box>
             <TextField
               color="secondary"
@@ -231,15 +231,15 @@ const AddSubjectsButton = () => {
               fullWidth
               id="subjectName"
               label="Subject Name"
-              variant="filled"
+              // variant="filled"
               value={subjectName}
               onChange={(e) => setSubjectName(e.target.value)}
             />
           </Box>
 
-          <Box sx={{ display: "flex", alignItems: "flex-end", marginTop: 3 }}>
-            <Box sx={{ width: 160 }}>
-              <Typography sx={{ marginRight: 2 }}>Stub Code</Typography>
+          <Box sx={{ display: "flex", alignItems: "baseline", marginTop: 1 }}>
+            <Box sx={{ width: 245 }}>
+              <Typography sx={{ marginRight: 1, marginBottom: 0 }}>Subject Code</Typography>
             </Box>
             <TextField
               color="secondary"
@@ -292,7 +292,7 @@ const AddSubjectsButton = () => {
             }}
           >
             <Box sx={{ width: 160 }}>
-              <Typography sx={{ marginRight: 2 }}> Subject Unit </Typography>
+              <Typography sx={{ marginRight: 2 }}> Subject Units </Typography>
             </Box>
             <Box>
               <TextField
