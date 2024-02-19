@@ -8,7 +8,6 @@ import toast, { Toaster } from "react-hot-toast";
 const AccessControlPage: NextPage = () => {
   const utils = trpc.useContext();
 
-  const { data: user, error } = trpc.useQuery(["user.role"]);
   const { data: accounts, error: accountsError } = trpc.useQuery(
     ["user.getAll"],
     {},
@@ -59,7 +58,7 @@ const AccessControlPage: NextPage = () => {
 
   return (
     <>
-      {user?.role === "superadmin" ? (
+      {
         <div className="mx-32 fontsans mt-10">
           <AccessControlTable
             users={accounts}
@@ -69,9 +68,8 @@ const AccessControlPage: NextPage = () => {
             setUserNotAdmin={setUserNotAdmin}
           />
         </div>
-      ) : (
-        <AdminError />
-      )}
+
+      }
       <Toaster />
     </>
   );

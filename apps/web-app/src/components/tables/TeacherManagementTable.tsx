@@ -1,4 +1,4 @@
-import { Box, Grid, Paper, Table } from "@mui/material";
+import { Box, Grid, MenuItem, Paper, Select, SelectChangeEvent, Table, TextField } from "@mui/material";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
@@ -12,12 +12,27 @@ import type { FC } from "react";
 import { useState } from "react";
 
 import { AddTeachersButton } from "../buttons";
-import RemoveButton from "../buttons/RemoveTeachersButton";
 import { EducationLoader } from "../loaders";
+import SearchBar from "../search/Search";
+import { Search } from "@mui/icons-material";
+import { Department, employmentType } from "@prisma/client";
 
 interface TeacherManagementTableProps {
   teachers: inferQueryOutput<"teacher.getAll">;
 
+}
+
+type Teacher = {
+  id: string;
+  teacherId: string;
+  firstName: string;
+  middleName: string | null;
+  lastName: string;
+  department: Department | null;
+  employment: employmentType | null;
+  birthday: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
@@ -25,6 +40,27 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
 }) => {
 
   const router = useRouter();
+
+  const [searchText, setSearchText] = useState("");
+  const [filteredList, setFilteredList] = useState<Teacher[]>(teachers);
+
+  const deptItems = Object.keys(Department).map((key) => (
+    <MenuItem key={key} value={key}>
+      {Department[key]}
+    </MenuItem>
+  ));
+
+  const handleFilterChange = (e: SelectChangeEvent) => {
+    let selectedDept = e.target.value;
+
+    if (selectedDept === "All") {
+      setFilteredList(teachers)
+    }
+    else {
+      setFilteredList(teachers.filter(teacher => teacher.department! === selectedDept))
+    }
+  }
+
 
   const handleTeacherSelect = (teacherId: string) => {
     router.push(`/teachers/${teacherId}`);
@@ -35,8 +71,42 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
     return <EducationLoader />;
   }
 
+  const getSearchedTeachers = (searchText: string, teachersList: Teacher[]) => {
+
+    if (!searchText) {
+      return teachersList
+    }
+    return teachersList.filter(teacher => teacher.firstName.includes(searchText) || teacher.lastName.includes(searchText))
+  }
+
+
+  const filteredTeachers = getSearchedTeachers(searchText, filteredList)
+
+
+
   return (
     <Grid >
+      {/*searchbar */}
+      <Grid container justifyContent="flex-start">
+        <Box>
+          <Search /><input type="text" onChange={(e) => setSearchText(e.target.value)} />
+        </Box>
+      </Grid>
+      {/* filter */}
+      <Grid container justifyContent="flex-start">
+        <Box>
+          <Select
+            defaultValue="All"
+            onChange={handleFilterChange}
+            id="department"
+            color="secondary"
+          >
+            <MenuItem value="All">All</MenuItem>
+            {deptItems}
+          </Select>
+        </Box>
+      </Grid>
+
       <Grid container justifyContent="flex-end">
         <Box>
           <AddTeachersButton />
@@ -62,7 +132,7 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
               </TableRow>
             </TableHead>
             <TableBody>
-              {teachers.map((teacher) => {
+              {filteredTeachers.map((teacher) => {
                 return (
                   <TableRow
                     key={teacher.teacherId}

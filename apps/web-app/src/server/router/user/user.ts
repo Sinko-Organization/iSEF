@@ -1,5 +1,4 @@
 import { Role } from "@prisma/client";
-import { NonNullableValues } from "@web-app/types/generics";
 import { z } from "zod";
 
 import { createRouter } from "../context";

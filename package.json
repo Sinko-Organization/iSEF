@@ -16,7 +16,8 @@
     "format:check": "prettier --check --plugin-search-dir=. **/*.{cjs,mjs,ts,tsx,md,json} --ignore-path ./.prettierignore",
     "test:unit": "turbo test:unit",
     "test:integration": "turbo test:integration",
-    "commit": "git add . && cz"
+    "commit": "git add . && cz",
+    "postinstall": "prisma generate"
   },
   "keywords": [],
   "author": "",
@@ -48,6 +49,7 @@
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
     "@mui/material": "^5.10.15",
-    "@mui/x-date-pickers": "^6.18.3"
+    "@mui/x-date-pickers": "^6.18.3",
+    "@vercel/postgres": "^0.7.2"
   }
 }

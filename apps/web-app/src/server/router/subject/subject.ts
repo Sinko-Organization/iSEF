@@ -25,6 +25,19 @@ export const subjectRouter = createAdminRouter()
       });
     },
   })
+  .query("get", {
+    input: z.object({
+      id: z.string(),
+    }),
+    async resolve({ ctx, input }) {
+      const { id } = input;
+      return ctx.prisma.subject.findUnique({
+        where: {
+          id: id,
+        },
+      });
+    },
+  })
   .query("getRecommendedSubjects", {
     input: z.object({
       studentId: z.string(),
@@ -618,7 +631,7 @@ export const subjectRouter = createAdminRouter()
 
       return mappedResults;
     },
-  });
-/**
- * Mutations
- */
+  })
+  /**
+   * Mutations
+   */
