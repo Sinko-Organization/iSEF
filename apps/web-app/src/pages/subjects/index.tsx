@@ -6,23 +6,22 @@ import type { NextPage } from "next";
 
 
 const SubjectPage: NextPage = () => {
-  // const { data: subjects, error: subjectsError } = trpc.useQuery(
-  //   ["subjectList.getAll"],
-  //   {},
-  // );
+  const { data: subjectsList, error: subjectsError } = trpc.useQuery(
+    ["subjectList.getAll"],
+    {},
+  );
 
-  // if (!subjects) {
-  //   return <EducationLoader />;
-  // }
+  if (!subjectsList) {
+    return <EducationLoader />;
+  }
 
   return (
     <>
       <div className="mx-32 fontsans mt-10">
-        <SubjectTable
-          // subjects={subjects!}
+        <SubjectTable subjects={subjectsList}        // subjects={subjects!}
         />
       </div>
-   </>
+    </>
   );
 };
 
