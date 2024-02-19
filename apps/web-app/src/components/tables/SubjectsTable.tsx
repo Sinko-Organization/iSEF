@@ -109,7 +109,6 @@ const SubjectTable: FC<SubjectTableProps> = ({
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Curriculum</TableCell>
                 <TableCell
                   style={{
                     backgroundColor: "#B2A1E1",
