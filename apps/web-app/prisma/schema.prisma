@@ -21,7 +21,7 @@ model Example {
 // Necessary for Next auth
 model Account {
     id                String  @id @default(cuid())
-    userId            String
+    userId            String @unique
     type              String
     provider          String
     providerAccountId String
@@ -47,16 +47,18 @@ model Session {
 }
 
 model User {
-    id            String    @id @default(cuid())
-    name          String?
-    email         String?   @unique
-    emailVerified DateTime?
-    image         String?
-    role          Role?     @default(regular)
-    createdAt     DateTime  @default(now()) @map("created_at")
-    updatedAt     DateTime  @updatedAt @map("updated_at")
-    accounts      Account[]
-    sessions      Session[]
+    id             String    @id @default(cuid())
+    name           String?
+    email          String?   @unique
+    emailVerified  DateTime?
+    lastAccessedAt DateTime?
+    image          String?
+    role           Role?     @default(regular)
+    createdAt      DateTime  @default(now()) @map("created_at")
+    updatedAt      DateTime  @updatedAt @map("updated_at")
+    accounts       Session[]
+    account        Account?
+
 }
 
 model VerificationToken {

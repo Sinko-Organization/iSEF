@@ -253,4 +253,40 @@ describe("testing the userRoute", () => {
           role: "regular"
       });
   })
+  test("test 'setnotAdmin' to remove admin previleges to the user account", async () => {
+    ctx = await createUserSession();
+
+    const caller = appRouter.createCaller(ctx);
+
+    await ctx.prisma.user.createMany({
+      data: [
+        {
+        id: "2",
+          name: null,
+          email: "johndoe2@email.com",
+          emailVerified: null,
+          image: null,
+          lastAccessedAt: new Date("2022-12-18"),
+        },
+      ]
+    });
+    // update the user record
+    await caller.mutation("user.updateLatestAccess", {
+      email: "johndoe2@email.com" 
+    });
+     // get the user record
+     const user = await ctx.prisma.user.findUnique({
+        where: {
+            email: "johndoe2@email.com"
+          }
+    });
+    expect(user).toMatchObject({
+        id: "2",
+        name: null,
+        email: "johndoe2@email.com",
+        emailVerified: null,
+        image: null,
+        lastAccessedAt: new Date(),
+    });
+})
 });

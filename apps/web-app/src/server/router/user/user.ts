@@ -19,6 +19,18 @@ export const userRouter = createRouter()
       });
     },
   })
+  .query("email", {
+    resolve({ ctx }) {
+      return ctx.prisma.user.findUnique({
+        where: {
+          id: ctx.session?.user?.id,
+        },
+        select: {
+          email: true,
+        },
+      });
+    },
+  })
   .query("getAll", {
     async resolve({ ctx }) {
       return ctx.prisma.user.findMany({
@@ -32,6 +44,7 @@ export const userRouter = createRouter()
           email: true,
           role: true,
           createdAt: true,
+          lastAccessedAt: true,
         },
       });
     },
@@ -46,10 +59,12 @@ export const userRouter = createRouter()
           name: true,
           email: true,
           role: true,
+          lastAccessedAt: true,
         },
       });
     },
   })
+  
 
   /**
    * Mutations
@@ -101,4 +116,22 @@ export const userRouter = createRouter()
         },
       });
     },
-  });
+  })
+  .mutation("updateLatestAccess", {
+    input: z.object({
+      email: z.string(),
+    }),
+    async resolve({ ctx, input }) {
+      const { email } = input;
+      return ctx.prisma.user.update({
+        where: {
+          email: email,
+        },
+        data: {
+          lastAccessedAt: new Date(),
+        },
+      });
+    },
+  })
+  
+  ;

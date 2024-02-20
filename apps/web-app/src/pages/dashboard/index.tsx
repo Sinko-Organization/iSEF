@@ -24,6 +24,7 @@ const DashboardPage: NextPage = () => {
       if (startYear) {
         setSchoolYear(startYear);
       }
+
     }
   }, [schoolYear, schoolYearsData, setSchoolYear]);
 
