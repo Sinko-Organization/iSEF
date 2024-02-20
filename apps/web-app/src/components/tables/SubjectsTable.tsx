@@ -109,10 +109,67 @@ const SubjectTable: FC<SubjectTableProps> = ({
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Subject Code</TableCell>
-                <TableCell>Subject Title</TableCell>
-                <TableCell>Units</TableCell>
-                <TableCell>Curriculum</TableCell>
+                <TableCell
+                  style={{
+                    backgroundColor: "#CABFE9",
+                    fontSize: "16px",
+                    fontWeight: "bold",
+                    padding: "10px",
+                    textAlign: "center",
+                    color: "black",
+                    border: "1px solid #ddd",
+                    borderRadius: 2,
+                    fontFamily: "Times New Roman"
+
+                  }}
+                >
+                  Subject Code
+                </TableCell>
+                <TableCell
+                  style={{
+                    backgroundColor: "#CABFE9",
+                    fontSize: "16px",
+                    fontWeight: "bold",
+                    padding: "10px",
+                    textAlign: "center",
+                    color: "black",
+                    border: "1px solid #ddd",
+                    borderRadius: 2,
+                    fontFamily: "Times New Roman"
+
+                  }}>
+                  Subject Title
+                </TableCell>
+                <TableCell
+                  style={{
+                    backgroundColor: "#CABFE9",
+                    fontSize: "16px",
+                    fontWeight: "bold",
+                    padding: "10px",
+                    textAlign: "center",
+                    color: "black",
+                    border: "1px solid #ddd",
+                    borderRadius: 2,
+                    fontFamily: "Times New Roman"
+
+                  }}>
+                  Units
+                </TableCell>
+                <TableCell
+                  style={{
+                    backgroundColor: "#CABFE9",
+                    fontSize: "16px",
+                    fontWeight: "bold",
+                    padding: "10px",
+                    textAlign: "center",
+                    color: "black",
+                    border: "1px solid #ddd",
+                    borderRadius: 2,
+                    fontFamily: "Times New Roman"
+
+                  }}>
+                  Curriculum
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -122,10 +179,40 @@ const SubjectTable: FC<SubjectTableProps> = ({
                     key={subject.id}
                     hover
                   >
-                    <TableCell>{subject.subCode}</TableCell>
-                    <TableCell>{subject.title}</TableCell>
-                    <TableCell>{subject.units}</TableCell>
-                    <TableCell>{subject.curriculum}</TableCell>
+                    <TableCell
+                      style={{
+                        textAlign: "center",
+                        fontFamily: "Arial",
+                        border: "1px solid #e5e7eb",
+                        borderRadius: 2,
+                      }}>
+                      {subject.subCode}
+                    </TableCell>
+                    <TableCell style={{
+                      textAlign: "center",
+                      fontFamily: "Arial",
+                      border: "1px solid #e5e7eb",
+                      borderRadius: 2,
+                    }}
+                    >
+                      {subject.title}
+                    </TableCell>
+                    <TableCell style={{
+                      textAlign: "center",
+                      fontFamily: "Arial",
+                      border: "1px solid #e5e7eb",
+                      borderRadius: 2,
+                    }}>
+                      {subject.units}
+                    </TableCell>
+                    <TableCell style={{
+                      textAlign: "center",
+                      fontFamily: "Arial",
+                      border: "1px solid #e5e7eb",
+                      borderRadius: 2,
+                    }}>
+                      {subject.curriculum}
+                    </TableCell>
                   </TableRow>
                 );
               })}
