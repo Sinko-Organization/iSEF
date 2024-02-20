@@ -24,6 +24,13 @@ export const subjectListRouter = createRouter()
       });
     },
   })
+  .query("curriculum", {
+    async resolve({ ctx }) {
+      return ctx.prisma.subjectList.findMany({
+        distinct: ["curriculum"],
+      });
+    },
+  })
   /**
    * Mutations
    */
