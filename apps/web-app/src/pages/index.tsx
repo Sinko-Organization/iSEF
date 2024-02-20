@@ -4,17 +4,24 @@ import Navbar from "@web-app/components/navbars";
 import { trpc } from "@web-app/utils/trpc";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 const SignIn = () => {
+  
+
   const router = useRouter();
   const { data: session } = useSession();
   const { data: userRole } = trpc.useQuery(["user.role"]);
-  const { mutate: updateLatestAccess} = trpc.useMutation(["user.updateLatestAccess"]);
+  const { data: userEmail } = trpc.useQuery(["user.email"]);
+  const { mutate: updateLastAccess} = trpc.useMutation(["user.updateLatestAccess"]);
+
+
+
   if (
     (userRole?.role === "admin" || userRole?.role === "superadmin") &&
     session
   ) {
-    updateLatestAccess;
+    updateLastAccess(userEmail);
     router.push("/dashboard");
   }
   return (

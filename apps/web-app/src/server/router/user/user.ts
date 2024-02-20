@@ -19,6 +19,18 @@ export const userRouter = createRouter()
       });
     },
   })
+  .query("email", {
+    resolve({ ctx }) {
+      return ctx.prisma.user.findUnique({
+        where: {
+          id: ctx.session?.user?.id,
+        },
+        select: {
+          email: true,
+        },
+      });
+    },
+  })
   .query("getAll", {
     async resolve({ ctx }) {
       return ctx.prisma.user.findMany({
