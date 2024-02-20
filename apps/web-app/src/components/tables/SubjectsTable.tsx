@@ -15,6 +15,7 @@ import { AddTeacherSubjects } from "../buttons";
 
 interface SubjectTableProps {
   subjects: inferQueryOutput<"subjectList.getAll">;
+  curriculums: inferQueryOutput<"subjectList.curriculum">;
 }
 
 type Subject = {
@@ -28,18 +29,16 @@ type Subject = {
 
 const SubjectTable: FC<SubjectTableProps> = ({
   subjects,
+  curriculums,
 }) => {
 
   const router = useRouter();
-
-
   const [searchText, setSearchText] = useState("");
   const [filteredList, setFilteredList] = useState<Subject[]>(subjects);
 
-  const curriculum = ["2022-2023", "2023-2024"]
-  const curriculumList = curriculum.map(() => (
-    <MenuItem >
-      {curriculum}
+  const curriculumList = Object.keys(curriculums).map((key) => (
+    <MenuItem key={key} value={key}>
+      {curriculums[key]}
     </MenuItem>
   ));
 

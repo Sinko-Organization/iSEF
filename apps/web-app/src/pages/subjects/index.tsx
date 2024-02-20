@@ -6,6 +6,7 @@ import type { NextPage } from "next";
 
 
 const SubjectPage: NextPage = () => {
+  const { data: curriculum, error } = trpc.useQuery(["subjectList.curriculum"]);
   const { data: subjectsList, error: subjectsError } = trpc.useQuery(
     ["subjectList.getAll"],
     {},
@@ -14,11 +15,13 @@ const SubjectPage: NextPage = () => {
   if (!subjectsList) {
     return <EducationLoader />;
   }
-
+  console.log(curriculum)
   return (
     <>
       <div className="mx-32 fontsans mt-10">
-        <SubjectTable subjects={subjectsList}        // subjects={subjects!}
+        <SubjectTable
+          subjects={subjectsList}
+          curriculums={curriculum}
         />
       </div>
     </>
