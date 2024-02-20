@@ -111,13 +111,15 @@ const SubjectTable: FC<SubjectTableProps> = ({
               <TableRow>
                 <TableCell
                   style={{
-                    backgroundColor: "#B2A1E1",
+                    backgroundColor: "#CABFE9",
+                    fontSize: "16px",
+                    fontWeight: "bold",
                     padding: "10px",
                     textAlign: "center",
-                    color: "white",
-                    border: "1px solid #F5F5F5",
+                    color: "black",
+                    border: "1px solid #ddd",
                     borderRadius: 2,
-                    fontFamily: "Arial"
+                    fontFamily: "Times New Roman"
 
                   }}
                 >
@@ -125,39 +127,45 @@ const SubjectTable: FC<SubjectTableProps> = ({
                 </TableCell>
                 <TableCell
                   style={{
-                    backgroundColor: "#B2A1E1",
+                    backgroundColor: "#CABFE9",
+                    fontSize: "16px",
+                    fontWeight: "bold",
                     padding: "10px",
                     textAlign: "center",
-                    color: "white",
-                    border: "1px solid #F5F5F5",
+                    color: "black",
+                    border: "1px solid #ddd",
                     borderRadius: 2,
-                    fontFamily: "Arial"
+                    fontFamily: "Times New Roman"
 
                   }}>
                   Subject Title
                 </TableCell>
                 <TableCell
                   style={{
-                    backgroundColor: "#B2A1E1",
+                    backgroundColor: "#CABFE9",
+                    fontSize: "16px",
+                    fontWeight: "bold",
                     padding: "10px",
                     textAlign: "center",
-                    color: "white",
-                    border: "1px solid #F5F5F5",
+                    color: "black",
+                    border: "1px solid #ddd",
                     borderRadius: 2,
-                    fontFamily: "Arial"
+                    fontFamily: "Times New Roman"
 
                   }}>
                   Units
                 </TableCell>
                 <TableCell
                   style={{
-                    backgroundColor: "#B2A1E1",
+                    backgroundColor: "#CABFE9",
+                    fontSize: "16px",
+                    fontWeight: "bold",
                     padding: "10px",
                     textAlign: "center",
-                    color: "white",
-                    border: "1px solid #e5e7eb",
+                    color: "black",
+                    border: "1px solid #ddd",
                     borderRadius: 2,
-                    fontFamily: "Arial"
+                    fontFamily: "Times New Roman"
 
                   }}>
                   Curriculum
@@ -181,10 +189,10 @@ const SubjectTable: FC<SubjectTableProps> = ({
                       {subject.subCode}
                     </TableCell>
                     <TableCell style={{
-                       textAlign: "center",
-                       fontFamily: "Arial",
-                       border: "1px solid #e5e7eb",
-                       borderRadius: 2,
+                      textAlign: "center",
+                      fontFamily: "Arial",
+                      border: "1px solid #e5e7eb",
+                      borderRadius: 2,
                     }}
                     >
                       {subject.title}
