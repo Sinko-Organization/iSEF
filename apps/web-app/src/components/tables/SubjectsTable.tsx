@@ -1,4 +1,4 @@
-import { Box, Grid, SelectChangeEvent, TextField, MenuItem } from "@mui/material";
+import { Box, Grid, SelectChangeEvent, TextField, MenuItem, Select } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -36,9 +36,9 @@ const SubjectTable: FC<SubjectTableProps> = ({
   const [searchText, setSearchText] = useState("");
   const [filteredList, setFilteredList] = useState<Subject[]>(subjects);
 
-  const curriculumList = Object.keys(curriculums).map((key) => (
-    <MenuItem key={key} value={key}>
-      {curriculums[key]}
+  const curriculumList = curriculums.map((curriculum) => (
+    <MenuItem key={curriculum.id}>
+      {curriculum.curriculum}
     </MenuItem>
   ));
 
@@ -49,7 +49,7 @@ const SubjectTable: FC<SubjectTableProps> = ({
       setFilteredList(subjects)
     }
     else {
-      setFilteredList(subjects.filter(subject => subject.curriculum! === selectedCurriculum))
+      setFilteredList(subjects.filter(subject => subject.curriculum.includes(selectedCurriculum)))
     }
   }
 
@@ -70,22 +70,21 @@ const SubjectTable: FC<SubjectTableProps> = ({
       {/*searchbar */}
       <Grid container justifyContent="flex-start">
         <Box>
-          <Search /><input type="text" onChange={(e) => (e.target.value)} />
+          <Search /><input type="text" onChange={(e) => setSearchText(e.target.value)} />
         </Box>
       </Grid>
       {/* filter */}
       <Grid container justifyContent="flex-start">
         <Box>
-          <TextField
+          <Select
             defaultValue="All"
             onChange={handleFilterChange}
             id="curriculum"
-            select
             color="secondary"
           >
             <MenuItem value="All">All</MenuItem>
             {curriculumList}
-          </TextField>
+          </Select>
         </Box>
       </Grid>
 
