@@ -15,13 +15,12 @@ const SubjectPage: NextPage = () => {
   if (!subjectsList) {
     return <EducationLoader />;
   }
-  console.log(curriculum)
   return (
     <>
       <div className="mx-32 fontsans mt-10">
         <SubjectTable
           subjects={subjectsList}
-          curriculums={curriculum}
+          curriculums={curriculum || []} // Add a default empty array if curriculum is undefined
         />
       </div>
     </>

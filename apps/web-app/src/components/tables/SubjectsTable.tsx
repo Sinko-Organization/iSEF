@@ -36,9 +36,9 @@ const SubjectTable: FC<SubjectTableProps> = ({
   const [searchText, setSearchText] = useState("");
   const [filteredList, setFilteredList] = useState<Subject[]>(subjects);
 
-  const curriculumList = Object.keys(curriculums).map((key) => (
-    <MenuItem key={key} value={key}>
-      {curriculums[key]}
+  const curriculumList = curriculums.map((curriculum) => (
+    <MenuItem key={curriculum.id}>
+      {curriculum.curriculum}
     </MenuItem>
   ));
 
