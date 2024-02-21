@@ -31,76 +31,65 @@ const useStyles = makeStyles({
 });
 
 interface Props extends React.HTMLAttributes<HTMLButtonElement> {
-  subjectId: string;
+  subCode: string;
 }
 
 
-export default function EditSubjectButton({ subjectId }: Props) {
+export default function EditSubjectButton({ subCode }: Props) {
   const utils = trpc.useContext();
-  const { data: subject, error } = trpc.useQuery(["subject.get", { id: subjectId }]);
+  const { data: subject, error } = trpc.useQuery(["subjectList.get", { subCode: subCode }]);
 
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
-  const { data: courses, error: coursesError } = trpc.useQuery(
-    ["course.getAll"],
-    {},
-  );
-
-  const courseMenuItems = courses!.map((course) => (
-    <MenuItem key={course.name} value={course.id}>
-      {course.name}
-    </MenuItem>
-  ));
-
-  const [courseID, setCourseID] = useState("");
-  const [subjectName, setSubjectName] = useState(subject!.name);
-  const [stubCode, setStubCode] = useState(subject!.stubCode);
+  const [subjectName, setSubjectName] = useState(subject!.title);
+  const [stubCode, setStubCode] = useState(subject!.subCode);
   const [subjectUnits, setSubjectUnits] = useState(subject!.units);
   const [curriculum, setCurriculum] = useState(subject!.curriculum);
   const [subjectCredits, setSubjectCredits] = useState(subject!.credits);
 
+
   const [errors, setErrors] = useState<string[]>([])
 
-  //Edit subject mutation
-  const { mutate: updateSubject, isLoading: isUpdatingSubject } =
-    trpc.useMutation(["subject.update"], {
-      onSuccess: (subject) => {
-        toast.success(`Subject "${subject.name}" has been updated`);
-        utils.invalidateQueries(["subject.get"]);
-        utils.invalidateQueries(["subject.getAll"]);
-      },
-      onError: () => {
-        toast.error("Error updating subject");
-      },
-    });
-
-  const editSubject = (
-    courseId: string,
-    name: string,
-    stubCode: string,
-    curriculum: string,
-    units: number,
-    credits: number,
-  ) => {
-    updateSubject({
-      courseId,
-      name,
-      stubCode,
-      curriculum,
-      units,
-      credits
-    });
-  };
-
   const clearValues = () => {
-    setCourseID("");
     setSubjectName("");
     setStubCode("");
     setCurriculum("");
     setSubjectUnits(0);
     setSubjectCredits(0);
   }
+
+  //Edit subject mutation
+  const { mutate: updateSubject, isLoading: isUpdatingSubject } = trpc.useMutation(
+    ["subjectList.update"],
+    {
+      onSuccess: (subject) => {
+        toast.success(`Subject "${subject.subCode}" has been updated`);
+        utils.invalidateQueries(["subjectList.getAll"]);
+        utils.invalidateQueries(["subjectList.get"]);
+      },
+      onError: () => {
+        toast.error("Error updating subject");
+      },
+    },
+  );
+
+  const editSubject = (
+    title: string,
+    subCode: string,
+    units: number,
+    credits: number,
+    curriculum: string
+  ) => {
+    updateSubject({
+      units,
+      credits,
+      subCode,
+      title,
+      curriculum,
+    });
+  };
+
 
   const handleUnitChange = (e: SelectChangeEvent) => {
     setSubjectUnits(Number(e.target.value));
@@ -114,28 +103,26 @@ export default function EditSubjectButton({ subjectId }: Props) {
     setSubjectCredits(Number(e.target.value));
   };
 
-  const handleClickOpen = () => {
+  const handleOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
     setErrors([]);
+    clearValues();
     setOpen(false);
   };
 
+
   const validateFields = () => {
     const newErrors: string[] = []
-
-    if (courseID.length === 0) {
-      newErrors.push("Please select a course")
-    }
 
     if (subjectName.length === 0) {
       newErrors.push("Please provide a subject name")
     }
 
     if (stubCode.length === 0) {
-      newErrors.push("Please provide a stub code")
+      newErrors.push("Please provide a subject code")
     }
 
     if (subjectUnits === 0) {
@@ -150,84 +137,61 @@ export default function EditSubjectButton({ subjectId }: Props) {
       newErrors.push("Please select a number of credits")
     }
 
-    // const VALID_CURRICULUM = /^\d{4}-\d{4}$/;
-    // if (!VALID_CURRICULUM.test(curriculum)) {
-    //   newErrors.push('Invalid curriculum input. Must be in the form XXXX-XXXX.');
-    // }
-
     setErrors(newErrors)
     return newErrors.length === 0;
   }
 
+  // on clicking "submit"
   const handleFormSubmit = () => {
     const isValid = validateFields();
 
     if (isValid) {
       editSubject(
         subjectName,
-        courseID,
         stubCode,
-        curriculum,
         subjectUnits,
-        subjectCredits
+        subjectCredits,
+        curriculum
       );
       clearValues();
       handleClose();
     }
     else {
-      handleClickOpen();
+      handleOpen();
     }
 
   };
 
-  if (!subject) {
-    return <CircularProgress />
-  }
-
   return (
     <React.Fragment>
       <div className={classes.container}>
-        <IconButton
-          onClick={handleClickOpen}
-          className={`${classes.button} px-4 py-3 text-lg font-medium`}
+        <Button
+          color="secondary"
+          className={classes.button}
+          variant="contained"
+          onClick={handleOpen}
         >
-          <EditIcon />
-        </IconButton>
+          Add Subject
+        </Button>
       </div>
 
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={open} onClose={handleClose} >
         <DialogTitle
-          style={{ textAlign: "center", backgroundColor: "lavender" }}
-        >
-          Edit Subject
+          style={{
+            textAlign: "center",
+            backgroundColor: "lavender",
+          }}>
+          Add Subject
         </DialogTitle>
+
 
         <DialogContent>
 
           <FormError messages={errors} />
 
-          <Box sx={{ display: "flex", alignItems: "flex-end", marginTop: 3 }}>
-            <Box sx={{ width: 160 }}>
-              <Typography sx={{ marginRight: 2 }}>Course</Typography>
-            </Box>
-            <TextField
-              color="secondary"
-              autoFocus
-              margin="dense"
-              fullWidth
-              id="course"
-              label="Course"
-              // variant="filled"
-              value={courseID}
-              onChange={(e) => setCourseID(e.target.value)}
-            >
-              {!courses ? <CircularProgress /> : courseMenuItems}
-            </TextField>
-          </Box>
-
-          <Box sx={{ display: "flex", alignItems: "flex-end", marginTop: 3 }}>
-            <Box sx={{ width: 160 }}>
-              <Typography sx={{ marginRight: 2 }}>Subject Name</Typography>
+          <Box sx={{ display: "flex", alignItems: "baseline", marginTop: 2 }}>
+            <Box sx={{ width: 245 }}>
+              <Typography sx={{ marginRight: 1, marginBottom: 0 }}>Subject Title</Typography>
             </Box>
             <TextField
               color="secondary"
@@ -236,15 +200,15 @@ export default function EditSubjectButton({ subjectId }: Props) {
               fullWidth
               id="subjectName"
               label="Subject Name"
-              variant="filled"
+              // variant="filled"
               value={subjectName}
               onChange={(e) => setSubjectName(e.target.value)}
             />
           </Box>
 
-          <Box sx={{ display: "flex", alignItems: "flex-end", marginTop: 3 }}>
-            <Box sx={{ width: 160 }}>
-              <Typography sx={{ marginRight: 2 }}>Stub Code</Typography>
+          <Box sx={{ display: "flex", alignItems: "baseline", marginTop: 1 }}>
+            <Box sx={{ width: 245 }}>
+              <Typography sx={{ marginRight: 1, marginBottom: 0 }}>Subject Code</Typography>
             </Box>
             <TextField
               color="secondary"
@@ -297,7 +261,7 @@ export default function EditSubjectButton({ subjectId }: Props) {
             }}
           >
             <Box sx={{ width: 160 }}>
-              <Typography sx={{ marginRight: 2 }}> Subject Unit </Typography>
+              <Typography sx={{ marginRight: 2 }}> Subject Units </Typography>
             </Box>
             <Box>
               <TextField
@@ -350,19 +314,24 @@ export default function EditSubjectButton({ subjectId }: Props) {
           </Box>
 
 
-
         </DialogContent>
-
         <DialogActions>
           <Button color="error" onClick={handleClose}>
             Cancel
           </Button>
-          <Button color="success" onClick={handleFormSubmit}>
+          <Button
+            color="secondary"
+            disabled={isUpdatingSubject}
+            onClick={handleFormSubmit}
+
+          >
             Submit
           </Button>
         </DialogActions>
+
+
       </Dialog>
       <Toaster />
     </React.Fragment>
-  );
+  )
 }
