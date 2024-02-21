@@ -43,21 +43,9 @@ const useStyles = makeStyles({
 
 
 const AddSubjectsButton = () => {
-
-  // const { data: courses, error: coursesError } = trpc.useQuery(
-  //   ["course.getAll"]
-  // );
-
-  // const courseMenuItems = !courses ? ["Courses not loaded"] : courses!.map((course) => (
-  //   <MenuItem key={course.name} value={course.id}>
-  //     {course.name}
-  //   </MenuItem>
-  // ));
-
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
-  // const [courseID, setCourseID] = useState("");
   const [subjectName, setSubjectName] = useState("");
   const [stubCode, setStubCode] = useState("");
   const [subjectUnits, setSubjectUnits] = useState(0);
@@ -118,10 +106,6 @@ const AddSubjectsButton = () => {
   const validateFields = () => {
     const newErrors: string[] = []
 
-    // if (courseID.length === 0) {
-    //   newErrors.push("Please select a course")
-    // }
-
     if (subjectName.length === 0) {
       newErrors.push("Please provide a subject name")
     }
@@ -141,11 +125,6 @@ const AddSubjectsButton = () => {
     if (subjectCredits === 0) {
       newErrors.push("Please select a number of credits")
     }
-
-    // const VALID_CURRICULUM = /^\d{4}-\d{4}$/;
-    // if (!VALID_CURRICULUM.test(curriculum)) {
-    //   newErrors.push('Invalid curriculum input. Must be in the form XXXX-XXXX.');
-    // }
 
     setErrors(newErrors)
     return newErrors.length === 0;
@@ -200,25 +179,6 @@ const AddSubjectsButton = () => {
         <DialogContent>
 
           <FormError messages={errors} />
-
-          {/* <Box sx={{ display: "flex", alignItems: "flex-end", marginTop: 3 }}>
-            <Box sx={{ width: 160 }}>
-              <Typography sx={{ marginRight: 2 }}>Course</Typography>
-            </Box>
-            <Select
-              color="secondary"
-              autoFocus
-              margin="dense"
-              fullWidth
-              id="course"
-              label="Course"
-              // variant="filled"
-              value={courseID}
-              onChange={(e) => setCourseID(e.target.value)}
-            >
-              {courseMenuItems}
-            </Select>
-          </Box> */}
 
           <Box sx={{ display: "flex", alignItems: "baseline", marginTop: 2 }}>
             <Box sx={{ width: 245 }}>
