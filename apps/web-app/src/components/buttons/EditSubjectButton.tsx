@@ -43,7 +43,6 @@ export default function EditSubjectButton({ subCode }: Props) {
   const [open, setOpen] = React.useState(false);
 
   const [subjectName, setSubjectName] = useState(subject!.title);
-  const [stubCode, setStubCode] = useState(subject!.subCode);
   const [subjectUnits, setSubjectUnits] = useState(subject!.units);
   const [curriculum, setCurriculum] = useState(subject!.curriculum);
   const [subjectCredits, setSubjectCredits] = useState(subject!.credits);
@@ -53,7 +52,6 @@ export default function EditSubjectButton({ subCode }: Props) {
 
   const clearValues = () => {
     setSubjectName("");
-    setStubCode("");
     setCurriculum("");
     setSubjectUnits(0);
     setSubjectCredits(0);
@@ -109,7 +107,6 @@ export default function EditSubjectButton({ subCode }: Props) {
 
   const handleClose = () => {
     setErrors([]);
-    clearValues();
     setOpen(false);
   };
 
@@ -119,10 +116,6 @@ export default function EditSubjectButton({ subCode }: Props) {
 
     if (subjectName.length === 0) {
       newErrors.push("Please provide a subject name")
-    }
-
-    if (stubCode.length === 0) {
-      newErrors.push("Please provide a subject code")
     }
 
     if (subjectUnits === 0) {
@@ -148,7 +141,7 @@ export default function EditSubjectButton({ subCode }: Props) {
     if (isValid) {
       editSubject(
         subjectName,
-        stubCode,
+        subCode,
         subjectUnits,
         subjectCredits,
         curriculum
@@ -201,23 +194,6 @@ export default function EditSubjectButton({ subCode }: Props) {
               // variant="filled"
               value={subjectName}
               onChange={(e) => setSubjectName(e.target.value)}
-            />
-          </Box>
-
-          <Box sx={{ display: "flex", alignItems: "baseline", marginTop: 1 }}>
-            <Box sx={{ width: 245 }}>
-              <Typography sx={{ marginRight: 1, marginBottom: 0 }}>Subject Code</Typography>
-            </Box>
-            <TextField
-              color="secondary"
-              autoFocus
-              margin="dense"
-              fullWidth
-              id="stubCode"
-              label="Stub Code"
-              // variant="filled"
-              value={stubCode}
-              onChange={(e) => setStubCode(e.target.value)}
             />
           </Box>
 
