@@ -179,7 +179,7 @@ export default function EditSubjectButton({ subCode }: Props) {
             textAlign: "center",
             backgroundColor: "lavender",
           }}>
-          Add Subject
+          Edit Subject
         </DialogTitle>
 
 
@@ -242,8 +242,8 @@ export default function EditSubjectButton({ subCode }: Props) {
                 value={curriculum}
                 color="secondary"
               >
-                <MenuItem value={"2022-2023"}>2023-2024</MenuItem>
-                <MenuItem value={"2021-2022"}>2022-2023</MenuItem>
+                <MenuItem value={"2023-2024"}>2023-2024</MenuItem>
+                <MenuItem value={"2022-2023"}>2022-2023</MenuItem>
                 <MenuItem value={"2021-2022"}>2021-2022</MenuItem>
               </TextField>
             </Box>
