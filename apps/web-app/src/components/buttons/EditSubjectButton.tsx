@@ -165,14 +165,12 @@ export default function EditSubjectButton({ subCode }: Props) {
   return (
     <React.Fragment>
       <div className={classes.container}>
-        <Button
-          color="secondary"
+        <IconButton
           className={classes.button}
-          variant="contained"
           onClick={handleOpen}
         >
-          Add Subject
-        </Button>
+          <EditIcon />
+        </IconButton>
       </div>
 
       <Dialog open={open} onClose={handleClose} >

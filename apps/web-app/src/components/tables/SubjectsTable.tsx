@@ -11,6 +11,7 @@ import { useState, type FC } from "react";
 import { Search } from "@mui/icons-material";
 import { useRouter } from "next/router";
 import { AddTeacherSubjects } from "../buttons";
+import { EducationLoader } from "../loaders";
 
 
 interface SubjectTableProps {
@@ -53,6 +54,16 @@ const SubjectTable: FC<SubjectTableProps> = ({
     }
   }
 
+  const handleSubjectSelect = (subCode: string) => {
+    router.push(`/subjects/${subCode}`);
+
+  };
+
+  if (!subjects) {
+    return <EducationLoader />;
+  }
+
+
   const getSearchedSubjects = (searchText: string, subjectsList: Subject[]) => {
 
     if (!searchText) {
@@ -70,7 +81,7 @@ const SubjectTable: FC<SubjectTableProps> = ({
       {/*searchbar */}
       <Grid container justifyContent="flex-start">
         <Box>
-          <Search /><input type="text" onChange={(e) => (e.target.value)} />
+          <Search /><input type="text" onChange={(e) => setSearchText(e.target.value)} />
         </Box>
       </Grid>
       {/* filter */}
@@ -176,6 +187,7 @@ const SubjectTable: FC<SubjectTableProps> = ({
                 return (
                   <TableRow
                     key={subject.id}
+                    onClick={() => handleSubjectSelect(subject.subCode.toString())}
                     hover
                   >
                     <TableCell
