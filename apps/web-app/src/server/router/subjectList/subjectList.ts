@@ -72,7 +72,6 @@ export const subjectListRouter = createRouter()
         },
         data: {
           title: title,
-          subCode: subCode,
           curriculum: curriculum,
           units: units,
           credits: credits,
