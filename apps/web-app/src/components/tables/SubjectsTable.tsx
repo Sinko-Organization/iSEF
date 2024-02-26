@@ -79,11 +79,11 @@ const SubjectTable: FC<SubjectTableProps> = ({
   return (
     <Grid >
           {/* filter */}
-      <Grid container justifyContent="flex-start">
+          <Grid container justifyContent="space-between">
         <Box>
           <TextField
             defaultValue="All"
-            onChange={handleFilterChange}
+            onChange={(e: SelectChangeEvent) => handleFilterChange(e)}
             id="curriculum"
             select
             color="secondary"
@@ -92,13 +92,12 @@ const SubjectTable: FC<SubjectTableProps> = ({
             {curriculumList}
           </TextField>
         </Box>
-      </Grid>
-
-      <Grid container justifyContent="flex-end">
         <Box>
           <AddTeacherSubjects />
         </Box>
       </Grid>
+
+      
       <Paper
         className="mt-10"
         sx={{
