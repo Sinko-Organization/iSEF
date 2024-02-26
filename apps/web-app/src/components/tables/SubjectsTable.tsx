@@ -78,13 +78,7 @@ const SubjectTable: FC<SubjectTableProps> = ({
 
   return (
     <Grid >
-      {/*searchbar */}
-      <Grid container justifyContent="flex-start">
-        <Box>
-          <Search /><input type="text" onChange={(e) => setSearchText(e.target.value)} />
-        </Box>
-      </Grid>
-      {/* filter */}
+          {/* filter */}
       <Grid container justifyContent="flex-start">
         <Box>
           <TextField
