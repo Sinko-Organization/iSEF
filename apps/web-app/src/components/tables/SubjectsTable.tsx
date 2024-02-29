@@ -6,8 +6,8 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { type inferQueryOutput } from "@web-app/utils/trpc";
-import { useState, type FC } from "react";
+import { trpc, type inferQueryOutput } from "@web-app/utils/trpc";
+import React, { useState, type FC } from "react";
 import { Search } from "@mui/icons-material";
 import { useRouter } from "next/router";
 import { AddTeacherSubjects } from "../buttons";
@@ -28,30 +28,28 @@ type Subject = {
   curriculum: string;
 }
 
-const SubjectTable: FC<SubjectTableProps> = ({
-  subjects,
-  curriculums,
-}) => {
+const SubjectTable: React.FC = () => {
+
+  const { data: curriculumList, error } = trpc.useQuery(["subjectList.curriculum"]);
+
 
   const router = useRouter();
-  const [searchText, setSearchText] = useState("");
-  const [filteredList, setFilteredList] = useState<Subject[]>(subjects);
 
-  const curriculumList = curriculums.map((curriculum) => (
-    <MenuItem key={curriculum.id} value={curriculum.curriculum}>
-      {curriculum.curriculum}
-    </MenuItem>
-  ));
+  // State to store the selected curriculum
+  const [selectedCurriculum, setSelectedCurriculum] = useState<string | undefined>(undefined);
 
-  const handleFilterChange = (e: SelectChangeEvent) => {
-    let selectedCurriculum = e.target.value;
+  // Define your query input based on the optional curriculum
+  const queryInput: string = {
+    curriculum: selectedCurriculum,
+  };
 
-    if (selectedCurriculum === "All") {
-      setFilteredList(subjects)
-    }
-    else {
-      setFilteredList(subjects.filter(subject => subject.curriculum! === selectedCurriculum))
-    }
+  // Fetch data 
+  const { data: subjectsList, error: subjectsError } = trpc.useQuery(
+    ["subjectList.getAll", queryInput]
+  );
+
+  const handleFilterChange = (newCirruculum: string | undefined) => {
+    setSelectedCurriculum(newCirruculum)
   }
 
   const handleSubjectSelect = (subCode: string) => {
@@ -59,37 +57,32 @@ const SubjectTable: FC<SubjectTableProps> = ({
 
   };
 
-  if (!subjects) {
+  if (!subjectsList || !curriculumList) {
     return <EducationLoader />;
   }
 
-
-  const getSearchedSubjects = (searchText: string, subjectsList: Subject[]) => {
-
-    if (!searchText) {
-      return subjectsList
-    }
-    return subjectsList.filter(subject => subject.title.includes(searchText) || subject.subCode.includes(searchText))
-  }
-
-  const filteredSubjects = getSearchedSubjects(searchText, filteredList)
+  const curriculumItems = curriculumList!.map((curriculum) => (
+    <MenuItem key={curriculum.id} value={curriculum.curriculum}>
+      {curriculum.curriculum}
+    </MenuItem>
+  ));
 
 
 
   return (
     <Grid >
-          {/* filter */}
-          <Grid container justifyContent="space-between">
+      {/* filter */}
+      <Grid container justifyContent="space-between">
         <Box>
           <TextField
             defaultValue="All"
-            onChange={(e: SelectChangeEvent) => handleFilterChange(e)}
+            onChange={(e: SelectChangeEvent) => handleFilterChange(e.target.value as string | undefined)}
             id="curriculum"
             select
             color="secondary"
           >
-            <MenuItem value="All">All</MenuItem>
-            {curriculumList}
+            <MenuItem value={undefined}>All</MenuItem>
+            {curriculumItems}
           </TextField>
         </Box>
         <Box>
@@ -97,7 +90,7 @@ const SubjectTable: FC<SubjectTableProps> = ({
         </Box>
       </Grid>
 
-      
+
       <Paper
         className="mt-10"
         sx={{
@@ -176,7 +169,7 @@ const SubjectTable: FC<SubjectTableProps> = ({
               </TableRow>
             </TableHead>
             <TableBody>
-              {filteredSubjects.map((subject) => {
+              {subjectsList!.map((subject) => {
                 return (
                   <TableRow
                     key={subject.id}

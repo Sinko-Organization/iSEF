@@ -94,7 +94,7 @@ const RemoveSubjectButton = ({
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title">{"Remove Subject"}</DialogTitle>
+                <DialogTitle id="alert-dialog-title">{"Delete Subject"}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
                         Are you sure you want to DELETE this subject?

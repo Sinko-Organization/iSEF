@@ -7,8 +7,16 @@ export const subjectListRouter = createRouter()
    * Queries
    */
   .query("getAll", {
-    async resolve({ ctx }) {
-      return ctx.prisma.subjectList.findMany();
+    input: z.object({
+      curriculum: z.string().optional(),
+    }),
+    async resolve({ ctx, input }) {
+      const { curriculum } = input;
+      return ctx.prisma.subjectList.findMany({
+        where: {
+          curriculum: curriculum,
+        },
+      });
     },
   })
   .query("get", {
