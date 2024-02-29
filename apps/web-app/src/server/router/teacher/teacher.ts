@@ -9,8 +9,16 @@ export const teacherRouter = createRouter()
    * Queries
    */
   .query("getAll", {
-    async resolve({ ctx }) {
-      return ctx.prisma.teacher.findMany();
+    input: z.object({
+      department: z.nativeEnum(Department).optional(),
+    }),
+    async resolve({ ctx, input }) {
+      const { department } = input;
+      return ctx.prisma.teacher.findMany({
+        where: {
+          department: department,
+        },
+      });
     },
   })
   .query("get", {
