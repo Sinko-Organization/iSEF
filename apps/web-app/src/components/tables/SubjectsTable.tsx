@@ -6,7 +6,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { type inferQueryOutput } from "@web-app/utils/trpc";
+import { trpc, type inferQueryOutput } from "@web-app/utils/trpc";
 import { useState, type FC } from "react";
 import { Search } from "@mui/icons-material";
 import { useRouter } from "next/router";
@@ -28,16 +28,18 @@ type Subject = {
   curriculum: string;
 }
 
-const SubjectTable: FC<SubjectTableProps> = ({
-  subjects,
-  curriculums,
-}) => {
+const SubjectTable = () => {
+
+  const { data: curriculumList, error } = trpc.useQuery(["subjectList.curriculum"]);
+  const { data: subjectsList, error: subjectsError } = trpc.useQuery(
+    ["subjectList.getAll"]
+  );
 
   const router = useRouter();
   const [searchText, setSearchText] = useState("");
   const [filteredList, setFilteredList] = useState<Subject[]>(subjects);
 
-  const curriculumList = curriculums.map((curriculum) => (
+  const curriculumItems = curriculums.map((curriculum) => (
     <MenuItem key={curriculum.id} value={curriculum.curriculum}>
       {curriculum.curriculum}
     </MenuItem>
@@ -59,7 +61,7 @@ const SubjectTable: FC<SubjectTableProps> = ({
 
   };
 
-  if (!subjects) {
+  if (!subjectsList || curriculumList) {
     return <EducationLoader />;
   }
 
@@ -78,8 +80,8 @@ const SubjectTable: FC<SubjectTableProps> = ({
 
   return (
     <Grid >
-          {/* filter */}
-          <Grid container justifyContent="space-between">
+      {/* filter */}
+      <Grid container justifyContent="space-between">
         <Box>
           <TextField
             defaultValue="All"
@@ -97,7 +99,7 @@ const SubjectTable: FC<SubjectTableProps> = ({
         </Box>
       </Grid>
 
-      
+
       <Paper
         className="mt-10"
         sx={{

@@ -6,22 +6,11 @@ import type { NextPage } from "next";
 
 
 const SubjectPage: NextPage = () => {
-  const { data: curriculum, error } = trpc.useQuery(["subjectList.curriculum"]);
-  const { data: subjectsList, error: subjectsError } = trpc.useQuery(
-    ["subjectList.getAll"],
-    {},
-  );
 
-  if (!subjectsList) {
-    return <EducationLoader />;
-  }
   return (
     <>
       <div className="mx-32 fontsans mt-10">
-        <SubjectTable
-          subjects={subjectsList}
-          curriculums={curriculum || []} // Add a default empty array if curriculum is undefined
-        />
+        <SubjectTable />
       </div>
     </>
   );

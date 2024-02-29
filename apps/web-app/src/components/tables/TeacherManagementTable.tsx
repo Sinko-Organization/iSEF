@@ -4,7 +4,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { inferQueryOutput } from "@web-app/utils/trpc";
+import { inferQueryOutput, trpc } from "@web-app/utils/trpc";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import * as React from "react";
@@ -35,11 +35,14 @@ type Teacher = {
   updatedAt: Date;
 }
 
-const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
-  teachers,
-}) => {
+const TeacherManagementTable = () => {
 
   const router = useRouter();
+
+  const { data: teachersList, error: teachersError } = trpc.useQuery(
+    ["teacher.getAll"],
+    {},
+  );
 
   const [searchText, setSearchText] = useState("");
   const [filteredList, setFilteredList] = useState<Teacher[]>(teachers);
@@ -132,7 +135,7 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({
               </TableRow>
             </TableHead>
             <TableBody>
-              {filteredTeachers.map((teacher) => {
+              {teachersList.map((teacher) => {
                 return (
                   <TableRow
                     key={teacher.teacherId}
