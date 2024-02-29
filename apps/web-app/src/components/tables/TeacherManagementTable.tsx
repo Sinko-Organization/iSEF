@@ -35,17 +35,30 @@ type Teacher = {
   updatedAt: Date;
 }
 
-const TeacherManagementTable = () => {
+const TeacherManagementTable: React.FC = () => {
 
   const router = useRouter();
 
+  // State to store the selected department
+  const [selectedDepartment, setSelectedDepartment] = useState<Department | undefined>(undefined);
+
+  // Define your query input based on the optional department
+  const queryInput: Department = {
+    department: selectedDepartment,
+  };
+
+  //Fetch Data
   const { data: teachersList, error: teachersError } = trpc.useQuery(
-    ["teacher.getAll"],
+    ["teacher.getAll", queryInput],
     {},
   );
 
-  const [searchText, setSearchText] = useState("");
-  const [filteredList, setFilteredList] = useState<Teacher[]>(teachers);
+  // Your handler for department selection
+  const handleFilterChange = (newDepartment: Department | undefined) => {
+    setSelectedDepartment(newDepartment);
+  };
+
+
 
   const deptItems = Object.keys(Department).map((key) => (
     <MenuItem key={key} value={key}>
@@ -53,58 +66,28 @@ const TeacherManagementTable = () => {
     </MenuItem>
   ));
 
-  const handleFilterChange = (e: SelectChangeEvent) => {
-    let selectedDept = e.target.value;
-
-    if (selectedDept === "All") {
-      setFilteredList(teachers)
-    }
-    else {
-      setFilteredList(teachers.filter(teacher => teacher.department! === selectedDept))
-    }
-  }
-
 
   const handleTeacherSelect = (teacherId: string) => {
     router.push(`/teachers/${teacherId}`);
 
   };
 
-  if (!teachers) {
+  if (!teachersList) {
     return <EducationLoader />;
   }
 
-  const getSearchedTeachers = (searchText: string, teachersList: Teacher[]) => {
-
-    if (!searchText) {
-      return teachersList
-    }
-    return teachersList.filter(teacher => teacher.firstName.includes(searchText) || teacher.lastName.includes(searchText))
-  }
-
-
-  const filteredTeachers = getSearchedTeachers(searchText, filteredList)
-
-
-
   return (
     <Grid >
-      {/*searchbar */}
-      <Grid container justifyContent="flex-start">
-        <Box>
-          <Search /><input type="text" onChange={(e) => setSearchText(e.target.value)} />
-        </Box>
-      </Grid>
       {/* filter */}
       <Grid container justifyContent="flex-start">
         <Box>
           <Select
             defaultValue="All"
-            onChange={handleFilterChange}
+            onChange={(e) => handleFilterChange(e.target.value as Department | undefined)}
             id="department"
             color="secondary"
           >
-            <MenuItem value="All">All</MenuItem>
+            <MenuItem value={undefined}>All</MenuItem>
             {deptItems}
           </Select>
         </Box>
@@ -135,7 +118,7 @@ const TeacherManagementTable = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {teachersList.map((teacher) => {
+              {teachersList!.map((teacher) => {
                 return (
                   <TableRow
                     key={teacher.teacherId}

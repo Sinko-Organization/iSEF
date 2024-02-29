@@ -1,3 +1,4 @@
+
 import AdminError from "@web-app/components/errors/AdminError";
 import { EducationLoader } from "@web-app/components/loaders";
 import { TeacherManagementTable } from "@web-app/components/tables";
