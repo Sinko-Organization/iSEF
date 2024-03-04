@@ -81,7 +81,7 @@ const SubjectTable: React.FC = () => {
             select
             color="secondary"
           >
-            <MenuItem value={undefined}>All</MenuItem>
+            <MenuItem value={"All"}>All</MenuItem>
             {curriculumItems}
           </TextField>
         </Box>
