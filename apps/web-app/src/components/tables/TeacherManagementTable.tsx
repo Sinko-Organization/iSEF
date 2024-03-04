@@ -54,8 +54,8 @@ const TeacherManagementTable: React.FC = () => {
   );
 
   // Your handler for department selection
-  const handleFilterChange = (newDepartment: Department | undefined) => {
-    setSelectedDepartment(newDepartment);
+  const handleFilterChange = (newDepartment: Department | string) => {
+    setSelectedDepartment(newDepartment === "All" ? undefined : newDepartment as Department);
   };
 
 
@@ -79,25 +79,24 @@ const TeacherManagementTable: React.FC = () => {
   return (
     <Grid >
       {/* filter */}
-      <Grid container justifyContent="flex-start">
+      <Grid container justifyContent="space-between">
         <Box>
           <Select
             defaultValue="All"
-            onChange={(e) => handleFilterChange(e.target.value as Department | undefined)}
+            onChange={(e) => handleFilterChange(e.target.value as Department | string)}
             id="department"
             color="secondary"
           >
-            <MenuItem value={undefined}>All</MenuItem>
+            <MenuItem value="All">All</MenuItem>
             {deptItems}
           </Select>
         </Box>
-      </Grid>
-
-      <Grid container justifyContent="flex-end">
         <Box>
           <AddTeachersButton />
         </Box>
       </Grid>
+
+
 
       <Paper
         className="mt-10"
@@ -111,10 +110,66 @@ const TeacherManagementTable: React.FC = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>ID Number</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Department</TableCell>
-                <TableCell>Employment</TableCell>
+                <TableCell
+                  style={{
+                    backgroundColor: "#CABFE9",
+                    fontSize: "16px",
+                    fontWeight: "bold",
+                    padding: "10px",
+                    textAlign: "center",
+                    color: "black",
+                    border: "1px solid #ddd",
+                    borderRadius: 2,
+                    fontFamily: "Times New Roman"
+                  }}
+                >
+                  ID Number
+                </TableCell>
+                <TableCell
+                  style={{
+                    backgroundColor: "#CABFE9",
+                    fontSize: "16px",
+                    fontWeight: "bold",
+                    padding: "10px",
+                    textAlign: "center",
+                    color: "black",
+                    border: "1px solid #ddd",
+                    borderRadius: 2,
+                    fontFamily: "Times New Roman"
+
+                  }}>
+                  Name
+                </TableCell>
+                <TableCell
+                  style={{
+                    backgroundColor: "#CABFE9",
+                    fontSize: "16px",
+                    fontWeight: "bold",
+                    padding: "10px",
+                    textAlign: "center",
+                    color: "black",
+                    border: "1px solid #ddd",
+                    borderRadius: 2,
+                    fontFamily: "Times New Roman"
+
+                  }}>
+                  Department
+                </TableCell>
+                <TableCell
+                  style={{
+                    backgroundColor: "#CABFE9",
+                    fontSize: "16px",
+                    fontWeight: "bold",
+                    padding: "10px",
+                    textAlign: "center",
+                    color: "black",
+                    border: "1px solid #ddd",
+                    borderRadius: 2,
+                    fontFamily: "Times New Roman"
+
+                  }}>
+                  Employment
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -127,15 +182,46 @@ const TeacherManagementTable: React.FC = () => {
                     }
                     hover
                   >
-                    <TableCell>{teacher.teacherId}</TableCell>
-                    <TableCell>
+                    <TableCell
+                      style={{
+                        textAlign: "center",
+                        fontFamily: "Arial",
+                        border: "1px solid #e5e7eb",
+                        borderRadius: 2,
+                      }}
+                    >
+                      {teacher.teacherId}
+                    </TableCell>
+                    <TableCell
+                      style={{
+                        textAlign: "center",
+                        fontFamily: "Arial",
+                        border: "1px solid #e5e7eb",
+                        borderRadius: 2,
+                      }}>
                       {isNotNullAndEmpty(teacher.middleName)
                         ? `${teacher.firstName} ${teacher.middleName![0]}. ${teacher.lastName
                         }`
                         : `${teacher.firstName} ${teacher.lastName}`}
                     </TableCell>
-                    <TableCell>{teacher.department}</TableCell>
-                    <TableCell>{teacher!.employment === "fulltime" ? "Full-Time" : "Part-Time"}</TableCell>
+                    <TableCell
+                      style={{
+                        textAlign: "center",
+                        fontFamily: "Arial",
+                        border: "1px solid #e5e7eb",
+                        borderRadius: 2,
+                      }}
+                    >
+                      {teacher.department}
+                    </TableCell>
+                    <TableCell
+                      style={{
+                        textAlign: "center",
+                        fontFamily: "Arial",
+                        border: "1px solid #e5e7eb",
+                        borderRadius: 2,
+                      }}>
+                      {teacher!.employment === "fulltime" ? "Full-Time" : "Part-Time"}</TableCell>
                   </TableRow>
                 );
               })}
