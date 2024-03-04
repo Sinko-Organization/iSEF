@@ -40,7 +40,7 @@ const TeacherManagementTable: React.FC = () => {
   const router = useRouter();
 
   // State to store the selected department
-  const [selectedDepartment, setSelectedDepartment] = useState<Department | undefined>(undefined);
+  const [selectedDepartment, setSelectedDepartment] = useState<Department | undefined>();
 
   // Define your query input based on the optional department
   const queryInput: Department = {
@@ -87,7 +87,6 @@ const TeacherManagementTable: React.FC = () => {
             id="department"
             color="secondary"
           >
-            <MenuItem value="All">All</MenuItem>
             {deptItems}
           </Select>
         </Box>
