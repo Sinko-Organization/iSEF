@@ -39,7 +39,7 @@ const SubjectTable: React.FC = () => {
   const [selectedCurriculum, setSelectedCurriculum] = useState<string | undefined>(undefined);
 
   // Define your query input based on the optional curriculum
-  const queryInput: string = {
+  const queryInput: { curriculum: string | undefined } = {
     curriculum: selectedCurriculum,
   };
 
@@ -76,12 +76,12 @@ const SubjectTable: React.FC = () => {
         <Box>
           <TextField
             defaultValue="All"
-            onChange={(e: SelectChangeEvent) => handleFilterChange(e.target.value as string | undefined)}
+            onChange={(event) => handleFilterChange(event.target.value)}
             id="curriculum"
             select
             color="secondary"
           >
-            <MenuItem value={undefined}>All</MenuItem>
+            <MenuItem value={"All"}>All</MenuItem>
             {curriculumItems}
           </TextField>
         </Box>

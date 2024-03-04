@@ -1,5 +1,4 @@
-import { employmentType } from "@prisma/client";
-import { Department } from "@prisma/client";
+import { Department, employmentType } from "@prisma/client";
 import { z } from "zod";
 
 import { createRouter } from "../context";
@@ -14,6 +13,7 @@ export const teacherRouter = createRouter()
     }),
     async resolve({ ctx, input }) {
       const { department } = input;
+      if (department === "All") return ctx.prisma.teacher.findMany();
       return ctx.prisma.teacher.findMany({
         where: {
           department: department,

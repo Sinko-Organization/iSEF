@@ -12,6 +12,7 @@ export const subjectListRouter = createRouter()
     }),
     async resolve({ ctx, input }) {
       const { curriculum } = input;
+      if (curriculum === "All") return ctx.prisma.subjectList.findMany();
       return ctx.prisma.subjectList.findMany({
         where: {
           curriculum: curriculum,

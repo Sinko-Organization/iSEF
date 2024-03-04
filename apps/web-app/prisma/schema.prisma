@@ -222,6 +222,7 @@ enum employmentType {
 }
 
 enum Department {
+    All
     Packaging
     Civil
     Mechanical
