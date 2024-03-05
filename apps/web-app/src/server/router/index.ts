@@ -5,15 +5,16 @@ import { createRouter } from "./context";
 import { courseRouter } from "./course";
 import { exampleRouter } from "./example";
 import { honorsRouter } from "./honors";
+import { proposedTeachingLoadRouter } from "./proposedTeachingLoad";
 import { protectedExampleRouter } from "./protected-example-router";
 import { schoolYearRouter } from "./school-year";
 import { studentRouter } from "./student";
 import { studentDataRouter } from "./student-data";
 import { subjectRouter } from "./subject/subject";
+import { subjectListRouter } from "./subjectList";
+import { teacherRouter } from "./teacher";
 import { userRouter } from "./user";
 import { yearLevelRouter } from "./year-level";
-import { teacherRouter } from "./teacher";
-import { subjectListRouter } from "./subjectList";
 
 export const appRouter = createRouter()
   .transformer(superjson)
@@ -28,7 +29,8 @@ export const appRouter = createRouter()
   .merge("yearLevel.", yearLevelRouter)
   .merge("subject.", subjectRouter)
   .merge("teacher.", teacherRouter)
-  .merge("subjectList.", subjectListRouter);
+  .merge("subjectList.", subjectListRouter)
+  .merge("proposedTeachingLoad.", proposedTeachingLoadRouter);
 
 // export type definition of API
 export type AppRouter = typeof appRouter;
