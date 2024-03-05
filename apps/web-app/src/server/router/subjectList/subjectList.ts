@@ -9,14 +9,31 @@ export const subjectListRouter = createRouter()
   .query("getAll", {
     input: z.object({
       curriculum: z.string().optional(),
+      search: z.string().optional(),
     }),
     async resolve({ ctx, input }) {
-      const { curriculum } = input;
-      if (curriculum === "All") return ctx.prisma.subjectList.findMany();
+      const { curriculum, search } = input;
+
+      const whereCondition: {
+        curriculum?: string;
+        title?: { contains: string };
+      } = {};
+
+      if (curriculum) {
+        whereCondition.curriculum = curriculum;
+      }
+
+      if (search) {
+        whereCondition.title = { contains: search };
+      }
+
+      if (curriculum === "All")
+        return ctx.prisma.subjectList.findMany({
+          where: { title: { contains: search } },
+        });
+
       return ctx.prisma.subjectList.findMany({
-        where: {
-          curriculum: curriculum,
-        },
+        where: whereCondition,
       });
     },
   })

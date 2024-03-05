@@ -41,22 +41,31 @@ const TeacherManagementTable: React.FC = () => {
 
   // State to store the selected department
   const [selectedDepartment, setSelectedDepartment] = useState<Department | undefined>();
+  // State to store search text
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   // Define your query input based on the optional department
-  const queryInput: Department = {
+  const queryInput: { department: Department | undefined, search: string | undefined } = {
     department: selectedDepartment,
+    search: searchQuery
   };
 
-  //Fetch Data
+  // Fetch Data
   const { data: teachersList, error: teachersError } = trpc.useQuery(
     ["teacher.getAll", queryInput],
     {},
   );
 
-  // Your handler for department selection
+  // Handler for department selection
   const handleFilterChange = (newDepartment: Department | string) => {
     setSelectedDepartment(newDepartment === "All" ? undefined : newDepartment as Department);
   };
+
+  // Handler for search
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+  };
+
 
 
 
@@ -78,9 +87,15 @@ const TeacherManagementTable: React.FC = () => {
 
   return (
     <Grid >
-      {/* filter */}
+
+
       <Grid container justifyContent="space-between">
+        <Grid item xs={4} style={{ textAlign: "center" }} >
+          {/* searchbar*/}
+          <TextField placeholder="Search by name" value={searchQuery} onChange={handleSearch} />
+        </Grid>
         <Box>
+          {/* filter */}
           <Select
             defaultValue="All"
             onChange={(e) => handleFilterChange(e.target.value as Department | string)}
