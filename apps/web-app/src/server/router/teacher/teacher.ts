@@ -10,14 +10,42 @@ export const teacherRouter = createRouter()
   .query("getAll", {
     input: z.object({
       department: z.nativeEnum(Department).optional(),
+      search: z.string().optional(),
     }),
     async resolve({ ctx, input }) {
-      const { department } = input;
-      if (department === "All") return ctx.prisma.teacher.findMany();
+      const { department, search } = input;
+
+      const whereCondition: {
+        department?: Department;
+        OR?: {
+          firstName?: { contains: string };
+          lastName?: { contains: string };
+        }[];
+      } = {};
+
+      if (department) {
+        whereCondition.department = department;
+      }
+
+      if (search) {
+        whereCondition.OR = [
+          { firstName: { contains: search } },
+          { lastName: { contains: search } },
+        ];
+      }
+
+      if (department === "All")
+        return ctx.prisma.teacher.findMany({
+          where: {
+            OR: {
+              firstName: { contains: search },
+              lastName: { contains: search },
+            },
+          },
+        });
+
       return ctx.prisma.teacher.findMany({
-        where: {
-          department: department,
-        },
+        where: whereCondition,
       });
     },
   })

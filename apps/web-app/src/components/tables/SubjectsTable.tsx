@@ -28,6 +28,16 @@ type Subject = {
   curriculum: string;
 }
 
+const styles = {
+
+  largeIcon: {
+    width: 40,
+    height: 40,
+
+  },
+
+};
+
 const SubjectTable: React.FC = () => {
 
   const { data: curriculumList, error } = trpc.useQuery(["subjectList.curriculum"]);
@@ -37,10 +47,13 @@ const SubjectTable: React.FC = () => {
 
   // State to store the selected curriculum
   const [selectedCurriculum, setSelectedCurriculum] = useState<string | undefined>(undefined);
+  // State to store search text
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   // Define your query input based on the optional curriculum
-  const queryInput: { curriculum: string | undefined } = {
+  const queryInput: { curriculum: string | undefined, search: string | undefined } = {
     curriculum: selectedCurriculum,
+    search: searchQuery
   };
 
   // Fetch data 
@@ -51,6 +64,10 @@ const SubjectTable: React.FC = () => {
   const handleFilterChange = (newCirruculum: string | undefined) => {
     setSelectedCurriculum(newCirruculum)
   }
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+  };
 
   const handleSubjectSelect = (subCode: string) => {
     router.push(`/subjects/${subCode}`);
@@ -71,15 +88,22 @@ const SubjectTable: React.FC = () => {
 
   return (
     <Grid >
-      {/* filter */}
+
       <Grid container justifyContent="space-between">
+
+        <Grid item xs={4} style={{ textAlign: "center" }} >
+          {/* searchbar*/}
+          <TextField placeholder="Search by title" value={searchQuery} onChange={handleSearch} />
+        </Grid>
         <Box>
+          {/* filter */}
           <TextField
             defaultValue="All"
             onChange={(event) => handleFilterChange(event.target.value)}
             id="curriculum"
             select
             color="secondary"
+            label="Filter"
           >
             <MenuItem value={"All"}>All</MenuItem>
             {curriculumItems}
