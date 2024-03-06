@@ -16,7 +16,7 @@ export const subjectListRouter = createRouter()
 
       const whereCondition: {
         curriculum?: string;
-        title?: { contains: string };
+        title?: { contains: string; mode: "insensitive" };
       } = {};
 
       if (curriculum) {
@@ -24,12 +24,12 @@ export const subjectListRouter = createRouter()
       }
 
       if (search) {
-        whereCondition.title = { contains: search };
+        whereCondition.title = { contains: search, mode: "insensitive" };
       }
 
       if (curriculum === "All")
         return ctx.prisma.subjectList.findMany({
-          where: { title: { contains: search } },
+          where: { title: { contains: search, mode: "insensitive" } },
         });
 
       return ctx.prisma.subjectList.findMany({

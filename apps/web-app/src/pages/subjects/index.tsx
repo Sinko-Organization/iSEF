@@ -36,7 +36,7 @@ const SubjectPage: NextPage = () => {
     setSearchQuery(event.target.value);
   };
 
-  const curriculumItems = curriculumList!.map((curriculum) => (
+  const curriculumItems = curriculumList?.map((curriculum) => (
     <MenuItem key={curriculum.id} value={curriculum.curriculum}>
       {curriculum.curriculum}
     </MenuItem>

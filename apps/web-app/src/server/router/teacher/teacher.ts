@@ -18,8 +18,8 @@ export const teacherRouter = createRouter()
       const whereCondition: {
         department?: Department;
         OR?: {
-          firstName?: { contains: string };
-          lastName?: { contains: string };
+          firstName?: { contains: string; mode: "insensitive" };
+          lastName?: { contains: string; mode: "insensitive" };
         }[];
       } = {};
 
@@ -29,8 +29,8 @@ export const teacherRouter = createRouter()
 
       if (search) {
         whereCondition.OR = [
-          { firstName: { contains: search } },
-          { lastName: { contains: search } },
+          { firstName: { contains: search, mode: "insensitive" } },
+          { lastName: { contains: search, mode: "insensitive" } },
         ];
       }
 
@@ -38,8 +38,8 @@ export const teacherRouter = createRouter()
         return ctx.prisma.teacher.findMany({
           where: {
             OR: {
-              firstName: { contains: search },
-              lastName: { contains: search },
+              firstName: { contains: search, mode: "insensitive" },
+              lastName: { contains: search, mode: "insensitive" },
             },
           },
         });
