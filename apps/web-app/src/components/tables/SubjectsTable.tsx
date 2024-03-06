@@ -16,7 +16,7 @@ import { EducationLoader } from "../loaders";
 
 interface SubjectTableProps {
   subjects: inferQueryOutput<"subjectList.getAll">;
-  curriculums: inferQueryOutput<"subjectList.curriculum">;
+  // curriculums: inferQueryOutput<"subjectList.curriculum">;
 }
 
 type Subject = {
@@ -38,82 +38,23 @@ const styles = {
 
 };
 
-const SubjectTable: React.FC = () => {
-
-  const { data: curriculumList, error } = trpc.useQuery(["subjectList.curriculum"]);
-
+const SubjectTable: FC<SubjectTableProps> = ({ subjects }) => {
 
   const router = useRouter();
-
-  // State to store the selected curriculum
-  const [selectedCurriculum, setSelectedCurriculum] = useState<string | undefined>(undefined);
-  // State to store search text
-  const [searchQuery, setSearchQuery] = useState<string>('');
-
-  // Define your query input based on the optional curriculum
-  const queryInput: { curriculum: string | undefined, search: string | undefined } = {
-    curriculum: selectedCurriculum,
-    search: searchQuery
-  };
-
-  // Fetch data 
-  const { data: subjectsList, error: subjectsError } = trpc.useQuery(
-    ["subjectList.getAll", queryInput]
-  );
-
-  const handleFilterChange = (newCirruculum: string | undefined) => {
-    setSelectedCurriculum(newCirruculum)
-  }
-
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(event.target.value);
-  };
 
   const handleSubjectSelect = (subCode: string) => {
     router.push(`/subjects/${subCode}`);
 
   };
 
-  if (!subjectsList || !curriculumList) {
+  if (!subjects) {
     return <EducationLoader />;
   }
-
-  const curriculumItems = curriculumList!.map((curriculum) => (
-    <MenuItem key={curriculum.id} value={curriculum.curriculum}>
-      {curriculum.curriculum}
-    </MenuItem>
-  ));
 
 
 
   return (
     <Grid >
-
-      <Grid container justifyContent="space-between">
-
-        <Grid item xs={4} style={{ textAlign: "center" }} >
-          {/* searchbar*/}
-          <TextField placeholder="Search by title" value={searchQuery} onChange={handleSearch} />
-        </Grid>
-        <Box>
-          {/* filter */}
-          <TextField
-            defaultValue="All"
-            onChange={(event) => handleFilterChange(event.target.value)}
-            id="curriculum"
-            select
-            color="secondary"
-            label="Filter"
-          >
-            <MenuItem value={"All"}>All</MenuItem>
-            {curriculumItems}
-          </TextField>
-        </Box>
-        <Box>
-          <AddTeacherSubjects />
-        </Box>
-      </Grid>
-
 
       <Paper
         className="mt-10"
@@ -193,7 +134,7 @@ const SubjectTable: React.FC = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {subjectsList!.map((subject) => {
+              {subjects!.map((subject) => {
                 return (
                   <TableRow
                     key={subject.id}
