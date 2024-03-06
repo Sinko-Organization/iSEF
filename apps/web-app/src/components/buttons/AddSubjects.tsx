@@ -290,7 +290,9 @@ const AddSubjectsButton = () => {
                   }}
                   inputProps={{
                     ...params.inputProps,
-                    pattern: "\\d{4}-\\d{4}", // This pattern ensures that the input is in the format 0000-0000, but not automatically
+                    pattern: "[0-9-]*",
+                    maxLength: 9,
+                    minLength: 9,  // This pattern ensures that the input is in the format 0000-0000, but not automatically
                   }}
                 />
               )}
