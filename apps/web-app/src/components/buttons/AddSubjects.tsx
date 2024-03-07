@@ -1,5 +1,6 @@
 import { D } from "@mobily/ts-belt";
 import {
+  Autocomplete,
   Box,
   Button,
   CircularProgress,
@@ -7,6 +8,8 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  IconButton,
+  InputAdornment,
   MenuItem,
   TextField,
   Typography,
@@ -18,6 +21,8 @@ import React, { ChangeEvent, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import FormError from "../errors/FormError";
+import AddIcon from '@mui/icons-material/Add';
+
 
 
 
@@ -51,6 +56,9 @@ const AddSubjectsButton = () => {
   const [subjectUnits, setSubjectUnits] = useState(0);
   const [curriculum, setCurriculum] = useState("");
   const [subjectCredits, setSubjectCredits] = useState(0);
+  const [curriculumOptions, setCurriculumOptions] = useState<string[]>(["2023-2024", "2022-2023", "2021-2022"]);
+  const [isAddCurriculumDialogOpen, setIsAddCurriculumDialogOpen] = useState(false);
+  const [curriculumInputValue, setCurriculumInputValue] = useState('');
 
 
   const [errors, setErrors] = useState<string[]>([])
@@ -153,6 +161,17 @@ const AddSubjectsButton = () => {
 
   };
 
+  // new curriculum
+  const [newCurriculum, setNewCurriculum] = useState("");
+
+  const handleNewCurriculumChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setNewCurriculum(e.target.value);
+  };
+
+  const handleNewCurriculumSubmit = () => {
+    setCurriculum(newCurriculum);
+  };
+
   return (
     <React.Fragment>
       <div className={classes.container}>
@@ -223,23 +242,61 @@ const AddSubjectsButton = () => {
               "& .MuiTextField-root": { m: 1, width: "40ch" },
             }}
           >
-            <Box sx={{ width: 160 }}>
+            <Box sx={{ width: 245 }}>
               <Typography sx={{ marginRight: 2 }}> Curriculum </Typography>
             </Box>
-            <Box>
-              <TextField
-                defaultValue=""
-                onChange={handleCurriculumChange}
-                id="subjectUnits"
-                select
-                value={curriculum}
-                color="secondary"
-              >
-                <MenuItem value={"2023-2024"}>2023-2024</MenuItem>
-                <MenuItem value={"2022-2023"}>2022-2023</MenuItem>
-                <MenuItem value={"2021-2022"}>2021-2022</MenuItem>
-              </TextField>
-            </Box>
+
+            <Autocomplete
+              id="subjectUnits"
+              options={curriculumOptions.concat(curriculum && !curriculumOptions.includes(curriculum) ? [`Add ${curriculum}`] : [])}
+              freeSolo
+              value={curriculum}
+              openOnFocus
+              onInputChange={(event, newInputValue) => {
+                setCurriculumInputValue(newInputValue);
+              }}
+              isOptionEqualToValue={(option, value) => option === value}
+              onChange={(event, newValue) => {
+                if (newValue && newValue.startsWith("Add ")) {
+                  setIsAddCurriculumDialogOpen(true); // Open the add curriculum dialog
+                  // TODO: Add the new curriculum to the database here
+
+                  // Then update the options array
+                  setCurriculumOptions((prevOptions) => [...prevOptions, newValue.substring(4)]);
+                }
+
+                setCurriculum(newValue || '');
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Select Curriculum"
+                  color="secondary"
+                  variant="outlined"
+                  InputProps={{
+                    ...params.InputProps,
+                    endAdornment: (
+                      <InputAdornment position="end" >
+                        {/^\d{4}-\d{4}$/.test(curriculumInputValue) && !curriculumOptions.includes(curriculumInputValue) ? (
+                          <IconButton>
+                            {/* TODO: Add the new curriculum to your database in the AddIcon */}
+                            <AddIcon />
+                          </IconButton>
+                        ) : (
+                          params.InputProps.endAdornment
+                        )}
+                      </InputAdornment>
+                    ),
+                  }}
+                  inputProps={{
+                    ...params.inputProps,
+                    pattern: "[0-9-]*",
+                    maxLength: 9,
+                    minLength: 9,  // This pattern ensures that the input is in the format 0000-0000, but not automatically
+                  }}
+                />
+              )}
+            />
           </Box>
 
           <Box
