@@ -259,7 +259,7 @@ const AddSubjectsButton = () => {
               onChange={(event, newValue) => {
                 if (newValue && newValue.startsWith("Add ")) {
                   setIsAddCurriculumDialogOpen(true); // Open the add curriculum dialog
-                  // TODO: Add the new curriculum to the database here ~ Nang Angelika
+                  // TODO: Add the new curriculum to the database here
 
                   // Then update the options array
                   setCurriculumOptions((prevOptions) => [...prevOptions, newValue.substring(4)]);
