@@ -48,6 +48,15 @@ const useStyles = makeStyles({
 
 
 const AddSubjectsButton = () => {
+  const utils = trpc.useContext();
+
+  // Query to get curriculums
+  const { data: curriculumFetch, error } = trpc.useQuery(["subjectList.curriculum"]);
+  // Convert curriculumList to an array of strings
+  const curriculumList = curriculumFetch?.map(item => item.curriculum) || [];
+
+  console.log(curriculumList)
+
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -56,7 +65,7 @@ const AddSubjectsButton = () => {
   const [subjectUnits, setSubjectUnits] = useState(0);
   const [curriculum, setCurriculum] = useState("");
   const [subjectCredits, setSubjectCredits] = useState(0);
-  const [curriculumOptions, setCurriculumOptions] = useState<string[]>(["2023-2024", "2022-2023", "2021-2022"]);
+  const [curriculumOptions, setCurriculumOptions] = useState<string[]>(curriculumList);
   const [isAddCurriculumDialogOpen, setIsAddCurriculumDialogOpen] = useState(false);
   const [curriculumInputValue, setCurriculumInputValue] = useState('');
 
@@ -70,8 +79,6 @@ const AddSubjectsButton = () => {
     setSubjectUnits(0);
     setSubjectCredits(0);
   }
-
-  const utils = trpc.useContext();
 
   //Add subject mutation
   const { mutate: addSubject, isLoading: isAddingSubject } = trpc.useMutation(
@@ -278,7 +285,7 @@ const AddSubjectsButton = () => {
                     endAdornment: (
                       <InputAdornment position="end" >
                         {/^\d{4}-\d{4}$/.test(curriculumInputValue) && !curriculumOptions.includes(curriculumInputValue) ? (
-                          <IconButton>
+                          <IconButton >
                             {/* TODO: Add the new curriculum to your database in the AddIcon */}
                             <AddIcon />
                           </IconButton>
