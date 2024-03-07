@@ -37,7 +37,15 @@ interface Props extends React.HTMLAttributes<HTMLButtonElement> {
 
 export default function EditSubjectButton({ subCode }: Props) {
   const utils = trpc.useContext();
-  const { data: subject, error } = trpc.useQuery(["subjectList.get", { subCode: subCode }]);
+  const { data: subject } = trpc.useQuery(["subjectList.get", { subCode: subCode }]);
+  // Query to get curriculums
+  const { data: curriculumFetch } = trpc.useQuery(["subjectList.curriculum"]);
+  // Turn curriculums into Menu Items
+  const curriculumItems = curriculumFetch?.map((curriculum) => (
+    <MenuItem key={curriculum.id} value={curriculum.curriculum}>
+      {curriculum.curriculum}
+    </MenuItem>
+  ));
 
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
@@ -218,9 +226,7 @@ export default function EditSubjectButton({ subCode }: Props) {
                 value={curriculum}
                 color="secondary"
               >
-                <MenuItem value={"2023-2024"}>2023-2024</MenuItem>
-                <MenuItem value={"2022-2023"}>2022-2023</MenuItem>
-                <MenuItem value={"2021-2022"}>2021-2022</MenuItem>
+                {curriculumItems}
               </TextField>
             </Box>
           </Box>

@@ -183,8 +183,6 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({ teachers }) =
           </Table>
         </TableContainer>
       </Paper>
-
-      {/* {selectedTeacher && <TeacherDetails teacher={selectedTeacher} />} */}
     </Grid>
   );
 };
