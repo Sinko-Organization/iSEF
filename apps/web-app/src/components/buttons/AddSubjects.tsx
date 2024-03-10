@@ -65,7 +65,7 @@ const AddSubjectsButton = () => {
   const [subjectUnits, setSubjectUnits] = useState(0);
   const [curriculum, setCurriculum] = useState("");
   const [subjectCredits, setSubjectCredits] = useState(0);
-  const [curriculumOptions, setCurriculumOptions] = useState<string[]>(curriculumList ? curriculumList : ["Loading curriculums"]);
+  const [curriculumOptions, setCurriculumOptions] = useState<string[]>(curriculumList);
   // const [isAddCurriculumDialogOpen, setIsAddCurriculumDialogOpen] = useState(false);
   const [curriculumInputValue, setCurriculumInputValue] = useState('');
 
@@ -138,7 +138,7 @@ const AddSubjectsButton = () => {
       newErrors.push("Please select a curriculum")
     }
 
-    if (/^\d{4}-\d{4}$/.test(curriculum)) {
+    if (!/^\d{4}-\d{4}$/.test(curriculum)) {
       newErrors.push("Invalid curriculum format. Must be in the form XXXX-XXXX.")
     }
 
@@ -265,7 +265,8 @@ const AddSubjectsButton = () => {
               value={curriculum}
               openOnFocus
               onInputChange={(event, newInputValue) => {
-                setCurriculumInputValue(newInputValue);
+                // setCurriculumInputValue(newInputValue);
+                setCurriculum(newInputValue);
               }}
               isOptionEqualToValue={(option, value) => option === value}
               onChange={(event, newValue) => {
@@ -276,7 +277,7 @@ const AddSubjectsButton = () => {
                   // Then update the options array
                   setCurriculumOptions((prevOptions) => [...prevOptions, newValue.substring(4)]);
 
-                  // Selecting "add" option
+                  // Selecting "Add" option
                   setCurriculum(newValue.substring(4));
                 }
 
@@ -292,7 +293,8 @@ const AddSubjectsButton = () => {
                     ...params.InputProps,
                     endAdornment: (
                       <InputAdornment position="end" >
-                        {/^\d{4}-\d{4}$/.test(curriculumInputValue) && !curriculumOptions.includes(curriculumInputValue) ? (
+                        {/* {/^\d{4}-\d{4}$/.test(curriculumInputValue) && !curriculumOptions.includes(curriculumInputValue) ? ( */}
+                        {/^\d{4}-\d{4}$/.test(curriculum) && !curriculumOptions.includes(curriculum) ? (
                           <IconButton >
                             {/* TODO: Add the new curriculum to your database in the AddIcon */}
                             <AddIcon />
