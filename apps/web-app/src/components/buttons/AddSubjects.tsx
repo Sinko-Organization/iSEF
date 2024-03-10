@@ -61,12 +61,12 @@ const AddSubjectsButton = () => {
   const [open, setOpen] = React.useState(false);
 
   const [subjectName, setSubjectName] = useState("");
-  const [stubCode, setStubCode] = useState("");
+  const [subCode, setSubCode] = useState("");
   const [subjectUnits, setSubjectUnits] = useState(0);
   const [curriculum, setCurriculum] = useState("");
   const [subjectCredits, setSubjectCredits] = useState(0);
-  const [curriculumOptions, setCurriculumOptions] = useState<string[]>(curriculumList);
-  const [isAddCurriculumDialogOpen, setIsAddCurriculumDialogOpen] = useState(false);
+  const [curriculumOptions, setCurriculumOptions] = useState<string[]>(curriculumList ? curriculumList : ["Loading curriculums"]);
+  // const [isAddCurriculumDialogOpen, setIsAddCurriculumDialogOpen] = useState(false);
   const [curriculumInputValue, setCurriculumInputValue] = useState('');
 
 
@@ -74,7 +74,7 @@ const AddSubjectsButton = () => {
 
   const clearValues = () => {
     setSubjectName("");
-    setStubCode("");
+    setSubCode("");
     setCurriculum("");
     setSubjectUnits(0);
     setSubjectCredits(0);
@@ -86,6 +86,7 @@ const AddSubjectsButton = () => {
     {
       onSuccess: (subject) => {
         utils.invalidateQueries(["subjectList.getAll"]);
+        utils.invalidateQueries(["subjectList.curriculum"]);
         toast.success(`Subject "${subject.subCode}" has been added`);
       },
       onError: () => {
@@ -125,7 +126,7 @@ const AddSubjectsButton = () => {
       newErrors.push("Please provide a subject name")
     }
 
-    if (stubCode.length === 0) {
+    if (subCode.length === 0) {
       newErrors.push("Please provide a subject code")
     }
 
@@ -135,6 +136,10 @@ const AddSubjectsButton = () => {
 
     if (curriculum.length === 0) {
       newErrors.push("Please select a curriculum")
+    }
+
+    if (/^\d{4}-\d{4}$/.test(curriculum)) {
+      newErrors.push("Invalid curriculum format. Must be in the form XXXX-XXXX.")
     }
 
     if (subjectCredits === 0) {
@@ -153,7 +158,7 @@ const AddSubjectsButton = () => {
       addSubject(
         {
           title: subjectName,
-          subCode: stubCode,
+          subCode: subCode,
           curriculum: curriculum,
           units: subjectUnits,
           credits: subjectCredits
@@ -232,11 +237,11 @@ const AddSubjectsButton = () => {
               autoFocus
               margin="dense"
               fullWidth
-              id="stubCode"
+              id="subCode"
               label="Stub Code"
               // variant="filled"
-              value={stubCode}
-              onChange={(e) => setStubCode(e.target.value)}
+              value={subCode}
+              onChange={(e) => setSubCode(e.target.value)}
             />
           </Box>
 
@@ -265,11 +270,14 @@ const AddSubjectsButton = () => {
               isOptionEqualToValue={(option, value) => option === value}
               onChange={(event, newValue) => {
                 if (newValue && newValue.startsWith("Add ")) {
-                  setIsAddCurriculumDialogOpen(true); // Open the add curriculum dialog
+                  // setIsAddCurriculumDialogOpen(true); // Open the add curriculum dialog
                   // TODO: Add the new curriculum to the database here
 
                   // Then update the options array
                   setCurriculumOptions((prevOptions) => [...prevOptions, newValue.substring(4)]);
+
+                  // Selecting "add" option
+                  setCurriculum(newValue.substring(4));
                 }
 
                 setCurriculum(newValue || '');
