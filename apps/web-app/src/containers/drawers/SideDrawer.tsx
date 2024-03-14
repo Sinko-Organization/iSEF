@@ -64,7 +64,7 @@ const paths: Path[] = [
   },
   {
     name: "Scheduling",
-    link: "",
+    link: "/schedule-management",
     icon: <ScheduleSharp />,
   },
   {
