@@ -45,30 +45,53 @@ const SubjectPage: NextPage = () => {
   return (
     <>
       <div className="mx-32 fontsans mt-10">
-        <Grid container justifyContent="space-between">
 
-          <Grid item xs={4} style={{ textAlign: "center" }} >
-            {/* searchbar*/}
-            <TextField placeholder="Search by title" value={searchQuery} onChange={handleSearch} />
+        <Grid container justifyContent="space-between" alignItems="center">
+          <Grid item xs={7} container alignItems="center">
+            <Grid item xs={1.5} style={{ textAlign: "left" }}>
+              {/* filter */}
+              <TextField
+                defaultValue="All"
+                onChange={(event) => handleFilterChange(event.target.value)}
+                id="curriculum"
+                select
+                color="secondary"
+                label="Curriculum"
+              >
+                <MenuItem value={"All"}>All</MenuItem>
+                {curriculumItems ? curriculumItems : <CircularProgress />}
+              </TextField>
+            </Grid>
+            <Grid item xs={1.5} style={{ textAlign: "left" }}>
+              {/* filter */}
+              <TextField
+                defaultValue="All"
+                id="department"
+                select
+                color="secondary"
+                label="Department"
+              >
+                <MenuItem value={"All"}>All</MenuItem>
+
+              </TextField>
+            </Grid>
+
+
+            <Grid item xs={5} style={{ textAlign: "left" }}  >
+              {/* searchbar*/}
+              <TextField placeholder="Search by title" value={searchQuery} onChange={handleSearch} />
+            </Grid>
+
           </Grid>
-          <Box>
-            {/* filter */}
-            <TextField
-              defaultValue="All"
-              onChange={(event) => handleFilterChange(event.target.value)}
-              id="curriculum"
-              select
-              color="secondary"
-              label="Filter"
-            >
-              <MenuItem value={"All"}>All</MenuItem>
-              {curriculumItems ? curriculumItems : <CircularProgress />}
-            </TextField>
-          </Box>
-          <Box>
+          <Grid item xs={1.5} style={{ textAlign: "right" }}>
             <AddTeacherSubjects />
-          </Box>
+          </Grid>
+
         </Grid>
+
+
+
+
 
         <SubjectTable subjects={subjectsList!} />
       </div>

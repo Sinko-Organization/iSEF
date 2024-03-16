@@ -238,7 +238,7 @@ const AddSubjectsButton = () => {
               margin="dense"
               fullWidth
               id="subCode"
-              label="Stub Code"
+              label="Subject Code"
               // variant="filled"
               value={subCode}
               onChange={(e) => setSubCode(e.target.value)}
@@ -254,7 +254,7 @@ const AddSubjectsButton = () => {
               "& .MuiTextField-root": { m: 1, width: "40ch" },
             }}
           >
-            <Box sx={{ width: 245 }}>
+            <Box sx={{ width: 160 }}>
               <Typography sx={{ marginRight: 2 }}> Curriculum </Typography>
             </Box>
 
