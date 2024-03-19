@@ -209,7 +209,7 @@ const AddTeachersButton = () => {
           color="secondary"
           variant="contained"
           onClick={handleOpen}
-          className={`${classes.button} px-1 py-3 text-lg font-medium`}
+          className={`-1 py-3 text-lg font-medium`}
         >
           Add Teacher
         </Button>
