@@ -162,7 +162,8 @@ model SubjectList {
     id             String          @id @default(cuid())
     subCode        String          @unique @map("sub_code")
     title          String
-    curriculum     String          @default("2022-2023")
+    curriculum     String[]        
+    department     Department[]
     units          Float  
     credits        Float           @default(0)  
     createdAt      DateTime        @default(now()) @map("created_at")
