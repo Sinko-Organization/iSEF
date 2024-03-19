@@ -12,6 +12,7 @@ import {
   InputAdornment,
   MenuItem,
   TextField,
+  Tooltip,
   Typography,
 
 } from "@mui/material";
@@ -260,7 +261,8 @@ const AddSubjectsButton = () => {
 
             <Autocomplete
               id="subjectUnits"
-              options={curriculumOptions.concat(curriculum && !curriculumOptions.includes(curriculum) ? [`Add ${curriculum}`] : [])}
+              // options={curriculumOptions.concat(curriculum && !curriculumOptions.includes(curriculum) ? [`Add ${curriculum}`] : [])}
+              options={curriculumOptions}
               freeSolo
               value={curriculum}
               openOnFocus
@@ -269,20 +271,20 @@ const AddSubjectsButton = () => {
                 setCurriculum(newInputValue);
               }}
               isOptionEqualToValue={(option, value) => option === value}
-              onChange={(event, newValue) => {
-                if (newValue && newValue.startsWith("Add ")) {
-                  // setIsAddCurriculumDialogOpen(true); // Open the add curriculum dialog
-                  // TODO: Add the new curriculum to the database here
+              // onChange={(event, newValue) => {
+              //   if (newValue && newValue.startsWith("Add ")) {
+              //     // setIsAddCurriculumDialogOpen(true); // Open the add curriculum dialog
+              //     // TODO: Add the new curriculum to the database here
 
-                  // Then update the options array
-                  setCurriculumOptions((prevOptions) => [...prevOptions, newValue.substring(4)]);
+              //     // Then update the options array
+              //     setCurriculumOptions((prevOptions) => [...prevOptions, newValue.substring(4)]);
 
-                  // Selecting "Add" option
-                  setCurriculum(newValue.substring(4));
-                }
+              //     // Selecting "Add" option
+              //     setCurriculum(newValue.substring(4));
+              //   }
 
-                setCurriculum(newValue || '');
-              }}
+              //   setCurriculum(newValue || '');
+              // }}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -295,10 +297,12 @@ const AddSubjectsButton = () => {
                       <InputAdornment position="end" >
                         {/* {/^\d{4}-\d{4}$/.test(curriculumInputValue) && !curriculumOptions.includes(curriculumInputValue) ? ( */}
                         {/^\d{4}-\d{4}$/.test(curriculum) && !curriculumOptions.includes(curriculum) ? (
-                          <IconButton >
-                            {/* TODO: Add the new curriculum to your database in the AddIcon */}
-                            <AddIcon />
-                          </IconButton>
+                          <Tooltip title="You are adding a new curriculum">
+                            <IconButton >
+                              {/* TODO: Add the new curriculum to your database in the AddIcon */}
+                              <AddIcon color="success" />
+                            </IconButton>
+                          </Tooltip>
                         ) : (
                           params.InputProps.endAdornment
                         )}
