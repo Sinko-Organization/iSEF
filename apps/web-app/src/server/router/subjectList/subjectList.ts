@@ -135,6 +135,32 @@ export const subjectListRouter = createRouter()
     },
   })
 
+  .mutation("addMany", {
+    input: z.array(
+      z.object({
+        title: z.string(),
+        subCode: z.string(),
+        curriculum: z.string(),
+        department: z.nativeEnum(Department),
+        units: z.number().int().nonnegative(),
+        credits: z.number().int().nonnegative(),
+      }),
+    ),
+    async resolve({ ctx, input }) {
+      const data = input.map((item) => ({
+        title: item.title,
+        subCode: item.subCode,
+        curriculum: [item.curriculum],
+        department: [item.department],
+        units: item.units,
+        credits: item.credits,
+      }));
+      return ctx.prisma.subjectList.createMany({
+        data: data,
+      });
+    },
+  })
+
   .mutation("update", {
     input: z.object({
       title: z.string(),
@@ -160,7 +186,34 @@ export const subjectListRouter = createRouter()
       });
     },
   })
-
+  .mutation("updateMany", {
+    input: z.array(
+      z.object({
+        title: z.string(),
+        subCode: z.string(),
+        curriculum: z.string(),
+        department: z.nativeEnum(Department),
+        units: z.number().int().nonnegative(),
+        credits: z.number().int().nonnegative(),
+      }),
+    ),
+    async resolve({ ctx, input }) {
+      const updates = input.map((update) => ({
+        where: { subCode: update.subCode },
+        data: {
+          title: update.title,
+          subCode: update.subCode,
+          curriculum: update.curriculum,
+          department: update.department,
+          units: update.units,
+          credits: update.credits,
+        },
+      }));
+      return ctx.prisma.subjectList.updateMany({
+        data: updates,
+      });
+    },
+  })
   .mutation("delete", {
     input: z.object({
       subCode: z.string(),
@@ -170,6 +223,18 @@ export const subjectListRouter = createRouter()
       return ctx.prisma.subjectList.delete({
         where: {
           subCode: subCode,
+        },
+      });
+    },
+  })
+  .mutation("deleteMany", {
+    input: z.object({
+      subCodes: z.array(z.string()),
+    }),
+    async resolve({ ctx, input }) {
+      return ctx.prisma.subjectList.deleteMany({
+        where: {
+          subCode: { in: input.subCodes },
         },
       });
     },
