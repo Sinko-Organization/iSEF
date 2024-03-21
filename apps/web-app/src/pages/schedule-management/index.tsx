@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import { Box, Grid, MenuItem, Select, TextField, Button } from "@mui/material";
 import { Department } from "@prisma/client";
-import { AddScheduleButton, AddTeachersButton } from "@web-app/components/buttons";
+import { AddCustomScheduleButton, AddScheduleButton, AddTeachersButton } from "@web-app/components/buttons";
 import AdminError from "@web-app/components/errors/AdminError";
 import { EducationLoader } from "@web-app/components/loaders";
 import { TeacherManagementTable } from "@web-app/components/tables";
@@ -35,9 +35,9 @@ const SchedulePage: NextPage = () => {
             </Box>
 
         </Grid>
-        
+
         <Grid container justifyContent="right">
-            Test
+            <AddCustomScheduleButton />
         </Grid>
         </div>
 
