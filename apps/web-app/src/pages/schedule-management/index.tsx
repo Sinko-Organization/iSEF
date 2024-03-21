@@ -12,7 +12,6 @@ import toast, { Toaster } from "react-hot-toast";
 const SchedulePage: NextPage = () => {
     return (
         <div className="mx-32 fontsans mt-10">
-        Schedule Page
         <Grid container justifyContent="space-between">
             <Grid item xs={4} style={{ textAlign: "center" }} >
               {/* searchbar or filter*/}
