@@ -34,8 +34,14 @@ const SchedulePage: NextPage = () => {
               <AddScheduleButton />
             </Box>
 
-          </Grid>
+        </Grid>
+        
+        <Grid container justifyContent="right">
+            Test
+        </Grid>
         </div>
+
+
     );
     };
 

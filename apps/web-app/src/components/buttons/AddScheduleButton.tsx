@@ -53,7 +53,26 @@ const useStyles = makeStyles({
   });
 
   // start adding the backend stuff here!
-  
+interface scheduleDialogProps {
+    dayOfTheWeek: string;
+}
+
+const SchedulingRow = ({dayOfTheWeek}: scheduleDialogProps) => {
+    return <React.Fragment>
+
+            <Box>
+                {dayOfTheWeek}
+                <Switch>
+                </Switch>
+                <Checkbox/> All Day
+                <Checkbox/> AM 
+                <Checkbox/> PM
+            </Box>   
+        
+    </React.Fragment>
+
+}
+
 const AddScheduleButton = () => {
 
     const classes = useStyles();
@@ -90,55 +109,12 @@ const AddScheduleButton = () => {
         </DialogTitle>
         <DialogContent>
 
-
-            <Box>
-                Monday
-                <Switch>
-                </Switch>
-                <Checkbox/> All Day
-                <Checkbox/> AM 
-                <Checkbox/> PM
-            </Box>   
-            <Box>
-                Tuesday
-                <Switch>
-                </Switch>
-                <Checkbox/> All Day
-                <Checkbox/> AM 
-                <Checkbox/> PM
-            </Box>    
-            <Box>
-                Wednesday
-                <Switch>
-                </Switch>
-                <Checkbox/> All Day
-                <Checkbox/> AM 
-                <Checkbox/> PM
-            </Box>
-            <Box>
-                Thursday
-                <Switch>
-                </Switch>
-                <Checkbox/> All Day
-                <Checkbox/> AM 
-                <Checkbox/> PM
-            </Box>    
-            <Box>
-                Friday
-                <Switch>
-                </Switch>
-                <Checkbox/> All Day
-                <Checkbox/> AM 
-                <Checkbox/> PM
-            </Box>    
-            <Box>
-                Saturday
-                <Switch>
-                </Switch>
-                <Checkbox/> All Day
-                <Checkbox/> AM 
-                <Checkbox/> PM
-            </Box>
+            <SchedulingRow dayOfTheWeek="Monday"/>
+            <SchedulingRow dayOfTheWeek="Tuesday"/>
+            <SchedulingRow dayOfTheWeek="Wednesday"/>
+            <SchedulingRow dayOfTheWeek="Thursday"/>
+            <SchedulingRow dayOfTheWeek="Friday"/>
+            <SchedulingRow dayOfTheWeek="Saturday"/>
 
         </DialogContent>
         <DialogActions>
