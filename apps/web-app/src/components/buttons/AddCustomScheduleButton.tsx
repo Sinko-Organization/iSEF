@@ -30,6 +30,7 @@ import dayjs from "dayjs";
 import React, { ChangeEvent, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { e } from "vitest/dist/index-220c1d70";
+import { DaySelector } from "../selectors";
 
 
 const useStyles = makeStyles({
@@ -90,25 +91,17 @@ const AddCustomScheduleButton = () => {
         Add custom schedule for this teacher
         </DialogTitle>
 
-        <Box sx={{ display: "flex", alignItems: "flex-end", marginTop: 3 }}>
+        <Box sx={{ display: "flex", alignItems: "flex-end", marginTop: 3, marginLeft: 4}}>
             <Box sx={{ width: 160 }}>
-              <Typography sx={{ marginRight: 2 }}>Day</Typography>
+
+              <DaySelector/>
+
             </Box>
-            <TextField
-              color="secondary"
-              //onChange={handleTextChange}
-              autoFocus
-              margin="dense"
-              name="teacherId"
-              type="text"
-              variant="filled"
-              fullWidth
-            />
-          </Box>
+        </Box>    
 
           <Box sx={{ display: "flex", alignItems: "flex-end" }}>
             <Box sx={{ width: 160 }}>
-              <Typography sx={{ marginRight: 2 }}>From</Typography>
+              <Typography sx={{ marginLeft: 2 }}>From</Typography>
             </Box>
 
             <TextField
@@ -124,7 +117,7 @@ const AddCustomScheduleButton = () => {
 
           <Box sx={{ display: "flex", alignItems: "flex-end" }}>
             <Box sx={{ width: 160 }}>
-              <Typography sx={{ marginRight: 2 }}>To</Typography>
+              <Typography sx={{ marginLeft: 2 }}>To</Typography>
             </Box>
 
             <TextField
