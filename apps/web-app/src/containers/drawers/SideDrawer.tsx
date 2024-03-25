@@ -23,6 +23,7 @@ import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import CoursePage from "@web-app/pages/subjects";
@@ -61,6 +62,11 @@ const paths: Path[] = [
     name: "Subjects",
     link: "/subjects",
     icon: <MenuIcon />,
+  },
+  {
+    name: "PTL",
+    link: "/proposed-teaching-load",
+    icon: <DescriptionOutlinedIcon />,
   },
   {
     name: "Scheduling",
