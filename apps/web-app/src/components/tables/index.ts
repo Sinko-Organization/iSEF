@@ -5,3 +5,4 @@ export { default as HonorsListTable } from "./HonorsListTable";
 export { default as AccessControlTable } from "./AccessControlTable";
 export { default as TeacherManagementTable } from "./TeacherManagementTable";
 export { default as TeacherDetails } from "./TeacherDetails";
+export { default as ProposedTeachingLoadTable } from "./ProposedTeachingLoad";   
