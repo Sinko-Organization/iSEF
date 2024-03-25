@@ -59,15 +59,21 @@ interface scheduleDialogProps {
 
 const SchedulingRow = ({dayOfTheWeek}: scheduleDialogProps) => {
     return <React.Fragment>
-
-            <Box>
+          <Box sx={{ display: "grid", alignItems: "center" }}>
+            <Box sx = {{ width: 600 }}>
+              <Box>
                 {dayOfTheWeek}
                 <Switch>
                 </Switch>
-                <Checkbox/> All Day
-                <Checkbox/> AM 
-                <Checkbox/> PM
+              </Box> 
+
+              <Checkbox/> 
+                    All Day
+
+              <Checkbox/> AM 
+              <Checkbox/> PM
             </Box>   
+          </Box>
         
     </React.Fragment>
 
@@ -115,6 +121,7 @@ const AddScheduleButton = () => {
             <SchedulingRow dayOfTheWeek="Thursday"/>
             <SchedulingRow dayOfTheWeek="Friday"/>
             <SchedulingRow dayOfTheWeek="Saturday"/>
+          
 
         </DialogContent>
         <DialogActions>
