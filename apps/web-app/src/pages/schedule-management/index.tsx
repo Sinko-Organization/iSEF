@@ -29,14 +29,16 @@ const SchedulePage: NextPage = () => {
                 {/* {deptItems} */}
               </Select>
             </Box>
-            <Box>
+            <Box sx = {{ marginTop: 1 }}>
               <AddScheduleButton />
             </Box>
 
         </Grid>
 
         <Grid container justifyContent="right">
+            <Box sx = {{ marginTop: 3}}>
             <AddCustomScheduleButton />
+            </Box>
         </Grid>
         </div>
 

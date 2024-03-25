@@ -52,10 +52,12 @@ const useStyles = makeStyles({
     },
   });
 
-  // start adding the backend stuff here!
+
 interface scheduleDialogProps {
     dayOfTheWeek: string;
 }
+
+  // start adding the backend stuff here!
 
 const SchedulingRow = ({dayOfTheWeek}: scheduleDialogProps) => {
     return <React.Fragment>
