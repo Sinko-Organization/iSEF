@@ -69,7 +69,7 @@ const AddPTL = () => {
                         textAlign: "center",
                         backgroundColor: "lavender",
                     }}>
-                    Add Subject
+                    Add PTL
                 </DialogTitle>
 
                 <DialogContent>

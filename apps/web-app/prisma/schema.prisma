@@ -179,11 +179,11 @@ model ProposedTeachingLoad {
     sections     Int        
     lecHours     Float
     labHours     Float
-    timeRemarks  String[]     @map("time_remarks")
+    timeRemarks  String       @map("time_remarks")
     createdAt    DateTime     @default(now()) @map("created_at")
     updatedAt    DateTime     @updatedAt @map("updated_at")
-    teacher      Teacher      @relation(fields: [teacherId], references: [id], onDelete: Cascade)
-    subject      SubjectList  @relation(fields: [subCode], references: [id], onDelete: Cascade)
+    teacher      Teacher      @relation(fields: [teacherId], references: [teacherId], onDelete: Cascade)
+    subject      SubjectList  @relation(fields: [subCode], references: [subCode], onDelete: Cascade)
 
 }
 
