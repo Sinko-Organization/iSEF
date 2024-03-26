@@ -49,6 +49,11 @@ export const teacherRouter = createRouter()
       });
     },
   })
+  .query("getAllNoFilter", {
+    async resolve({ ctx }) {
+      return ctx.prisma.teacher.findMany();
+    },
+  })
   .query("get", {
     input: z.object({
       teacherId: z.string(),

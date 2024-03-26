@@ -38,6 +38,11 @@ export const subjectListRouter = createRouter()
       });
     },
   })
+  .query("getAllNoFilter", {
+    async resolve({ ctx }) {
+      return ctx.prisma.subjectList.findMany();
+    },
+  })
   // query a single item
   .query("get", {
     input: z.object({
