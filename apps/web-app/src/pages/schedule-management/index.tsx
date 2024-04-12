@@ -6,11 +6,13 @@ import AdminError from "@web-app/components/errors/AdminError";
 import { EducationLoader } from "@web-app/components/loaders";
 import { TeacherManagementTable } from "@web-app/components/tables";
 import { trpc } from "@web-app/utils/trpc";
-import { useState } from "react";
+import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import Calendar from "@web-app/components/tables/Calendar";
 
 const SchedulePage: NextPage = () => {
     return (
+      <React.Fragment>
         <div className="mx-32 fontsans mt-10">
         <Grid container justifyContent="space-between">
             <Grid item xs={4} style={{ textAlign: "center" }} >
@@ -41,6 +43,11 @@ const SchedulePage: NextPage = () => {
             </Box>
         </Grid>
         </div>
+        <div className="mx-32 mt-10">
+          <Calendar />
+        </div>
+
+        </React.Fragment>
 
 
     );
