@@ -56,7 +56,7 @@ const Calendar = () => {
         <div className={classes.weekCalendar}>
             <table className={classes.table}>
                 <thead>
-                    <tr>
+                    <tr> 
                         <th style={{ color: '#9078B6' }}>Time</th>
                         {daysOfWeek.map((day, index) => (
                             <th style={{ color: '#9078B6' }} key={index}>{day}</th>

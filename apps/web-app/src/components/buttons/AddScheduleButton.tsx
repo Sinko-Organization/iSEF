@@ -30,71 +30,46 @@ import dayjs from "dayjs";
 import React, { ChangeEvent, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { e } from "vitest/dist/index-220c1d70";
+import { DaySelector } from "../selectors";
 
 
 const useStyles = makeStyles({
-    container: {
-      display: "flex",
-      alignItems: "center",
+  container: {
+    display: "flex",
+    alignItems: "center",
+  },
+  button: {
+    backgroundColor: "#9078B6",
+    color: "white",
+    borderRadius: "full",
+    padding: "10px",
+    "&:hover": {
+      backgroundColor: "#694f92",
     },
-    button: {
-      backgroundColor: "#9078B6",
-      color: "white",
-      borderRadius: "full",
-      padding: "10px",
-      "&:hover": {
-        backgroundColor: "#694f92",
-      },
-    },
-  
-    text: {
-      marginLeft: "10px",
-    },
-  });
+  },
+
+  text: {
+    marginLeft: "10px",
+  },
+});
+
+// start adding the backend stuff here!
 
 
-interface scheduleDialogProps {
-    dayOfTheWeek: string;
-}
+const AddCustomScheduleButton = () => {
 
-  // start adding the backend stuff here!
+  const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => {
+    setOpen(true);
+  };
 
-const SchedulingRow = ({dayOfTheWeek}: scheduleDialogProps) => {
-    return <React.Fragment>
-          <Box sx={{ display: "grid", alignItems: "center" }}>
-            <Box sx = {{ width: 600 }}>
-              <Box>
-                {dayOfTheWeek}
-                <Switch>
-                </Switch>
-              </Box> 
+  const handleClose = () => {
+    setOpen(false);
+  };
 
-              <Checkbox/> 
-                    All Day
+  return (
 
-              <Checkbox/> AM 
-              <Checkbox/> PM
-            </Box>   
-          </Box>
-        
-    </React.Fragment>
-
-}
-
-const AddScheduleButton = () => {
-
-    const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
-    const handleOpen = () => {
-        setOpen(true);
-      };
-    
-      const handleClose = () => {
-        setOpen(false);
-    };
-
-    return (
-    
     <React.Fragment>
       <div>
         <Button
@@ -109,37 +84,87 @@ const AddScheduleButton = () => {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle
           style={{
-            textAlign: "left",
+            textAlign: "center",
             backgroundColor: "lavender",
           }}
         >
-          Available on Days
+          Add schedule for this teacher
         </DialogTitle>
-        <DialogContent>
 
-            <SchedulingRow dayOfTheWeek="Monday"/>
-            <SchedulingRow dayOfTheWeek="Tuesday"/>
-            <SchedulingRow dayOfTheWeek="Wednesday"/>
-            <SchedulingRow dayOfTheWeek="Thursday"/>
-            <SchedulingRow dayOfTheWeek="Friday"/>
-            <SchedulingRow dayOfTheWeek="Saturday"/>
+        <Box sx={{ display: "flex", alignItems: "flex-end", marginTop: 3, marginLeft: 4 }}>
+          <Box sx={{ width: 160 }}>
+
+            <DaySelector />
+
+          </Box>
+        </Box>
+        <Box sx={{ display: "flex", alignItems: "flex-end" }}>
+          <Box sx={{ width: 160 }}>
+            <Typography sx={{ marginLeft: 2 }}>Time</Typography>
           
+          </Box>
+        </Box>
 
-        </DialogContent>
-        <DialogActions>
-          <Button color="error" onClick={handleClose}>
-            Cancel
-          </Button>
-          <Button
+          <TextField
             color="secondary"
-          >
-            Add
-          </Button>
-        </DialogActions>
+            //onChange={handleTextChange}
+            margin="dense"
+            name="lastName"
+            type="text"
+            fullWidth
+            variant="filled"
+          />
+
+          <Box sx={{ display: "flex", alignItems: "flex-end" }}>
+            <Box sx={{ width: 160 }}>
+              <Typography sx={{ marginLeft: 2 }}>From</Typography>
+            </Box>
+
+            <TextField
+              color="secondary"
+              //onChange={handleTextChange}
+              margin="dense"
+              name="firstName"
+              type="text"
+              fullWidth
+              variant="filled"
+            />
+          </Box>
+
+          <Box sx={{ display: "flex", alignItems: "flex-end" }}>
+            <Box sx={{ width: 160 }}>
+              <Typography sx={{ marginLeft: 2 }}>To</Typography>
+            </Box>
+
+            <TextField
+              color="secondary"
+              //onChange={handleTextChange}
+              margin="dense"
+              name="middleName"
+              type="text"
+              fullWidth
+              variant="filled"
+            />
+          </Box>
+
+          <DialogContent>
+
+
+          </DialogContent>
+          <DialogActions>
+            <Button color="error" onClick={handleClose}>
+              Cancel
+            </Button>
+            <Button
+              color="secondary"
+            >
+              Add
+            </Button>
+          </DialogActions>
       </Dialog>
 
     </React.Fragment>
   );
 };
 
-export default AddScheduleButton;
+export default AddCustomScheduleButton;
