@@ -6,11 +6,16 @@ import AdminError from "@web-app/components/errors/AdminError";
 import { EducationLoader } from "@web-app/components/loaders";
 import { TeacherManagementTable } from "@web-app/components/tables";
 import { trpc } from "@web-app/utils/trpc";
-import { useState } from "react";
+import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import Calendar from "@web-app/components/tables/Calendar";
+
+import SaveCalendar from "@web-app/components/buttons/SaveCalendar";
+
 
 const SchedulePage: NextPage = () => {
     return (
+      <div>
         <div className="mx-32 fontsans mt-10">
         <Grid container justifyContent="space-between">
             <Grid item xs={4} style={{ textAlign: "center" }} >
@@ -30,19 +35,24 @@ const SchedulePage: NextPage = () => {
               </Select>
             </Box>
             <Box sx = {{ marginTop: 1 }}>
-              <AddScheduleButton />
+             <AddCustomScheduleButton />
             </Box>
 
         </Grid>
 
         <Grid container justifyContent="right">
             <Box sx = {{ marginTop: 3}}>
-            <AddCustomScheduleButton />
+            <AddScheduleButton />
             </Box>
         </Grid>
         </div>
-
-
+        <div className="mx-32 mt-10">
+          <Calendar />
+        </div>
+        <div className="mx-32 mt-10">
+          <SaveCalendar />
+        </div>
+      </div> 
     );
     };
 

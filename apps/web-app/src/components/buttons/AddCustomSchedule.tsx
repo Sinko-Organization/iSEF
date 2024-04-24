@@ -30,7 +30,6 @@ import dayjs from "dayjs";
 import React, { ChangeEvent, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { e } from "vitest/dist/index-220c1d70";
-import { DaySelector } from "../selectors";
 
 
 const useStyles = makeStyles({
@@ -53,10 +52,38 @@ const useStyles = makeStyles({
     },
   });
 
+
+interface scheduleDialogProps {
+    dayOfTheWeek: string;
+}
+
   // start adding the backend stuff here!
 
+const SchedulingRow = ({dayOfTheWeek}: scheduleDialogProps) => {
+    return <React.Fragment>
+          <Box sx={{ display: "grid", alignItems: "center" }}>
+            <Box sx = {{ width: 600 }}>
+              <Box>
+                {dayOfTheWeek}
+                <Switch>
+                </Switch>
+              </Box> 
 
-const AddCustomScheduleButton = () => {
+              <Checkbox/> 
+                    All Day
+
+              <Checkbox/> AM 
+              <Checkbox/> PM
+            </Box>   
+          </Box>
+        
+    </React.Fragment>
+
+}
+
+const AddScheduleButton = () => {
+
+  
 
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
@@ -88,51 +115,17 @@ const AddCustomScheduleButton = () => {
             backgroundColor: "lavender",
           }}
         >
-        Add custom schedule for this teacher
+          Available on Days
         </DialogTitle>
-
-        <Box sx={{ display: "flex", alignItems: "flex-end", marginTop: 3, marginLeft: 4}}>
-            <Box sx={{ width: 160 }}>
-
-              <DaySelector/>
-
-            </Box>
-        </Box>    
-
-          <Box sx={{ display: "flex", alignItems: "flex-end" }}>
-            <Box sx={{ width: 160 }}>
-              <Typography sx={{ marginLeft: 2 }}>From</Typography>
-            </Box>
-
-            <TextField
-              color="secondary"
-              //onChange={handleTextChange}
-              margin="dense"
-              name="firstName"
-              type="text"
-              fullWidth
-              variant="filled"
-            />
-          </Box>
-
-          <Box sx={{ display: "flex", alignItems: "flex-end" }}>
-            <Box sx={{ width: 160 }}>
-              <Typography sx={{ marginLeft: 2 }}>To</Typography>
-            </Box>
-
-            <TextField
-              color="secondary"
-              //onChange={handleTextChange}
-              margin="dense"
-              name="middleName"
-              type="text"
-              fullWidth
-              variant="filled"
-            />
-          </Box>
-
         <DialogContent>
 
+            <SchedulingRow dayOfTheWeek="Monday"/>
+            <SchedulingRow dayOfTheWeek="Tuesday"/>
+            <SchedulingRow dayOfTheWeek="Wednesday"/>
+            <SchedulingRow dayOfTheWeek="Thursday"/>
+            <SchedulingRow dayOfTheWeek="Friday"/>
+            <SchedulingRow dayOfTheWeek="Saturday"/>
+          
 
         </DialogContent>
         <DialogActions>
@@ -151,4 +144,4 @@ const AddCustomScheduleButton = () => {
   );
 };
 
-export default AddCustomScheduleButton;
+export default AddScheduleButton;

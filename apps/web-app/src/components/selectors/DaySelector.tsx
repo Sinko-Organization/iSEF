@@ -24,7 +24,8 @@ const DaySelector = () => {
                     label="Day"
                     defaultValue = "Monday"
                     onChange={handleChange}
-                >              
+                >         
+                <MenuItem>Monday</MenuItem>     
                 <MenuItem>Tuesday</MenuItem>
                 <MenuItem>Wednesday</MenuItem>
                 <MenuItem>Thursday</MenuItem>
