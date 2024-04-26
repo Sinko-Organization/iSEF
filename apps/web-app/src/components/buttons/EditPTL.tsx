@@ -161,7 +161,6 @@ const EditPTL = ({ id }: Props) => {
                 labHours!,
                 remarks
             );
-            clearValues();
             handleClose();
         }
         else {
@@ -176,7 +175,6 @@ const EditPTL = ({ id }: Props) => {
 
     const handleClose = () => {
         setErrors([]);
-        clearValues();
         setOpen(false);
     };
 
@@ -196,8 +194,9 @@ const EditPTL = ({ id }: Props) => {
         setRemarks(e.target.value);
     };
 
-    if (!PTLdata)
-        return <CircularProgress />
+    if (!PTLdata) {
+        return <CircularProgress />;
+    }
 
     return (
         <React.Fragment>
