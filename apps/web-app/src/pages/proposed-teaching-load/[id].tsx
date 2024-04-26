@@ -1,6 +1,7 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { trpc } from "@web-app/utils/trpc";
+import EditPTL from "@web-app/components/buttons/EditPTL";
 
 
 
@@ -15,6 +16,7 @@ const PTLPage: NextPage = () => {
 
     return (
         <>
+            <EditPTL id={id} />
             <div>CUID: {id}</div>
             <div>put PTL info here</div>
         </>

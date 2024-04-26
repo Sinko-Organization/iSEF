@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useState } from "react";
-import { Button, DialogContent, Typography, DialogActions, Autocomplete, AutocompleteRenderInputParams, MenuItem, Select, SelectChangeEvent } from "@mui/material";
+import { Button, DialogContent, Typography, DialogActions, Autocomplete, AutocompleteRenderInputParams, MenuItem, Select, SelectChangeEvent, CircularProgress } from "@mui/material";
 import { Add, SubjectSharp } from "@mui/icons-material";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -32,10 +32,20 @@ const useStyles = makeStyles({
     },
 });
 
+interface Props extends React.HTMLAttributes<HTMLButtonElement> {
+    id: string;
+}
 
-const AddPTL = () => {
+
+const EditPTL = ({ id }: Props) => {
     const classes = useStyles();
     const utils = trpc.useContext();
+
+    // Query to get PTL data
+    const { data: PTLdata, status: PTLDataStatus } = trpc.useQuery([
+        "proposedTeachingLoad.get",
+        { PTLId: id },
+    ]);
 
     // Query to get teachers
     const { data: teachers, error: teacherError } = trpc.useQuery(["teacher.getAllNoFilter"]);
@@ -52,29 +62,33 @@ const AddPTL = () => {
 
     const [open, setOpen] = useState(false);
 
-    const [teacherId, setTeacherId] = useState("");
-    const [subCode, setSubCode] = useState("");
-    const [sections, setSections] = useState<number | undefined>(0);
-    const [lecHours, setLecHours] = useState<number | undefined>(0);
-    const [labHours, setLabHours] = useState<number | undefined>(0);
-    const [remarks, setRemarks] = useState("");
+    const [teacherId, setTeacherId] = useState(PTLdata?.teacherId);
+    const [subCode, setSubCode] = useState(PTLdata?.subCode);
+    const [sections, setSections] = useState<number | undefined>(Number(PTLdata?.sections));
+    const [lecHours, setLecHours] = useState<number | undefined>(Number(PTLdata?.lecHours));
+    const [labHours, setLabHours] = useState<number | undefined>(Number(PTLdata?.labHours));
+    const [remarks, setRemarks] = useState(PTLdata?.timeRemarks);
     const [errors, setErrors] = useState<string[]>([])
 
-    //Add PTL mutation
-    const { mutate: addPTL, isLoading: isAddingPTL } = trpc.useMutation(
-        ["proposedTeachingLoad.add"],
+
+
+    //Edit PTL mutation
+    const { mutate: editPTL, isLoading: isEditingPTL } = trpc.useMutation(
+        ["proposedTeachingLoad.update"],
         {
-            onSuccess: (teacher: { teacherId: string }) => {
+            onSuccess: () => {
                 utils.invalidateQueries(["proposedTeachingLoad.getAll"]);
-                toast.success(`PTL has been added`);
+                utils.invalidateQueries(["proposedTeachingLoad.get"]);
+                toast.success(`PTL has been updated`);
             },
             onError: () => {
-                toast.error("Error adding teacher record");
+                toast.error("Error updating PTL");
             },
         },
     );
 
-    const addNewPTL = (
+    const updatePTL = (
+        PTLId: string,
         teacherId: string,
         subCode: string,
         sections: number,
@@ -82,7 +96,8 @@ const AddPTL = () => {
         labHours: number,
         timeRemarks: string
     ) => {
-        addPTL({
+        editPTL({
+            PTLId,
             teacherId,
             subCode,
             sections,
@@ -104,11 +119,11 @@ const AddPTL = () => {
     const validateFields = () => {
         const newErrors: string[] = []
 
-        if (teacherId.length === 0) {
+        if (teacherId === undefined) {
             newErrors.push("Please provide a teacher ID")
         }
 
-        if (subCode.length === 0) {
+        if (subCode === undefined) {
             newErrors.push("Please provide a subject code")
         }
 
@@ -132,12 +147,13 @@ const AddPTL = () => {
         return newErrors.length === 0;
     }
 
-    // on clicking "add"
+    // on clicking "submit"
     const handleFormSubmit = () => {
         const isValid = validateFields();
 
         if (isValid) {
-            addNewPTL(
+            updatePTL(
+                id,
                 teacherId,
                 subCode,
                 sections!,
@@ -180,6 +196,9 @@ const AddPTL = () => {
         setRemarks(e.target.value);
     };
 
+    if (!PTLdata)
+        return <CircularProgress />
+
     return (
         <React.Fragment>
 
@@ -190,7 +209,7 @@ const AddPTL = () => {
                     variant="contained"
                     onClick={handleOpen}
                 >
-                    Add PTL
+                    Edit PTL
                 </Button>
             </div>
 
@@ -202,7 +221,7 @@ const AddPTL = () => {
                         textAlign: "center",
                         backgroundColor: "lavender",
                     }}>
-                    Add PTL
+                    Edit PTL
                 </DialogTitle>
 
                 <DialogContent>
@@ -217,6 +236,7 @@ const AddPTL = () => {
                             </Typography>
                         </Box>
                         <Autocomplete
+                            value={{ label: teacherId }}
                             id="teacherId"
                             sx={{ width: 300 }}
                             options={teacherOptions}
@@ -236,6 +256,7 @@ const AddPTL = () => {
                             </Typography>
                         </Box>
                         <Autocomplete
+                            value={{ label: subCode }}
                             id="subCode"
                             sx={{ width: 300 }}
                             options={subjectOptions}
@@ -255,6 +276,7 @@ const AddPTL = () => {
                             </Typography>
                         </Box>
                         <Select
+                            value={sections}
                             color="secondary"
                             autoFocus
                             margin="dense"
@@ -280,6 +302,7 @@ const AddPTL = () => {
                             </Typography>
                         </Box>
                         <Select
+                            value={lecHours}
                             color="secondary"
                             autoFocus
                             margin="dense"
@@ -305,6 +328,7 @@ const AddPTL = () => {
                             </Typography>
                         </Box>
                         <Select
+                            value={labHours}
                             color="secondary"
                             autoFocus
                             margin="dense"
@@ -329,6 +353,7 @@ const AddPTL = () => {
                             </Typography>
                         </Box>
                         <TextField
+                            value={remarks}
                             color="secondary"
                             autoFocus
                             margin="dense"
@@ -343,7 +368,7 @@ const AddPTL = () => {
                             Cancel
                         </Button>
                         <Button onClick={handleFormSubmit} color="primary">
-                            Add
+                            Submit
                         </Button>
                     </DialogActions>
                 </DialogContent>
@@ -353,4 +378,4 @@ const AddPTL = () => {
     );
 }
 
-export default AddPTL;
+export default EditPTL;
