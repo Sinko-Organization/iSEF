@@ -10,7 +10,8 @@ export const proposedTeachingLoadRouter = createRouter()
     async resolve({ ctx }) {
       return ctx.prisma.proposedTeachingLoad.findMany();
     },
-  }).query("get", {
+  })
+  .query("get", {
     input: z.object({
       PTLId: z.string(),
     }),
@@ -54,6 +55,7 @@ export const proposedTeachingLoadRouter = createRouter()
 
   .mutation("update", {
     input: z.object({
+      PTLId: z.string(),
       teacherId: z.string(),
       subCode: z.string(),
       sections: z.number().int().nonnegative(),
@@ -62,9 +64,19 @@ export const proposedTeachingLoadRouter = createRouter()
       timeRemarks: z.string(),
     }),
     async resolve({ ctx, input }) {
-      const { teacherId, subCode, sections, lecHours, labHours, timeRemarks } =
-        input;
-      return ctx.prisma.proposedTeachingLoad.create({
+      const {
+        PTLId,
+        teacherId,
+        subCode,
+        sections,
+        lecHours,
+        labHours,
+        timeRemarks,
+      } = input;
+      return ctx.prisma.proposedTeachingLoad.update({
+        where: {
+          id: PTLId,
+        },
         data: {
           teacherId: teacherId,
           subCode: subCode,
