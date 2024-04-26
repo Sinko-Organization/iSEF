@@ -9,6 +9,7 @@ import TableRow from "@mui/material/TableRow";
 import { inferQueryOutput, trpc } from "@web-app/utils/trpc";
 import { FC } from "react";
 import { EducationLoader } from "../loaders";
+import router from "next/router";
 
 interface ProposedTeachingLoadTableProps {
     PTLs: inferQueryOutput<"proposedTeachingLoad.getAll">;
@@ -30,6 +31,11 @@ const cellStyle: React.CSSProperties = {
 
 const ProposedTeachingLoadTable: FC<ProposedTeachingLoadTableProps> = ({ PTLs }) => {
     console.log(PTLs)
+
+    const handlePTLSelect = (PTLId: string) => {
+        router.push(`/proposed-teaching-load/${PTLId}`);
+
+    };
 
     if (!PTLs) {
         return <EducationLoader />
@@ -63,6 +69,9 @@ const ProposedTeachingLoadTable: FC<ProposedTeachingLoadTableProps> = ({ PTLs })
                                 return (
                                     <TableRow
                                         key={PTL.id}
+                                        onClick={() =>
+                                            handlePTLSelect(PTL.id.toString())
+                                        }
                                         hover
                                     >
                                         <TableCell

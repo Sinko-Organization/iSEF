@@ -10,6 +10,18 @@ export const proposedTeachingLoadRouter = createRouter()
     async resolve({ ctx }) {
       return ctx.prisma.proposedTeachingLoad.findMany();
     },
+  }).query("get", {
+    input: z.object({
+      PTLId: z.string(),
+    }),
+    async resolve({ ctx, input }) {
+      const { PTLId } = input;
+      return ctx.prisma.proposedTeachingLoad.findUnique({
+        where: {
+          id: PTLId,
+        },
+      });
+    },
   })
 
   /**
