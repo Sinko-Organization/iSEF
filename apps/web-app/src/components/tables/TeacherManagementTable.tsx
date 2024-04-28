@@ -1,4 +1,4 @@
-import { Box, Grid, MenuItem, Paper, Select, SelectChangeEvent, Table, TextField } from "@mui/material";
+import { Box, Grid, MenuItem, Paper, Select, SelectChangeEvent, Table, TextField, Toolbar, Typography } from "@mui/material";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
@@ -60,6 +60,29 @@ const TeacherManagementTable: FC<TeacherManagementTableProps> = ({ teachers }) =
           overflow: "hidden",
         }}
       >
+        <Toolbar
+          sx={{
+            backgroundColor: "#B2A1E1",
+            pl: { sm: 2 },
+            pr: { xs: 1, sm: 1 },
+            borderBottom: "1px solid #ddd",
+            color: "white",
+            textAlign: "center",
+          }}
+        >
+          <Typography
+            sx={{
+              flex: "1 1 100%",
+              fontFamily: "Times New Roman",
+              fontSize: "20px",
+            }}
+            // variant="h6"
+            id="tableTitle"
+            component="div"
+          >
+            <div className="font-bold">MANAGE TEACHERS</div>
+          </Typography>
+        </Toolbar>
         <TableContainer>
           <Table>
             <TableHead>

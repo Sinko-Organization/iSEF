@@ -53,36 +53,48 @@ const TeacherManagementPage: NextPage = () => {
 
 
   return (
-    <>
+    <Grid paddingTop={5} paddingX={5}>
       {user?.role === "admin" || user?.role === "superadmin" ? (
-        <div className="mx-32 fontsans mt-10">
-          <Grid container justifyContent="space-between">
-            <Grid item xs={4} style={{ textAlign: "center" }} >
+        <Grid item container direction="row">
+          <Grid container spacing={2.5}>
+            <Grid item >
               {/* searchbar*/}
-              <TextField placeholder="Search by name" value={searchQuery} onChange={handleSearch} />
+              <Box sx={{ width: 250 }}>
+                <TextField
+                  color="secondary"
+                  fullWidth
+                  placeholder="Search teacher by name"
+                  value={searchQuery}
+                  onChange={handleSearch} />
+              </Box>
             </Grid>
-            <Box>
-              {/* filter */}
-              <Select
-                defaultValue="All"
-                onChange={(e) => handleFilterChange(e.target.value as Department | string)}
-                id="department"
-                color="secondary"
-              >
-                {deptItems}
-              </Select>
-            </Box>
-            <Box>
-              <AddTeachersButton />
-            </Box>
+            <Grid item>
+              <Box sx={{ width: 150 }}>
+                {/* filter */}
+                <Select
+                  fullWidth
+                  defaultValue="All"
+                  onChange={(e) => handleFilterChange(e.target.value as Department | string)}
+                  id="department"
+                  color="secondary"
+                >
+                  {deptItems}
+                </Select>
+              </Box>
+            </Grid>
+            <Grid item>
+              <Box sx={{ pl: 64, pt: 2 }}>
+                <AddTeachersButton />
+              </Box>
+            </Grid>
+            <Grid item flexGrow={1}> <TeacherManagementTable teachers={teachersList!} /></Grid>
           </Grid>
-          <TeacherManagementTable teachers={teachersList!} />
-        </div>
+        </Grid>
       ) : (
         <AdminError />
       )}
       <Toaster />
-    </>
+    </Grid>
   );
 };
 
