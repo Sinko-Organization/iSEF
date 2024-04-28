@@ -33,77 +33,77 @@ import { e } from "vitest/dist/index-220c1d70";
 
 
 const useStyles = makeStyles({
-    container: {
-      display: "flex",
-      alignItems: "center",
+  container: {
+    display: "flex",
+    alignItems: "center",
+  },
+  button: {
+    backgroundColor: "#9078B6",
+    color: "white",
+    borderRadius: "full",
+    padding: "10px",
+    "&:hover": {
+      backgroundColor: "#694f92",
     },
-    button: {
-      backgroundColor: "#9078B6",
-      color: "white",
-      borderRadius: "full",
-      padding: "10px",
-      "&:hover": {
-        backgroundColor: "#694f92",
-      },
-    },
-  
-    text: {
-      marginLeft: "10px",
-    },
-  });
+  },
+
+  text: {
+    marginLeft: "10px",
+  },
+});
 
 
 interface scheduleDialogProps {
-    dayOfTheWeek: string;
+  dayOfTheWeek: string;
 }
 
-  // start adding the backend stuff here!
+// start adding the backend stuff here!
 
-const SchedulingRow = ({dayOfTheWeek}: scheduleDialogProps) => {
-    return <React.Fragment>
-          <Box sx={{ display: "grid", alignItems: "center" }}>
-            <Box sx = {{ width: 600 }}>
-              <Box>
-                {dayOfTheWeek}
-                <Switch>
-                </Switch>
-              </Box> 
+const SchedulingRow = ({ dayOfTheWeek }: scheduleDialogProps) => {
+  return <React.Fragment>
+    <Box sx={{ display: "grid", alignItems: "center" }}>
+      <Box sx={{ width: 600 }}>
+        <Box>
+          {dayOfTheWeek}
+          <Switch>
+          </Switch>
+        </Box>
 
-              <Checkbox/> 
-                    All Day
+        <Checkbox />
+        All Day
 
-              <Checkbox/> AM 
-              <Checkbox/> PM
-            </Box>   
-          </Box>
-        
-    </React.Fragment>
+        <Checkbox /> AM
+        <Checkbox /> PM
+      </Box>
+    </Box>
+
+  </React.Fragment>
 
 }
 
 const AddScheduleButton = () => {
 
-  
 
-    const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
-    const handleOpen = () => {
-        setOpen(true);
-      };
-    
-      const handleClose = () => {
-        setOpen(false);
-    };
 
-    return (
-    
+  const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+
     <React.Fragment>
-      <div>
+      <div className={classes.container}>
         <Button
           color="secondary"
           variant="contained"
           onClick={handleOpen}
-          className={`-1 py-3 text-lg font-medium`}
+          className={classes.button}
         >
           Custom
         </Button>
@@ -119,13 +119,13 @@ const AddScheduleButton = () => {
         </DialogTitle>
         <DialogContent>
 
-            <SchedulingRow dayOfTheWeek="Monday"/>
-            <SchedulingRow dayOfTheWeek="Tuesday"/>
-            <SchedulingRow dayOfTheWeek="Wednesday"/>
-            <SchedulingRow dayOfTheWeek="Thursday"/>
-            <SchedulingRow dayOfTheWeek="Friday"/>
-            <SchedulingRow dayOfTheWeek="Saturday"/>
-          
+          <SchedulingRow dayOfTheWeek="Monday" />
+          <SchedulingRow dayOfTheWeek="Tuesday" />
+          <SchedulingRow dayOfTheWeek="Wednesday" />
+          <SchedulingRow dayOfTheWeek="Thursday" />
+          <SchedulingRow dayOfTheWeek="Friday" />
+          <SchedulingRow dayOfTheWeek="Saturday" />
+
 
         </DialogContent>
         <DialogActions>

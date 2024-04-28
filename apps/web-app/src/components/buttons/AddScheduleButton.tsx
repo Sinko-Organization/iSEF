@@ -71,12 +71,12 @@ const AddCustomScheduleButton = () => {
   return (
 
     <React.Fragment>
-      <div>
+      <div className={classes.container}>
         <Button
           color="secondary"
           variant="contained"
           onClick={handleOpen}
-          className={`-1 py-3 text-lg font-medium`}
+          className={classes.button}
         >
           Add Schedule
         </Button>
@@ -101,66 +101,66 @@ const AddCustomScheduleButton = () => {
         <Box sx={{ display: "flex", alignItems: "flex-end" }}>
           <Box sx={{ width: 160 }}>
             <Typography sx={{ marginLeft: 2 }}>Time</Typography>
-          
+
           </Box>
         </Box>
+
+        <TextField
+          color="secondary"
+          //onChange={handleTextChange}
+          margin="dense"
+          name="lastName"
+          type="text"
+          fullWidth
+          variant="filled"
+        />
+
+        <Box sx={{ display: "flex", alignItems: "flex-end" }}>
+          <Box sx={{ width: 160 }}>
+            <Typography sx={{ marginLeft: 2 }}>From</Typography>
+          </Box>
 
           <TextField
             color="secondary"
             //onChange={handleTextChange}
             margin="dense"
-            name="lastName"
+            name="firstName"
             type="text"
             fullWidth
             variant="filled"
           />
+        </Box>
 
-          <Box sx={{ display: "flex", alignItems: "flex-end" }}>
-            <Box sx={{ width: 160 }}>
-              <Typography sx={{ marginLeft: 2 }}>From</Typography>
-            </Box>
-
-            <TextField
-              color="secondary"
-              //onChange={handleTextChange}
-              margin="dense"
-              name="firstName"
-              type="text"
-              fullWidth
-              variant="filled"
-            />
+        <Box sx={{ display: "flex", alignItems: "flex-end" }}>
+          <Box sx={{ width: 160 }}>
+            <Typography sx={{ marginLeft: 2 }}>To</Typography>
           </Box>
 
-          <Box sx={{ display: "flex", alignItems: "flex-end" }}>
-            <Box sx={{ width: 160 }}>
-              <Typography sx={{ marginLeft: 2 }}>To</Typography>
-            </Box>
+          <TextField
+            color="secondary"
+            //onChange={handleTextChange}
+            margin="dense"
+            name="middleName"
+            type="text"
+            fullWidth
+            variant="filled"
+          />
+        </Box>
 
-            <TextField
-              color="secondary"
-              //onChange={handleTextChange}
-              margin="dense"
-              name="middleName"
-              type="text"
-              fullWidth
-              variant="filled"
-            />
-          </Box>
-
-          <DialogContent>
+        <DialogContent>
 
 
-          </DialogContent>
-          <DialogActions>
-            <Button color="error" onClick={handleClose}>
-              Cancel
-            </Button>
-            <Button
-              color="secondary"
-            >
-              Add
-            </Button>
-          </DialogActions>
+        </DialogContent>
+        <DialogActions>
+          <Button color="error" onClick={handleClose}>
+            Cancel
+          </Button>
+          <Button
+            color="secondary"
+          >
+            Add
+          </Button>
+        </DialogActions>
       </Dialog>
 
     </React.Fragment>

@@ -27,19 +27,19 @@ const useStyles = makeStyles({
 
 const SaveCalendar = () => {
     const classes = useStyles();
-   
-    
+
+
     return (
         <React.Fragment>
             <div className={classes.container}>
-                <Button 
-                   color="secondary"
-                   className={classes.button}
-                   variant="contained">
+                <Button
+                    color="secondary"
+                    className={classes.button}
+                    variant="contained">
                     Save Schedule</Button>
             </div>
         </React.Fragment>
     );
-    }
-    
-    export default SaveCalendar;
+}
+
+export default SaveCalendar;
