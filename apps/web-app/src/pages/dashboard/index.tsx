@@ -1,3 +1,4 @@
+import { Grid } from "@mui/material";
 import { EducationLoader } from "@web-app/components/loaders";
 import { DashboardTable } from "@web-app/components/tables";
 import { CurriculumSelector } from "@web-app/containers/curriculum-selector";
@@ -47,17 +48,22 @@ const DashboardPage: NextPage = () => {
   }
 
   return (
-    <div className="mx-32 font-sans mt-10">
-      {schoolYearsData && (
-        <CurriculumSelector
-          schoolYearsData={schoolYearsData}
-          curriculum={{ schoolYear, semesterType }}
-          setSchoolYear={setSchoolYear}
-          setSemesterType={setSemesterType}
-        />
-      )}
-      {courseData && <DashboardTable rows={courseData} />}
-    </div>
+    <Grid paddingTop={5} paddingX={5}>
+      <Grid>
+        {schoolYearsData && (
+          <CurriculumSelector
+            schoolYearsData={schoolYearsData}
+            curriculum={{ schoolYear, semesterType }}
+            setSchoolYear={setSchoolYear}
+            setSemesterType={setSemesterType}
+          />
+        )}
+      </Grid>
+      <Grid>
+        {courseData && <DashboardTable rows={courseData} />}
+      </Grid>
+
+    </Grid>
   );
 };
 

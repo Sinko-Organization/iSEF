@@ -1,3 +1,4 @@
+import { Grid } from "@mui/material";
 import { EducationLoader } from "@web-app/components/loaders";
 import { HonorsListTable } from "@web-app/components/tables";
 import { CourseSelector } from "@web-app/containers/course-selector";
@@ -56,20 +57,25 @@ const Index: NextPage = () => {
   }
 
   return (
-    <>
-      <div className="mx-20 my-10 flex flex-row gap-5">
-        {schoolYearsData && (
-          <CurriculumSelector
-            schoolYearsData={schoolYearsData}
-            curriculum={{ schoolYear, semesterType }}
-            setSchoolYear={setSchoolYear}
-            setSemesterType={setSemesterType}
-          />
-        )}
-        <YearLevelSelector yearLevel={yearLevel} setYearLevel={setYearLevel} />
-        <CourseSelector course={courseId} setCourse={setCourse} />
-      </div>
-      <div className="mx-20 mt-10">
+    <Grid paddingTop={5} paddingX={5} sx={{ flexGrow: 1 }} >
+      <Grid item direction="row">
+        <Grid container item>
+          {schoolYearsData && (
+            <CurriculumSelector
+              schoolYearsData={schoolYearsData}
+              curriculum={{ schoolYear, semesterType }}
+              setSchoolYear={setSchoolYear}
+              setSemesterType={setSemesterType}
+            />
+          )}
+          {/* <Grid paddingRight={2}>
+            <YearLevelSelector yearLevel={yearLevel} setYearLevel={setYearLevel} />
+          </Grid> */}
+
+          {/* <CourseSelector course={courseId} setCourse={setCourse} /> */}
+        </Grid>
+      </Grid>
+      <Grid>
         {data && (
           <HonorsListTable
             honorsList={data.map((student) => ({
@@ -83,8 +89,10 @@ const Index: NextPage = () => {
             }))}
           />
         )}
-      </div>
-    </>
+      </Grid>
+
+    </Grid>
+
   );
 };
 

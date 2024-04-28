@@ -1,3 +1,4 @@
+import { Typography } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -30,12 +31,29 @@ const DashboardTable: FC<DashboardTableProps> = ({ rows }) => {
     >
       <TableContainer>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead sx={{ backgroundColor: "#EBDEF0" }}>
+          <TableHead sx={{ backgroundColor: "#B2A1E1" }}>
             <TableRow></TableRow>
             <TableRow>
               <TableCell colSpan={3} align="center" className="text-sm">
-                Courses <br></br> Total Population:{" "}
-                <b>{totalPopulation} students</b>
+                <Typography sx={{
+                  flex: "1 1 100%",
+                  fontFamily: "Times New Roman",
+                  fontSize: "20px",
+                  color: "white",
+                }}
+                  id="tableTitle"
+                  component="div">
+                  <div className="font-bold">COURSES</div>
+
+                </Typography>
+                <Typography sx={{
+                  fontSize: "15px",
+                  color: "white"
+                }}>
+                  <b> Total Population:{" "}</b>
+                  <b>{totalPopulation} students</b>
+                </Typography>
+
               </TableCell>
             </TableRow>
           </TableHead>
