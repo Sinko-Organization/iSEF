@@ -43,14 +43,15 @@ const SubjectPage: NextPage = () => {
   ));
 
   return (
-    <>
-      <div className="mx-32 fontsans mt-10">
-
-        <Grid container justifyContent="space-between" alignItems="center">
-          <Grid item xs={7} container alignItems="center">
-            <Grid item xs={1.5} style={{ textAlign: "left" }}>
-              {/* filter */}
+    <Grid paddingTop={5} paddingX={5} sx={{ flexGrow: 1 }}>
+      <Grid item container direction="row">
+        <Grid container spacing={2.5}>
+          {/* filter */}
+          <Grid item>
+            {/* curriculum */}
+            <Box sx={{ width: 150 }}>
               <TextField
+                fullWidth
                 defaultValue="All"
                 onChange={(event) => handleFilterChange(event.target.value)}
                 id="curriculum"
@@ -61,10 +62,13 @@ const SubjectPage: NextPage = () => {
                 <MenuItem value={"All"}>All</MenuItem>
                 {curriculumItems ? curriculumItems : <CircularProgress />}
               </TextField>
-            </Grid>
-            <Grid item xs={1.5} style={{ textAlign: "left" }}>
-              {/* filter */}
+            </Box>
+          </Grid>
+          <Grid item>
+            {/* department */}
+            <Box sx={{ width: 150 }}>
               <TextField
+                fullWidth
                 defaultValue="All"
                 id="department"
                 select
@@ -74,28 +78,35 @@ const SubjectPage: NextPage = () => {
                 <MenuItem value={"All"}>All</MenuItem>
 
               </TextField>
-            </Grid>
-
-
-            <Grid item xs={5} style={{ textAlign: "left" }}  >
-              {/* searchbar*/}
-              <TextField placeholder="Search by title" value={searchQuery} onChange={handleSearch} />
-            </Grid>
-
+            </Box>
           </Grid>
-          <Grid item xs={1.5} style={{ textAlign: "right" }}>
-            <AddTeacherSubjects />
+          <Grid item>
+            {/* search */}
+            <Box sx={{ width: 250 }}>
+              <TextField
+                fullWidth
+                color="secondary"
+                label="Search"
+                placeholder="Search by title"
+                value={searchQuery}
+                onChange={handleSearch} />
+            </Box>
           </Grid>
-
+          <Grid item >
+            <Box sx={{ pl: 44, pt: 1 }}>
+              <AddTeacherSubjects />
+            </Box>
+          </Grid>
         </Grid>
+      </Grid>
+      <SubjectTable subjects={subjectsList!} />
+    </Grid >
 
 
 
 
 
-        <SubjectTable subjects={subjectsList!} />
-      </div>
-    </>
+
   );
 };
 
