@@ -58,7 +58,6 @@ model User {
     updatedAt      DateTime  @updatedAt @map("updated_at")
     accounts       Session[]
     account        Account?
-
 }
 
 model VerificationToken {
@@ -118,13 +117,15 @@ model Course {
     studentRecords StudentRecord[]
 }
 
-model SubjectSchedule {
+model Schedule {
     id           String       @id @default(cuid())
     teacherId    String       @map("teacher_id")
     subCode      String       @map("sub_code")
+    type         subjectType
+    room         String     
     days         String[]
-    classHours   String[]
-    room         String            
+    startTime    String
+    endTime      String       
     createdAt    DateTime     @default(now()) @map("created_at")
     updatedAt    DateTime     @updatedAt @map("updated_at")
     teacher      Teacher      @relation(fields: [teacherId], references: [id], onDelete: Cascade)
@@ -140,7 +141,7 @@ model Teacher {
     lastName   String   @map("last_name")
     department Department?
     employment employmentType?
-    subjectTaught SubjectSchedule[] 
+    subjectTaught Schedule[] 
     birthday   DateTime
     createdAt  DateTime @default(now()) @map("created_at")
     updatedAt  DateTime @updatedAt @map("updated_at")
@@ -168,7 +169,7 @@ model SubjectList {
     credits        Float           @default(0)  
     createdAt      DateTime        @default(now()) @map("created_at")
     updatedAt      DateTime        @updatedAt @map("updated_at")       
-    subjectSchedules SubjectSchedule[]
+    Schedules Schedule[]
     proposedTeachingLoads ProposedTeachingLoad[]
 }
 
@@ -220,6 +221,11 @@ enum Role {
 enum employmentType {
     fulltime
     parttime
+}
+
+enum subjectType {
+    LEC
+    LAB
 }
 
 enum Department {
