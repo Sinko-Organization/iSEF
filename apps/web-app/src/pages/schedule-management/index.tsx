@@ -9,14 +9,27 @@ import { trpc } from "@web-app/utils/trpc";
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import Calendar from "@web-app/components/tables/Calendar";
-
 import SaveCalendar from "@web-app/components/buttons/SaveCalendar";
-
+import { excelConversion, generateDownload } from "./export"
 
 const SchedulePage: NextPage = () => {
+  const { data: scheduleList, error } = trpc.useQuery(["schedule.getAll"]);
+  const [excelData, setExcelData] = useState(null);
+
+  const handleDownload = async () => {
+    try {
+      excelConversion(scheduleList, setExcelData);
+      generateDownload(excelData);
+    } catch (error) {
+      console.error('Error fetching Excel data:', error);
+    }
+  };
 
   return (
     <Grid paddingTop={5} paddingX={5}>
+      <div>
+        <Button onClick={handleDownload}>Download Excel</Button>
+      </div>
       <Grid container >
         <Grid container >
           {/* searchbar or filter*/}
