@@ -1,5 +1,4 @@
 import { subjectType } from "@prisma/client";
-import * as Excel from "exceljs";
 import { z } from "zod";
 
 import { createRouter } from "../context";
@@ -10,7 +9,21 @@ export const scheduleRouter = createRouter()
    */
   .query("getAll", {
     async resolve({ ctx }) {
-      return ctx.prisma.schedule.findMany();
+      return ctx.prisma.schedule.findMany({
+        include: {
+          teacher: {
+            select: {
+              firstName: true,
+              lastName: true,
+            },
+          },
+          subject: {
+            select: {
+              subCode: true,
+            },
+          },
+        },
+      });
     },
   })
   .query("getSubCodeSchedule", {
@@ -21,7 +34,12 @@ export const scheduleRouter = createRouter()
       const { subCode } = input;
       return ctx.prisma.schedule.findMany({
         where: {
-          subCode: { contains: subCode },
+          subject: {
+            subCode: subCode, // Assuming 'subCode' is the field in SubjectList
+          },
+        },
+        include: {
+          subject: true, // Include the SubjectList data
         },
       });
     },
@@ -39,65 +57,13 @@ export const scheduleRouter = createRouter()
       });
     },
   })
-  .query("exportSchedule", {
-    async resolve({ ctx }) {
-      const scheduleData = await ctx.prisma.schedule.findMany({
-        include: {
-          teacher: {
-            select: {
-              lastName: true,
-              firstName: true,
-            },
-          },
-          subject: {
-            select: {
-              subCode: true,
-            },
-          },
-        },
-      });
-      // Create a new workbook
-      const workbook = new Excel.Workbook();
-      const worksheet = workbook.addWorksheet("Schedule");
-
-      // Add headers to the worksheet
-      worksheet.addRow([
-        "SubCode",
-        "Type",
-        "Teacher",
-        "Room",
-        "Days",
-        "StartTime",
-        "EndTime",
-      ]);
-
-      // Add data to the worksheet
-      for (const scheduleItem of scheduleData) {
-        worksheet.addRow([
-          scheduleItem.subCode,
-          scheduleItem.type,
-          scheduleItem.teacher,
-          scheduleItem.room,
-          scheduleItem.days.join(", "),
-          scheduleItem.startTime,
-          scheduleItem.endTime,
-        ]);
-      }
-      // Generate the Excel file buffer
-      const excelBuffer = await workbook.xlsx.writeBuffer();
-
-      // Return the Excel file buffer to a string
-      return excelBuffer.toString("base64");
-    },
-  })
-
   /**
    * Mutations
    */
   .mutation("add", {
     input: z.object({
       teacherId: z.string(),
-      subCode: z.string(),
+      subjectId: z.string(),
       type: z.nativeEnum(subjectType),
       room: z.string(),
       days: z.string(),
@@ -105,12 +71,12 @@ export const scheduleRouter = createRouter()
       endTime: z.string(),
     }),
     async resolve({ ctx, input }) {
-      const { teacherId, subCode, type, room, days, startTime, endTime } =
+      const { teacherId, subjectId, type, room, days, startTime, endTime } =
         input;
       return ctx.prisma.schedule.create({
         data: {
           teacherId: teacherId,
-          subCode: subCode,
+          subjectId: subjectId,
           type: type,
           room: room,
           days: [days],
@@ -125,7 +91,7 @@ export const scheduleRouter = createRouter()
     input: z.array(
       z.object({
         teacherId: z.string(),
-        subCode: z.string(),
+        subjectId: z.string(),
         type: z.nativeEnum(subjectType),
         room: z.string(),
         days: z.string(),
@@ -136,7 +102,7 @@ export const scheduleRouter = createRouter()
     async resolve({ ctx, input }) {
       const data = input.map((item) => ({
         teacherId: item.teacherId,
-        subCode: item.subCode,
+        subjectId: item.subjectId,
         type: item.type,
         room: item.room,
         days: [item.days],
@@ -169,7 +135,7 @@ export const scheduleRouter = createRouter()
         },
         data: {
           teacherId: teacherId,
-          subCode: subCode,
+          subjectId: subCode,
           type: type,
           room: room,
           days: [days],
