@@ -120,7 +120,7 @@ model Course {
 model Schedule {
     id           String       @id @default(cuid())
     teacherId    String       @map("teacher_id")
-    subCode      String       @map("sub_code")
+    subjectId    String       @map("subject_id")
     type         subjectType
     room         String     
     days         String[]
@@ -129,7 +129,7 @@ model Schedule {
     createdAt    DateTime     @default(now()) @map("created_at")
     updatedAt    DateTime     @updatedAt @map("updated_at")
     teacher      Teacher      @relation(fields: [teacherId], references: [id], onDelete: Cascade)
-    subject      SubjectList  @relation(fields: [subCode], references: [id], onDelete: Cascade)
+    subject      SubjectList  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
 }
     
 
@@ -169,7 +169,7 @@ model SubjectList {
     credits        Float           @default(0)  
     createdAt      DateTime        @default(now()) @map("created_at")
     updatedAt      DateTime        @updatedAt @map("updated_at")       
-    Schedules Schedule[]
+    Schedules      Schedule[]
     proposedTeachingLoads ProposedTeachingLoad[]
 }
 

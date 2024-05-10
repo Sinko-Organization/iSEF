@@ -9,7 +9,21 @@ export const scheduleRouter = createRouter()
    */
   .query("getAll", {
     async resolve({ ctx }) {
-      return ctx.prisma.schedule.findMany();
+      return ctx.prisma.schedule.findMany({
+        include: {
+          teacher: {
+            select: {
+              firstName: true,
+              lastName: true,
+            },
+          },
+          subject: {
+            select: {
+              subCode: true,
+            },
+          },
+        },
+      });
     },
   })
   .query("getSubCodeSchedule", {
@@ -20,7 +34,12 @@ export const scheduleRouter = createRouter()
       const { subCode } = input;
       return ctx.prisma.schedule.findMany({
         where: {
-          subCode: { contains: subCode },
+          subject: {
+            subCode: subCode, // Assuming 'subCode' is the field in SubjectList
+          },
+        },
+        include: {
+          subject: true, // Include the SubjectList data
         },
       });
     },
@@ -44,7 +63,7 @@ export const scheduleRouter = createRouter()
   .mutation("add", {
     input: z.object({
       teacherId: z.string(),
-      subCode: z.string(),
+      subjectId: z.string(),
       type: z.nativeEnum(subjectType),
       room: z.string(),
       days: z.string(),
@@ -52,12 +71,12 @@ export const scheduleRouter = createRouter()
       endTime: z.string(),
     }),
     async resolve({ ctx, input }) {
-      const { teacherId, subCode, type, room, days, startTime, endTime } =
+      const { teacherId, subjectId, type, room, days, startTime, endTime } =
         input;
       return ctx.prisma.schedule.create({
         data: {
           teacherId: teacherId,
-          subCode: subCode,
+          subjectId: subjectId,
           type: type,
           room: room,
           days: [days],
@@ -72,7 +91,7 @@ export const scheduleRouter = createRouter()
     input: z.array(
       z.object({
         teacherId: z.string(),
-        subCode: z.string(),
+        subjectId: z.string(),
         type: z.nativeEnum(subjectType),
         room: z.string(),
         days: z.string(),
@@ -83,7 +102,7 @@ export const scheduleRouter = createRouter()
     async resolve({ ctx, input }) {
       const data = input.map((item) => ({
         teacherId: item.teacherId,
-        subCode: item.subCode,
+        subjectId: item.subjectId,
         type: item.type,
         room: item.room,
         days: [item.days],
@@ -116,7 +135,7 @@ export const scheduleRouter = createRouter()
         },
         data: {
           teacherId: teacherId,
-          subCode: subCode,
+          subjectId: subCode,
           type: type,
           room: room,
           days: [days],
