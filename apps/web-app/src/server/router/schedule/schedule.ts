@@ -1,4 +1,5 @@
 import { subjectType } from "@prisma/client";
+import * as Excel from "exceljs";
 import { z } from "zod";
 
 import { createRouter } from "../context";
@@ -38,6 +39,58 @@ export const scheduleRouter = createRouter()
       });
     },
   })
+  .query("exportSchedule", {
+    async resolve({ ctx }) {
+      const scheduleData = await ctx.prisma.schedule.findMany({
+        include: {
+          teacher: {
+            select: {
+              lastName: true,
+              firstName: true,
+            },
+          },
+          subject: {
+            select: {
+              subCode: true,
+            },
+          },
+        },
+      });
+      // Create a new workbook
+      const workbook = new Excel.Workbook();
+      const worksheet = workbook.addWorksheet("Schedule");
+
+      // Add headers to the worksheet
+      worksheet.addRow([
+        "SubCode",
+        "Type",
+        "Teacher",
+        "Room",
+        "Days",
+        "StartTime",
+        "EndTime",
+      ]);
+
+      // Add data to the worksheet
+      for (const scheduleItem of scheduleData) {
+        worksheet.addRow([
+          scheduleItem.subCode,
+          scheduleItem.type,
+          scheduleItem.teacher,
+          scheduleItem.room,
+          scheduleItem.days.join(", "),
+          scheduleItem.startTime,
+          scheduleItem.endTime,
+        ]);
+      }
+      // Generate the Excel file buffer
+      const excelBuffer = await workbook.xlsx.writeBuffer();
+
+      // Return the Excel file buffer to a string
+      return excelBuffer.toString("base64");
+    },
+  })
+
   /**
    * Mutations
    */
