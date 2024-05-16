@@ -31,7 +31,7 @@ export const appRouter = createRouter()
   .merge("subject.", subjectRouter)
   .merge("teacher.", teacherRouter)
   .merge("subjectList.", subjectListRouter)
-  .merge("schedule", scheduleRouter)
+  .merge("schedule.", scheduleRouter)
   .merge("proposedTeachingLoad.", proposedTeachingLoadRouter);
 
 // export type definition of API
