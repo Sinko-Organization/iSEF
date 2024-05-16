@@ -120,7 +120,7 @@ model Course {
 model Schedule {
     id           String       @id @default(cuid())
     teacherId    String       @map("teacher_id")
-    subjectId    String       @map("subject_id")
+    subCode      String       @map("sub_code")
     type         subjectType
     room         String     
     days         String[]
@@ -128,8 +128,8 @@ model Schedule {
     endTime      String       
     createdAt    DateTime     @default(now()) @map("created_at")
     updatedAt    DateTime     @updatedAt @map("updated_at")
-    teacher      Teacher      @relation(fields: [teacherId], references: [id], onDelete: Cascade)
-    subject      SubjectList  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+    teacher      Teacher      @relation(fields: [teacherId], references: [teacherId], onDelete: Cascade)
+    subject      SubjectList  @relation(fields: [subCode], references: [subCode], onDelete: Cascade)
 }
     
 
