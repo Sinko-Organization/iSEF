@@ -17,11 +17,6 @@ export const scheduleRouter = createRouter()
               lastName: true,
             },
           },
-          subject: {
-            select: {
-              subCode: true,
-            },
-          },
         },
       });
     },
@@ -37,9 +32,6 @@ export const scheduleRouter = createRouter()
           subject: {
             subCode: subCode, // Assuming 'subCode' is the field in SubjectList
           },
-        },
-        include: {
-          subject: true, // Include the SubjectList data
         },
       });
     },
@@ -63,7 +55,7 @@ export const scheduleRouter = createRouter()
   .mutation("add", {
     input: z.object({
       teacherId: z.string(),
-      subjectId: z.string(),
+      subCode: z.string(),
       type: z.nativeEnum(subjectType),
       room: z.string(),
       days: z.string(),
@@ -71,12 +63,12 @@ export const scheduleRouter = createRouter()
       endTime: z.string(),
     }),
     async resolve({ ctx, input }) {
-      const { teacherId, subjectId, type, room, days, startTime, endTime } =
+      const { teacherId, subCode, type, room, days, startTime, endTime } =
         input;
       return ctx.prisma.schedule.create({
         data: {
           teacherId: teacherId,
-          subjectId: subjectId,
+          subCode: subCode,
           type: type,
           room: room,
           days: [days],
@@ -91,7 +83,7 @@ export const scheduleRouter = createRouter()
     input: z.array(
       z.object({
         teacherId: z.string(),
-        subjectId: z.string(),
+        subCode: z.string(),
         type: z.nativeEnum(subjectType),
         room: z.string(),
         days: z.string(),
@@ -102,7 +94,7 @@ export const scheduleRouter = createRouter()
     async resolve({ ctx, input }) {
       const data = input.map((item) => ({
         teacherId: item.teacherId,
-        subjectId: item.subjectId,
+        subCode: item.subCode,
         type: item.type,
         room: item.room,
         days: [item.days],
@@ -135,7 +127,7 @@ export const scheduleRouter = createRouter()
         },
         data: {
           teacherId: teacherId,
-          subjectId: subCode,
+          subCode: subCode,
           type: type,
           room: room,
           days: [days],
