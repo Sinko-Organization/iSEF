@@ -208,10 +208,10 @@ SCHEDULE VERIFICATION
     newEndTime: string,
   ): boolean {
     // Convert time strings to Date objects for easier comparison
-    const existingStart = new Date(existingStartTime);
-    const existingEnd = new Date(existingEndTime);
-    const newStart = new Date(newStartTime);
-    const newEnd = new Date(newEndTime);
+    const existingStart = this.parseTimeString(existingStartTime);
+    const existingEnd = this.parseTimeString(existingEndTime);
+    const newStart = this.parseTimeString(newStartTime);
+    const newEnd = this.parseTimeString(newEndTime);
 
     // Check for overlap by comparing start and end times
     if (
@@ -241,6 +241,7 @@ ROOM DAYS TIME ASSIGNMENTS
   assignRoom(): Room {
     // Assign a room for the schedule logic
     // Age appropriate room assignment
+    // Use this.teacher.birthday to determine age
 
     return "EN100";
   }
@@ -257,7 +258,24 @@ ROOM DAYS TIME ASSIGNMENTS
     // 3hour class 1 hour rest rule
     // teacher availability verification
 
-    return { startTime: "08:00", endTime: "09:30" };
+    return { startTime: "0800", endTime: "0930" };
+  }
+
+  /***
+HELPER FUNCTIONS
+***/
+  // Helper function to parse time string to Date object
+  parseTimeString(timeString: string): Date {
+    // Assuming the time string is in the format "HHMM"
+    const hours = Number.parseInt(timeString.slice(0, 2), 10);
+    const minutes = Number.parseInt(timeString.slice(2, 4), 10);
+
+    const date = new Date();
+    date.setHours(hours);
+    date.setMinutes(minutes);
+    date.setSeconds(0); // Optionally, set seconds to 0
+
+    return date;
   }
 }
 
