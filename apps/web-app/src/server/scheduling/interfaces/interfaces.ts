@@ -63,4 +63,5 @@ export interface SchedulerClass {
   assignRoom(): Room;
   assignDays(): DaysOfWeek[];
   assignTime(): { startTime: Time; endTime: Time };
+  parseTimeString(time: string): Date;
 }
