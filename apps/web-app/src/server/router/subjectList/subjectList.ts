@@ -109,7 +109,7 @@ export const subjectListRouter = createRouter()
   .query("curriculum", {
     async resolve({ ctx }) {
       const distinctCurriculums: string[] = await ctx.prisma
-        .$queryRaw`SELECT DISTINCT UNNEST("curriculum") AS curriculum FROM "subjectList";`;
+        .$queryRaw`SELECT DISTINCT UNNEST("curriculum") AS curriculum FROM "SubjectList";`;
       return distinctCurriculums;
     },
   })
