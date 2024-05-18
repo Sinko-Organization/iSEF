@@ -61,7 +61,20 @@ export interface SchedulerClass {
   teacherAvailabilityVerification(): boolean;
   classAndRestRuleVerification(): boolean;
   assignRoom(): Room;
-  assignDays(): DaysOfWeek[];
-  assignTime(): { startTime: Time; endTime: Time };
+  assignDaysAndTime(
+    subjectType: subjectType,
+    hours: number,
+  ): { startTime: Time; endTime: Time; days: DaysOfWeek[] };
   parseTimeString(time: string): Date;
+  generateStartTime(): Time;
+  assignSingleDay(): DaysOfWeek[];
+  assignMultipleDaysForLecture(hours: number): DaysOfWeek[];
+  calculateEndTimeForDay(startTime: Time, hours: number): Time;
+  calculateEndTimeForLecture(
+    days: DaysOfWeek[],
+    startTime: Time,
+    hours: number,
+  ): Time;
+  timeToMinutes(time: Time): number;
+  minutesToTime(duration: number): Time;
 }

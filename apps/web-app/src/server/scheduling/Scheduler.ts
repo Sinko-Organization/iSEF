@@ -90,13 +90,13 @@ SCHEDULE GENERATION
     const singleSectionSchedules: Schedule[] = [];
 
     if (subject.lecHours > 0) {
-      const time = this.assignTime();
+      const time = this.assignDaysAndTime("LEC", subject.lecHours);
       const lectureSchedule: Schedule = {
         teacherId: subject.teacherId,
         subCode: subject.subCode,
         type: subjectType.LEC,
         room: this.assignRoom(),
-        days: this.assignDays(),
+        days: time.days,
         startTime: time.startTime, // Assuming Time is defined somewhere
         endTime: time.endTime, // Assuming Time is defined somewhere
       };
@@ -107,13 +107,13 @@ SCHEDULE GENERATION
     }
 
     if (subject.labHours > 0) {
-      const time = this.assignTime();
+      const time = this.assignDaysAndTime("LAB", subject.labHours);
       const labSchedule: Schedule = {
         teacherId: subject.teacherId,
         subCode: subject.subCode,
         type: subjectType.LAB,
         room: this.assignRoom(),
-        days: this.assignDays(),
+        days: time.days,
         startTime: time.startTime,
         endTime: time.endTime,
       };
@@ -130,13 +130,13 @@ SCHEDULE GENERATION
 
     for (let i = 1; i <= subject.sections; i++) {
       if (subject.lecHours > 0) {
-        const time = this.assignTime();
+        const time = this.assignDaysAndTime("LEC", subject.lecHours);
         const lectureSchedule: Schedule = {
           teacherId: subject.teacherId,
           subCode: subject.subCode,
           type: subjectType.LEC,
           room: this.assignRoom(),
-          days: this.assignDays(),
+          days: time.days,
           startTime: time.startTime,
           endTime: time.endTime,
         };
@@ -147,13 +147,13 @@ SCHEDULE GENERATION
       }
 
       if (subject.labHours > 0) {
-        const time = this.assignTime();
+        const time = this.assignDaysAndTime("LAB", subject.labHours);
         const labSchedule: Schedule = {
           teacherId: subject.teacherId,
           subCode: subject.subCode,
           type: subjectType.LAB,
           room: this.assignRoom(),
-          days: this.assignDays(),
+          days: time.days,
           startTime: time.startTime,
           endTime: time.endTime,
         };
@@ -246,19 +246,30 @@ ROOM DAYS TIME ASSIGNMENTS
     return "EN100";
   }
 
-  assignDays(): DaysOfWeek[] {
-    // Assign days for the schedule logic
-    // teacher availability verification
+  assignDaysAndTime(
+    subjectType: subjectType,
+    hours: number,
+  ): { startTime: Time; endTime: Time; days: DaysOfWeek[] } {
+    const startTime = this.generateStartTime();
+    let endTime: Time;
 
-    return ["M", "W", "F"];
-  }
+    if (subjectType === "LAB") {
+      // Calculate end time for Lab based on continuous hours
+      endTime = this.calculateEndTimeForDay(startTime, hours);
 
-  assignTime(): { startTime: Time; endTime: Time } {
-    // Assign time for the schedule logic
+      // Assign a single random day for Lab
+      const days = this.assignSingleDay();
+      return { startTime, endTime, days };
+    } else {
+      // Assign multiple days for Lecture
+      const days = this.assignMultipleDaysForLecture(hours);
+      // Calculate end time for Lecture based on the given hours
+      endTime = this.calculateEndTimeForLecture(days, startTime, hours);
+
+      return { startTime, endTime, days };
+    }
     // 3hour class 1 hour rest rule
     // teacher availability verification
-
-    return { startTime: "0800", endTime: "0930" };
   }
 
   /***
@@ -276,6 +287,102 @@ HELPER FUNCTIONS
     date.setSeconds(0); // Optionally, set seconds to 0
 
     return date;
+  }
+  // Helper function to calculate start time
+  generateStartTime(): Time {
+    // Generate a random start time from available time slots
+    const timeSlots: Time[] = [
+      "0700",
+      "0730",
+      "0800",
+      "0830",
+      "0900",
+      "0930",
+      "1000",
+      "1030",
+      "1100",
+      "1130",
+      "1200",
+      "1230",
+      "1300",
+      "1330",
+      "1400",
+      "1430",
+      "1500",
+      "1530",
+      "1600",
+      "1630",
+      "1700",
+      "1730",
+      "1800",
+      "1830",
+      "1900",
+      "1930",
+      "2000",
+      "2030",
+      "2100",
+      "2130",
+    ];
+    const randomIndex = Math.floor(Math.random() * timeSlots.length);
+    return timeSlots[randomIndex] as Time;
+  }
+
+  // Helper function to generate a random day
+  assignSingleDay(): DaysOfWeek[] {
+    // Assign a single random day from available days
+    const availableDays: DaysOfWeek[] = ["M", "T", "W", "TH", "F", "S"];
+    const randomIndex = Math.floor(Math.random() * availableDays.length);
+    return [availableDays[randomIndex]] as DaysOfWeek[];
+  }
+  // Helper function to generate multiple random days
+  assignMultipleDaysForLecture(hours: number): DaysOfWeek[] {
+    // Assign multiple days for Lecture
+    const availableDays: DaysOfWeek[] = ["M", "T", "W", "TH", "F", "S"];
+    // Calculate the number of days to assign based on the given hours
+    const numberOfDays = Math.min(hours, availableDays.length); // Ensure not to exceed the number of available days
+    // Randomly shuffle the available days array
+    const shuffledDays = availableDays.sort(() => Math.random() - 0.5);
+    // Select the first 'numberOfDays' days from the shuffled array
+    const selectedDays = shuffledDays.slice(0, numberOfDays);
+    return selectedDays;
+  }
+  // Helper function to calculate end time for a day
+  calculateEndTimeForDay(startTime: Time, hours: number): Time {
+    // Calculate end time based on the start time and hours for a day
+    const startTimeInMinutes = this.timeToMinutes(startTime);
+    const endTimeInMinutes = startTimeInMinutes + hours * 60;
+    const endTime = this.minutesToTime(endTimeInMinutes);
+    return endTime;
+  }
+  // Helper function to calculate end time for Lecture
+  calculateEndTimeForLecture(
+    days: DaysOfWeek[],
+    startTime: Time,
+    hours: number,
+  ): Time {
+    // Calculate the duration per day
+    const durationPerDay = hours / days.length;
+    // Calculate the end time for each day
+    let endTime: Time = startTime;
+    for (let i = 0; i < days.length; i++) {
+      endTime = this.calculateEndTimeForDay(endTime, durationPerDay);
+    }
+    // Return the end time for the last day
+    return endTime;
+  }
+  // Helper function to conver time string to minutes
+  timeToMinutes(time: Time): number {
+    const hours: number = Number.parseInt(time.slice(0, 2), 10);
+    const minutes: number = Number.parseInt(time.slice(2), 10);
+    return hours * 60 + minutes;
+  }
+  // Helper function to convert minutes into time string
+  minutesToTime(duration: number): Time {
+    const hours: number = Math.floor(duration / 60);
+    const minutes: number = duration % 60;
+    const formattedHours: string = hours.toString().padStart(2, "0");
+    const formattedMinutes: string = (minutes % 60).toString().padStart(2, "0");
+    return `${formattedHours}${formattedMinutes}` as Time;
   }
 }
 
