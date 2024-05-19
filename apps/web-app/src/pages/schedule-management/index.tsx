@@ -11,10 +11,11 @@ import toast, { Toaster } from "react-hot-toast";
 import Calendar from "@web-app/components/tables/Calendar";
 import SaveCalendar from "@web-app/components/buttons/SaveCalendar";
 import { excelConversion, generateDownload } from "./export"
-
 const SchedulePage: NextPage = () => {
   const { data: scheduleList, error } = trpc.useQuery(["schedule.getAll"]);
   const [excelData, setExcelData] = useState(null);
+  const { mutate: generateSchedule } = trpc.useMutation(["schedule.generateSchedule"]);
+  const { mutate: deleteSchedules } = trpc.useMutation(["schedule.deleteAll"]);
 
   const handleDownload = async () => {
     try {
@@ -24,11 +25,15 @@ const SchedulePage: NextPage = () => {
       console.error('Error fetching Excel data:', error);
     }
   };
+  const handleGenerateSchedule = () => { generateSchedule(); };
+  const handleDeleteSchedules = () => { deleteSchedules(); };
 
   return (
     <Grid paddingTop={5} paddingX={5}>
       <div>
         <Button onClick={handleDownload}>Download Excel</Button>
+        <Button onClick={handleGenerateSchedule}>Generate Schedule</Button>
+        <Button onClick={handleDeleteSchedules}>Delete Schedules</Button>
       </div>
       <Grid container >
         <Grid container >

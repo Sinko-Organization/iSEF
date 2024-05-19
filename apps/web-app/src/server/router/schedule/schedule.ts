@@ -1,6 +1,7 @@
 import { subjectType } from "@prisma/client";
 import { z } from "zod";
 
+import Scheduler from "../../scheduling/Scheduler";
 import { createRouter } from "../context";
 
 export const scheduleRouter = createRouter()
@@ -49,9 +50,18 @@ export const scheduleRouter = createRouter()
       });
     },
   })
+
   /**
    * Mutations
    */
+  .mutation("generateSchedule", {
+    async resolve({ ctx }) {
+      const scheduler = new Scheduler(ctx);
+      const schedule = scheduler.generateSchedule();
+      console.log(schedule);
+      return schedule;
+    },
+  })
   .mutation("add", {
     input: z.object({
       teacherId: z.string(),
@@ -151,15 +161,8 @@ export const scheduleRouter = createRouter()
       });
     },
   })
-  .mutation("deleteMany", {
-    input: z.object({
-      id: z.array(z.string()),
-    }),
-    async resolve({ ctx, input }) {
-      return ctx.prisma.schedule.deleteMany({
-        where: {
-          id: { in: input.id },
-        },
-      });
+  .mutation("deleteAll", {
+    async resolve({ ctx }) {
+      return ctx.prisma.schedule.deleteMany();
     },
   });
