@@ -11,7 +11,7 @@ export interface PTL {
   sections: number;
   lecHours: number;
   labHours: number;
-  timeRemarks: string;
+  timeRemarks: { days: DaysOfWeek[]; startTime: Time; endTime: Time };
   createdAt: Date;
   updatedAt: Date;
 }
@@ -40,6 +40,7 @@ export interface Schedule {
 }
 
 export interface SchedulerClass {
+  ctx: any;
   ptl: PTL[];
   teachers: Teacher[];
   schedules: Schedule[];
@@ -60,7 +61,16 @@ export interface SchedulerClass {
     newStartTime: Time,
     newEndTime: Time,
   ): boolean;
-  teacherAvailabilityVerification(): boolean;
+  teacherAvailabilityVerification(
+    timeRemarks: {
+      days: DaysOfWeek[];
+      startTime: Time;
+      endTime: Time;
+    },
+    days: DaysOfWeek[],
+    startTime: Time,
+    endTime: Time,
+  ): boolean;
   classAndRestRuleVerification(schedule: Schedule): boolean;
   assignRoom(birthday: Date): Room;
   assignDaysAndTime(

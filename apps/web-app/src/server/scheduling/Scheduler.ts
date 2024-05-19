@@ -1,4 +1,4 @@
-import { PrismaClient, subjectType } from "@prisma/client";
+import { subjectType } from "@prisma/client";
 
 import {
   PTL,
@@ -10,13 +10,13 @@ import DaysOfWeek from "./types/DaysOfWeek";
 import { Room, roomArray } from "./types/Room";
 import { Time, timeArray } from "./types/Time";
 
-const prisma = new PrismaClient();
-
 class Scheduler implements SchedulerClass {
+  ctx: any;
   ptl: PTL[] = [];
   teachers: Teacher[] = [];
   schedules: Schedule[] = [];
-  constructor() {
+  constructor(ctx: any) {
+    this.ctx = ctx;
     this.ptl = [];
     this.teachers = [];
     this.schedules = [];
@@ -26,21 +26,12 @@ class Scheduler implements SchedulerClass {
 SCHEDULE DATABASE OPERATIONS
 ***/
   async PTLData(): Promise<PTL[]> {
-    try {
-      return await prisma.proposedTeachingLoad.findMany();
-    } catch (error) {
-      // Handle the error here, such as logging it or throwing a custom error
-      throw new Error(
-        `Failed to fetch proposed teaching load data: ${
-          (error as Error).message
-        }`,
-      );
-    }
+    return await this.ctx.prisma.proposedTeachingLoad.findMany();
   }
 
   async TeacherData(): Promise<Teacher[]> {
     try {
-      return await prisma.teacher.findMany();
+      return await this.ctx.prisma.teacher.findMany();
     } catch (error) {
       // Handle the error here, such as logging it or throwing a custom error
       throw new Error(
@@ -52,7 +43,7 @@ SCHEDULE DATABASE OPERATIONS
   async createMultipleSchedules(schedules: Schedule[]): Promise<void> {
     try {
       // Use Prisma to create many schedules
-      await prisma.schedule.createMany({
+      await this.ctx.prisma.schedule.createMany({
         data: schedules,
       });
     } catch (error) {
@@ -108,7 +99,13 @@ SCHEDULE GENERATION
       while (
         this.scheduleOverlapVerification(lectureSchedule) ||
         !timeArray.includes(time.endTime) ||
-        !this.classAndRestRuleVerification(lectureSchedule)
+        !this.classAndRestRuleVerification(lectureSchedule) ||
+        !this.teacherAvailabilityVerification(
+          subject.timeRemarks,
+          time.days,
+          time.startTime,
+          time.endTime,
+        )
       ) {
         time = this.assignDaysAndTime("LEC", subject.lecHours);
         lectureSchedule = {
@@ -145,7 +142,13 @@ SCHEDULE GENERATION
       while (
         this.scheduleOverlapVerification(labSchedule) ||
         !timeArray.includes(time.endTime) ||
-        !this.classAndRestRuleVerification(labSchedule)
+        !this.classAndRestRuleVerification(labSchedule) ||
+        !this.teacherAvailabilityVerification(
+          subject.timeRemarks,
+          time.days,
+          time.startTime,
+          time.endTime,
+        )
       ) {
         time = this.assignDaysAndTime("LAB", subject.labHours);
         labSchedule = {
@@ -192,7 +195,13 @@ SCHEDULE GENERATION
         while (
           this.scheduleOverlapVerification(lectureSchedule) ||
           !timeArray.includes(time.endTime) ||
-          !this.classAndRestRuleVerification(lectureSchedule)
+          !this.classAndRestRuleVerification(lectureSchedule) ||
+          !this.teacherAvailabilityVerification(
+            subject.timeRemarks,
+            time.days,
+            time.startTime,
+            time.endTime,
+          )
         ) {
           time = this.assignDaysAndTime("LEC", subject.lecHours);
           lectureSchedule = {
@@ -232,7 +241,13 @@ SCHEDULE GENERATION
         while (
           this.scheduleOverlapVerification(labSchedule) ||
           !timeArray.includes(time.endTime) ||
-          !this.classAndRestRuleVerification(labSchedule)
+          !this.classAndRestRuleVerification(labSchedule) ||
+          !this.teacherAvailabilityVerification(
+            subject.timeRemarks,
+            time.days,
+            time.startTime,
+            time.endTime,
+          )
         ) {
           time = this.assignDaysAndTime("LAB", subject.labHours);
           labSchedule = {
@@ -315,9 +330,39 @@ SCHEDULE VERIFICATION
     return false; // No overlap found
   }
 
-  teacherAvailabilityVerification(): boolean {
-    // Check if teachers are availability factoring the remarks from PTL for the generated schedule
-    // Teacher availability verification logic goes here
+  teacherAvailabilityVerification(
+    timeRemarks: { days: DaysOfWeek[]; startTime: Time; endTime: Time },
+    days: DaysOfWeek[],
+    startTime: Time,
+    endTime: Time,
+  ): boolean {
+    // Check if the generated schedule falls within the teacher's available time range for each day
+    for (const day of days) {
+      // Check if the day is included in the teacher's time remarks
+      let isAvailable = false;
+      // Iterate over the teacher's available days and check if the current day matches
+      for (const availableDay of timeRemarks.days) {
+        if (availableDay === day) {
+          isAvailable = true;
+          break; // Exit the loop once the day is found
+        }
+      }
+      if (!isAvailable) {
+        return false; // Teacher is not available on this day
+      }
+
+      // Check if the start time is after the teacher's available start time
+      if (startTime < timeRemarks.startTime) {
+        return false;
+      }
+
+      // Check if the end time is before the teacher's available end time
+      if (endTime > timeRemarks.endTime) {
+        return false;
+      }
+    }
+
+    // If all conditions are met, the teacher is available
     return true;
   }
 
@@ -411,8 +456,6 @@ ROOM DAYS TIME ASSIGNMENTS
 
       return { startTime, endTime, days };
     }
-    // 3hour class 1 hour rest rule
-    // teacher availability verification
   }
 
   /***
