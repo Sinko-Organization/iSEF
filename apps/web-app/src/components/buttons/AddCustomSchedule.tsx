@@ -81,7 +81,7 @@ const SchedulingRow = ({ dayOfTheWeek }: scheduleDialogProps) => {
 
 }
 
-const AddScheduleButton = () => {
+const AddCustomScheduleButton = () => {
 
 
 
@@ -144,4 +144,4 @@ const AddScheduleButton = () => {
   );
 };
 
-export default AddScheduleButton;
+export default AddCustomScheduleButton;

@@ -1,42 +1,26 @@
-import { Toast } from "@chakra-ui/react";
-import { Add } from "@mui/icons-material";
+import { background } from "@chakra-ui/react";
 import {
   Box,
   Button,
-  Checkbox,
   Dialog,
   DialogActions,
-  DialogContent,
-  DialogContentText,
   DialogTitle,
-  Grid,
-  IconButton,
+  Typography,
+  TextField,
   MenuItem,
   Select,
+  FormControl,
+  InputLabel,
+  Modal,
+  Paper,
   SelectChangeEvent,
-  Switch,
-  TextField,
-  Typography,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { DateField } from "@mui/x-date-pickers";
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { employmentType } from "@prisma/client";
-import { Department } from "@prisma/client";
-import FormError from "../errors/FormError";
-import { trpc } from "@web-app/utils/trpc";
-import dayjs from "dayjs";
-import React, { ChangeEvent, useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
-import { e } from "vitest/dist/index-220c1d70";
-import { DaySelector } from "../selectors";
-
+import React, { useState, useEffect } from "react";
 
 const useStyles = makeStyles({
   container: {
     display: "flex",
-    alignItems: "center",
   },
   button: {
     backgroundColor: "#9078B6",
@@ -47,124 +31,220 @@ const useStyles = makeStyles({
       backgroundColor: "#694f92",
     },
   },
-
   text: {
     marginLeft: "10px",
   },
 });
 
-// start adding the backend stuff here!
+const subjects = ["OSH", "Algorithms", "Networking", "Web Development", "Database Management", "Software Engineering", "Operating Systems", "Computer Architecture", "Data Structures", "Machine Learning", "Cyber Security"];
+const rooms = ["En101", "En102", "En103", "En104", "En105", "En106", "En107", "En108", "En109", "En110", "En200"];
+const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const hours = Array.from({ length: 15 }, (_, i) => 7 + i);
 
 
-const AddCustomScheduleButton = () => {
-
+const AddScheduleButton = () => {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => {
-    setOpen(true);
+
+  const [selectedSubject, setSelectedSubject] = useState('');
+  const [selectedRoom, setSelectedRoom] = useState('');
+  const [selectedDay, setSelectedDay] = useState('');
+  const [modalOpen, setModalOpen] = useState(false);
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
+
+  const handleSubjectChange = (event: SelectChangeEvent<string>) => {
+    setSelectedSubject(event.target.value);
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleRoomChange = (event: SelectChangeEvent<string>) => {
+    setSelectedRoom(event.target.value);
   };
+
+  const handleDayChange = (event: SelectChangeEvent<string>) => {
+    setSelectedDay(event.target.value);
+  };
+
+  const handleStartTimeChange = (event: SelectChangeEvent<string>) => {
+    setStartTime(event.target.value);
+  };
+
+  const handleEndTimeChange = (event: SelectChangeEvent<string>) => {
+    setEndTime(event.target.value);
+  };
+
+  const handleOpenModal = () => setModalOpen(true);
+  const handleCloseModal = () => setModalOpen(false);
+
+  const handleAddSchedule = () => {
+    if (selectedDay && selectedSubject && selectedRoom && startTime && endTime) {
+      const newSchedule = {
+        day: selectedDay,
+        subject: selectedSubject,
+        room: selectedRoom,
+        startTime: startTime,
+        endTime: endTime
+      };
+      console.log('New Schedule:', newSchedule);
+      // Add logic to save the new schedule
+      handleCloseModal();
+    } else {
+      alert('Please fill all fields!');
+    }
+  };
+
+
 
   return (
-
     <React.Fragment>
-      <div className={classes.container}>
-        <Button
-          color="secondary"
-          variant="contained"
-          onClick={handleOpen}
-          className={classes.button}
-        >
+      <div>
+        <Button variant="contained" color="secondary" onClick={handleOpenModal} style={{ marginBottom: '16px' }} className={classes.button}>
           Add Schedule
         </Button>
+        <Modal open={modalOpen} onClose={handleCloseModal} className={classes.container}>
+          <Paper sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', padding: '20px' }} style={{ background: "lavender" }}>
+            <Typography variant="h6" gutterBottom>
+              Add Schedule
+            </Typography>
+            <form>
+              {/* Subject */}
+              <Box sx={{ display: "flex", alignItems: "center", marginBottom: 2 }}>
+                <Typography variant="body1" sx={{ marginRight: 2 }}>
+                  Subject
+                </Typography>
+                <Box sx={{ width: 200 }}>
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">Subject</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      label="Subject"
+                      value={selectedSubject}
+                      onChange={handleSubjectChange}
+                      sx={{ width: "100%" }}
+                    >
+                      {subjects.map((subject, index) => (
+                        <MenuItem key={index} value={subject}>
+                          {subject}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Box>
+              </Box>
+              {/* Room */}
+              <Box sx={{ display: "flex", alignItems: "center", marginBottom: 2 }}>
+                <Typography variant="body1" sx={{ marginRight: 2 }}>
+                  Room
+                </Typography>
+                <Box sx={{ width: 200 }}>
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">Room</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      label="Room"
+                      value={selectedRoom}
+                      onChange={handleRoomChange}
+                      sx={{ width: "100%" }}
+                    >
+                      {rooms.map((room, index) => (
+                        <MenuItem key={index} value={room}>
+                          {room}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Box>
+              </Box>
+              {/* Day */}
+              <Box sx={{ display: "flex", alignItems: "center", marginBottom: 2 }}>
+                <Typography variant="body1" sx={{ marginRight: 2 }}>
+                  Day
+                </Typography>
+                <Box sx={{ width: 200 }}>
+                  <FormControl fullWidth>
+                    <InputLabel id="day-label">Day</InputLabel>
+                    <Select
+                      labelId="day-label"
+                      id="day"
+                      value={selectedDay}
+                      onChange={handleDayChange}
+                      label="Day"
+                    >
+                      {daysOfWeek.map((day, index) => (
+                        <MenuItem key={index} value={day}>
+                          {day}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Box>
+              </Box>
+              {/* Start Time */}
+              <Box sx={{ display: "flex", alignItems: "center", marginBottom: 2 }}>
+                <Typography variant="body1" sx={{ marginRight: 2 }}>
+                  Start Time
+                </Typography>
+                <Box sx={{ width: 200 }}>
+                  <FormControl fullWidth>
+                    <InputLabel id="start-time-label">Start Time</InputLabel>
+                    <Select
+                      labelId="start-time-label"
+                      id="start-time"
+                      value={startTime}
+                      onChange={handleStartTimeChange}
+                      label="Start Time"
+                    >
+                      {hours.map((hour, index) => (
+                        <MenuItem key={index} value={`${hour}:00`}>
+                          {`${hour}:00 ${hour < 12 ? 'AM' : 'PM'}`}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Box>
+              </Box>
+              {/* End Time */}
+              <Box sx={{ display: "flex", alignItems: "center", marginBottom: 2 }}>
+                <Typography variant="body1" sx={{ marginRight: 2 }}>
+                  End Time
+                </Typography>
+                <Box sx={{ width: 200 }}>
+                  <FormControl fullWidth>
+                    <InputLabel id="end-time-label">End Time</InputLabel>
+                    <Select
+                      labelId="end-time-label"
+                      id="end-time"
+                      value={endTime}
+                      onChange={handleEndTimeChange}
+                      label="End Time"
+                    >
+                      {hours.map((hour, index) => (
+                        <MenuItem key={index} value={`${hour}:00`}>
+                          {`${hour}:00 ${hour < 12 ? 'AM' : 'PM'}`}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Box>
+              </Box>
+              {/* Add Schedule Button */}
+              <DialogActions>
+                <Button color="error" onClick={handleCloseModal}>
+                  Cancel
+                </Button>
+                <Button color="secondary">Add</Button>
+              </DialogActions>
+
+            </form>
+          </Paper>
+        </Modal>
       </div>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle
-          style={{
-            textAlign: "center",
-            backgroundColor: "lavender",
-          }}
-        >
-          Add schedule for this teacher
-        </DialogTitle>
-
-        <Box sx={{ display: "flex", alignItems: "flex-end", marginTop: 3, marginLeft: 4 }}>
-          <Box sx={{ width: 160 }}>
-
-            <DaySelector />
-
-          </Box>
-        </Box>
-        <Box sx={{ display: "flex", alignItems: "flex-end" }}>
-          <Box sx={{ width: 160 }}>
-            <Typography sx={{ marginLeft: 2 }}>Time</Typography>
-
-          </Box>
-        </Box>
-
-        <TextField
-          color="secondary"
-          //onChange={handleTextChange}
-          margin="dense"
-          name="lastName"
-          type="text"
-          fullWidth
-          variant="filled"
-        />
-
-        <Box sx={{ display: "flex", alignItems: "flex-end" }}>
-          <Box sx={{ width: 160 }}>
-            <Typography sx={{ marginLeft: 2 }}>From</Typography>
-          </Box>
-
-          <TextField
-            color="secondary"
-            //onChange={handleTextChange}
-            margin="dense"
-            name="firstName"
-            type="text"
-            fullWidth
-            variant="filled"
-          />
-        </Box>
-
-        <Box sx={{ display: "flex", alignItems: "flex-end" }}>
-          <Box sx={{ width: 160 }}>
-            <Typography sx={{ marginLeft: 2 }}>To</Typography>
-          </Box>
-
-          <TextField
-            color="secondary"
-            //onChange={handleTextChange}
-            margin="dense"
-            name="middleName"
-            type="text"
-            fullWidth
-            variant="filled"
-          />
-        </Box>
-
-        <DialogContent>
+    </React.Fragment >
 
 
-        </DialogContent>
-        <DialogActions>
-          <Button color="error" onClick={handleClose}>
-            Cancel
-          </Button>
-          <Button
-            color="secondary"
-          >
-            Add
-          </Button>
-        </DialogActions>
-      </Dialog>
 
-    </React.Fragment>
   );
 };
 
-export default AddCustomScheduleButton;
+export default AddScheduleButton;
