@@ -61,7 +61,7 @@ export interface SchedulerClass {
     newEndTime: Time,
   ): boolean;
   teacherAvailabilityVerification(): boolean;
-  classAndRestRuleVerification(): boolean;
+  classAndRestRuleVerification(schedule: Schedule): boolean;
   assignRoom(birthday: Date): Room;
   assignDaysAndTime(
     subjectType: subjectType,

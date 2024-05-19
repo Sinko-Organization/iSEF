@@ -107,7 +107,8 @@ SCHEDULE GENERATION
 
       while (
         this.scheduleOverlapVerification(lectureSchedule) ||
-        !timeArray.includes(time.endTime)
+        !timeArray.includes(time.endTime) ||
+        !this.classAndRestRuleVerification(lectureSchedule)
       ) {
         time = this.assignDaysAndTime("LEC", subject.lecHours);
         lectureSchedule = {
@@ -143,7 +144,8 @@ SCHEDULE GENERATION
 
       while (
         this.scheduleOverlapVerification(labSchedule) ||
-        !timeArray.includes(time.endTime)
+        !timeArray.includes(time.endTime) ||
+        !this.classAndRestRuleVerification(labSchedule)
       ) {
         time = this.assignDaysAndTime("LAB", subject.labHours);
         labSchedule = {
@@ -189,7 +191,8 @@ SCHEDULE GENERATION
 
         while (
           this.scheduleOverlapVerification(lectureSchedule) ||
-          !timeArray.includes(time.endTime)
+          !timeArray.includes(time.endTime) ||
+          !this.classAndRestRuleVerification(lectureSchedule)
         ) {
           time = this.assignDaysAndTime("LEC", subject.lecHours);
           lectureSchedule = {
@@ -228,7 +231,8 @@ SCHEDULE GENERATION
 
         while (
           this.scheduleOverlapVerification(labSchedule) ||
-          !timeArray.includes(time.endTime)
+          !timeArray.includes(time.endTime) ||
+          !this.classAndRestRuleVerification(labSchedule)
         ) {
           time = this.assignDaysAndTime("LAB", subject.labHours);
           labSchedule = {
@@ -317,9 +321,49 @@ SCHEDULE VERIFICATION
     return true;
   }
 
-  classAndRestRuleVerification(): boolean {
-    // Check if the 3hr class and 1hr rest rule is followed
-    // Class and rest rule verification logic goes here
+  classAndRestRuleVerification(schedule: Schedule): boolean {
+    const maxAllowedMinutes = 180;
+    const teacherSchedules = this.schedules.filter(
+      (sch) => sch.teacherId === schedule.teacherId,
+    );
+    const daySchedules = teacherSchedules.filter((sch) =>
+      sch.days.some((day) => schedule.days.includes(day)),
+    );
+
+    let totalMinutes = 0;
+
+    // Calculate total minutes for the new schedule
+    const newStartMinutes = this.timeToMinutes(schedule.startTime);
+    const newEndMinutes = this.timeToMinutes(schedule.endTime);
+    totalMinutes += newEndMinutes - newStartMinutes;
+
+    // Calculate total minutes for the existing schedules
+    for (const daySchedule of daySchedules) {
+      const startMinutes = this.timeToMinutes(daySchedule.startTime);
+      const endMinutes = this.timeToMinutes(daySchedule.endTime);
+      totalMinutes += endMinutes - startMinutes;
+
+      // Check for the 1-hour rest rule
+      if (
+        Math.abs(startMinutes - newEndMinutes) < 60 ||
+        Math.abs(endMinutes - newStartMinutes) < 60
+      ) {
+        return false;
+      }
+
+      // Check if there's a gap between the new schedule and existing schedules
+      if (
+        daySchedule.endTime !== schedule.startTime &&
+        daySchedule.startTime !== schedule.endTime
+      ) {
+        return true;
+      }
+    }
+
+    // Check if the total minutes exceed the maximum allowed minutes
+    if (totalMinutes > maxAllowedMinutes) {
+      return false;
+    }
     return true;
   }
   /***
