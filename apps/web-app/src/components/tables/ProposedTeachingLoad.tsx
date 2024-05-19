@@ -154,7 +154,7 @@ const ProposedTeachingLoadTable: FC<ProposedTeachingLoadTableProps> = ({ PTLs })
                                                 borderRadius: 2,
                                             }}
                                         >
-                                            {PTL.timeRemarks}
+                                            {JSON.stringify(PTL.timeRemarks)}
                                         </TableCell>
                                     </TableRow>
                                 )
