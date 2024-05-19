@@ -35,7 +35,11 @@ export const proposedTeachingLoadRouter = createRouter()
       sections: z.number().int().nonnegative(),
       lecHours: z.number().int().nonnegative(),
       labHours: z.number().int().nonnegative(),
-      timeRemarks: z.string(),
+      timeRemarks: z.object({
+        days: z.array(z.string()),
+        startTime: z.string(),
+        endTime: z.string(),
+      }),
     }),
     async resolve({ ctx, input }) {
       const { teacherId, subCode, sections, lecHours, labHours, timeRemarks } =
@@ -61,7 +65,11 @@ export const proposedTeachingLoadRouter = createRouter()
       sections: z.number().int().nonnegative(),
       lecHours: z.number().int().nonnegative(),
       labHours: z.number().int().nonnegative(),
-      timeRemarks: z.string(),
+      timeRemarks: z.object({
+        days: z.array(z.string()),
+        startTime: z.string(),
+        endTime: z.string(),
+      }),
     }),
     async resolve({ ctx, input }) {
       const {
