@@ -1,6 +1,8 @@
 import { Department, employmentType, subjectType } from "@prisma/client";
 
-import { DaysOfWeek, Room, Time } from "../types/type";
+import DaysOfWeek from "../types/DaysOfWeek";
+import { Room } from "../types/Room";
+import { Time } from "../types/Time";
 
 export interface PTL {
   id: string;
@@ -60,7 +62,7 @@ export interface SchedulerClass {
   ): boolean;
   teacherAvailabilityVerification(): boolean;
   classAndRestRuleVerification(): boolean;
-  assignRoom(): Room;
+  assignRoom(birthday: Date): Room;
   assignDaysAndTime(
     subjectType: subjectType,
     hours: number,

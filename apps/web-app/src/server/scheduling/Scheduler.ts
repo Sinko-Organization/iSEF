@@ -6,7 +6,9 @@ import {
   SchedulerClass,
   Teacher,
 } from "./interfaces/interfaces";
-import { DaysOfWeek, Room, Time } from "./types/type";
+import DaysOfWeek from "./types/DaysOfWeek";
+import { Room, roomArray } from "./types/Room";
+import { Time, timeArray } from "./types/Time";
 
 const prisma = new PrismaClient();
 
@@ -88,40 +90,81 @@ SCHEDULE GENERATION
 
   generateSingleSectionSchedule(subject: PTL): Schedule[] {
     const singleSectionSchedules: Schedule[] = [];
-
+    const teacher = this.teachers.find(
+      (teacher) => teacher.teacherId === subject.teacherId,
+    ) as Teacher;
     if (subject.lecHours > 0) {
-      const time = this.assignDaysAndTime("LEC", subject.lecHours);
-      const lectureSchedule: Schedule = {
+      let time = this.assignDaysAndTime("LEC", subject.lecHours);
+      let lectureSchedule: Schedule = {
         teacherId: subject.teacherId,
         subCode: subject.subCode,
-        type: subjectType.LEC,
-        room: this.assignRoom(),
-        days: time.days,
-        startTime: time.startTime, // Assuming Time is defined somewhere
-        endTime: time.endTime, // Assuming Time is defined somewhere
-      };
-
-      if (!this.scheduleOverlapVerification(lectureSchedule)) {
-        singleSectionSchedules.push(lectureSchedule);
-      }
-    }
-
-    if (subject.labHours > 0) {
-      const time = this.assignDaysAndTime("LAB", subject.labHours);
-      const labSchedule: Schedule = {
-        teacherId: subject.teacherId,
-        subCode: subject.subCode,
-        type: subjectType.LAB,
-        room: this.assignRoom(),
+        type: "LEC",
+        room: this.assignRoom(teacher.birthday),
         days: time.days,
         startTime: time.startTime,
         endTime: time.endTime,
       };
 
-      if (!this.scheduleOverlapVerification(labSchedule)) {
+      while (
+        this.scheduleOverlapVerification(lectureSchedule) ||
+        !timeArray.includes(time.endTime)
+      ) {
+        time = this.assignDaysAndTime("LEC", subject.lecHours);
+        lectureSchedule = {
+          teacherId: subject.teacherId,
+          subCode: subject.subCode,
+          type: "LEC",
+          room: this.assignRoom(teacher.birthday),
+          days: time.days,
+          startTime: time.startTime,
+          endTime: time.endTime,
+        };
+      }
+
+      if (
+        !this.scheduleOverlapVerification(lectureSchedule) &&
+        timeArray.includes(time.endTime)
+      ) {
+        singleSectionSchedules.push(lectureSchedule);
+      }
+    }
+
+    if (subject.labHours > 0) {
+      let time = this.assignDaysAndTime("LAB", subject.labHours);
+      let labSchedule: Schedule = {
+        teacherId: subject.teacherId,
+        subCode: subject.subCode,
+        type: "LAB",
+        room: this.assignRoom(teacher.birthday),
+        days: time.days,
+        startTime: time.startTime,
+        endTime: time.endTime,
+      };
+
+      while (
+        this.scheduleOverlapVerification(labSchedule) ||
+        !timeArray.includes(time.endTime)
+      ) {
+        time = this.assignDaysAndTime("LAB", subject.labHours);
+        labSchedule = {
+          teacherId: subject.teacherId,
+          subCode: subject.subCode,
+          type: "LAB",
+          room: this.assignRoom(teacher.birthday),
+          days: time.days,
+          startTime: time.startTime,
+          endTime: time.endTime,
+        };
+      }
+
+      if (
+        !this.scheduleOverlapVerification(labSchedule) &&
+        timeArray.includes(time.endTime)
+      ) {
         singleSectionSchedules.push(labSchedule);
       }
     }
+
     return singleSectionSchedules;
   }
 
@@ -130,35 +173,79 @@ SCHEDULE GENERATION
 
     for (let i = 1; i <= subject.sections; i++) {
       if (subject.lecHours > 0) {
-        const time = this.assignDaysAndTime("LEC", subject.lecHours);
-        const lectureSchedule: Schedule = {
+        const teacher = this.teachers.find(
+          (teacher) => teacher.teacherId === subject.teacherId,
+        ) as Teacher;
+        let time = this.assignDaysAndTime("LEC", subject.lecHours);
+        let lectureSchedule: Schedule = {
           teacherId: subject.teacherId,
           subCode: subject.subCode,
-          type: subjectType.LEC,
-          room: this.assignRoom(),
+          type: "LEC",
+          room: this.assignRoom(teacher.birthday),
           days: time.days,
           startTime: time.startTime,
           endTime: time.endTime,
         };
 
-        if (!this.scheduleOverlapVerification(lectureSchedule)) {
+        while (
+          this.scheduleOverlapVerification(lectureSchedule) ||
+          !timeArray.includes(time.endTime)
+        ) {
+          time = this.assignDaysAndTime("LEC", subject.lecHours);
+          lectureSchedule = {
+            teacherId: subject.teacherId,
+            subCode: subject.subCode,
+            type: "LEC",
+            room: this.assignRoom(teacher.birthday),
+            days: time.days,
+            startTime: time.startTime,
+            endTime: time.endTime,
+          };
+        }
+
+        if (
+          !this.scheduleOverlapVerification(lectureSchedule) &&
+          timeArray.includes(time.endTime)
+        ) {
           multipleSectionSchedules.push(lectureSchedule);
         }
       }
 
       if (subject.labHours > 0) {
-        const time = this.assignDaysAndTime("LAB", subject.labHours);
-        const labSchedule: Schedule = {
+        const teacher = this.teachers.find(
+          (teacher) => teacher.teacherId === subject.teacherId,
+        ) as Teacher;
+        let time = this.assignDaysAndTime("LAB", subject.labHours);
+        let labSchedule: Schedule = {
           teacherId: subject.teacherId,
           subCode: subject.subCode,
-          type: subjectType.LAB,
-          room: this.assignRoom(),
+          type: "LAB",
+          room: this.assignRoom(teacher.birthday),
           days: time.days,
           startTime: time.startTime,
           endTime: time.endTime,
         };
 
-        if (!this.scheduleOverlapVerification(labSchedule)) {
+        while (
+          this.scheduleOverlapVerification(labSchedule) ||
+          !timeArray.includes(time.endTime)
+        ) {
+          time = this.assignDaysAndTime("LAB", subject.labHours);
+          labSchedule = {
+            teacherId: subject.teacherId,
+            subCode: subject.subCode,
+            type: "LAB",
+            room: this.assignRoom(teacher.birthday),
+            days: time.days,
+            startTime: time.startTime,
+            endTime: time.endTime,
+          };
+        }
+
+        if (
+          !this.scheduleOverlapVerification(labSchedule) &&
+          timeArray.includes(time.endTime)
+        ) {
           multipleSectionSchedules.push(labSchedule);
         }
       }
@@ -238,12 +325,24 @@ SCHEDULE VERIFICATION
   /***
 ROOM DAYS TIME ASSIGNMENTS
 ***/
-  assignRoom(): Room {
-    // Assign a room for the schedule logic
-    // Age appropriate room assignment
-    // Use this.teacher.birthday to determine age
+  assignRoom(birthday: Date): Room {
+    const today = new Date();
+    const age = today.getFullYear() - birthday.getFullYear();
 
-    return "EN100";
+    if (age > 45) {
+      // Filter the roomArray to include only rooms within the 100 range
+      const availableRooms = roomArray.filter(
+        (room) => Number.parseInt(room.slice(2)) < 200,
+      );
+
+      // Randomly select a room from the filtered availableRooms
+      const randomIndex = Math.floor(Math.random() * availableRooms.length);
+      return availableRooms[randomIndex] as Room;
+    } else {
+      // If the age is not greater than 45, select any room from the roomArray
+      const randomIndex = Math.floor(Math.random() * roomArray.length);
+      return roomArray[randomIndex] as Room;
+    }
   }
 
   assignDaysAndTime(
@@ -291,40 +390,8 @@ HELPER FUNCTIONS
   // Helper function to calculate start time
   generateStartTime(): Time {
     // Generate a random start time from available time slots
-    const timeSlots: Time[] = [
-      "0700",
-      "0730",
-      "0800",
-      "0830",
-      "0900",
-      "0930",
-      "1000",
-      "1030",
-      "1100",
-      "1130",
-      "1200",
-      "1230",
-      "1300",
-      "1330",
-      "1400",
-      "1430",
-      "1500",
-      "1530",
-      "1600",
-      "1630",
-      "1700",
-      "1730",
-      "1800",
-      "1830",
-      "1900",
-      "1930",
-      "2000",
-      "2030",
-      "2100",
-      "2130",
-    ];
-    const randomIndex = Math.floor(Math.random() * timeSlots.length);
-    return timeSlots[randomIndex] as Time;
+    const randomIndex = Math.floor(Math.random() * timeArray.length);
+    return timeArray[randomIndex] as Time;
   }
 
   // Helper function to generate a random day
@@ -337,13 +404,27 @@ HELPER FUNCTIONS
   // Helper function to generate multiple random days
   assignMultipleDaysForLecture(hours: number): DaysOfWeek[] {
     // Assign multiple days for Lecture
-    const availableDays: DaysOfWeek[] = ["M", "T", "W", "TH", "F", "S"];
-    // Calculate the number of days to assign based on the given hours
-    const numberOfDays = Math.min(hours, availableDays.length); // Ensure not to exceed the number of available days
-    // Randomly shuffle the available days array
-    const shuffledDays = availableDays.sort(() => Math.random() - 0.5);
-    // Select the first 'numberOfDays' days from the shuffled array
-    const selectedDays = shuffledDays.slice(0, numberOfDays);
+    const availableDays: DaysOfWeek[] = ["M", "T", "W", "TH", "F"];
+    // Assign multiple days for Lecture
+    const numberOfDays = hours === 3 ? [2, hours] : [1, 2, 3];
+    // Divide the available days into the specified number of groups
+    const groupedDays: DaysOfWeek[][] = [];
+
+    for (const groupLength of numberOfDays) {
+      const group: DaysOfWeek[] = [];
+      for (let j = 0; j < groupLength; j++) {
+        const randomIndex = Math.floor(Math.random() * availableDays.length);
+        if (!group.includes(availableDays[randomIndex] as DaysOfWeek)) {
+          group.push(availableDays[randomIndex] as DaysOfWeek);
+        }
+      }
+      groupedDays.push(group);
+    }
+    const randomIndex = Math.floor(Math.random() * groupedDays.length);
+    const selectedDays: DaysOfWeek[] = groupedDays[randomIndex] as DaysOfWeek[];
+    selectedDays.sort(
+      (a, b) => availableDays.indexOf(a) - availableDays.indexOf(b),
+    );
     return selectedDays;
   }
   // Helper function to calculate end time for a day
@@ -362,15 +443,13 @@ HELPER FUNCTIONS
   ): Time {
     // Calculate the duration per day
     const durationPerDay = hours / days.length;
-    // Calculate the end time for each day
+    // Calculate the end time
     let endTime: Time = startTime;
-    for (let i = 0; i < days.length; i++) {
-      endTime = this.calculateEndTimeForDay(endTime, durationPerDay);
-    }
+    endTime = this.calculateEndTimeForDay(endTime, durationPerDay);
     // Return the end time for the last day
     return endTime;
   }
-  // Helper function to conver time string to minutes
+  // Helper function to convert time string to minutes
   timeToMinutes(time: Time): number {
     const hours: number = Number.parseInt(time.slice(0, 2), 10);
     const minutes: number = Number.parseInt(time.slice(2), 10);
