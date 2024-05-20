@@ -249,7 +249,7 @@ const AddPTL = () => {
                             options={teacherOptions}
                             getOptionLabel={(option) => option.label}
                             openOnFocus
-                            onInputChange={(event, newInputValue) => { setTeacherId(newInputValue); console.log("TEACHERID: ", newInputValue); }}
+                            onInputChange={(event, newInputValue) => setTeacherId(newInputValue)}
                             isOptionEqualToValue={(option, value) => option === value}
                             renderInput={(params) => <TextField {...params} label="Teacher ID" />}
                         />
@@ -268,7 +268,7 @@ const AddPTL = () => {
                             options={subjectOptions}
                             getOptionLabel={(option) => option.label}
                             openOnFocus
-                            onInputChange={(event, newInputValue) => { setSubCode(newInputValue), console.log("SUBCODE: ", newInputValue) }}
+                            onInputChange={(event, newInputValue) => setSubCode(newInputValue)}
                             isOptionEqualToValue={(option, value) => option === value}
                             renderInput={(params) => <TextField {...params} label="Subject Code" />}
                         />
