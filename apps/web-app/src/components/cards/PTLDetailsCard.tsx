@@ -38,7 +38,7 @@ export default function PTLDetailsCard({ id }: Props) {
                     <strong>Lab Hours: {PTLdata.labHours}</strong>
                 </Typography>
                 <Typography variant="body2" color="textSecondary">
-                    <strong>Remarks: {PTLdata.timeRemarks}</strong>
+                    <strong>Remarks: {JSON.stringify(PTLdata.timeRemarks)}</strong>
                 </Typography>
             </CardContent>
         </Card>

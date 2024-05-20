@@ -10,6 +10,8 @@ import { B } from "@mobily/ts-belt";
 import { trpc } from "@web-app/utils/trpc";
 import toast, { Toaster } from "react-hot-toast";
 import FormError from "../errors/FormError";
+import DaysOfWeek from "@web-app/server/scheduling/types/DaysOfWeek";
+import { Time, timeArray } from "@web-app/server/scheduling/types/Time";
 
 
 const useStyles = makeStyles({
@@ -32,6 +34,7 @@ const useStyles = makeStyles({
     },
 });
 
+const daysOfWeek: DaysOfWeek[] = ["M", "T", "W", "TH", "F", "S"];
 
 const AddPTL = () => {
     const classes = useStyles();
@@ -57,7 +60,11 @@ const AddPTL = () => {
     const [sections, setSections] = useState<number | undefined>(0);
     const [lecHours, setLecHours] = useState<number | undefined>(0);
     const [labHours, setLabHours] = useState<number | undefined>(0);
-    const [remarks, setRemarks] = useState("");
+    const [timeRemarks, setTimeRemarks] = useState({
+        days: [] as DaysOfWeek[],
+        startTime: "",
+        endTime: ""
+    });
     const [errors, setErrors] = useState<string[]>([])
 
     //Add PTL mutation
@@ -80,7 +87,7 @@ const AddPTL = () => {
         sections: number,
         lecHours: number,
         labHours: number,
-        timeRemarks: string
+        timeRemarks: { days: DaysOfWeek[], startTime: string, endTime: string }
     ) => {
         addPTL({
             teacherId,
@@ -98,39 +105,51 @@ const AddPTL = () => {
         setSections(undefined);
         setLecHours(undefined);
         setLabHours(undefined);
-        setRemarks("");
-    }
+        setTimeRemarks({
+            days: [],
+            startTime: "",
+            endTime: ""
+        });
+    };
 
     const validateFields = () => {
-        const newErrors: string[] = []
+        const newErrors: string[] = [];
 
         if (teacherId.length === 0) {
-            newErrors.push("Please provide a teacher ID")
+            newErrors.push("Please provide a teacher ID");
         }
 
         if (subCode.length === 0) {
-            newErrors.push("Please provide a subject code")
+            newErrors.push("Please provide a subject code");
         }
 
         if (sections === undefined) {
-            newErrors.push("Please select a number of sections")
+            newErrors.push("Please select a number of sections");
         }
 
         if (lecHours === undefined) {
-            newErrors.push("Please select a number of lecture hours")
+            newErrors.push("Please select a number of lecture hours");
         }
 
         if (labHours === undefined) {
-            newErrors.push("Please select a number of laboratory hours")
+            newErrors.push("Please select a number of laboratory hours");
         }
 
-        if (remarks.length === 0) {
-            newErrors.push("Please provide remarks")
+        // if (timeRemarks.days.length === 0) {
+        //     newErrors.push("Please select the days");
+        // }
+
+        if (timeRemarks.startTime.length === 0) {
+            newErrors.push("Please select a start time");
         }
 
-        setErrors(newErrors)
+        if (timeRemarks.endTime.length === 0) {
+            newErrors.push("Please select an end time");
+        }
+
+        setErrors(newErrors);
         return newErrors.length === 0;
-    }
+    };
 
     // on clicking "add"
     const handleFormSubmit = () => {
@@ -143,17 +162,14 @@ const AddPTL = () => {
                 sections!,
                 lecHours!,
                 labHours!,
-                remarks
+                timeRemarks
             );
             clearValues();
             handleClose();
-        }
-        else {
+        } else {
             handleOpen();
         }
-
     };
-
     const handleOpen = () => {
         setOpen(true);
     };
@@ -176,10 +192,21 @@ const AddPTL = () => {
         setLabHours(Number(e.target.value));
     };
 
-    const handleRemarksChange = (e: SelectChangeEvent) => {
-        setRemarks(e.target.value);
+    const handleDaysChange = (event: React.SyntheticEvent, newValue: DaysOfWeek[]) => {
+        if (newValue.length === 0) {
+            setTimeRemarks((prev) => ({ ...prev, days: daysOfWeek }));
+        } else {
+            setTimeRemarks((prev) => ({ ...prev, days: newValue }));
+        }
     };
 
+    const handleStartTimeChange = (event: React.SyntheticEvent, newValue: Time | null) => {
+        setTimeRemarks((prev) => ({ ...prev, startTime: newValue || "" }));
+    };
+
+    const handleEndTimeChange = (event: React.SyntheticEvent, newValue: Time | null) => {
+        setTimeRemarks((prev) => ({ ...prev, endTime: newValue || "" }));
+    };
     return (
         <React.Fragment>
 
@@ -322,21 +349,55 @@ const AddPTL = () => {
                         </Select>
                     </Box>
 
-                    <Box sx={{ display: "flex", alignItems: "baseline", marginTop: 2 }} >
+                    <Box sx={{ display: "flex", alignItems: "baseline", marginTop: 2 }}>
+                        {/* Days */}
                         <Box sx={{ width: 245 }}>
                             <Typography sx={{ marginRight: 1, marginBottom: 0 }}>
-                                Remarks
+                                Days
                             </Typography>
                         </Box>
-                        <TextField
-                            color="secondary"
-                            autoFocus
-                            margin="dense"
-                            fullWidth
-                            id="Remarks"
-                            onChange={handleRemarksChange}
+                        <Autocomplete
+                            multiple
+                            id="days"
+                            options={daysOfWeek}
+                            getOptionLabel={(option) => option}
+                            onChange={handleDaysChange}
+                            renderInput={(params) => <TextField {...params} label="Days" />}
                         />
                     </Box>
+
+                    <Box sx={{ display: "flex", alignItems: "baseline", marginTop: 2 }}>
+                        {/* Start Time */}
+                        <Box sx={{ width: 245 }}>
+                            <Typography sx={{ marginRight: 1, marginBottom: 0 }}>
+                                Start Time
+                            </Typography>
+                        </Box>
+                        <Autocomplete
+                            id="startTime"
+                            options={timeArray}
+                            getOptionLabel={(option) => option}
+                            onChange={handleStartTimeChange}
+                            renderInput={(params) => <TextField {...params} label="Start Time" />}
+                        />
+                    </Box>
+
+                    <Box sx={{ display: "flex", alignItems: "baseline", marginTop: 2 }}>
+                        {/* End Time */}
+                        <Box sx={{ width: 245 }}>
+                            <Typography sx={{ marginRight: 1, marginBottom: 0 }}>
+                                End Time
+                            </Typography>
+                        </Box>
+                        <Autocomplete
+                            id="endTime"
+                            options={timeArray}
+                            getOptionLabel={(option) => option}
+                            onChange={handleEndTimeChange}
+                            renderInput={(params) => <TextField {...params} label="End Time" />}
+                        />
+                    </Box>
+
 
                     <DialogActions>
                         <Button onClick={handleClose} color="primary">
