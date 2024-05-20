@@ -1,4 +1,3 @@
-import { Department } from "@prisma/client";
 import { z } from "zod";
 
 import { createRouter } from "../context";
@@ -71,40 +70,40 @@ export const subjectListRouter = createRouter()
       });
     },
   })
-  .query("getDepartment", {
-    input: z.object({
-      department: z.nativeEnum(Department),
-    }),
-    async resolve({ ctx, input }) {
-      const { department } = input;
-      return ctx.prisma.subjectList.findMany({
-        where: {
-          department: { has: department },
-        },
-      });
-    },
-  })
-  .query("getCurriculumAndDepartment", {
-    input: z.object({
-      curriculum: z.string(),
-      department: z.nativeEnum(Department),
-    }),
-    async resolve({ ctx, input }) {
-      const { curriculum, department } = input;
-      return ctx.prisma.subjectList.findMany({
-        where: {
-          AND: [
-            {
-              curriculum: { has: curriculum },
-            },
-            {
-              department: { has: department },
-            },
-          ],
-        },
-      });
-    },
-  })
+  // .query("getDepartment", {
+  //   input: z.object({
+  //     department: z.nativeEnum(Department),
+  //   }),
+  //   async resolve({ ctx, input }) {
+  //     const { department } = input;
+  //     return ctx.prisma.subjectList.findMany({
+  //       where: {
+  //         department: { has: department },
+  //       },
+  //     });
+  //   },
+  // })
+  // .query("getCurriculumAndDepartment", {
+  //   input: z.object({
+  //     curriculum: z.string(),
+  //     department: z.nativeEnum(Department),
+  //   }),
+  //   async resolve({ ctx, input }) {
+  //     const { curriculum, department } = input;
+  //     return ctx.prisma.subjectList.findMany({
+  //       where: {
+  //         AND: [
+  //           {
+  //             curriculum: { has: curriculum },
+  //           },
+  //           {
+  //             department: { has: department },
+  //           },
+  //         ],
+  //       },
+  //     });
+  //   },
+  // })
   // for dropdown list
   .query("curriculum", {
     async resolve({ ctx }) {
@@ -121,18 +120,18 @@ export const subjectListRouter = createRouter()
       title: z.string(),
       subCode: z.string(),
       curriculum: z.string(),
-      department: z.nativeEnum(Department),
+      // department: z.nativeEnum(Department),
       units: z.number().int().nonnegative(),
       credits: z.number().int().nonnegative(),
     }),
     async resolve({ ctx, input }) {
-      const { title, subCode, curriculum, department, units, credits } = input;
+      const { title, subCode, curriculum, units, credits } = input;
       return ctx.prisma.subjectList.create({
         data: {
           title: title,
           subCode: subCode,
           curriculum: [curriculum],
-          department: [department],
+          // department: [department],
           units: units,
           credits: credits,
         },
@@ -146,7 +145,7 @@ export const subjectListRouter = createRouter()
         title: z.string(),
         subCode: z.string(),
         curriculum: z.string(),
-        department: z.nativeEnum(Department),
+        // department: z.nativeEnum(Department),
         units: z.number().int().nonnegative(),
         credits: z.number().int().nonnegative(),
       }),
@@ -156,7 +155,7 @@ export const subjectListRouter = createRouter()
         title: item.title,
         subCode: item.subCode,
         curriculum: [item.curriculum],
-        department: [item.department],
+        // department: [item.department],
         units: item.units,
         credits: item.credits,
       }));
@@ -171,12 +170,12 @@ export const subjectListRouter = createRouter()
       title: z.string(),
       subCode: z.string(),
       curriculum: z.string(),
-      department: z.nativeEnum(Department),
+      // department: z.nativeEnum(Department),
       units: z.number().int().nonnegative(),
       credits: z.number().int().nonnegative(),
     }),
     async resolve({ ctx, input }) {
-      const { title, subCode, curriculum, department, units, credits } = input;
+      const { title, subCode, curriculum, units, credits } = input;
       return ctx.prisma.subjectList.update({
         where: {
           subCode: subCode,
@@ -184,7 +183,7 @@ export const subjectListRouter = createRouter()
         data: {
           title: title,
           curriculum: { push: curriculum },
-          department: { push: department },
+          // department: { push: department },
           units: units,
           credits: credits,
         },
@@ -197,7 +196,7 @@ export const subjectListRouter = createRouter()
         title: z.string(),
         subCode: z.string(),
         curriculum: z.string(),
-        department: z.nativeEnum(Department),
+        // department: z.nativeEnum(Department),
         units: z.number().int().nonnegative(),
         credits: z.number().int().nonnegative(),
       }),
@@ -209,7 +208,7 @@ export const subjectListRouter = createRouter()
           title: update.title,
           subCode: update.subCode,
           curriculum: update.curriculum,
-          department: update.department,
+          // department: update.department,
           units: update.units,
           credits: update.credits,
         },

@@ -164,7 +164,6 @@ model SubjectList {
     subCode        String          @unique @map("sub_code")
     title          String
     curriculum     String[]        
-    department     Department[]
     units          Float  
     credits        Float           @default(0)  
     createdAt      DateTime        @default(now()) @map("created_at")
@@ -180,7 +179,7 @@ model ProposedTeachingLoad {
     sections     Int        
     lecHours     Float
     labHours     Float
-    timeRemarks  String       @map("time_remarks")
+    timeRemarks  Json       @map("time_remarks")
     createdAt    DateTime     @default(now()) @map("created_at")
     updatedAt    DateTime     @updatedAt @map("updated_at")
     teacher      Teacher      @relation(fields: [teacherId], references: [teacherId], onDelete: Cascade)

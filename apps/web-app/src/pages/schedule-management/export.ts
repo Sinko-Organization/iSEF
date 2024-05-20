@@ -27,7 +27,7 @@ export const excelConversion = (scheduleData: any, set: Function) => {
       type,
       `${teacher.firstName} ${teacher.lastName}`,
       room,
-      days.join(", "), // Join array of days into a comma-separated string
+      days.join(""),
       startTime,
       endTime,
     ]);
